@@ -1,0 +1,11 @@
+# Schema migrations
+south
+
+# For the admin documentation
+docutils
+
+# For the Imagefields
+PIL
+
+# For the API
+#django-piston
