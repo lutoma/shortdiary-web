@@ -103,6 +103,7 @@ INSTALLED_APPS = (
 	'south',
 	'django.contrib.admin',
 	'django.contrib.admindocs',
+	'diary'
 )
 
 LOGGING = {
