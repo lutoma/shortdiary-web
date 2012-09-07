@@ -8,7 +8,9 @@ class Post(models.Model):
 	date = models.DateField(verbose_name = ('date'))
 	text = models.TextField(max_length = 350, verbose_name = _('text'))
 	mood = models.CharField(max_length = 100, verbose_name = _('mood'))
-	image = models.ImageField(upload_to = 'postimages/%d%m%y/', verbose_name = _('image'))
+	image = models.ImageField(upload_to = 'postimages/%d%m%y/', blank = True, verbose_name = _('image'))
 
 	created_at = models.DateTimeField(auto_now_add = True)
 	last_changed_at = models.DateTimeField(auto_now = True)
+
+	__unicode__ = lambda self: _('{0} at {1}').format(self.author, self.date)
