@@ -9,3 +9,6 @@ PIL
 
 # For the API
 #django-piston
+
+# Async jobs
+django-celery

@@ -1,0 +1,12 @@
+{% load i18n %}{% blocktrans with user=post.author.username date=post.date mood=post.mood %}Hey {{ user }},
+
+this is your shortdiary post from {{ date }}. Back then, your mood was {{ mood }}.{% endblocktrans %}
+{% if post.image %}
+{% blocktrans with host=MEDIA_URL image=post.image%}You added an image to your post! You can find it here: {{ host }}{{ image }} (We also attached it to this email).{% endblocktrans %}{% endif %}
+
+––––––––––––––––––––––
+
+{{ post.text }}
+
+-- 
+{% blocktrans %}You received this mail because you signed up on shortdiary. If you don't wish to receive these emails anymore, log in to your shortdiary account under https://shortdiary.me/accounts/login and change your email preferences.{% endblocktrans %}

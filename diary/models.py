@@ -13,4 +13,6 @@ class Post(models.Model):
 	created_at = models.DateTimeField(auto_now_add = True)
 	last_changed_at = models.DateTimeField(auto_now = True)
 
+	sent = models.BooleanField(default = False, verbose_name = _('mail sent?'))
+
 	__unicode__ = lambda self: _('{0} at {1}').format(self.author, self.date)

@@ -1,2 +1,4 @@
 *.pyc
 development.db
+celery
+celerybeat-schedule

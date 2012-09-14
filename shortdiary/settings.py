@@ -110,8 +110,15 @@ INSTALLED_APPS = (
 	'south',
 	'django.contrib.admin',
 	'django.contrib.admindocs',
+	'kombu.transport.django',
+	'djcelery',
 	'diary'
 )
+
+# Asynchronous jobs
+BROKER_URL = "django://"
+import djcelery
+djcelery.setup_loader()
 
 LOGGING = {
 	'version': 1,
@@ -136,3 +143,5 @@ LOGGING = {
 		},
 	}
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
