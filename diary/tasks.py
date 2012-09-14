@@ -31,10 +31,11 @@ def process_mails():
 			'shortdiary <team@shortdiary.me>',
 			['{0} <{1}>'.format(post.author.username, post.author.email)])
 
-		mail.attach(
-			os.path.split(post.image.name)[1],
-			post.image.read(),
-			mimetypes.guess_type(post.image.name)[0])
+		if post.image:
+			mail.attach(
+				os.path.split(post.image.name)[1],
+				post.image.read(),
+				mimetypes.guess_type(post.image.name)[0])
 
 		mail.send()
 
