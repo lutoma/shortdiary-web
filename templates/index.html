@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %} 
+{% load humanize %}
+
+{%block content %}
+	{% if user.is_superuser %}
+		<p><a href="/admin/">Admin panel</a></p>
+	{% endif %}
+
+	<h2>Recent posts</h2>
+	<ul>
+		{% for post in posts %}
+			<li><a href='/post/show/{{ post.id }}/'>{{ post.date|naturalday }} – {{ post.mood }}</a></li>
+		{% empty %}
+			No posts to show – Try <a href="/post/new/">adding your first post</a>!
+		{% endfor %}
+	</ul>
+{% endblock %}
