@@ -74,3 +74,8 @@ div[role=main] {
 	font-size: .8em;
 	color: #545454;
 }
+
+.post-image {
+	max-width: 500px;
+	max-height: 400px;
+}
