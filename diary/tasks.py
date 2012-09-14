@@ -31,7 +31,7 @@ def process_mails():
 			['shortdiary <team@shortdiary.me>'],
 			[post.author.email])
 
-		mail.attach(post.image.name, post.image.read(), post.image.content_type)
+		mail.attach(post.image.name, post.image.read(), post.image.file.content_type)
 		mail.send()
 
 		post.sent = True
