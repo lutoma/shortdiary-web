@@ -12,3 +12,6 @@ PIL
 
 # Async jobs
 django-celery
+
+# Timezonefoo
+pytz
