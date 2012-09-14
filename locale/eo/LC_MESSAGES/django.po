@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: shortdiary 0.0.1\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-13 23:39-0700\n"
-"PO-Revision-Date: 2012-09-13 23:41-0800\n"
+"POT-Creation-Date: 2012-09-13 23:42-0700\n"
+"PO-Revision-Date: 2012-09-13 23:57-0800\n"
 "Last-Translator: Lukas Martini <hello@lutoma.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,112 +18,108 @@ msgstr ""
 
 #: diary/models.py:7
 msgid "author"
-msgstr "Autor"
+msgstr "aûtoro"
 
 #: diary/models.py:9
 msgid "text"
-msgstr "Text"
+msgstr "teksto"
 
 #: diary/models.py:10 templates/new_post.html:12
 msgid "mood"
-msgstr "Stimmung"
+msgstr "animststo"
 
 #: diary/models.py:11
 msgid "image"
-msgstr "Bild"
+msgstr "bildo"
 
 #: diary/models.py:16
 msgid "mail sent?"
-msgstr "Mail gesendet?"
+msgstr "retletero"
 
 #: diary/models.py:18
 msgid "{0} at {1}"
-msgstr "{0} am {1}"
+msgstr "{0} en la {1}"
 
 #: diary/tasks.py:29
 msgid "Your shortdiary post from {0}"
-msgstr "Dein shortdiary-Eintrag vom {0}"
+msgstr "Via enskribon shortdiaryan de la {0}"
 
 #: diary/views.py:14 templates/base.html:21
 msgid "Home"
-msgstr "Home"
+msgstr "Hejmpaĝo"
 
 #: diary/views.py:15
 msgid "Ohai. <a href=\"/accounts/login\">This way</a>."
-msgstr "Ohai. <a href=\"/accounts/login\">Hier entlang</a>."
+msgstr "Saluton."
 
 #: diary/views.py:34 templates/base.html:23
 msgid "New post"
-msgstr "Neuer Eintrag"
+msgstr "Enskribo nova"
 
 #: diary/views.py:58
 msgid "Post from {0}"
-msgstr "Eintrag vom {0}"
+msgstr "Enskribo de la {0}"
 
 #: templates/base.html:24
 msgid "Log out"
-msgstr "Abmelden"
+msgstr "Adiaûus"
 
 #: templates/base.html:26 templates/login.html:15
 msgid "Log in"
-msgstr "Einloggen"
+msgstr "salutus"
 
 #: templates/base.html:42
 msgid "No content to show :("
-msgstr "Nichts anzuzeigen :("
+msgstr "Neniaj enskrioboj ekzistas."
 
 #: templates/base.html:50
 msgid "Admin panel"
-msgstr "Administrationsbereich"
+msgstr ""
 
 #: templates/index.html:7
 msgid "Welcome back, "
-msgstr "Willkommen zurück, "
+msgstr "Saluton, "
 
 #: templates/index.html:15
 msgid "Recent posts"
-msgstr "Kürzliche Einträge"
+msgstr "Enskriboj novaj"
 
 #: templates/index.html:20
 msgid ""
 "No posts to show – Try <a href=\"/post/new/\">adding your first post</a>!"
-msgstr ""
-"Keine Einträge anzuzeigen – Lege <a href=\"/post/new/\">deinen ersten "
-"Eintrag an</a>!"
+msgstr "Neniaj enskrioboj ekzistas. Provus krei via unuan enskribon."
 
 #: templates/login.html:6
 msgid "Your username and password didn't match. Please try again."
 msgstr ""
-"Dein Benutzername und Passwort haben nicht gepasst. Bitte versuche es noch "
-"einmal."
 
 #: templates/login.html:12
 msgid "username"
-msgstr "Benutzername"
+msgstr "salutnomo"
 
 #: templates/login.html:13
 msgid "password"
-msgstr "Passwort"
+msgstr "pasvorto"
 
 #: templates/new_post.html:7
 msgid "Enter your text here"
-msgstr "Gib hier deinen Text ein"
+msgstr "Ĉi tie enigus tekston vian."
 
 #: templates/new_post.html:9
 msgid "yesterday"
-msgstr "Gestern"
+msgstr "hieraû"
 
 #: templates/new_post.html:10
 msgid "today"
-msgstr "Heute"
+msgstr "hodiaû"
 
 #: templates/new_post.html:14
 msgid "submit"
-msgstr "Abschicken"
+msgstr "konservus"
 
 #: templates/show_post.html:5
 msgid "Mood"
-msgstr "Stimmung"
+msgstr "animststo"
 
 #: templates/mails/post.txt:1
 #, python-format
@@ -133,10 +129,6 @@ msgid ""
 "this is your shortdiary post from %(date)s. Back then, your mood was "
 "%(mood)s."
 msgstr ""
-"Hey %(user)s,\n"
-"\n"
-"das hier ist dein shortdiary-Eintrag vom %(date)s. Damals war deine Stimmnug "
-"\"%(mood)s\"."
 
 #: templates/mails/post.txt:5
 #, python-format
@@ -144,8 +136,6 @@ msgid ""
 "You added an image to your post! You can find it here: http:%(host)s"
 "%(image)s (We also attached it to this email)."
 msgstr ""
-"Du hast ein Bild zu diesem Eintrag hinzugefügt. Du kannst es hier finden: "
-"http:%(host)s%(image)s (Wir haben es ausserdem an diese Mail angehängt)."
 
 #: templates/mails/post.txt:12
 msgid ""
@@ -153,7 +143,3 @@ msgid ""
 "wish to receive these emails anymore, log in to your shortdiary account "
 "under https://shortdiary.me/accounts/login and change your email preferences."
 msgstr ""
-"Du hast diese Mail bekommen, weil du dich bei shortdiary angemeldet hast. "
-"Falls du keine dieser Mails mehr bekommen möchtest, logge dich unter https://"
-"shortdiary.me/accounts/login in deinen shortdiary-Account ein und ändere "
-"deine Mail-Einstellungen."
