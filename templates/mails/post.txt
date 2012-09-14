@@ -2,7 +2,7 @@
 
 this is your shortdiary post from {{ date }}. Back then, your mood was {{ mood }}.{% endblocktrans %}
 {% if post.image %}
-{% blocktrans with host=MEDIA_URL image=post.image%}You added an image to your post! You can find it here: {{ host }}{{ image }} (We also attached it to this email).{% endblocktrans %}{% endif %}
+{% blocktrans with host=MEDIA_URL image=post.image %}You added an image to your post! You can find it here: http:{{ host }}{{ image }} (We also attached it to this email).{% endblocktrans %}{% endif %}
 
 ––––––––––––––––––––––
 
