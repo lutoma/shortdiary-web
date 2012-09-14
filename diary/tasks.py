@@ -29,7 +29,7 @@ def process_mails():
 			_('Your shortdiary post from {0}').format(post.date),
 			mail_template.render(Context({'post': post, 'MEDIA_URL': settings.MEDIA_URL})),
 			'shortdiary <team@shortdiary.me>',
-			[post.author.email])
+			['{0} <{1}>'.format(post.author.username, post.author.email)])
 
 		mail.attach(
 			os.path.split(post.image.name)[1],
