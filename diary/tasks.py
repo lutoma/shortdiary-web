@@ -26,7 +26,7 @@ def process_mails():
 		mail = EmailMessage(
 			_('Your shortdiary post from {0}').format(post.date),
 			mail_template.render(Context({'post': post})),
-			['shortdiary <team@shortdiary.me>'],
+			'shortdiary <team@shortdiary.me>',
 			[post.author.email])
 
 		mail.attach(post.image.name, post.image.read(), mimetypes.guess_type(post.image.name)[0])
