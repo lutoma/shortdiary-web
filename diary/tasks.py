@@ -1,6 +1,6 @@
 # coding: utf-8
-
 import datetime
+import mimetypes
 from django.utils.translation import ugettext as _
 from celery.schedules import crontab
 from celery.decorators import periodic_task
@@ -17,9 +17,7 @@ def process_mails():
 
 	# Change to years = 1 in production
 	searched_date = datetime.date.today() - datetime.timedelta(days = 0)
-
 	posts = Post.objects.filter(date = searched_date, sent = False)
-
 	print('Found {} mail(s) to send'.format(len(posts)))
 
 	for post in posts:
@@ -31,7 +29,7 @@ def process_mails():
 			['shortdiary <team@shortdiary.me>'],
 			[post.author.email])
 
-		mail.attach(post.image.name, post.image.read(), post.image.file.content_type)
+		mail.attach(post.image.name, post.image.read(), mimetypes.guess_type(post.image.name)[0])
 		mail.send()
 
 		post.sent = True
