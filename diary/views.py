@@ -45,6 +45,10 @@ def new_post(request):
 		return HttpResponse('Invalid data.')
 
 	post = form.save(commit = False)
+
+	if Post.objects.filter(author = request.user, date = post.date).count() > 0:
+		return HttpResponse('Sorry, you already have an entry for that day')
+
 	post.author = request.user
 	post.save()
 
