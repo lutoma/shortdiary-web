@@ -3,7 +3,7 @@
 
 {% block content %}
 	{% if form.errors %}
-		<p>Your username and password didn't match. Please try again.</p>
+		<p>{% trans "Your username and password didn't match. Please try again." %}</p>
 	{% endif %}
 
 	<form method="post" action="">
@@ -12,7 +12,7 @@
 		<input id="id_username" type="text" name="username" maxlength="30" placeholder="{% trans 'username' %}" />
 		<input type="password" name="password" id="id_password" placeholder="{% trans 'password' %}" />
 
-		<input type="submit" value="login" />
+		<input type="submit" value="{% trans 'Log in' %}" />
 		<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}/{% endif %}" />
 	</form>
 {% endblock %}

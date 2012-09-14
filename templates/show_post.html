@@ -2,7 +2,7 @@
 {% load i18n %} 
 
 {%block content %}
-	<p>Mood: {{ post.mood }}</p>
+	<p>{% trans 'Mood' %}: {{ post.mood }}</p>
 	<img src="{{ MEDIA_URL }}{{ post.image }}" />
 	<pre>{{ post.text }}</pre>
 {% endblock %}

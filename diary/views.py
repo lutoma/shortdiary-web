@@ -11,8 +11,8 @@ from django.forms import ModelForm
 def index(request):
 	if not request.user.is_authenticated():
 		context = {
-			'title': 'Home',
-			'content': 'Ohai.'
+			'title': _('Home'),
+			'content': _('Ohai. <a href="/accounts/login">This way</a>.')
 		}
 		return render_to_response('base.html', context_instance=RequestContext(request, context))
 
@@ -31,7 +31,7 @@ class PostForm(ModelForm):
 def new_post(request):
 	if not request.method == 'POST':
 		context = {
-			'title': 'New post',
+			'title': _('New post'),
 			'today': datetime.date.today(),
 			'yesterday': datetime.date.today() - datetime.timedelta(days=1),
 			'form': PostForm()
@@ -55,7 +55,11 @@ def show_post(request, post_id):
 	post = get_object_or_404(Post, id = post_id, author = request.user)
 
 	context = {
-		'title': 'Post from {}'.format(post.date),
+		'title': _('Post from {0}').format(post.date),
 		'post': post,
 	}
 	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
+
+def switch_language(request, language):
+	request.session['django_language'] = language
+	return HttpResponseRedirect('/')
