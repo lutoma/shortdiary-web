@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load i18n %} 
+{% load humanize %}
+
+{%block content %}
+	<p>
+		Ohai. <a href="/accounts/login">This way</a>.
+	</p>
+
+	{% if post %}
+		<h2>{% trans 'Random public post' %}</h2>
+		<p>{{ post.text }}</p>
+	{% endif %}
+{% endblock %}

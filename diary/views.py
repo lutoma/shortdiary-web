@@ -10,11 +10,17 @@ from django.forms import ModelForm
 
 def index(request):
 	if not request.user.is_authenticated():
+
+		try:
+			post = Post.objects.filter(author__userprofile__public = True).order_by('?')[:1].get()
+		except Post.DoesNotExist:
+			post = None
+
 		context = {
 			'title': _('Home'),
-			'content': _('Ohai. <a href="/accounts/login">This way</a>.')
+			'post': post,
 		}
-		return render_to_response('base.html', context_instance=RequestContext(request, context))
+		return render_to_response('frontpage.html', context_instance=RequestContext(request, context))
 
 	context = {
 		'title': 'Home',
