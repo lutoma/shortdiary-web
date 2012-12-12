@@ -158,3 +158,4 @@ LOGGING = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+AUTH_PROFILE_MODULE = 'diary.UserProfile'
