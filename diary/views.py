@@ -118,6 +118,7 @@ def sign_up(request):
 @login_required
 def invite(request):
 	invite = Invite(generated_by = request.user)
+	invite.save()
 
 	context = {
 		'title': 'Home',
