@@ -23,6 +23,7 @@ urlpatterns += patterns('',
 
 	url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
 	url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
+	url(r'^accounts/signup/$', 'diary.views.sign_up'),
 
 	url(r'^post/new/', 'diary.views.new_post'),
 	url(r'^post/show/(?P<post_id>[0-9]+)/', 'diary.views.show_post'),

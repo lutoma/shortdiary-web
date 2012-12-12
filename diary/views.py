@@ -5,7 +5,9 @@ from django.shortcuts import render, redirect, get_object_or_404, render_to_resp
 from django.utils.translation import ugettext as _
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
-from diary.models import Post
+from django.contrib.auth.models import User
+import django.contrib.auth
+from diary.models import Post, Invite
 from django.forms import ModelForm
 
 def index(request):
@@ -72,4 +74,43 @@ def show_post(request, post_id):
 
 def switch_language(request, language):
 	request.session['django_language'] = language
+	return HttpResponseRedirect('/')
+
+class SignUpForm(ModelForm):
+	class Meta:
+		model = User
+		fields = ('username', 'email', 'password')
+
+def sign_up(request):
+	if not request.method == 'POST':
+		context = {
+			'title': _('Sign up'),
+		}
+
+		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
+
+	# Request method is POST
+	form = SignUpForm(request.POST, request.FILES)
+	if not form.is_valid():
+		return HttpResponse('Invalid data.')
+
+	# Check invite code
+	try:
+		invite = Invite.objects.get(code = request.POST.get('invite_code', None))
+	except Invite.DoesNotExist:
+		return HttpResponse('Invalid invite code.')
+
+	# Fixme
+	user = form.save(commit = False)
+	user.set_password(request.POST.get('password', None))
+	user.save()
+
+	user.userprofile.public = request.POST.get('public', False)
+	user.userprofile.invited_by = invite.generated_by
+	user.userprofile.save()
+
+	invite.delete()
+
+	login_user = django.contrib.auth.authenticate(username = user.username, password = request.POST.get('password', None))
+	django.contrib.auth.login(request, login_user)
 	return HttpResponseRedirect('/')
