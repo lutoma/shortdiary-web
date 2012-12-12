@@ -114,3 +114,13 @@ def sign_up(request):
 	login_user = django.contrib.auth.authenticate(username = user.username, password = request.POST.get('password', None))
 	django.contrib.auth.login(request, login_user)
 	return HttpResponseRedirect('/')
+
+@login_required
+def invite(request):
+	invite = Invite(generated_by = request.user)
+
+	context = {
+		'title': 'Home',
+		'content': 'Generated invite code: {}'.format(invite.code)
+	}
+	return render_to_response('base.html', context_instance=RequestContext(request, context))
