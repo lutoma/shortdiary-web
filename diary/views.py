@@ -10,6 +10,11 @@ import django.contrib.auth
 from diary.models import Post, Invite
 from django.forms import ModelForm
 
+tos = lambda request: render_to_response(
+		'tos.html',
+		context_instance = RequestContext(request, {'title': _('Terms of service')}),
+	)
+
 def index(request):
 	if not request.user.is_authenticated():
 
@@ -19,7 +24,7 @@ def index(request):
 			post = None
 
 		context = {
-			'title': _('Home'),
+			'title': _('shortdiary'),
 			'post': post,
 		}
 		return render_to_response('frontpage.html', context_instance=RequestContext(request, context))
