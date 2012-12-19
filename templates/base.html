@@ -57,10 +57,10 @@
 			{% endblock %}
 
 			<div id='footer'>
-				shortdiary 0.2.0 Draftprint
+				shortdiary 0.2.0 Draftprint | <a href="/tos/">{% trans 'TOS' %}</a>
 
 				{% if user.is_superuser %}
-					– <a href="/admin/">{% trans 'Admin panel' %}</a>
+					 | <a href="/admin/">{% trans 'Admin panel' %}</a>
 				{% endif %}
 			</div>
 		</div>
