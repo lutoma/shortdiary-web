@@ -1,6 +1,27 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
+{% block headeradd %}
+	<script>
+		function show_chars() {
+			var chars_left = 350 - $(this).val().length;
+			$('#new-post-char-counter').html(chars_left);
+
+			if(chars_left < 0)
+				$('#new-post-char-counter').css('color', 'red');
+			else if(chars_left < 15)
+				$('#new-post-char-counter').css('color', 'orange');
+			else
+				$('#new-post-char-counter').css('color', 'inherit');
+		}
+
+		$(document).ready(function() {
+			$('#text-input').keyup(show_chars);
+			$('#text-input').change(show_chars);
+		});
+	</script>
+{% endblock %}
+
 {%block content %}
 	{% if form.errors %}
 		<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
@@ -9,7 +30,8 @@
 	<form action='' method='POST' enctype='multipart/form-data'>
 		{% csrf_token %}
 
-		<textarea name='text' placeholder='{%trans "Enter your text here (Max. 350 chars)" %}'>{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
+		<textarea id="text-input" name='text' placeholder='{%trans "Enter your text here (Max. 350 chars)" %}'>{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
+		<small id="new-post-char-counter">350</small>
 		{{ form.text.errors }}
 		
 		<select name='date'>

@@ -134,3 +134,9 @@ div[role=main] {
 	color: #545454;
 	min-height: 50px;
 }
+
+#new-post-char-counter {
+	display: block;
+	width: 500px;
+	text-align: right;
+}
