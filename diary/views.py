@@ -24,7 +24,7 @@ def index(request):
 			post = None
 
 		context = {
-			'title': _('shortdiary'),
+			'title': _('Welcome to shortdiary'),
 			'post': post,
 		}
 		return render_to_response('frontpage.html', context_instance=RequestContext(request, context))

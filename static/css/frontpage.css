@@ -1,0 +1,26 @@
+body {
+	background: url(../img/frontpage-bg.jpeg) #F7F5FA;
+	color: #414141;
+	background-attachment: fixed;
+	background-size: cover;
+}
+
+#front-mainsignup {
+	display: inline-block;
+	border: none;
+	font-size: 30px;
+	font-family: inherit;
+	color: #313131;
+	font-weight: 700;
+	margin-top: 30px;
+	text-decoration: none;
+	background: #CDB380;
+	padding: 3px 10px;
+	margin-bottom: 60px;
+	border-radius: 3px;
+	text-shadow: -1px 1px 0 #555;
+}
+
+#front-randompost {
+	margin-top: 20px;
+}

@@ -2,13 +2,23 @@
 {% load i18n %} 
 {% load humanize %}
 
+{% block headeradd %}
+	<link href="{{ STATIC_URL }}css/frontpage.css" rel="stylesheet" />
+{% endblock %}
+
 {%block content %}
 	<p>
-		Ohai. <a href="/accounts/login">This way</a>.
+		<h2 style="font-weight: 200; font-size: 35px;">{% trans "shortdiary lets you revisit your past, think of all the great things you have done and all those you still on your to do list. It's your life – you should remember it." %}</h2>
 	</p>
 
+	<a id="front-mainsignup" href="/accounts/signup/">→ {% trans 'Sign me up!' %}</a>
+
 	{% if post %}
-		<h2>{% trans 'Random public post' %}</h2>
-		<p>{{ post.text }}</p>
+		<hr />
+
+		<p id="front-randompost">
+			<h2>{% trans 'Random public post' %}</h2>
+			<p>{{ post.text }}</p>
+		</p>
 	{% endif %}
 {% endblock %}

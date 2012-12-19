@@ -1,15 +1,15 @@
 body {
-	font-family: 'Open Sans', 'opensans', sans-serif;
-	color: #242424;
-	background: #ffffff;
+	font-family: Exo, 'Exo', sans-serif;
+	color: #515151;
+	background: #F7F5FA;
 	margin: 0;
-	padding: 30px 50px;
-	font-size: 16px;
-	line-height: 1.5;
+	padding: 0;
+	font-size: 18px;
+	line-height: 1.7;
 }
 
 a, a:hover {
-	color: #DE2355;
+	color: #033649;
 	text-decoration: none;
 }
 
@@ -18,23 +18,13 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	font-weight: 400;
+	font-weight: 300;
 	margin: 0;
 	margin-bottom: .3em;
 }
 
 h1 {
-	font-family: 'Gentium Book Basic', italic;
-	font-style: italic;
-	font-size: 4em;
-}
-
-textarea {
-	width: 500px;
-	max-width: 100%;
-	height: 200px;
-	max-height: 100%;
-	padding: 3px 4px;
+	font-size: 3em;
 }
 
 input, select {
@@ -42,13 +32,43 @@ input, select {
 	margin: 0;
 	margin-top: 1em;
 	padding: 3px 4px;
+	max-width: 100%;
+}
+
+input[type=text], input[type=password], textarea
+{
+	background-color: #FEFEFE;
+	border: 1px solid #D4D4D4;
+	border-top: 1px solid #A4A4A4;
+	border-left: 1px solid #A4A4A4;
+	width: 300px;
+}
+
+textarea {
+	font-family: inherit;
+	font-size: 17px;
 	width: 500px;
 	max-width: 100%;
-	border: 1px solid #242424;
+	height: 200px;
+	max-height: 100%;
+	padding: 3px 4px;
+}
+
+input[type=submit], input[type=button], button {
+	min-width: 50px;
+	padding: 5px;
+	font-family: inherit;
+	color: #222;
+	font-weight: 600;
+	font-size: 18px;
 }
 
 select {
 	width: 508px;
+}
+
+ul {
+	list-style-type: square;
 }
 
 hr {
@@ -60,11 +80,50 @@ hr {
 div[role=main] {
 	margin: 0 auto;
 	max-width: 940px;
+	margin-top: 30px;
 }
 
 #languages {
 	float: right;
 }
+
+.post-image {
+	max-width: 500px;
+	max-height: 400px;
+}
+
+#top-block {
+	margin: 0 auto;
+	max-width: 940px;
+
+	color: #ffffff;
+	background-color: #036564;
+	padding: 3px;
+	height: 40px;
+	border-bottom: 4px solid #CDB380;
+}
+
+#name {
+	display: inline-block;
+	font-size: 25px;
+	margin: 0;
+	font-weight: 700;
+	margin-left: 20px;
+	color: #ffffff;
+	float: left;
+	margin-right: 50px;
+}
+
+#navigation {
+	margin-top: 6px;
+	margin-right: 20px;
+}
+
+#navigation a {
+	color: #ffffff;
+	margin-right: 10px;
+}
+
 
 #footer {
 	margin-top: 80px;
@@ -73,9 +132,5 @@ div[role=main] {
 	border-top: 1px solid #d4d4d4;
 	font-size: .8em;
 	color: #545454;
-}
-
-.post-image {
-	max-width: 500px;
-	max-height: 400px;
+	min-height: 50px;
 }
