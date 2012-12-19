@@ -2,16 +2,28 @@
 {% load i18n %}
 
 {%block content %}
+	{% if form.errors %}
+		<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
+	{% endif %}
+	
 	<form action='' method='POST' enctype='multipart/form-data'>
 		{% csrf_token %}
-		<textarea name='text' placeholder='{%trans "Enter your text here (Max. 350 chars)" %}'></textarea>
+
+		<textarea name='text' placeholder='{%trans "Enter your text here (Max. 350 chars)" %}'>{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
+		{{ form.text.errors }}
+		
 		<select name='date'>
 			<option value='{{ yesterday|date:"Y-m-d" }}'>{%trans "yesterday" %}</option>
 			<option value='{{ today|date:"Y-m-d" }}' selected>{%trans "today" %}</option>
 		</select>
-		<input type='text' name='mood' maxlength='100' placeholder='{%trans "mood" %}' />
+		{{ form.date.errors }}
+		
+		<input type='text' name='mood' maxlength='100' placeholder='{%trans "mood" %}' value="{% if form.mood.value %}{{ form.mood.value }}{% endif %}" />
+		{{ form.mood.errors }}
+
 		<p><small>Image (optional)</small></p>
 		<input type='file' name='image' />
+		{{ form.file.errors }}
 		<input type='submit' value='{% trans "submit" %}' />
 	</form>
 {% endblock %}

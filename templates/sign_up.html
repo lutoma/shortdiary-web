@@ -2,14 +2,27 @@
 {% load i18n %}
 
 {%block content %}
+	{% if form.errors %}
+		<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
+	{% endif %}
+
 	<form action='' method='POST' enctype='multipart/form-data'>
 		{% csrf_token %}
-		<input type='text' name='username' maxlength='100' placeholder='username' />
-		<input type='email' name='email' maxlength='100' placeholder='email' />
-		<input type='password' name='password' maxlength='100' placeholder='password' />
-		<label for='public_check'>Public account?</label> <small>(If your account is public, your posts may be displayed <i>anonymously</i>).</small><input type='checkbox' id='public_check' name='public' />
+		<input type='text' name='username' maxlength='100' placeholder='username'  value="{% if form.username.value %}{{ form.username.value }}{% endif %}" />
+		{{ form.username.errors }}
+
+		<input type='email' name='email' maxlength='100' placeholder='email' value="{% if form.email.value %}{{ form.email.value }}{% endif %}" />
+		{{ form.email.errors }}
+
+		<input type='password' name='password' maxlength='100' placeholder='password' value="{% if form.password.value %}{{ form.password.value }}{% endif %}" />
+		{{ form.password.errors }}
+
+		<label for='public_check'>Public account?</label> <small>(If your account is public, your posts may be displayed <i>anonymously</i>).</small><input type='checkbox' id='public_check' name='public' {% if form.public.value %}checked{% endif %} />
+		{{ form.public.errors }}
 
 		<input type='text' name='invite_code' maxlength='100' placeholder='invite code' />
+		{% if noinvite %}{% trans 'The invite you entered is invalid. Please try again. ' %}{% endif %}
+
 		<input type='submit' value='{% trans "submit" %}' />
 	</form>
 {% endblock %}

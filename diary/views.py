@@ -55,7 +55,15 @@ def new_post(request):
 	# Request method is POST
 	form = PostForm(request.POST, request.FILES)
 	if not form.is_valid():
-		return HttpResponse('Invalid data.')
+		context = {
+			'title': _('New post'),
+			'today': datetime.date.today(),
+			'yesterday': datetime.date.today() - datetime.timedelta(days=1),
+			'form': form,
+		}
+
+		return render_to_response('new_post.html', context_instance=RequestContext(request, context))
+
 
 	post = form.save(commit = False)
 
@@ -97,13 +105,22 @@ def sign_up(request):
 	# Request method is POST
 	form = SignUpForm(request.POST, request.FILES)
 	if not form.is_valid():
-		return HttpResponse('Invalid data.')
+		context = {
+			'title': _('Sign up'),
+			'form': form,
+		}
+		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
 
 	# Check invite code
 	try:
 		invite = Invite.objects.get(code = request.POST.get('invite_code', None))
 	except Invite.DoesNotExist:
-		return HttpResponse('Invalid invite code.')
+		context = {
+			'title': _('Sign up'),
+			'form': form,
+			'noinvite': True,
+		}
+		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
 
 	# Fixme
 	user = form.save(commit = False)
