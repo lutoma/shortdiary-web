@@ -35,7 +35,7 @@ input, select {
 	max-width: 100%;
 }
 
-input[type=text], input[type=password], textarea
+input[type=text], input[type=password], input[type=email], textarea
 {
 	background-color: #FEFEFE;
 	border: 1px solid #D4D4D4;
