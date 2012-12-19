@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: shortdiary 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-19 07:04+0100\n"
-"PO-Revision-Date: 2012-12-19 07:07+0100\n"
+"POT-Creation-Date: 2012-12-19 02:46-0800\n"
+"PO-Revision-Date: 2012-12-19 11:47+0100\n"
 "Last-Translator: Lukas Martini <hello@lutoma.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -88,11 +88,23 @@ msgstr "Abmelden"
 msgid "Log in"
 msgstr "Einloggen"
 
-#: templates/base.html:51
+#: templates/base.html:37
+msgid "Blog"
+msgstr "Blog"
+
+#: templates/base.html:38
+msgid "Report bug"
+msgstr "Fehler melden"
+
+#: templates/base.html:55
 msgid "No content to show :("
 msgstr "Nichts anzuzeigen :("
 
-#: templates/base.html:59
+#: templates/base.html:60
+msgid "TOS"
+msgstr "Nutzungsbedingungen"
+
+#: templates/base.html:63
 msgid "Admin panel"
 msgstr "Administrationsbereich"
 
@@ -110,7 +122,7 @@ msgstr ""
 msgid "Sign me up!"
 msgstr "Ich will mich registrieren!"
 
-#: templates/frontpage.html:18
+#: templates/frontpage.html:20
 msgid "Random public post"
 msgstr "Zufälliger öffentlicher Eintrag"
 
@@ -144,8 +156,8 @@ msgid "password"
 msgstr "Passwort"
 
 #: templates/new_post.html:7
-msgid "Enter your text here"
-msgstr "Gib hier deinen Text ein"
+msgid "Enter your text here (Max. 350 chars)"
+msgstr "Gib hier deinen Text ein (Max. 350 Zeichen)"
 
 #: templates/new_post.html:9
 msgid "yesterday"
@@ -155,7 +167,7 @@ msgstr "Gestern"
 msgid "today"
 msgstr "Heute"
 
-#: templates/new_post.html:14 templates/sign_up.html:13
+#: templates/new_post.html:15 templates/sign_up.html:13
 msgid "submit"
 msgstr "Abschicken"
 
