@@ -4,12 +4,13 @@
 {%block content %}
 	<form action='' method='POST' enctype='multipart/form-data'>
 		{% csrf_token %}
-		<textarea name='text' placeholder='{%trans "Enter your text here" %}'></textarea>
+		<textarea name='text' placeholder='{%trans "Enter your text here (Max. 350 chars)" %}'></textarea>
 		<select name='date'>
 			<option value='{{ yesterday|date:"Y-m-d" }}'>{%trans "yesterday" %}</option>
 			<option value='{{ today|date:"Y-m-d" }}' selected>{%trans "today" %}</option>
 		</select>
 		<input type='text' name='mood' maxlength='100' placeholder='{%trans "mood" %}' />
+		<p><small>Image (optional)</small></p>
 		<input type='file' name='image' />
 		<input type='submit' value='{% trans "submit" %}' />
 	</form>
