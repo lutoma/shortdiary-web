@@ -15,7 +15,7 @@
 	<h2>{% trans 'Recent posts' %}</h2>
 	<ul class="post-list">
 		{% for post in posts %}
-			<a href='/post/show/{{ post.id }}/'>
+			<a href='/post/{{ post.id }}/'>
 				<li class='{% cycle 'even' 'odd' %}'>
 					<h4>{{ post.date|naturalday }}</h4>: {{ post.mood }} <small class="text-teaser">{{ post.text|truncatechars:100 }}</small>
 				</li>
