@@ -1,5 +1,5 @@
 # coding: utf-8
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -15,6 +15,10 @@ class UserProfile(models.Model):
 
 	__unicode__ = lambda self: self.user.username
 
+	class Meta:
+		verbose_name = _('user profile')
+		verbose_name_plural = _('user profiles')
+
 # Automatically create a new user profile when a new user is added
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -29,12 +33,16 @@ class Post(models.Model):
 	mood = models.CharField(max_length = 100, verbose_name = _('mood'))
 	image = models.ImageField(upload_to = 'postimages/%d%m%y/', blank = True, verbose_name = _('image'))
 
-	created_at = models.DateTimeField(auto_now_add = True)
-	last_changed_at = models.DateTimeField(auto_now = True)
+	created_at = models.DateTimeField(auto_now_add = True, verbose_name = _('created at'))
+	last_changed_at = models.DateTimeField(auto_now = True, verbose_name = _('last changed at'))
 
 	sent = models.BooleanField(default = False, verbose_name = _('mail sent?'))
 
 	__unicode__ = lambda self: _('{0} at {1}').format(self.author, self.date)
+
+	class Meta:
+		verbose_name = _('post')
+		verbose_name_plural = _('posts')
 
 class Invite(models.Model):
 	generate_code = lambda: ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(20))
@@ -45,3 +53,7 @@ class Invite(models.Model):
 	created_at = models.DateTimeField(auto_now_add = True)
 
 	__unicode__ = lambda self: self.code
+
+	class Meta:
+		verbose_name = _('invite')
+		verbose_name_plural = _('invites')
