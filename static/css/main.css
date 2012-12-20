@@ -80,7 +80,7 @@ hr {
 div[role=main] {
 	margin: 0 auto;
 	max-width: 940px;
-	margin-top: 30px;
+	margin-top: 26px;
 }
 
 #languages {
@@ -124,6 +124,11 @@ div[role=main] {
 	margin-right: 10px;
 }
 
+#title {
+	display: block;
+	margin-bottom: 40px;
+}
+
 
 #footer {
 	margin-top: 80px;
@@ -139,4 +144,33 @@ div[role=main] {
 	display: block;
 	width: 500px;
 	text-align: right;
+}
+
+.post-list {
+	list-style-type: none;
+	padding: 0;
+}
+
+.post-list a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.post-list li {
+	padding: 4px 10px;
+	overflow: hidden;
+}
+
+.post-list .even{
+	background: #F0F0F0;
+}
+
+.post-list li h4 {
+	display: inline;
+	font-weight: 600;
+}
+
+.post-list .text-teaser
+{
+	color: #bbb;
 }
