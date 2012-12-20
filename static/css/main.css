@@ -172,5 +172,6 @@ div[role=main] {
 
 .post-list .text-teaser
 {
+	margin-left: 6px;
 	color: #bbb;
 }
