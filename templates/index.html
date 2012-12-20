@@ -24,4 +24,9 @@
 			{% trans 'No posts to show – Try <a href="/post/new/">adding your first post</a>!'%}
 		{% endfor %}
 	</ul>
+
+	{% if randompost %}
+		<h2>{% trans 'Random public post' %}</h2>
+		<p>{{ randompost.text|linebreaks }}</p>
+	{% endif %}
 {% endblock %}

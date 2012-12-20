@@ -16,21 +16,21 @@ tos = lambda request: render_to_response(
 	)
 
 def index(request):
+	try:
+		randompost = Post.objects.filter(author__userprofile__public = True).order_by('?')[:1].get()
+	except Post.DoesNotExist:
+		randompost = None
+
 	if not request.user.is_authenticated():
-
-		try:
-			post = Post.objects.filter(author__userprofile__public = True).order_by('?')[:1].get()
-		except Post.DoesNotExist:
-			post = None
-
 		context = {
 			'title': _('Welcome to shortdiary'),
-			'post': post,
+			'post': randompost,
 		}
 		return render_to_response('frontpage.html', context_instance=RequestContext(request, context))
 
 	context = {
 		'title': 'Home',
+		'randompost': randompost,
 		'posts': Post.objects.filter(author = request.user).order_by('-date', '-created_at')[:20],
 	}
 	return render_to_response('index.html', context_instance=RequestContext(request, context))

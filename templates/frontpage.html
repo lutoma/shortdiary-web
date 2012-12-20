@@ -18,7 +18,7 @@
 
 		<p id="front-randompost">
 			<h2>{% trans 'Random public post' %}</h2>
-			<p>{{ post.text }}</p>
+			<p>{{ post.text|linebreaks }}</p>
 		</p>
 	{% endif %}
 {% endblock %}
