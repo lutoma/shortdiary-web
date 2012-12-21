@@ -12,6 +12,9 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	public = models.BooleanField(verbose_name = _('public'))
 	invited_by = models.ForeignKey(User, related_name = 'user_invited_by', blank = True, null = True, verbose_name = _('invited by'))
+	last_login_at = models.DateTimeField(blank = True, null = True, verbose_name = _('last logged in at'))
+	mail_verified = models.BooleanField(default = False, verbose_name = _('email verified?'))
+	language = models.CharField(default = 'en_US', max_length = 4, verbose_name = _('language'))
 
 	__unicode__ = lambda self: self.user.username
 
