@@ -20,7 +20,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'UserProfile.language'
         db.add_column('diary_userprofile', 'language',
-                      self.gf('django.db.models.fields.CharField')(default='en_US', max_length=4),
+                      self.gf('django.db.models.fields.CharField')(default='en', max_length=4),
                       keep_default=False)
 
         # Adding unique constraint on 'Invite', fields ['code']
