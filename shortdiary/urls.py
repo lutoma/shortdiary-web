@@ -32,7 +32,7 @@ urlpatterns += patterns('',
 	url(r'^post/new/', 'diary.views.new_post'),
 	url(r'^post/(?P<post_id>[0-9]+)/', 'diary.views.show_post'),
 
-	url(r'^mail/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', 'diary.views.mail_verify'),
+	url(r'^email/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', 'diary.views.mail_verify'),
 
 	url(r'^/?$', 'diary.views.index'),
 )
