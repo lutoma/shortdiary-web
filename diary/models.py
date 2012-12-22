@@ -26,7 +26,7 @@ class UserProfile(models.Model):
 		verbose_name = _('user profile')
 		verbose_name_plural = _('user profiles')
 
-	get_verification_hash = lambda self: hashlib.sha256(self.user.email + settings.SECRET_KEY).hexdigest()
+	get_verification_hash = lambda self: hashlib.sha256(self.user.email.encode('utf-8') + settings.SECRET_KEY).hexdigest()
 
 	def send_verification_mail(self):
 		mail_template = get_template('mails/verification.txt')
