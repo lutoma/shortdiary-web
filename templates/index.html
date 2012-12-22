@@ -12,6 +12,10 @@
 		{% endif%}
 	</p>
 
+	{% if user.is_authenticated and not user.get_profile.mail_verified %}
+		<p><b>Your email address is unverified</b>. Therefore, we won't be able to send you any mails, <i>including</i> your diary mails. Please check your inbox for the verification link.</p>
+	{% endif %}
+
 	<h2>{% trans 'Recent posts' %}</h2>
 	<ul class="post-list">
 		{% for post in posts %}
