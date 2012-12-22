@@ -133,6 +133,8 @@ def sign_up(request):
 
 	invite.delete()
 
+	user.get_profile().send_verification_mail()
+
 	login_user = django.contrib.auth.authenticate(username = user.username, password = request.POST.get('password', None))
 	django.contrib.auth.login(request, login_user)
 	return HttpResponseRedirect('/')
@@ -147,3 +149,14 @@ def invite(request):
 		'content': 'Generated invite code: {}'.format(invite.code)
 	}
 	return render_to_response('base.html', context_instance=RequestContext(request, context))
+
+def mail_verify(request, user_id, hash):
+	user = get_object_or_404(User, id = user_id)
+	profile = user.get_profile()
+
+	if not hash == profile.get_verification_hash():
+		return HttpResponse('Sorry, invalid hash.')
+
+	profile.mail_verified = True
+	profile.save()
+	return HttpResponseRedirect("/")

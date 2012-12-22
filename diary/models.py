@@ -3,8 +3,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.core.mail import EmailMessage
+from django.template.loader import get_template, Context
+from django.conf import settings
 import string
 import random
+import hashlib
 
 class UserProfile(models.Model):
 	'''The extended user profile'''
@@ -22,10 +26,21 @@ class UserProfile(models.Model):
 		verbose_name = _('user profile')
 		verbose_name_plural = _('user profiles')
 
+	get_verification_hash = lambda self: hashlib.sha256(self.user.email + settings.SECRET_KEY).hexdigest()
+
+	def send_verification_mail(self):
+		mail_template = get_template('mails/verification.txt')
+		mail = EmailMessage(
+			_('Please verify your email address on shortdiary, {0}'.format(self.user.username)),
+			mail_template.render(Context({'mailuser': self.user, 'hash': self.get_verification_hash()})),
+			'shortdiary <team@shortdiary.me>',
+			['{0} <{1}>'.format(self.user.username, self.user.email)])
+		mail.send()
+
 # Automatically create a new user profile when a new user is added
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user=instance)
+        UserProfile.objects.create(user = instance)
 
 post_save.connect(create_user_profile, sender=User)
 

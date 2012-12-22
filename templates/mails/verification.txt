@@ -1,0 +1,8 @@
+{% load i18n %}{% blocktrans with id=mailuser.id name=mailuser.username hash=hash %}Hey {{ name }},
+
+you registered on shortdiary.me and gave us this email address. To confirm it as yours, simply click the following link:
+
+http://shortdiary.me/email/verify/{{ id }}/{{ hash }}{% endblocktrans %}
+
+-- 
+{% blocktrans %}You received this mail because you signed up on shortdiary. Unless you click the confirmation link, you will not receive any more mail from us.{% endblocktrans %}

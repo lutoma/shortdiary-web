@@ -5,10 +5,9 @@ import mimetypes
 from django.utils.translation import ugettext as _
 from celery.schedules import crontab
 from celery.decorators import periodic_task
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import EmailMessage
 from diary.models import Post
-from django.template.loader import get_template
-from django.template import Context
+from django.template.loader import get_template, Context
 from django.conf import settings
 
 @periodic_task(run_every = crontab(hour="*", minute="*", day_of_week="*"))
@@ -24,6 +23,10 @@ def process_mails():
 
 	for post in posts:
 		print('Sending mail for post #{} ({})'.format(post.id, post))
+		
+		if not post.author.get_profile().mail_verified:
+			print('User hasn\'t verified mail address, skipping')
+			continue
 
 		mail = EmailMessage(
 			_('Your shortdiary post from {0}').format(post.date),
