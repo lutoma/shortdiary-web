@@ -113,7 +113,6 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-	'django.contrib.auth',
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
 	'django.contrib.sites',
@@ -125,7 +124,8 @@ INSTALLED_APPS = (
 	'django.contrib.admindocs',
 	'kombu.transport.django',
 	'djcelery',
-	'diary'
+	'diary',
+	'django.contrib.auth',
 )
 
 # Asynchronous jobs
