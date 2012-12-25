@@ -31,7 +31,7 @@ def index(request):
 	context = {
 		'title': 'Home',
 		'randompost': randompost,
-		'posts': Post.objects.filter(author = request.user).order_by('-date', '-created_at')[:20],
+		'posts': Post.objects.filter(author = request.user, date__gte = datetime.date.today() - datetime.timedelta(days = 7)).order_by('-date', '-created_at'),
 	}
 	return render_to_response('index.html', context_instance=RequestContext(request, context))
 
