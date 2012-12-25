@@ -39,13 +39,6 @@
 
 				<a href="http://shortdiary.wordpress.com" target="_blank">{% trans 'Blog' %}</a>
 				<a href="https://github.com/shortdiary/shortdiary/issues/new" target="_blank">{% trans 'Report bug' %}</a>
-
-
-				<span id="languages">
-					{% for lang in LANGUAGES %}
-						<a href="/i18n/setlang/{{ lang.0 }}/">{{ lang.1 }}</a>
-					{% endfor %}
-				</span>
 			</div>
 		</div>
 		<div role="main">
@@ -65,6 +58,13 @@
 				{% if user.is_superuser %}
 					 | <a href="/admin/">{% trans 'Admin panel' %}</a>
 				{% endif %}
+
+
+				<span id="languages">
+					{% for lang in LANGUAGES %}
+						<a href="/i18n/setlang/{{ lang.0 }}/">{{ lang.1 }}</a>{% if not forloop.last %} |{% endif %}
+					{% endfor %}
+				</span>
 			</div>
 		</div>
 
