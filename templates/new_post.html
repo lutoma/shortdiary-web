@@ -35,8 +35,8 @@
 		{{ form.text.errors }}
 		
 		<select name='date'>
-			<option value='{{ yesterday|date:"Y-m-d" }}'>{%trans "yesterday" %}</option>
-			<option value='{{ today|date:"Y-m-d" }}' selected>{%trans "today" %}</option>
+			<option value='{{ yesterday|date:"Y-m-d" }}'>{%trans "yesterday" %} ({{yesterday}})</option>
+			<option value='{{ today|date:"Y-m-d" }}' selected>{%trans "today" %} ({{today}})</option>
 		</select>
 		{{ form.date.errors }}
 		
