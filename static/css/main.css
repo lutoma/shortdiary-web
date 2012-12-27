@@ -43,7 +43,7 @@ h1 {
 	float: left;
 }
 
-.buttonpane button, .buttonpane input[type=button], .buttonpane input[type=submit] {
+.buttonpane button, .buttonpane input[type=button], .buttonpane input[type=submit], .button {
 	float: right;
 	margin: 0;
 	margin-top: 5px;
@@ -82,13 +82,14 @@ textarea {
 	padding: 3px 4px;
 }
 
-input[type=submit], input[type=button], button {
+input[type=submit], input[type=button], button, .button {
 	min-width: 50px;
 	padding: 4px 10px;
 	font-family: inherit;
 	color: #222;
 	font-weight: 600;
 	font-size: 15px;
+	line-height: 1.4;
 
 	text-shadow: 0 1px 0 white;
 	border: 1px solid #D4D4D4;
@@ -102,7 +103,7 @@ input[type=submit], input[type=button], button {
 	border-radius: 2px;
 }
 
-input[type=submit]:hover, input[type=button]:hover, button:hover {
+input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover {
 	cursor: pointer;
 	color: white;
 	text-decoration: none;
