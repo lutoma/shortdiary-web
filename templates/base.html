@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load gravatar %}
+{% load staticfiles %}
 
 <!doctype html>
 <html>
@@ -10,10 +11,10 @@
 
 		<link href='//fonts.googleapis.com/css?family=Exo:100,200,300,400,600,700' rel='stylesheet' type='text/css'>
 
-		<link href="{{ STATIC_URL }}css/main.css" rel="stylesheet" />
-		<link href="{{ STATIC_URL }}css/font-awesome.css" rel="stylesheet" />
+		<link href="{% static 'css/main.css' %}" rel="stylesheet" />
+		<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" />
 
-		<link rel='icon' type='image/png' href='{{ STATIC_URL }}img/favicon.png' />
+		<link rel='icon' type='image/png' href='{% static "img/favicon.png" %}' />
 
 		<script>
 			var static_url = '{{ STATIC_URL }}';
