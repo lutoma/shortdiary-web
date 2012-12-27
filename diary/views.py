@@ -10,6 +10,7 @@ import django.contrib.auth
 from diary.models import Post, Invite
 import django.forms as forms
 
+
 tos = lambda request: render_to_response(
 		'tos.html',
 		context_instance = RequestContext(request, {'title': _('Terms of service')}),
@@ -138,6 +139,36 @@ def sign_up(request):
 	login_user = django.contrib.auth.authenticate(username = user.username, password = request.POST.get('password', None))
 	django.contrib.auth.login(request, login_user)
 	return HttpResponseRedirect('/')
+
+
+class LoginForm(forms.Form):
+	username = forms.CharField(max_length = 200)
+	password = forms.CharField(max_length = 200)
+
+
+def login(request):
+	if not request.method == 'POST':
+		context = {
+			'title': _('Login'),
+		}
+		return render_to_response('login.html', context_instance=RequestContext(request, context))
+
+	# Request method is POST
+	username = request.POST['username']
+	password = request.POST['password']
+
+	user = django.contrib.auth.authenticate(username = username, password = password)
+	if user is not None and user.is_active:
+		django.contrib.auth.login(request, user)
+		user.get_profile().last_login_at = datetime.datetime.now()
+		user.get_profile().save()
+		return HttpResponseRedirect('/')
+
+	context = {
+		'title': _('Login'),
+		'errors': True,
+	}
+	return render_to_response('login.html', context_instance = RequestContext(request, context))
 
 @login_required
 def invite(request):
