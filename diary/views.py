@@ -185,13 +185,16 @@ def account_settings(request):
 		return render_to_response('account_settings.html', context_instance=RequestContext(request, context))
 
 	# Save form
+	profile = request.user.get_profile()
+
 	if request.user.email != form.cleaned_data['email']:
-		request.user.get_profile().email_verified = False
+		profile.mail_verified = False
+		request.user.email = form.cleaned_data['email']
+		profile.send_verification_mail()
 
-	request.user.email = form.cleaned_data['email']
-	request.user.get_profile().public = form.cleaned_data['public']
+	profile.public = form.cleaned_data['public']
 
-	request.user.get_profile().save()
+	profile.save()
 	request.user.save()
 
 	context = {
