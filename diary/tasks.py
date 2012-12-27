@@ -10,7 +10,7 @@ from diary.models import Post
 from django.template.loader import get_template, Context
 from django.conf import settings
 
-@periodic_task(run_every = crontab(hour="*", minute="*", day_of_week="*"))
+@periodic_task(run_every = crontab(hour="*", minute="0", day_of_week="*"))
 def process_mails():
 	print('Sending mails…')
 
