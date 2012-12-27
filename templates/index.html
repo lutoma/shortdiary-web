@@ -17,17 +17,41 @@
 	{% endif %}
 
 	<h2>{% trans 'Recent posts' %}</h2>
-	<ul class="post-list">
-		{% for post in posts %}
-			<a href='/post/{{ post.id }}/'>
-				<li class='{% cycle 'even' 'odd' %}'>
-					<h4>{{ post.date|naturalday }}</h4>: {{ post.mood }} <small class="text-teaser">{{ post.text|truncatechars:100 }}</small>
-				</li>
-		</a>
-		{% empty %}
-			{% trans 'No posts to show – Try <a href="/post/new/">adding your first post</a>!'%}
-		{% endfor %}
-	</ul>
+	<!-- <a href='/post/{{ post.id }}/'> -->
+	<table class="post-list border alternate">
+		<tbody>
+			{% for post in posts %}
+					<tr data-id='{{ post.id }}' onclick="window.location.href = '/post/{{ post.id }}';">
+						<td style="width: 45px; text-align: center;">
+							<a href='/post/{{ post.id }}'><strong>#{{ post.get_user_post_id }}</strong></a>
+						</td>
+						<!--<td>
+							<i class="icon-edit"></i>
+						</td>-->
+						<td style="width: 250px;">
+							<!-- We heard you like tables … -->
+							<table>
+								<tbody>
+									<tr>
+										<td><a href='/post/{{ post.id }}'><strong>{{ post.date|naturalday }}</strong></a></td>
+									</tr>
+									<tr>
+										<td>
+											<a href='/post/{{ post.id }}'><small style='font-size: .8em; font-weight: 300;'>Posted {{ post.created_at }}</small></a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+						<td>
+							<a href='/post/{{ post.id }}'><small class="text-teaser">{{ post.text|truncatechars:140 }}</small></a>
+						</td>
+					</tr>
+			{% empty %}
+				{% trans 'No posts to show – Try <a href="/post/new/">adding your first post</a>!'%}
+			{% endfor %}
+		</tbody>
+	</table>
 
 	{% if randompost %}
 		<h2>{% trans 'Random public post' %}</h2>

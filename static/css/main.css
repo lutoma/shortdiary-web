@@ -33,6 +33,8 @@ h1 {
 	font-size: 3em;
 }
 
+/* Input elements & buttons */
+
 input, select, button, textarea {
 	display: block;
 	margin: 0;
@@ -92,6 +94,43 @@ input[type=submit]:hover, input[type=button]:hover, button:hover {
 	background-image: -webkit-linear-gradient(#599BDC, #3072B3);
 	background-image: linear-gradient(#599BDC, #3072B3);
 	background-repeat: repeat-x;
+}
+
+/* Tables */
+table {
+	width: 100%;
+	background: inherit;
+	font-size: .97em;
+}
+
+table tbody {
+	margin: 10px;
+}
+
+table tr {
+	border-bottom: 1px solid #d4d4d4;
+	padding: 4px;
+	background: inherit;
+}
+
+table tr td {
+	border: none !important;
+	background: inherit;
+}
+
+/* Tables with class='border' */
+table.border {
+	border: 1px solid #d4d4d4;
+	border-radius: 2px;
+}
+
+table.border > tbody > tr > td {
+	padding: .1em .5em;
+}
+
+/* Tables with class='alternate' */
+table.alternate > tbody > tr:nth-child(even) {
+	background: #f0f0f0;
 }
 
 select {
@@ -209,29 +248,19 @@ div[role=main] {
 	padding: 0;
 }
 
-.post-list a {
-	text-decoration: none;
-	color: inherit;
-}
-
-.post-list li {
-	padding: 4px 10px;
-	overflow: hidden;
-}
-
-.post-list .even{
-	background: #F0F0F0;
-}
-
-.post-list li h4 {
-	display: inline;
-	font-weight: 600;
-}
-
 .post-list .text-teaser
 {
 	margin-left: 6px;
-	color: #bbb;
+	color: #888;
+}
+
+.post-list > tbody {
+	cursor: pointer;
+}
+
+.post-list a {
+	text-decoration: none;
+	color: inherit;
 }
 
 /* –––––––––––––––––––– */
