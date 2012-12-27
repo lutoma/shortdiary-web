@@ -15,3 +15,6 @@ django-celery
 
 # Timezonefoo
 pytz
+
+# Gravatar
+django-gravatar

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{%block content %}
+	{% if form.errors %}
+		<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
+	{% endif %}
+
+	{% if success %}
+		<p><strong>{% trans 'Your changes have been saved!' %}</strong></p>
+	{% endif %}
+
+	<p>{% trans 'You can change most of your account settings here <small>(Hint: You can change your avatar at <a href="https://gravatar.com/">gravatar.com</a>)</small>.' %}</p>
+
+	<form action='' method='POST' enctype='multipart/form-data'>
+		{% csrf_token %}
+		<input type='email' name='email' maxlength='100' placeholder='email' value="{% if form.email.value %}{{ form.email.value }}{% else %}{{ user.email }}{% endif %}" />
+		<small>
+			{% trans 'Status' %}: 
+			{% if user.get_profile.mail_verified %}
+				{% trans 'Verified' %}. 
+			{% else %}
+				<span style="color: red;">{% trans 'Unverified' %}. </span>
+			{% endif %}
+
+			{% trans "<strong>Caution:</strong> If you change your email address, you won't receive any mails until you've verified the new address, so be sure to do that quickly!" %}
+		</small>
+		{{ form.email.errors }}
+
+		<input type='password' name='password' maxlength='100' placeholder='{% trans "New password (or leave empty)" %}' value="{% if form.password.value %}{{ form.password.value }}{% endif %}" />
+		{{ form.password.errors }}
+
+		<label for='public_check'>{% trans "Public account?" %}</label> <input type='checkbox' id='public_check' name='public' {% if form.public.value or user.get_profile.public %}checked{% endif %} />
+		{{ form.public.errors }}
+
+		<button type='submit'>
+				<i class='icon-share-alt'></i> {% trans "submit" %}
+		</button>
+	</form>
+{% endblock %}

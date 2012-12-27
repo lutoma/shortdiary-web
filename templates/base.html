@@ -1,4 +1,5 @@
-{% load i18n %} 
+{% load i18n %}
+{% load gravatar %}
 
 <!doctype html>
 <html>
@@ -9,8 +10,8 @@
 
 		<link href='//fonts.googleapis.com/css?family=Exo:100,200,300,400,600,700' rel='stylesheet' type='text/css'>
 
-		<link href="{{ STATIC_URL }}css/reset.css" rel="stylesheet" />
 		<link href="{{ STATIC_URL }}css/main.css" rel="stylesheet" />
+		<link href="{{ STATIC_URL }}css/font-awesome.css" rel="stylesheet" />
 
 		<link rel='icon' type='image/png' href='{{ STATIC_URL }}img/favicon.png' />
 
@@ -31,7 +32,6 @@
 			<div id="navigation">
 				{% if user.is_authenticated %}
 					<a href="/post/new/">{% trans 'New post' %}</a>
-					<a href="/accounts/logout/">{% trans 'Log out' %}</a>
 				{% else %}
 					<a href="/accounts/login/">{% trans 'Log in' %}</a>
 					<a href="/accounts/signup/">{% trans 'Sign up' %}</a>
@@ -39,6 +39,18 @@
 
 				<a href="http://shortdiary.wordpress.com" target="_blank">{% trans 'Blog' %}</a>
 				<a href="https://github.com/shortdiary/shortdiary/issues/new" target="_blank">{% trans 'Report bug' %}</a>
+
+				<span class="right">
+					{% if user.is_authenticated %}
+						<a href='/'><img class="user-avatar" src="{% gravatar_for_user user 25 %}" alt='' title="Hint: You can change your avatar at gravatar.com" />
+						{{ user.username }}</a>
+						
+						<span class="nav-icons">
+							<a href="/accounts/settings/" title="{% trans 'Account settings' %}"><i class="icon-wrench"></i></a>
+							<a href="/accounts/logout/" title="{% trans 'Sign out' %}"><i class="icon-signout"></i></a>
+						</span>
+					{% endif %}
+				</span>
 			</div>
 		</div>
 		<div role="main">
@@ -61,6 +73,7 @@
 
 
 				<span id="languages">
+					<i class="icon-flag" style="margin-right: 7px;"></i>
 					{% for lang in LANGUAGES %}
 						<a href="/i18n/setlang/{{ lang.0 }}/">{{ lang.1 }}</a>{% if not forloop.last %} |{% endif %}
 					{% endfor %}

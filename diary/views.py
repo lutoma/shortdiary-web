@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import django.contrib.auth
 from diary.models import Post, Invite
-from django.forms import ModelForm
+import django.forms as forms
 
 tos = lambda request: render_to_response(
 		'tos.html',
@@ -35,7 +35,7 @@ def index(request):
 	}
 	return render_to_response('index.html', context_instance=RequestContext(request, context))
 
-class PostForm(ModelForm):
+class PostForm(forms.ModelForm):
 	class Meta:
 		model = Post
 		fields = ('text', 'mood', 'date', 'image')
@@ -89,7 +89,7 @@ def switch_language(request, language):
 	request.session['django_language'] = language
 	return HttpResponseRedirect('/')
 
-class SignUpForm(ModelForm):
+class SignUpForm(forms.ModelForm):
 	class Meta:
 		model = User
 		fields = ('username', 'email', 'password')
@@ -160,3 +160,43 @@ def mail_verify(request, user_id, hash):
 	profile.mail_verified = True
 	profile.save()
 	return HttpResponseRedirect("/")
+
+class AccountSettingsForm(forms.Form):
+	email = forms.EmailField(max_length = 100)
+	public = forms.BooleanField(required = False)
+	password = forms.CharField(max_length = 200, required = False)
+	oldpassword = forms.CharField(max_length = 200)
+
+def account_settings(request):
+	if not request.method == 'POST':
+		context = {
+			'title': _('Account settings'),
+			'form': AccountSettingsForm(),
+		}
+		return render_to_response('account_settings.html', context_instance=RequestContext(request, context))
+
+	# Request method is POST
+	form = AccountSettingsForm(request.POST, request.FILES)
+
+	if not form.is_valid():
+		context = {
+			'title': _('Account settings'),
+			'form': form,
+		}
+		return render_to_response('account_settings.html', context_instance=RequestContext(request, context))
+
+	# Save form
+	if request.user.email != form.cleaned_data['email']:
+		request.user.get_profile().email_verified = False
+
+	request.user.email = form.cleaned_data['email']
+	request.user.get_profile().public = form.cleaned_data['public']
+
+	request.user.get_profile().save()
+	request.user.save()
+
+	context = {
+		'title': _('Account settings'),
+		'success': True,
+	}
+	return render_to_response('account_settings.html', context_instance=RequestContext(request, context))

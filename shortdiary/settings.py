@@ -112,6 +112,9 @@ TEMPLATE_DIRS = (
 	os.path.join(SITE_ROOT, 'templates'),
 )
 
+GRAVATAR_URL_PREFIX = 'https://secure.gravatar.com/'
+GRAVATAR_DEFAULT_IMAGE = 'mm'
+
 INSTALLED_APPS = (
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
@@ -125,7 +128,8 @@ INSTALLED_APPS = (
 	'django.contrib.admindocs',
 	'kombu.transport.django',
 	'djcelery',
-	'diary'
+	'gravatar',
+	'diary',
 )
 
 # Asynchronous jobs

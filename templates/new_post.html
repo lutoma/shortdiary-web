@@ -46,6 +46,9 @@
 		<p><small>Image (optional)</small></p>
 		<input type='file' name='image' />
 		{{ form.file.errors }}
-		<input type='submit' value='{% trans "submit" %}' />
+
+		<button type='submit'>
+			<i class='icon-share-alt'></i> {% trans "Submit" %}
+		</button>
 	</form>
 {% endblock %}

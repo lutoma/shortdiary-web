@@ -1,3 +1,4 @@
+
 body {
 	font-family: Exo, 'Exo', sans-serif;
 	color: #515151;
@@ -7,6 +8,10 @@ body {
 	font-size: 18px;
 	line-height: 1.7;
 }
+
+/* –––––––––––––––––––– */
+/* General element defs */
+/* –––––––––––––––––––– */
 
 a, a:hover {
 	color: #033649;
@@ -28,7 +33,7 @@ h1 {
 	font-size: 3em;
 }
 
-input, select {
+input, select, button, textarea {
 	display: block;
 	margin: 0;
 	margin-top: 1em;
@@ -57,11 +62,36 @@ textarea {
 
 input[type=submit], input[type=button], button {
 	min-width: 50px;
-	padding: 5px;
+	padding: 4px 10px;
 	font-family: inherit;
 	color: #222;
 	font-weight: 600;
-	font-size: 18px;
+	font-size: 15px;
+
+	text-shadow: 0 1px 0 white;
+	border: 1px solid #D4D4D4;
+	border-bottom-color: #BCBCBC;
+	background-color: #EAEAEA;
+	background-image: -moz-linear-gradient(#FAFAFA, #EAEAEA);
+	background-image: -webkit-linear-gradient(#FAFAFA, #EAEAEA);
+	background-image: linear-gradient(#FAFAFA, #EAEAEA);
+	background-repeat: repeat-x;
+
+	border-radius: 2px;
+}
+
+input[type=submit]:hover, input[type=button]:hover, button:hover {
+	cursor: pointer;
+	color: white;
+	text-decoration: none;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+	border-color: #518CC6;
+	border-bottom-color: #2A65A0;
+	background-color: #3072B3;
+	background-image: -moz-linear-gradient(#599BDC, #3072B3);
+	background-image: -webkit-linear-gradient(#599BDC, #3072B3);
+	background-image: linear-gradient(#599BDC, #3072B3);
+	background-repeat: repeat-x;
 }
 
 select {
@@ -84,14 +114,13 @@ div[role=main] {
 	margin-top: 26px;
 }
 
-#languages {
+.right {
 	float: right;
 }
 
-.post-image {
-	max-width: 500px;
-	max-height: 400px;
-}
+/* –––––––––––––––––––– */
+/*        Top bar       */
+/* –––––––––––––––––––– */
 
 #top-block {
 	margin: 0 auto;
@@ -115,6 +144,8 @@ div[role=main] {
 	margin-right: 50px;
 }
 
+/* Navigation */
+
 #navigation {
 	margin-top: 6px;
 	margin-right: 20px;
@@ -125,12 +156,34 @@ div[role=main] {
 	margin-right: 10px;
 }
 
+#navigation .user-avatar {
+	margin-top: 2px;
+	float: left;
+	margin-right: 7px;
+	border-radius: 2px;
+}
+
+#navigation .nav-icons {
+	margin-left: 10px;
+}
+
+#navigation .nav-icons a {
+	text-decoration: none;
+}
+
+#navigation .nav-icons a:hover {
+	color: #CDB380;
+}
+
 #title {
 	display: block;
 	margin-bottom: 40px;
 	margin-top: 0;
 }
 
+/* –––––––––––––––––––– */
+/*        Footer        */
+/* –––––––––––––––––––– */
 
 #footer {
 	margin-top: 80px;
@@ -142,12 +195,15 @@ div[role=main] {
 	min-height: 50px;
 }
 
-#new-post-char-counter {
-	display: block;
-	width: 500px;
-	text-align: right;
+#languages {
+	float: right;
 }
 
+/* –––––––––––––––––––– */
+/*   Index (logged in)  */
+/* –––––––––––––––––––– */
+
+/* Post list */
 .post-list {
 	list-style-type: none;
 	padding: 0;
@@ -176,4 +232,23 @@ div[role=main] {
 {
 	margin-left: 6px;
 	color: #bbb;
+}
+
+/* –––––––––––––––––––– */
+/*   Single post view   */
+/* –––––––––––––––––––– */
+
+.post-image {
+	max-width: 500px;
+	max-height: 400px;
+}
+
+/* –––––––––––––––––––– */
+/*    New post view     */
+/* –––––––––––––––––––– */
+
+#new-post-char-counter {
+	display: block;
+	width: 500px;
+	text-align: right;
 }
