@@ -26,7 +26,7 @@
 			{% for post in posts %}
 					<tr data-id='{{ post.id }}' onclick="window.location.href = '/post/{{ post.id }}';">
 						<td style="width: 45px; text-align: center;">
-							<a href='/post/{{ post.id }}'><strong>#{{ post.get_user_post_id }}</strong></a>
+							<a href='/post/{{ post.id }}'><strong>#{{ post.get_user_id }}</strong></a>
 						</td>
 						<!--<td>
 							<i class="icon-edit"></i>

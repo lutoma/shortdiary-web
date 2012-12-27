@@ -63,7 +63,7 @@ class Post(models.Model):
 		verbose_name_plural = _('posts')
 
 	# Get user specific post ID (Aka: The how-manieth post of the user is this?)
-	def get_user_post_id(self):
+	def get_user_id(self):
 		return len(Post.objects.filter(author = self.author, date__lt = self.date))
 
 class Invite(models.Model):

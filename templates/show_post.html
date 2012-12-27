@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
 {% load i18n %} 
+{% load humanize %}
 
 {%block content %}
-	<p>{% trans 'Mood' %}: {{ post.mood }}</p>
+	<ul style="list-style-type: none; padding-left: 5px;">
+		<li><i class='icon-question-sign'></i> {% trans 'Mood' %}: {{ post.mood }}</li>
+		<li><i class='icon-calendar'></i> {% trans 'Post date' %}: {{ post.date }}</li>
+		<li><i class='icon-upload'></i> {% trans 'Created at' %}: {{ post.created_at }}</li>
+		<li><i class='icon-sort'></i> {% trans 'This is your ' %} {{ post.get_user_id|ordinal }} {% trans 'post' %}</li>
+		<li><i class='icon-envelope'></i> {% trans 'The email for this post has ' %} {% if not post.mail_sent %}{% trans 'not yet' %}{% endif %}{% trans ' been sent' %}</li>
+	</ul>
 	
 	{% if post.image %}
 		<a href="{{ MEDIA_URL }}{{ post.image }}" target="_blank"><img class="post-image" src="{{ MEDIA_URL }}{{ post.image }}" /></a>

@@ -80,7 +80,7 @@ def show_post(request, post_id):
 	post = get_object_or_404(Post, id = post_id, author = request.user)
 
 	context = {
-		'title': _('Post from {0}').format(post.date),
+		'title': _('Your post #{}').format(post.get_user_id()),
 		'post': post,
 	}
 	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
