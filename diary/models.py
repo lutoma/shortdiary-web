@@ -64,7 +64,7 @@ class Post(models.Model):
 
 	# Get user specific post ID (Aka: The how-manieth post of the user is this?)
 	def get_user_id(self):
-		return len(Post.objects.filter(author = self.author, date__lt = self.date))
+		return len(Post.objects.filter(author = self.author, date__lt = self.date)) + 1
 
 class Invite(models.Model):
 	generate_code = lambda: ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(20))
