@@ -165,7 +165,6 @@ class AccountSettingsForm(forms.Form):
 	email = forms.EmailField(max_length = 100)
 	public = forms.BooleanField(required = False)
 	password = forms.CharField(max_length = 200, required = False)
-	oldpassword = forms.CharField(max_length = 200)
 
 def account_settings(request):
 	if not request.method == 'POST':
