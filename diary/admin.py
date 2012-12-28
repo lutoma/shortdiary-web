@@ -21,9 +21,9 @@ class PostAdmin(admin.ModelAdmin):
 	list_filter = ['sent', 'created_at']
 
 class UserProfileAdmin(admin.ModelAdmin):
-	list_display = ['user', 'public', 'mail_verified', 'last_login_at', 'invited_by', 'language']
+	list_display = ['user', 'public', 'mail_verified', 'last_seen_at', 'invited_by', 'language']
 	list_filter = ['public', 'mail_verified']
-	readonly_fields=('last_login_at',)
+	readonly_fields=('last_seen_at',)
 
 class InviteAdmin(admin.ModelAdmin):
     list_display = ['generated_by', 'code']
