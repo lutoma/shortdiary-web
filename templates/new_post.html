@@ -23,32 +23,36 @@
 {% endblock %}
 
 {%block content %}
-	{% if form.errors %}
-		<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
+	{% if existing_posts.0 and existing_posts.1 %}
+		<p>{% trans "You've already written posts for today and yesterday. Good work! Unfortunately, this also means you can't write any more new posts today :(. Check back tomorrow!" %}</p>
+	{% else %}
+		{% if form.errors %}
+			<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
+		{% endif %}
+		
+		<form action='' method='POST' enctype='multipart/form-data'>
+			{% csrf_token %}
+
+			<textarea id="text-input" name='text' placeholder='{%trans "Enter your text here (Max. 350 chars)" %}'>{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
+			<small id="new-post-char-counter">350</small>
+			{{ form.text.errors }}
+			
+			<select name='date'>
+				<option value='{{ post_days.0|date:"Y-m-d" }}' {% if existing_posts.0 %}disabled{% endif %}>{%trans "yesterday" %} ({{ post_days.0 }})</option>
+				<option value='{{ post_days.1|date:"Y-m-d" }}' {% if existing_posts.1 %}disabled{% endif %}>{%trans "today" %} ({{ post_days.1 }})</option>
+			</select>
+			{{ form.date.errors }}
+			
+			<input type='text' name='mood' maxlength='100' placeholder='{%trans "mood" %}' value="{% if form.mood.value %}{{ form.mood.value }}{% endif %}" />
+			{{ form.mood.errors }}
+
+			<p><small>Image (optional)</small></p>
+			<input type='file' name='image' />
+			{{ form.file.errors }}
+
+			<button type='submit'>
+				<i class='icon-share-alt'></i> {% trans "Submit" %}
+			</button>
+		</form>
 	{% endif %}
-	
-	<form action='' method='POST' enctype='multipart/form-data'>
-		{% csrf_token %}
-
-		<textarea id="text-input" name='text' placeholder='{%trans "Enter your text here (Max. 350 chars)" %}'>{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
-		<small id="new-post-char-counter">350</small>
-		{{ form.text.errors }}
-		
-		<select name='date'>
-			<option value='{{ yesterday|date:"Y-m-d" }}'>{%trans "yesterday" %} ({{yesterday}})</option>
-			<option value='{{ today|date:"Y-m-d" }}' selected>{%trans "today" %} ({{today}})</option>
-		</select>
-		{{ form.date.errors }}
-		
-		<input type='text' name='mood' maxlength='100' placeholder='{%trans "mood" %}' value="{% if form.mood.value %}{{ form.mood.value }}{% endif %}" />
-		{{ form.mood.errors }}
-
-		<p><small>Image (optional)</small></p>
-		<input type='file' name='image' />
-		{{ form.file.errors }}
-
-		<button type='submit'>
-			<i class='icon-share-alt'></i> {% trans "Submit" %}
-		</button>
-	</form>
 {% endblock %}

@@ -43,11 +43,22 @@ class PostForm(forms.ModelForm):
 
 @login_required
 def new_post(request):
+	yesterday = datetime.date.today() - datetime.timedelta(days=1)
+	
 	if not request.method == 'POST':
+		# Check if there are not already posts existing for the last 2 days
+		existing_posts = (
+			Post.objects.filter(author = request.user, date = yesterday),
+			Post.objects.filter(author = request.user, date = datetime.date.today())
+		)
+
+		# Pass this information along to the template, which will show an error
+		# if posts for both days exist already (Or will hide the day for which
+		# a post already exists, if there's only one).
 		context = {
 			'title': _('New post'),
-			'today': datetime.date.today(),
-			'yesterday': datetime.date.today() - datetime.timedelta(days=1),
+			'post_days': (yesterday, datetime.date.today()),
+			'existing_posts': existing_posts,
 			'form': PostForm()
 		}
 
@@ -58,8 +69,7 @@ def new_post(request):
 	if not form.is_valid():
 		context = {
 			'title': _('New post'),
-			'today': datetime.date.today(),
-			'yesterday': datetime.date.today() - datetime.timedelta(days=1),
+			'post_days': (yesterday, datetime.date.today()),
 			'form': form,
 		}
 
