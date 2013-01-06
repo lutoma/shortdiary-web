@@ -19,11 +19,14 @@ class PostAdmin(admin.ModelAdmin):
 
 	list_display = ['author', 'date', 'sent']
 	list_filter = ['sent', 'created_at']
+	date_hierarchy = 'date'
 
 class UserProfileAdmin(admin.ModelAdmin):
 	list_display = ['user', 'public', 'mail_verified', 'last_seen_at', 'invited_by', 'language']
-	list_filter = ['public', 'mail_verified']
+	list_filter = ['public', 'mail_verified', 'last_seen_at']
 	readonly_fields=('last_seen_at',)
+	#date_hierarchy = 'user__date_joined'
+	search_fields = ('user__username',)
 
 class InviteAdmin(admin.ModelAdmin):
     list_display = ['generated_by', 'code']
