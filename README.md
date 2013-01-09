@@ -8,11 +8,12 @@ Install the current version Django and all the dependencies from requirements.tx
 
 Then, execute the following commands:
 
-* `yes no | ./manage.py`
+* `yes no | ./manage.py syncdb`
 * `./manage.py migrate`
 
 Then, create a super user in the Django shell. Firstly, start it using `./manage.py shell`. Then, execute the following commands:
 
+* `from diary.models import User`
 * `self.adminuser = User.objects.create_user('admin', 'admin@test.com', 'pass')`
 * `self.adminuser.save()`
 * `self.adminuser.is_staff = True`
