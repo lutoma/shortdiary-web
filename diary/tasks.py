@@ -18,6 +18,8 @@ def process_mails():
 
 	# Change to years = 1 in production
 	searched_date = datetime.date.today() - datetime.timedelta(days = 7)
+	print('Searching mails from {}'.format(searched_date))
+
 	posts = Post.objects.filter(date = searched_date, sent = False)
 	print('Found {} mail(s) to send'.format(len(posts)))
 
@@ -29,10 +31,12 @@ def process_mails():
 			continue
 
 		mail = EmailMessage(
-			_('Your shortdiary post from {0}').format(post.date),
-			mail_template.render(Context({'post': post, 'MEDIA_URL': settings.MEDIA_URL})),
-			'shortdiary <team@shortdiary.me>',
-			['{0} <{1}>'.format(post.author.username, post.author.email)])
+				_('Your shortdiary post from {0}').format(post.date),
+				mail_template.render(Context({'post': post, 'MEDIA_URL': settings.MEDIA_URL})),
+				'shortdiary <team@shortdiary.me>',
+				['{0} <{1}>'.format(post.author.username, post.author.email)],
+				headers = {'X-Shortdiary-Post-Date': searched_date}
+			)
 
 		if post.image:
 			mail.attach(
