@@ -38,9 +38,10 @@
 			{{ form.text.errors }}
 			
 			<select name='date'>
-				<option value='{{ post_days.0|date:"Y-m-d" }}' {% if existing_posts.0 %}disabled{% endif %}>{%trans "yesterday" %} ({{ post_days.0 }})</option>
-				<option value='{{ post_days.1|date:"Y-m-d" }}' {% if existing_posts.1 %}disabled{% endif %}>{%trans "today" %} ({{ post_days.1 }})</option>
+				<option value='{{ post_days.0|date:"Y-m-d" }}' {% ifequal form.date.value post_days.0|date:"Y-m-d" %}selected {% endifequal %}{% if existing_posts.0 %}disabled{% endif %}>{%trans "yesterday" %} ({{ post_days.0 }})</option>
+				<option value='{{ post_days.1|date:"Y-m-d" }}' {% ifequal form.date.value post_days.1|date:"Y-m-d" %}selected {% endifequal %}{% if existing_posts.1 %}disabled{% endif %}>{%trans "today" %} ({{ post_days.1 }})</option>
 			</select>
+
 			{{ form.date.errors }}
 			
 			<input type='text' name='mood' maxlength='100' placeholder='{%trans "mood" %}' value="{% if form.mood.value %}{{ form.mood.value }}{% endif %}" />
