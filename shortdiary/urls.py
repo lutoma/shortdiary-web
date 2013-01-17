@@ -12,10 +12,6 @@ else:
 	urlpatterns = patterns('')
 
 urlpatterns += patterns('',
-	# Examples:
-	# url(r'^$', 'shortdiary.views.home', name='home'),
-	# url(r'^shortdiary/', include('shortdiary.foo.urls')),
-
 	url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 	url(r'^admin/', include(admin.site.urls)),
 
@@ -29,6 +25,7 @@ urlpatterns += patterns('',
 	url(r'^invite/generate/', 'diary.views.invite'),
 
 	url(r'^tos/', 'diary.views.tos'),
+	url(r'^about/', 'diary.views.tos'),
 
 	url(r'^post/new/', 'diary.views.new_post'),
 	url(r'^post/(?P<post_id>[0-9]+)/', 'diary.views.show_post'),

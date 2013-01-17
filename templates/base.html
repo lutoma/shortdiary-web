@@ -66,7 +66,7 @@
 			{% endblock %}
 
 			<div id='footer'>
-				shortdiary <a href='https://github.com/shortdiary/shortdiary/commit/{% include 'current_git_version.txt' %}'>0.2.0 Draftprint</a> | <a href="/tos/">{% trans 'TOS' %}</a> | <a href="https://github.com/shortdiary/shortdiary" target="_blank">Source code</a>.
+				shortdiary <a href='https://github.com/shortdiary/shortdiary/commit/{% include 'current_git_version.txt' %}'>0.2.0 Draftprint</a> | <a href="/tos/">{% trans 'TOS' %}</a> | <a href='/about/'>{% trans 'About, Security &amp; Imprint' %}</a>.
 
 				{% if user.is_superuser %}
 					 | <a href="/admin/">{% trans 'Admin panel' %}</a>

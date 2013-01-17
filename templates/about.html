@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load i18n %} 
+
+{%block content %}
+	<h2>{% trans 'The team' %}</h2>
+
+	<p style="float: left; width: 45%;">
+		<img src='http://farm9.staticflickr.com/8446/7822047020_6c85ee6c1a.jpg' alt='Stephan' style=' height: 200px; float: left; margin-right: 20px;' />
+
+		{% blocktrans %}Stephan is probably best described as strategist or concept developer. He's the guy who comes up with all the ideas. He does the conception of the service and originally thought up the idea that led to shortdiary. You'll probably see him fiddling some roadmap or pondering of a great new feature.{% endblocktrans %}<br /><br />
+
+		{% blocktrans %}You can follow Stephan on <a href='https://twitter.com/herrurbach'>twitter</a> or visit his <a href='http://stephanurbach.de/'>homepage</a>{% endblocktrans %}.
+	</p>
+
+	<p style='float: left; width: 45%; margin-left: 10%;'>
+		<img src='https://fbcdn-sphotos-d-a.akamaihd.net/hphotos-ak-snc7/311439_1660779256729_591211489_n.jpg' alt='Lukas' style='height: 200px;  float: left; margin-right: 20px;' />
+
+		{% blocktrans %}Lukas is responsible for the technical side of shortdiary. He wrote all of the code and takes care of our servers. The design is also his fault. You'll probably see him thinking about some tricky code issue or sitting between piles of hard drives.{% endblocktrans %}<br /><br />
+
+		{% blocktrans %}You can follow Lukas on <a href='https://twitter.com/lutoma'>twitter</a> or <a href='https://github.com/lutoma'>github</a> and visit his <a href='https://lutoma.org'>homepage</a>. Or you could <a href='https://facebook.com/lutoma'>subscribe to his posts on Facebook</a>, if that's more of your thing.{% endblocktrans %}
+	</p>
+	
+	<br style='clear: both;' />
+
+	<h2>{% trans 'Hosting &amp; Data security' %}</h2>
+	<p>{% blocktrans %}Shortdiary is hosted at <a href='https://hetzner.de/'>Hetzner</a> in Germany on infrastructure provided by the <a href='https://ohai.su/'>ohai.su</a> project, a non-profit that aims to improve the web by providing open services. Your data never leaves the European Union (Unless, of course, you access shortdiary from outside the EU).{% endblocktrans %}</p>
+
+	<p>{% blocktrans %}All communication betweeten you and us is encrypted, if possible. All web pages under shortdiary.me automatically redirect to their SSL counterpart. We also use <a href='https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security'>HTTP Strict Transport Security (HSTS)</a> to make sure your browser always uses SSL when browsing shortdiary.me, so that even if somebody overtakes your local network, they won't be able to spoof shortdiary. <!--In Google Chrome, shortdiary.me is included in a hard-coded list of domains that are only to be accessed using SSL.-->All emails from us are sent using TLS encryption if your server supports it (Google Mail and most other large providers do).{% endblocktrans %}</p>
+
+	<p>{% blocktrans %}Access to the shortdiary servers is limited to two persons: Lukas himself and <a href='https://twitter.com/prauscher'>Patrick Rauscher</a>, who is part of the ohai.su team.{% endblocktrans %}</p>
+
+	<p>{% blocktrans %}Oh, and by the way: If you want to review the source code, feel free to! It's <a href='https://github.com/shortdiary/shortdiary'>open and on GitHub</a>.{% endblocktrans %}</p>
+
+
+	<h2>{% trans 'Contact' %}</h2>
+	<p>
+		{% trans 'In case you have questions or complaints, you can always contact us via email:' %}<br />
+		<i class="icon-envelope"></i> <a href="mailto:team@shortdiary.me">team@shortdiary.me</a>.
+	</p>
+	<p>{% blocktrans %}(Please don't send bug reports via email, but instead <a href='https://github.com/shortdiary/shortdiary/issues/new'>post them</a> in the <a href='https://github.com/shortdiary/shortdiary/issues'>GitHub repository</a>. Thanks!){% endblocktrans %}</p>
+
+	<h2>{% trans 'Imprint' %}</h2>
+	<small>{% trans '(This is only relevant for german law, which requires every website to provide name and address of the responsible person).' %}</small>
+
+	<p>Angaben gemäß § 5 TMG:</p>
+	<p>
+		Lukas Martini<br />
+		Pflugstraße 9a<br />
+		10115 Berlin<br />
+		{% trans 'Germany' %}<br />
+	</p>
+{% endblock %}
+

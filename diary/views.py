@@ -16,6 +16,11 @@ tos = lambda request: render_to_response(
 		context_instance = RequestContext(request, {'title': _('Terms of service')}),
 	)
 
+tos = lambda request: render_to_response(
+		'about.html',
+		context_instance = RequestContext(request, {'title': _('About shortdiary')}),
+	)
+
 def index(request):
 	try:
 		randompost = Post.objects.filter(author__userprofile__public = True).order_by('?')[:1].get()
