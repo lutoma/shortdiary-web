@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
-{% load i18n %} 
+{% load i18n %}
+{% load staticfiles %}
 
 {%block content %}
 	<h2>{% trans 'The team' %}</h2>
 
 	<p style="float: left; width: 45%;">
-		<img src='http://farm9.staticflickr.com/8446/7822047020_6c85ee6c1a.jpg' alt='Stephan' style=' height: 200px; float: left; margin-right: 20px;' />
+		<img src='{% static "img/stephan.jpg" %}' alt='Stephan' style=' height: 200px; float: left; margin-right: 20px;' />
 
 		{% blocktrans %}Stephan is probably best described as strategist or concept developer. He's the guy who comes up with all the ideas. He does the conception of the service and originally thought up the idea that led to shortdiary. You'll probably see him fiddling some roadmap or pondering of a great new feature.{% endblocktrans %}<br /><br />
 
@@ -13,7 +14,7 @@
 	</p>
 
 	<p style='float: left; width: 45%; margin-left: 10%;'>
-		<img src='https://fbcdn-sphotos-d-a.akamaihd.net/hphotos-ak-snc7/311439_1660779256729_591211489_n.jpg' alt='Lukas' style='height: 200px;  float: left; margin-right: 20px;' />
+		<img src='{% static "img/lukas.jpg" %}' alt='Lukas' style='height: 200px;  float: left; margin-right: 20px;' />
 
 		{% blocktrans %}Lukas is responsible for the technical side of shortdiary. He wrote all of the code and takes care of our servers. The design is also his fault. You'll probably see him thinking about some tricky code issue or sitting between piles of hard drives.{% endblocktrans %}<br /><br />
 
