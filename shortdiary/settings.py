@@ -81,6 +81,8 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+	'django.middleware.gzip.GZipMiddleware',
+	'htmlmin.middleware.HtmlMinifyMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.locale.LocaleMiddleware',
