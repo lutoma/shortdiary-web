@@ -11,14 +11,9 @@ Then, execute the following commands:
 * `yes no | ./manage.py syncdb`
 * `./manage.py migrate`
 
-Then, create a super user in the Django shell. Firstly, start it using `./manage.py shell`. Then, execute the following commands:
+Next, create an admin user
+* `./manage.py createsuperuser`
 
-* `from diary.models import User`
-* `adminuser = User.objects.create_user('admin', 'admin@example.org', 'pass')`
-* `adminuser.save()`
-* `adminuser.is_staff = True`
-* `adminuser.save()`
-
-Congratulations, you're done (and can close the shell using `exit()`).
+Congratulations, you're done.
 
 As last step, fire up the local development server using `./manage.py runserver` and point your browser to `http://127.0.0.1:8000`.
