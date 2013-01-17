@@ -14,10 +14,10 @@ Then, execute the following commands:
 Then, create a super user in the Django shell. Firstly, start it using `./manage.py shell`. Then, execute the following commands:
 
 * `from diary.models import User`
-* `self.adminuser = User.objects.create_user('admin', 'admin@test.com', 'pass')`
-* `self.adminuser.save()`
-* `self.adminuser.is_staff = True`
-* `self.adminuser.save()`
+* `adminuser = User.objects.create_user('admin', 'admin@example.org', 'pass')`
+* `adminuser.save()`
+* `adminuser.is_staff = True`
+* `adminuser.save()`
 
 Congratulations, you're done (and can close the shell using `exit()`).
 
