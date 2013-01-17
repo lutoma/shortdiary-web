@@ -22,13 +22,14 @@ urlpatterns += patterns('',
 	url(r'^accounts/signup/$', 'diary.views.sign_up'),
 	url(r'^accounts/settings/$', 'diary.views.account_settings'),
 
-	url(r'^invite/generate/', 'diary.views.invite'),
+	url(r'^invites/new/', 'diary.views.invite'),
 
 	url(r'^tos/', 'diary.views.tos'),
 	url(r'^about/', 'diary.views.about'),
 
-	url(r'^post/new/', 'diary.views.new_post'),
-	url(r'^post/(?P<post_id>[0-9]+)/', 'diary.views.show_post'),
+	url(r'^posts/new/', 'diary.views.new_post'),
+	url(r'^posts/(?P<post_id>[0-9]+)/', 'diary.views.show_post'),
+	url(r'^posts/(?P<post_id>[0-9]+)/edit/', 'diary.views.edit_post'),
 
 	url(r'^email/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', 'diary.views.mail_verify'),
 

@@ -32,7 +32,7 @@
 
 			<div id="navigation">
 				{% if user.is_authenticated %}
-					<a href="/post/new/">{% trans 'New post' %}</a>
+					<a href="/posts/new/">{% trans 'New post' %}</a>
 				{% else %}
 					<a href="/accounts/login/">{% trans 'Log in' %}</a>
 					<a href="/accounts/signup/">{% trans 'Sign up' %}</a>

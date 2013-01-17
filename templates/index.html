@@ -18,15 +18,15 @@
 
 	<div class="buttonpane">
 		<h2>{% trans 'Recent posts' %}</h2>
-		<a href='/post/new/' class='button'><i class='icon-plus-sign'></i> {% trans 'Add post' %}</a>
+		<a href='/posts/new/' class='button'><i class='icon-plus-sign'></i> {% trans 'Add post' %}</a>
 	</div>
 	<!-- <a href='/post/{{ post.id }}/'> -->
 	<table class="post-list border alternate">
 		<tbody>
 			{% for post in posts %}
-					<tr data-id='{{ post.id }}' onclick="window.location.href = '/post/{{ post.id }}';">
+					<tr data-id='{{ post.id }}' onclick="window.location.href = '/posts/{{ post.id }}';">
 						<td style="width: 45px; text-align: center;">
-							<a href='/post/{{ post.id }}'><strong>#{{ post.get_user_id }}</strong></a>
+							<a href='/posts/{{ post.id }}'><strong>#{{ post.get_user_id }}</strong></a>
 						</td>
 						<!--<td>
 							<i class="icon-edit"></i>
@@ -36,22 +36,22 @@
 							<table>
 								<tbody>
 									<tr>
-										<td><a href='/post/{{ post.id }}'><strong>{{ post.date|naturalday }}</strong></a></td>
+										<td><a href='/posts/{{ post.id }}'><strong>{{ post.date|naturalday }}</strong></a></td>
 									</tr>
 									<tr>
 										<td>
-											<a href='/post/{{ post.id }}'><small style='font-size: .8em; font-weight: 300;'>Posted {{ post.created_at }}</small></a>
+											<a href='/posts/{{ post.id }}'><small style='font-size: .8em; font-weight: 300;'>Posted {{ post.created_at }}</small></a>
 										</td>
 									</tr>
 								</tbody>
 							</table>
 						</td>
 						<td>
-							<a href='/post/{{ post.id }}'><small class="text-teaser">{{ post.text|truncatechars:140 }}</small></a>
+							<a href='/posts/{{ post.id }}'><small class="text-teaser">{{ post.text|truncatechars:140 }}</small></a>
 						</td>
 					</tr>
 			{% empty %}
-				{% trans 'No posts to show – Try <a href="/post/new/">adding your first post</a>!'%}
+				{% trans 'No posts to show – Try <a href="/posts/new/">adding a new post</a>!'%}
 			{% endfor %}
 		</tbody>
 	</table>
