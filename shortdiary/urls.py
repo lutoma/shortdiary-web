@@ -25,7 +25,7 @@ urlpatterns += patterns('',
 	url(r'^invite/generate/', 'diary.views.invite'),
 
 	url(r'^tos/', 'diary.views.tos'),
-	url(r'^about/', 'diary.views.tos'),
+	url(r'^about/', 'diary.views.about'),
 
 	url(r'^post/new/', 'diary.views.new_post'),
 	url(r'^post/(?P<post_id>[0-9]+)/', 'diary.views.show_post'),

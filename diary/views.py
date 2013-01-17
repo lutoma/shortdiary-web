@@ -16,7 +16,7 @@ tos = lambda request: render_to_response(
 		context_instance = RequestContext(request, {'title': _('Terms of service')}),
 	)
 
-tos = lambda request: render_to_response(
+about = lambda request: render_to_response(
 		'about.html',
 		context_instance = RequestContext(request, {'title': _('About shortdiary')}),
 	)
