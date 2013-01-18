@@ -1,26 +1,65 @@
 body {
-	background: url(../img/frontpage-bg.jpeg) #F7F5FA;
-	color: #414141;
+	background: url(../img/frontpage-bg-hill.jpg) #F7F5FA;
+	color: #fff;
 	background-attachment: fixed;
 	background-size: cover;
 }
 
+a, a:hover {
+	color: #fff;
+}
+
 #front-mainsignup {
+	display: block;
+	margin-top: 70px;
+	margin-bottom: 120px;
+	text-align: center;
+}
+
+#front-mainsignup > input, #front-mainsignup > button {
 	display: inline-block;
+	height: 35px;
+}
+
+#front-mainsignup > input {
 	border: none;
-	font-size: 30px;
-	font-family: inherit;
-	color: #313131;
-	font-weight: 700;
-	margin-top: 30px;
-	text-decoration: none;
-	background: #CDB380;
-	padding: 3px 10px;
-	margin-bottom: 60px;
+	margin-right: 10px;
+	width: 350px;
+	background: rgba(238, 238, 238, 0.8);
 	border-radius: 3px;
-	text-shadow: -1px 1px 0 #555;
+	border: 1px solid #888;
+	color: #242424;
+	font-weight: 700;
+	font-size: 20px;
+	padding-left: 10px;
+}
+
+#front-mainsignup > input::-webkit-input-placeholder {
+    color:    #777;
+}
+#front-mainsignup > input:-moz-placeholder {
+    color:    #777;
+}
+#front-mainsignup > input::-moz-placeholder {
+    color:    #777;
+}
+#front-mainsignup > input:-ms-input-placeholder {
+    color:    #777;
+}
+
+#front-mainsignup > button {
+	height: 41px;
+	width: 150px;
+	font-size: 18px;
+	font-weight: 700;
 }
 
 #front-randompost {
 	margin-top: 20px;
+}
+
+#footer {
+	display: block;
+	color: #fff;
+	border-top: 1px solid #949494;
 }

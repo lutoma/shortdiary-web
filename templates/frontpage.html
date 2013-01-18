@@ -7,12 +7,16 @@
 	<link href="{% static 'css/frontpage.css' %}" rel="stylesheet" />
 {% endblock %}
 
-{%block content %}
-	<p>
-		<h2 style="font-weight: 200; font-size: 35px;">{% trans "shortdiary lets you revisit your past, think of all the great things you have done and all those still on your to do list. It's your life – you should remember it." %}</h2>
-	</p>
+{% block maintitle %}
+	<h1 id='title'>Welcome to shortdiary</h1>
 
-	<a id="front-mainsignup" href="/accounts/signup/">→ {% trans 'Sign me up!' %}</a>
+	<h2 style="font-weight: 200; font-size: 35px;">{% trans "shortdiary lets you revisit your past, think of all the great things you have done and all those still on your to do list." %}</h2>
+
+	<h1 style='font-weight: 400; font-size: 35px; margin-top: 0;'>It's your life – you should remember it</h1>
+{% endblock %}
+
+{%block content %}
+	<div id="front-mainsignup"><input type='email' placeholder='Your email address' /> <button>Request invite</button></div>
 
 	{% if post %}
 		<hr />
