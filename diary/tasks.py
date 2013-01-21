@@ -38,7 +38,7 @@ def process_mails():
 				headers = {'X-Shortdiary-Post-Date': searched_date}
 			)
 
-		if post.image and mimetypes.guess_type(post.image.name)[0]):
+		if post.image and mimetypes.guess_type(post.image.name)[0]:
 			mail.attach(
 				os.path.split(post.image.name)[1],
 				post.image.read(),
