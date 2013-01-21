@@ -9,7 +9,8 @@ env:
   - DJANGO=1.4.3
 install:
   - pip install -q Django==$DJANGO --use-mirrors
-  - pip install -r requirements.txt --use-mirrors
+  - pip install -qr requirements.txt --use-mirrors
+  - pip install -q https://github.com/dcramer/pyflakes/tarball/master
 before_script:
   - pyflakes -x */mirations .
 script:
