@@ -6,6 +6,6 @@ install:
   - pip install -qr requirements.txt --use-mirrors
   - pip install -q https://github.com/dcramer/pyflakes/tarball/master
 before_script:
-  - pyflakes -x */mirations .
+  - pyflakes -X */mirations .
 script:
   - python manage.py test diary
