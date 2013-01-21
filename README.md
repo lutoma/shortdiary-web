@@ -1,6 +1,8 @@
 shortdiary
 ==========
 
+[![Build Status](https://travis-ci.org/shortdiary/shortdiary.png?branch=master)](undefined)
+
 Local (development) Installation
 --------------------------------
 
