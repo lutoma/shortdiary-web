@@ -8,4 +8,4 @@ install:
 before_script:
   - pyflakes -x */mirations .
 script:
-  - python manage.py test
+  - python manage.py test diary
