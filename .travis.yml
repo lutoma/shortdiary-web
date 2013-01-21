@@ -1,0 +1,8 @@
+language: python
+python:
+  - "2.7"
+install:
+  - "cp hfa/settings.example.py hfa/settings.py"
+  - "./manage.py syncdb --noinput"
+  - "pip install -r dependencies.txt"
+script: "./manage.py test diary"
