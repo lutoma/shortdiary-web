@@ -29,7 +29,7 @@ urlpatterns += patterns('',
 
 	url(r'^posts/new/', 'diary.views.new_post'),
 	url(r'^posts/(?P<post_id>[0-9]+)/', 'diary.views.show_post'),
-	url(r'^posts/(?P<post_id>[0-9]+)/edit/', 'diary.views.edit_post'),
+	#url(r'^posts/(?P<post_id>[0-9]+)/edit/', 'diary.views.edit_post'),
 
 	url(r'^email/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', 'diary.views.mail_verify'),
 
