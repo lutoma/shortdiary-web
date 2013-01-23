@@ -21,3 +21,6 @@ django-gravatar
 
 # HTML minifying
 django-htmlmin
+
+# AJAX & API
+djangorestframework

@@ -7,6 +7,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.mail import EmailMessage
 import django.forms as forms
+from inviteman.serializers import InviteRequestSerializer
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 class InviteForm(forms.Form):
 	email = forms.EmailField(max_length = 200)
@@ -56,3 +60,17 @@ def invite(request):
 		)
 	mail.send()
 	return render_to_response('invite.html', context_instance=RequestContext(request, context))
+
+
+
+@api_view(['POST'])
+def invite_request(request):
+	"""
+	Add new invite request using AJAX
+	"""
+	serializer = InviteRequestSerializer(data=request.DATA)
+	if serializer.is_valid():
+		serializer.save()
+		return Response(serializer.data, status=status.HTTP_201_CREATED)
+	else:
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
