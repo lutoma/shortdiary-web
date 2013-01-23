@@ -133,6 +133,7 @@ INSTALLED_APPS = (
 	'djcelery',
 	'gravatar',
 	'diary',
+	'inviteman',
 )
 
 # Asynchronous jobs

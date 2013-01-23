@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django.utils.translation import ugettext_lazy as _
-from diary.models import Post, UserProfile, Invite
+from diary.models import Post, UserProfile
 from django.contrib import admin
 
 class PostAdmin(admin.ModelAdmin):
@@ -28,9 +28,5 @@ class UserProfileAdmin(admin.ModelAdmin):
 	#date_hierarchy = 'user__date_joined'
 	search_fields = ('user__username',)
 
-class InviteAdmin(admin.ModelAdmin):
-    list_display = ['generated_by', 'code']
-
 admin.site.register(Post, PostAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(Invite, InviteAdmin)

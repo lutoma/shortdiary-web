@@ -7,7 +7,8 @@ from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import django.contrib.auth
-from diary.models import Post, Invite
+from diary.models import Post
+from inviteman.models import Invite
 import django.forms as forms
 
 
@@ -184,17 +185,6 @@ def login(request):
 		'errors': True,
 	}
 	return render_to_response('login.html', context_instance = RequestContext(request, context))
-
-@login_required
-def invite(request):
-	invite = Invite(generated_by = request.user)
-	invite.save()
-
-	context = {
-		'title': 'Home',
-		'content': 'Generated invite code: {}'.format(invite.code)
-	}
-	return render_to_response('base.html', context_instance=RequestContext(request, context))
 
 def mail_verify(request, user_id, hash):
 	user = get_object_or_404(User, id = user_id)
