@@ -22,6 +22,7 @@ a, a:hover {
 }
 
 #front-mainsignup > input {
+	font-family: inherit;
 	border: none;
 	margin-right: 10px;
 	width: 350px;
