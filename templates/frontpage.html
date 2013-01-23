@@ -4,7 +4,8 @@
 {% load staticfiles %}
 
 {% block headeradd %}
-	<link href="{% static 'css/frontpage.css' %}" rel="stylesheet" />
+	<link href='{% static "css/frontpage.css" %}' rel="stylesheet" />
+	<script src='{% static "js/frontpage.js" %}'></script>
 {% endblock %}
 
 {% block maintitle %}
@@ -16,7 +17,13 @@
 {% endblock %}
 
 {%block content %}
-	<div id="front-mainsignup"><input type='email' placeholder='Your email address' /> <button>Request invite</button></div>
+	<div id="front-mainsignup">
+		<form id='invite-request-form'>
+			<input type='email' name='email' placeholder='Your email address' />
+			<button type='submit'>Request invite</button>
+			<i class=""></i> 
+		</form>
+	</div>
 
 	{% if post %}
 		<hr />
