@@ -22,7 +22,7 @@ urlpatterns += patterns('',
 	url(r'^accounts/signup/$', 'diary.views.sign_up'),
 	url(r'^accounts/settings/$', 'diary.views.account_settings'),
 
-	url(r'^invites/new/', 'inviteman.views.invite'),
+	url(r'^invite/', 'inviteman.views.invite'),
 
 	url(r'^tos/', 'diary.views.tos'),
 	url(r'^about/', 'diary.views.about'),
