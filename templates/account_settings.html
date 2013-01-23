@@ -14,7 +14,7 @@
 
 	<form action='' method='POST' enctype='multipart/form-data'>
 		{% csrf_token %}
-		<input type='email' name='email' maxlength='100' placeholder='email' value="{% if form.email.value %}{{ form.email.value }}{% else %}{{ user.email }}{% endif %}" />
+		<input type='email' name='email' maxlength='100' placeholder='email' value="{% if form.email.value %}{{ form.email.value }}{% else %}{{ user.email }}{% endif %}" required />
 		<small>
 			{% trans 'Status' %}: 
 			{% if user.get_profile.mail_verified %}

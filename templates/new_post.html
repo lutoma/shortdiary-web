@@ -33,7 +33,7 @@
 		<form action='' method='POST' enctype='multipart/form-data'>
 			{% csrf_token %}
 
-			<textarea id="text-input" name='text' placeholder='{%trans "Enter your text here (Max. 350 chars)" %}'>{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
+			<textarea id="text-input" name='text' placeholder='{%trans "Enter your text here (Max. 350 chars)" %}' required>{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
 			<small id="new-post-char-counter">350</small>
 			{{ form.text.errors }}
 			
@@ -44,7 +44,7 @@
 
 			{{ form.date.errors }}
 			
-			<input type='text' name='mood' maxlength='100' placeholder='{%trans "mood" %}' value="{% if form.mood.value %}{{ form.mood.value }}{% endif %}" />
+			<input type='text' name='mood' maxlength='100' placeholder='{%trans "mood" %}' value="{% if form.mood.value %}{{ form.mood.value }}{% endif %}" required />
 			{{ form.mood.errors }}
 
 			<p><small>Image (optional)</small></p>

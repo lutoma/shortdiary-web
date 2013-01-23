@@ -19,7 +19,7 @@
 		<form method="post" action="">
 			{% csrf_token %}
 
-			<input type='email' name='email' placeholder='Email address' />
+			<input type='email' name='email' placeholder='Email address' required />
 			{{ form.email.errors }}
 
 			<textarea name='message' placeholder='A personal message from you (optional)'></textarea>

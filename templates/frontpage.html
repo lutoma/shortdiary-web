@@ -19,7 +19,7 @@
 {%block content %}
 	<div id="front-mainsignup">
 		<form id='invite-request-form'>
-			<input type='email' name='email' placeholder='Your email address' />
+			<input type='email' name='email' placeholder='Your email address' pattern="[^ @]+@[^ @]+" required />
 			<button type='submit'>Request invite</button>
 			<i class=""></i> 
 		</form>
