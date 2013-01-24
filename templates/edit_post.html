@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load humanize %}
+
+{% block headeradd %}
+	<script>
+		function show_chars() {
+			var chars_left = 350 - $(this).val().length;
+			$('#new-post-char-counter').html(chars_left);
+
+			if(chars_left < 0)
+				$('#new-post-char-counter').css('color', 'red');
+			else if(chars_left < 15)
+				$('#new-post-char-counter').css('color', 'orange');
+			else
+				$('#new-post-char-counter').css('color', 'inherit');
+		}
+
+		$(document).ready(function() {
+			$('#text-input').keyup(show_chars);
+			$('#text-input').change(show_chars);
+		});
+	</script>
+{% endblock %}
+
+{%block content %}
+	<!--
+		Check if there are already posts for today and yesterday and we're not
+		just editing an existing post
+	-->
+	{% if existing_posts.0 and existing_posts.1 and not edit_post %}
+		<p>{% trans "You've already written posts for today and yesterday. Good work! Unfortunately, this also means you can't write any more new posts today :(. Check back tomorrow!" %}</p>
+	{% else %}
+		{% if edit_post %}
+				You're currently editing your {{ edit_post.get_user_id|ordinal }} post, which happens to be from {{ edit_post.date }} (That's {{ edit_post.date|naturalday }}).
+		{% endif %}
+
+		{% if form.errors %}
+			<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
+		{% endif %}
+		
+		<form action='' method='POST' enctype='multipart/form-data'>
+			{% csrf_token %}
+
+			<textarea id="text-input" name='text' placeholder='{%trans "Enter your text here (Max. 350 chars)" %}' required>{% if form.text.value %}{{ form.text.value }}{% endif %}{{ edit_post.text }}</textarea>
+			<small id="new-post-char-counter">350</small>
+			{{ form.text.errors }}
+			
+			{% if not edit_post %}
+				<select name='date'>
+					<option value='{{ post_days.0|date:"Y-m-d" }}' {% ifequal form.date.value post_days.0|date:"Y-m-d" %}selected {% endifequal %}{% if existing_posts.0 %}disabled{% endif %}>{%trans "yesterday" %} ({{ post_days.0 }})</option>
+					<option value='{{ post_days.1|date:"Y-m-d" }}' {% ifequal form.date.value post_days.1|date:"Y-m-d" %}selected {% endifequal %}{% if existing_posts.1 %}disabled{% endif %}>{%trans "today" %} ({{ post_days.1 }})</option>
+				</select>
+			{% else %}
+				<strong>{% trans 'Date' %}:</strong> {{ edit_post.date }}
+
+				<!-- For post validation reasons -->
+				<input type='hidden' name='date' value='{{ edit_post.date|date:"Y-m-d" }}' />
+			{% endif %}
+
+			{{ form.date.errors }}
+			
+			<input type='text' name='mood' maxlength='100' placeholder='{%trans "mood" %}' value="{% if form.mood.value %}{{ form.mood.value }}{% endif %}{{ edit_post.mood }}" required />
+			{{ form.mood.errors }}
+
+			{% if not edit_post %}
+				<p><small>{% trans 'Image (optional)' %}</small></p>
+				<input type='file' name='image' />
+			{% endif %}
+			{{ form.file.errors }}
+
+
+			<button type='submit'>
+				<i class='icon-share-alt'></i> {% trans "Submit" %}
+			</button>
+		</form>
+	{% endif %}
+{% endblock %}

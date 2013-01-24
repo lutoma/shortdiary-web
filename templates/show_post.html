@@ -16,4 +16,6 @@
 	{% endif %}
 
 	{{ post.text|linebreaks }}
+
+	<a href='/posts/{{ post.id }}/edit/'><i class='icon-edit'></i> {% trans 'Edit' %}</a>
 {% endblock %}
