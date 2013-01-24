@@ -7,9 +7,12 @@ from django.utils.translation import ugettext as _
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from inviteman.models import Invite
 import django.contrib.auth
 from diary.models import Post
-from inviteman.models import Invite
 import django.forms as forms
 
 
@@ -269,3 +272,20 @@ def account_settings(request):
 		'success': True,
 	}
 	return render_to_response('account_settings.html', context_instance=RequestContext(request, context))
+
+@api_view(['DELETE'])
+def delete_post(request, post_id):
+	"""
+	Delete a post. This is currently an AJAX only view
+	"""
+
+	post = get_object_or_404(Post,
+		id = post_id,
+		author = request.user,
+	)
+
+	if not post.is_editable():
+		raise PermissionDenied
+
+	post.delete()
+	return Response(status=status.HTTP_204_NO_CONTENT)

@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %} 
 {% load humanize %}
+{% load staticfiles %}
+
+{% block headeradd %}
+	<script src='{% static "js/index.js" %}'></script>
+{% endblock %}
 
 {%block content %}
 	<p>
@@ -24,12 +29,12 @@
 	<table class="post-list border alternate">
 		<tbody>
 			{% for post in posts %}
-					<tr data-id='{{ post.id }}' onclick="window.location.href = '/posts/{{ post.id }}';">
+					<tr id='post-{{ post.id }}' data-id='{{ post.id }}' onclick="window.location.href = '/posts/{{ post.id }}';">
 						<td style="width: 45px; text-align: center;">
 							<a href='/posts/{{ post.id }}'><strong>#{{ post.get_user_id }}</strong></a>
 						</td>
-						<td style='width: 13px;'>
-							{% if post.is_editable %}<a href='/posts/{{ post.id }}/edit/'><i class='icon-edit'></i></a>{% endif %}
+						<td style='width: 13px;' class='edit'>
+							{% if post.is_editable %}<a href='/posts/{{ post.id }}/edit/'><i class='icon-edit'></i></a> <a class='delete-post' data-id='{{ post.id }}'><i class='icon-trash'></i></a>{% endif %}
 						</td>
 						<td style="width: 250px;">
 							<!-- We heard you like tables … -->
