@@ -29,7 +29,7 @@
 							<a href='/posts/{{ post.id }}'><strong>#{{ post.get_user_id }}</strong></a>
 						</td>
 						<td style='width: 13px;'>
-							<a href='/posts/{{ post.id }}/edit/'><i class='icon-edit'></i></a>
+							{% if post.is_editable %}<a href='/posts/{{ post.id }}/edit/'><i class='icon-edit'></i></a>{% endif %}
 						</td>
 						<td style="width: 250px;">
 							<!-- We heard you like tables … -->
@@ -55,6 +55,7 @@
 			{% endfor %}
 		</tbody>
 	</table>
+	<p><small>(You can view posts from the last 7 days and edit posts from the last 3 days).</small></p>
 
 	{% if randompost %}
 		<h2>{% trans 'Random public post' %}</h2>
