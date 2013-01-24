@@ -2,6 +2,7 @@
 import datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
+from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
@@ -64,8 +65,10 @@ def edit_post(request, post_id = None):
 		edit_post = get_object_or_404(Post,
 			id = post_id,
 			author = request.user,
-			date__gt = datetime.date.today() - datetime.timedelta(days=6),
 		)
+
+		if not edit_post.is_editable():
+			raise PermissionDenied
 
 	yesterday = datetime.date.today() - datetime.timedelta(days=1)
 	

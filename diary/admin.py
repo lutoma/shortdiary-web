@@ -17,7 +17,7 @@ class PostAdmin(admin.ModelAdmin):
 		),
 	]
 
-	list_display = ['author', 'date', 'sent']
+	list_display = ['author', 'date', 'sent', 'is_editable']
 	list_filter = ['sent', 'created_at']
 	date_hierarchy = 'date'
 

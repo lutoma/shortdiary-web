@@ -7,9 +7,12 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template, Context
 from django.conf import settings
 import hashlib
+import datetime
 
 class UserProfile(models.Model):
-	'''The extended user profile'''
+	"""
+	The extended user profile
+	"""
 
 	user = models.OneToOneField(User)
 	public = models.BooleanField(verbose_name = _('public'))
@@ -44,6 +47,10 @@ def create_user_profile(sender, instance, created, **kwargs):
 post_save.connect(create_user_profile, sender=User)
 
 class Post(models.Model):
+	"""
+	A diary post
+	"""
+
 	author = models.ForeignKey(User, verbose_name = _('author'))
 	date = models.DateField(verbose_name = ('date'))
 	text = models.TextField(max_length = 350, verbose_name = _('text'))
@@ -61,6 +68,23 @@ class Post(models.Model):
 		verbose_name = _('post')
 		verbose_name_plural = _('posts')
 
-	# Get user specific post ID (Aka: The how-manieth post of the user is this?)
 	def get_user_id(self):
+		"""
+		Get user specific post ID (Aka: The how-manieth post of this user is this?)
+		"""
 		return len(Post.objects.filter(author = self.author, date__lt = self.date)) + 1
+
+	get_user_id.admin_order_field = 'date'
+	get_user_id.boolean = False
+	get_user_id.short_description = 'User post ID'
+
+	def is_editable(self):
+		"""
+		Should this post still be editable by the user?
+		"""
+
+		return (self.date > datetime.date.today() - datetime.timedelta(days = 3))
+
+	is_editable.admin_order_field = 'date'
+	is_editable.boolean = True
+	is_editable.short_description = 'Still editable by user?'
