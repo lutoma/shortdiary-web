@@ -17,7 +17,7 @@ def process_mails():
 	mail_template = get_template('mails/post.txt')
 
 	# Change to years = 1 in production
-	searched_date = datetime.date.today() - datetime.timedelta(days = 7)
+	searched_date = datetime.date.today() - datetime.timedelta(months = 1)
 	print('Searching mails from {}'.format(searched_date))
 
 	posts = Post.objects.filter(date = searched_date, sent = False)
