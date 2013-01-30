@@ -54,7 +54,7 @@ class Post(models.Model):
 	author = models.ForeignKey(User, verbose_name = _('author'))
 	date = models.DateField(verbose_name = ('date'))
 	text = models.TextField(max_length = 350, verbose_name = _('text'))
-	mood = models.CharField(max_length = 100, verbose_name = _('mood'))
+	mood = models.IntegerField(verbose_name = _ ('mood'))
 	image = models.ImageField(upload_to = 'postimages/%d%m%y/', blank = True, verbose_name = _('image'))
 
 	created_at = models.DateTimeField(auto_now_add = True, verbose_name = _('created at'))

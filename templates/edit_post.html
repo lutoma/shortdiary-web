@@ -60,10 +60,8 @@
 					<input type='hidden' name='date' value='{{ edit_post.date|date:"Y-m-d" }}' />
 				{% endif %}
 
-				<!--<div class='label'><i class='icon-thumbs-up'></i> Mood: <span id='mood-slider-value'>6</span> / 10</div>-->
-				<div class='label'><i class='icon-thumbs-up'></i> Mood</div>
-				<!--<input id="mood" name="mood" type="range" min="1" max="10" step="1" value="6" onchange="$('#mood-slider-value').html(this.value)" style='display: inline-block;' />-->
-				<input id="mood" name="mood" type="text" style="" />
+				<div class='label'><i class='icon-thumbs-up'></i> Mood: <span id='mood-slider-value'>6</span> / 10</div>
+				<input id="mood" name="mood" type="range" min="1" max="10" step="1" value="6" onchange="$('#mood-slider-value').html(this.value)" style='display: inline-block;' />
 
 				<div class='label'><i class='icon-camera'></i> Image (optional)</div>
 				{% if not edit_post %}
