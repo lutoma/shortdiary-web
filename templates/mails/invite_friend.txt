@@ -1,6 +1,10 @@
 {% load i18n %}{% blocktrans with name=user.username invitecode=invite.code %}Hey there,
 
-your friend {{ name }} invited you to join shortdiary! To sign up, point your browser to
+your friend {{ name }} invited you to join shortdiary! {% endblocktrans %}{%if message %}{% trans 'This is what they said:' %}
+
+{{ message }}
+
+{% endif %}{% blocktrans %}To sign up, point your browser to
 
 https://shortdiary.me/signup/
 

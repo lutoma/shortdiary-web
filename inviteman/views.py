@@ -52,9 +52,15 @@ def invite(request):
 	context['invites_left'] = profile.invites_left
 	profile.save()
 
+	mail_context = Context({
+		'user': request.user,
+		'invite': invite,
+		'message': form.cleaned_data['message']
+	})
+
 	mail = EmailMessage(
 			_('You\'ve been invited to join shortdiary by {}').format(request.user.username),
-			mail_template.render(Context({'user': request.user, 'invite': invite})),
+			mail_template.render(mail_context),
 			'shortdiary <team@shortdiary.me>',
 			['{}'.format(form.cleaned_data['email'])],
 		)
