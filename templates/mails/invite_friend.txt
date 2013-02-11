@@ -1,4 +1,4 @@
-{% load i18n %}{% blocktrans with name=user.username invitecode=invite.code %}Hey there,
+{% load i18n %}{% blocktrans with name=user.username  %}Hey there,
 
 your friend {{ name }} invited you to join shortdiary! {% endblocktrans %}{%if message %}{% trans 'This is what they said:' %}
 
@@ -14,4 +14,4 @@ and enter the following invite code:
 {% endblocktrans %}
 
 -- 
-{% blocktrans %}You received this mail from us because {{ user.username }} invited you. You will not receive any further mails from us unless you sign up{% endblocktrans %}
+{% blocktrans with name=user.username %}You received this mail from us because {{ user.username }} invited you. You will not receive any further mails from us unless you sign up{% endblocktrans %}
