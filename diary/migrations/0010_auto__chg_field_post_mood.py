@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
         # db.alter_column('diary_post', 'mood', self.gf('django.db.models.fields.IntegerField')())
 
         db.delete_column('diary_post', 'mood')
-        db.add_column('diary_post', 'mood', self.gf('django.db.models.fields.IntegerField')())
+        db.add_column('diary_post', 'mood', self.gf('django.db.models.fields.IntegerField')(default=6))
 
     def backwards(self, orm):
         db.delete_column('diary_post', 'mood')
