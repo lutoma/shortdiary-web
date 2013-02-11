@@ -8,14 +8,14 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # db.alter_column('diary_post', 'mood', self.gf('django.db.models.fields.IntegerField')())
 
-        # Changing field 'Post.mood'
-        db.alter_column('diary_post', 'mood', self.gf('django.db.models.fields.IntegerField')())
+        db.delete_column('diary_post', 'mood')
+        db.add_column('diary_post', 'mood', self.gf('django.db.models.fields.IntegerField')())
 
     def backwards(self, orm):
-
-        # Changing field 'Post.mood'
-        db.alter_column('diary_post', 'mood', self.gf('django.db.models.fields.CharField')(max_length=100))
+        db.delete_column('diary_post', 'mood')
+        db.add_column('diary_post', 'mood', self.gf('django.db.models.fields.CharField')(max_length=100))
 
     models = {
         'auth.group': {
