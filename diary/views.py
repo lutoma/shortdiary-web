@@ -2,13 +2,17 @@
 import datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
+from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from inviteman.models import Invite
 import django.contrib.auth
 from diary.models import Post
-from inviteman.models import Invite
 import django.forms as forms
 
 
@@ -38,7 +42,7 @@ def index(request):
 	context = {
 		'title': 'Home',
 		'randompost': randompost,
-		'posts': Post.objects.filter(author = request.user, date__gte = datetime.date.today() - datetime.timedelta(days = 7)).order_by('-date', '-created_at'),
+		'posts': Post.objects.filter(author = request.user, date__gte = datetime.date.today() - datetime.timedelta(days = 6)).order_by('-date', '-created_at'),
 	}
 	return render_to_response('index.html', context_instance=RequestContext(request, context))
 
@@ -48,11 +52,32 @@ class PostForm(forms.ModelForm):
 		fields = ('text', 'mood', 'date', 'image')
 
 @login_required
-def new_post(request):
+def edit_post(request, post_id = None):
+	"""
+	Edit or add post.
+
+	This view takes one parameter (post_id). It defaults to None, in which case
+	a new post will be created.
+	"""
+
+	edit_post = None
+
+	# Do we want to edit an existing post? If yes, try to find that post.
+	# (And also check if that post was within the last 7 days)
+	if post_id:
+		edit_post = get_object_or_404(Post,
+			id = post_id,
+			author = request.user,
+		)
+
+		if not edit_post.is_editable():
+			raise PermissionDenied
+
 	yesterday = datetime.date.today() - datetime.timedelta(days=1)
 	
 	if not request.method == 'POST':
 		# Check if there are not already posts existing for the last 2 days
+		# This is only relevant if we add a new post
 		existing_posts = (
 			Post.objects.filter(author = request.user, date = yesterday),
 			Post.objects.filter(author = request.user, date = datetime.date.today())
@@ -62,13 +87,14 @@ def new_post(request):
 		# if posts for both days exist already (Or will hide the day for which
 		# a post already exists, if there's only one).
 		context = {
-			'title': _('New post'),
+			'title': _('Edit post') if edit_post else _('New post'),
 			'post_days': (yesterday, datetime.date.today()),
 			'existing_posts': existing_posts,
-			'form': PostForm()
+			'form': PostForm(),
+			'edit_post': edit_post,
 		}
 
-		return render_to_response('new_post.html', context_instance=RequestContext(request, context))
+		return render_to_response('edit_post.html', context_instance=RequestContext(request, context))
 
 	# Request method is POST
 	form = PostForm(request.POST, request.FILES)
@@ -77,18 +103,26 @@ def new_post(request):
 			'title': _('New post'),
 			'post_days': (yesterday, datetime.date.today()),
 			'form': form,
+			'edit_post': edit_post,
 		}
 
-		return render_to_response('new_post.html', context_instance=RequestContext(request, context))
+		return render_to_response('edit_post.html', context_instance=RequestContext(request, context))
 
 
-	post = form.save(commit = False)
+	if not edit_post:
+		# This is a new post, save it
+		post = form.save(commit = False)
 
-	if Post.objects.filter(author = request.user, date = post.date).count() > 0:
-		return HttpResponse('Sorry, you already have an entry for that day')
+		if Post.objects.filter(author = request.user, date = post.date).count() > 0:
+			return HttpResponse('Sorry, you already have an entry for that day')
 
-	post.author = request.user
-	post.save()
+		post.author = request.user
+		post.save()
+	else:
+		# This is an edit of an existing post
+		edit_post.text = form.cleaned_data['text']		
+		edit_post.mood = form.cleaned_data['mood']	
+		edit_post.save()	
 
 	return HttpResponseRedirect('/')
 
@@ -238,3 +272,20 @@ def account_settings(request):
 		'success': True,
 	}
 	return render_to_response('account_settings.html', context_instance=RequestContext(request, context))
+
+@api_view(['DELETE'])
+def delete_post(request, post_id):
+	"""
+	Delete a post. This is currently an AJAX only view
+	"""
+
+	post = get_object_or_404(Post,
+		id = post_id,
+		author = request.user,
+	)
+
+	if not post.is_editable():
+		raise PermissionDenied
+
+	post.delete()
+	return Response(status=status.HTTP_204_NO_CONTENT)

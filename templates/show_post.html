@@ -4,7 +4,7 @@
 
 {%block content %}
 	<ul style="list-style-type: none; padding-left: 5px;">
-		<li><i class='icon-question-sign'></i> {% trans 'Mood' %}: {{ post.mood }}</li>
+		<li><i class='icon-thumbs-up'></i> {% trans 'Mood' %}: {{ post.mood }}</li>
 		<li><i class='icon-calendar'></i> {% trans 'Post date' %}: {{ post.date }}</li>
 		<li><i class='icon-upload'></i> {% trans 'Created at' %}: {{ post.created_at }}</li>
 		<li><i class='icon-sort'></i> {% trans 'This is your ' %} {{ post.get_user_id|ordinal }} {% trans 'post' %}</li>
@@ -16,4 +16,6 @@
 	{% endif %}
 
 	{{ post.text|linebreaks }}
+
+	<a href='/posts/{{ post.id }}/edit/'><i class='icon-edit'></i> {% trans 'Edit' %}</a>
 {% endblock %}

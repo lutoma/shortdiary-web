@@ -13,11 +13,18 @@ class PostAdmin(admin.ModelAdmin):
 		(None, {'fields': ['author', 'date', 'sent']}),
 		(
 			_('Privacy section. Only open if absolutely needed (Mood, Text, Image)'),
-			{'fields': ['mood', 'text', 'image'], 'classes': ['collapse']}
+			{'fields': [
+				'mood',
+				'text',
+				'image',
+				'location_verbose',
+				'location_lat',
+				'location_lon'
+			], 'classes': ['collapse']}
 		),
 	]
 
-	list_display = ['author', 'date', 'sent']
+	list_display = ['author', 'date', 'sent', 'is_editable']
 	list_filter = ['sent', 'created_at']
 	date_hierarchy = 'date'
 

@@ -9,10 +9,18 @@
 
 		<title>{{ title }} – shortdiary</title>
 
+		<!--[if lt IE 9]>
+			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
 		<link href='//fonts.googleapis.com/css?family=Exo:100,200,300,400,600,700' rel='stylesheet' type='text/css'>
 
 		<link href="{% static 'css/main.css' %}" rel="stylesheet" />
-		<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" />
+		<link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+		
+		<!--[if IE 7]>
+		<link href="{% static 'css/font-awesome-ie7.min.css' %}" rel="stylesheet" />
+		<![endif]-->
 
 		<link rel='icon' type='image/png' href='{% static "img/favicon.png" %}' />
 
@@ -22,6 +30,7 @@
 		</script>
 
 		<script src='//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
+		<script src='{% static "js/csrf.js" %}'></script>
 
 		{% block headeradd %}
 		{% endblock %}
@@ -33,13 +42,13 @@
 			<div id="navigation">
 				{% if user.is_authenticated %}
 					<a href="/posts/new/">{% trans 'New post' %}</a>
+					<a href="/invite/">{% trans 'Invite someone' %}</a>
 				{% else %}
 					<a href="/accounts/login/">{% trans 'Log in' %}</a>
 					<a href="/accounts/signup/">{% trans 'Sign up' %}</a>
 				{% endif %}
 
 				<a href="http://shortdiary.wordpress.com" target="_blank">{% trans 'Blog' %}</a>
-				<a href="https://github.com/shortdiary/shortdiary/issues/new" target="_blank">{% trans 'Report bug' %}</a>
 
 				<span class="right">
 					{% if user.is_authenticated %}
@@ -55,7 +64,7 @@
 			</div>
 		</div>
 		<div role="main">
-			<h1 id="title">{{ title }}</h1>
+			{% block maintitle %}<h1 id="title">{{ title }}</h1>{% endblock %}
 			
 			{% block content %}
 				{% if content %}
@@ -66,10 +75,10 @@
 			{% endblock %}
 
 			<div id='footer'>
-				shortdiary <a href='https://github.com/shortdiary/shortdiary/commit/{% include 'current_git_version.txt' %}'>0.3.0 Federschwert</a> | <a href="/tos/">{% trans 'TOS' %}</a> | <a href='/about/'>{% trans 'About, Security &amp; Imprint' %}</a>.
+				shortdiary <a href='https://github.com/shortdiary/shortdiary/commit/{% include 'current_git_version.txt' %}'>0.3.0 Federschwert</a> | <a href="/tos/">{% trans 'TOS' %}</a> | <a href='/about/'>{% trans 'About, Security &amp; Imprint' %}</a>. | <a href="https://github.com/shortdiary/shortdiary/issues/new" target="_blank">{% trans 'Report bug' %}</a>
 
 				{% if user.is_superuser %}
-					 | <a href="/admin/">{% trans 'Admin panel' %}</a>
+					 | <a href="/admin/">{% trans 'Admin' %}</a>
 				{% endif %}
 
 

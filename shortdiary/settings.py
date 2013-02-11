@@ -132,6 +132,7 @@ INSTALLED_APPS = (
 	'kombu.transport.django',
 	'djcelery',
 	'gravatar',
+	'rest_framework',
 	'diary',
 	'inviteman',
 )

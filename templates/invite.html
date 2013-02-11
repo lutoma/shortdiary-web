@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n %} 
+
+{% block content %}
+	{% if not invites_left %}
+		{% trans "Sorry, you don't have any invites to give away right now :(. Check back later." %}
+	{% else %}
+		{% blocktrans count counter=invites_left %}
+			You have {{ invites_left }} invite left. Use it wisely!
+		{% plural %}
+			You have {{ invites_left }} invites left. Use them wisely!
+		{% endblocktrans %}
+
+
+		{% if form.errors %}
+			<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
+		{% endif %}
+
+		<form method="post" action="">
+			{% csrf_token %}
+
+			<input type='email' name='email' placeholder='Email address' required />
+			{{ form.email.errors }}
+
+			<textarea name='message' placeholder='A personal message from you (optional)'></textarea>
+			{{ form.message.errors }}
+
+			<input type='submit' value="Send invite" />
+		</form>
+	{% endif %}
+{% endblock %}
