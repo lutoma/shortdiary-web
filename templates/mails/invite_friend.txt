@@ -6,7 +6,7 @@ your friend {{ name }} invited you to join shortdiary! {% endblocktrans %}{%if m
 
 {% endif %}{% blocktrans with invitecode=invite.code %}To sign up, point your browser to
 
-https://shortdiary.me/signup/
+https://shortdiary.me/accounts/signup/
 
 and enter the following invite code:
 
