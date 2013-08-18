@@ -39,6 +39,18 @@ class UserProfile(models.Model):
 			['{0} <{1}>'.format(self.user.username, self.user.email)])
 		mail.send()
 
+	def get_streak(self):
+		# FIXME This code is horrible
+		i = 0
+		while True:
+			try:
+				Post.objects.get(author = self, date = datetime.date.today() - datetime.timedelta(days = i))
+			except Post.DoesNotExist:
+				break
+			i += 1
+
+		return i
+
 # Automatically create a new user profile when a new user is added
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

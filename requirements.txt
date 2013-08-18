@@ -24,3 +24,7 @@ django-htmlmin
 
 # AJAX & API
 djangorestframework
+
+# Authentication
+python-openid
+django-allauth

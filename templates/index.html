@@ -15,6 +15,8 @@
 		{% else %}
 			{{ user.username }}!
 		{% endif%}
+
+		Your current streak: {{ user.get_profile.get_streak }} day{{ user.get_profile.get_streak|pluralize }}.
 	</p>
 
 	{% if user.is_authenticated and not user.get_profile.mail_verified %}
