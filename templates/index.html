@@ -18,33 +18,33 @@
 		{% endif%}
 	</p>
 
-	{% if user.is_authenticated and not user.get_profile.mail_verified %}
+	{% if user.is_authenticated and not user.mail_verified %}
 		<p><b>Your email address is unverified</b>. Therefore, we won't be able to send you any mails, <i>including</i> your diary mails. Please check your inbox for the verification link.</p>
 	{% endif %}
 
 	<h2>Your activity</h2>
 	<div id='activity-calendar' class='border'>
 		<div class='activity-infobox'>
-			<span class='factoid'>{{ user.get_profile.get_streak }}</span>
+			<span class='factoid'>{{ user.get_streak }}</span>
 
 			day posting streak
 		</div>
 
 		<div class='activity-infobox'>
-			<span class='factoid'>{{ user.get_profile.get_posts|length }}</span>
+			<span class='factoid'>{{ user.get_posts|length }}</span>
 
 			total posts
 		</div>
 
 		<div class='activity-infobox last'>
-			<span class='factoid'>{{ user.get_profile.get_post_characters }}</span>
+			<span class='factoid'>{{ user.get_post_characters }}</span>
 
 			total characters in posts
 		</div>
 
 		<hr class='clear'>
 
-		{% for day in user.get_profile.get_year_history %}
+		{% for day in user.get_year_history %}
 			<div class='activity-calendar-day' style="background-color: {% if day %}{{ day.get_activity_color }}{% else %}#eee{% endif %}">
 				&nbsp;
 			</div>

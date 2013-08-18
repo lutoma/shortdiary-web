@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
-from api.views import PostList, PostDetail, PublicPostDetail
+from api.views import PostList, PostDetail, PublicPostDetail, ProfileDetail
 admin.autodiscover()
 
 if settings.DEBUG:
@@ -18,8 +18,7 @@ api_patterns= format_suffix_patterns(patterns('',
 	url(r'^posts/$', PostList.as_view(), name="api-post-list"),
  	url(r'^posts/(?P<pk>\d+)/$', PostDetail.as_view(), name='api-post-detail'),
  	url(r'^public/$', PublicPostDetail.as_view(), name='api-public-post'),
-
-
+	url(r'^profile$', ProfileDetail.as_view(), name='api-profile-detail'),
 ), allowed=["json", "html"])
 
 urlpatterns += patterns('',

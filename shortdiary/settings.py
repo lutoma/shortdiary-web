@@ -131,7 +131,7 @@ INSTALLED_APPS = (
 	'django.contrib.admindocs',
 	'kombu.transport.django',
 	'djcelery',
-	'gravatar',
+	'django_gravatar',
 	'rest_framework',
 	'diary',
 	'inviteman',
@@ -177,3 +177,5 @@ REST_FRAMEWORK = {
         'api.permissions.IsOwner',
     )
 }
+
+AUTH_USER_MODEL = 'diary.DiaryUser'

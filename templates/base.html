@@ -52,8 +52,7 @@
 
 				<span class="right">
 					{% if user.is_authenticated %}
-						<a href='/'><img class="user-avatar" src="{% gravatar_for_user user 25 %}" alt='' title="Hint: You can change your avatar at gravatar.com" />
-						{{ user.username }}</a>
+						<a href='/'>{% gravatar user.email 25 %} {{ user.username }}</a>
 						
 						<span class="nav-icons">
 							<a href="/accounts/settings/" title="{% trans 'Account settings' %}"><i class="icon-wrench"></i></a>

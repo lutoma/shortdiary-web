@@ -6,13 +6,12 @@ from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from inviteman.models import Invite
 import django.contrib.auth
-from diary.models import Post
+from diary.models import Post, DiaryUser
 from diary.forms import PostForm, SignUpForm, LoginForm, AccountSettingsForm
 
 tos = lambda request: render_to_response(
@@ -27,7 +26,7 @@ about = lambda request: render_to_response(
 
 def index(request):
 	try:
-		randompost = Post.objects.filter(author__userprofile__public = True).order_by('?')[:1].get()
+		randompost = Post.objects.filter(author__public = True).order_by('?')[:1].get()
 	except Post.DoesNotExist:
 		randompost = None
 
@@ -168,13 +167,13 @@ def sign_up(request):
 	user.set_password(request.POST.get('password', None))
 	user.save()
 
-	user.userprofile.public = request.POST.get('public', False)
-	user.userprofile.invited_by = invite.generated_by
-	user.userprofile.save()
+	userpublic = request.POST.get('public', False)
+	userinvited_by = invite.generated_by
+	usersave()
 
 	invite.delete()
 
-	user.get_profile().send_verification_mail()
+	user.send_verification_mail()
 
 	login_user = django.contrib.auth.authenticate(username = user.username, password = request.POST.get('password', None))
 	django.contrib.auth.login(request, login_user)
@@ -196,8 +195,8 @@ def login(request):
 	user = django.contrib.auth.authenticate(username = username, password = password)
 	if user is not None and user.is_active:
 		django.contrib.auth.login(request, user)
-		user.get_profile().last_login_at = datetime.datetime.now()
-		user.get_profile().save()
+		user.last_login_at = datetime.datetime.now()
+		user.save()
 		return HttpResponseRedirect('/')
 
 	context = {
@@ -207,14 +206,13 @@ def login(request):
 	return render_to_response('login.html', context_instance = RequestContext(request, context))
 
 def mail_verify(request, user_id, hash):
-	user = get_object_or_404(User, id = user_id)
-	profile = user.get_profile()
+	user = get_object_or_404(DiaryUser, id = user_id)
 
-	if not hash == profile.get_verification_hash():
+	if not hash == user.get_verification_hash():
 		return HttpResponse('Sorry, invalid hash.')
 
-	profile.mail_verified = True
-	profile.save()
+	user.mail_verified = True
+	user.save()
 	return HttpResponseRedirect("/")
 
 
@@ -237,16 +235,14 @@ def account_settings(request):
 		return render_to_response('account_settings.html', context_instance=RequestContext(request, context))
 
 	# Save form
-	profile = request.user.get_profile()
 
 	if request.user.email != form.cleaned_data['email']:
-		profile.mail_verified = False
+		request.user.mail_verified = False
 		request.user.email = form.cleaned_data['email']
-		profile.send_verification_mail()
+		request.user.send_verification_mail()
 
-	profile.public = form.cleaned_data['public']
+	request.user.public = form.cleaned_data['public']
 
-	profile.save()
 	request.user.save()
 
 	context = {

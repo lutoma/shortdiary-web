@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.core.mail import EmailMessage
 from django.template.loader import get_template, Context
@@ -9,24 +9,17 @@ from django.conf import settings
 import hashlib
 import datetime
 
-class UserProfile(models.Model):
+class DiaryUser(AbstractUser):
 	"""
-	The extended user profile
+	The extended user
 	"""
 
-	user = models.OneToOneField(User)
 	public = models.BooleanField(verbose_name = _('public'))
-	invited_by = models.ForeignKey(User, related_name = 'user_invited_by', blank = True, null = True, verbose_name = _('invited by'))
+	invited_by = models.ForeignKey("DiaryUser", related_name = 'user_invited_by', blank = True, null = True, verbose_name = _('invited by'))
 	invites_left = models.IntegerField(default = 5, verbose_name = _('invites left'))
 	last_seen_at = models.DateTimeField(blank = True, null = True, verbose_name = _('last seen at'))
 	mail_verified = models.BooleanField(default = False, verbose_name = _('email verified?'))
 	language = models.CharField(default = 'en_US', max_length = 5, verbose_name = _('language'))
-
-	__unicode__ = lambda self: self.user.username
-
-	class Meta:
-		verbose_name = _('user profile')
-		verbose_name_plural = _('user profiles')
 
 	get_verification_hash = lambda self: hashlib.sha256(self.user.email.encode('utf-8') + settings.SECRET_KEY).hexdigest()
 
@@ -80,19 +73,12 @@ class UserProfile(models.Model):
 	def get_post_characters(self):
 		return reduce(lambda x, post: x + len(post.text), self.get_posts(), 0)
 
-# Automatically create a new user profile when a new user is added
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user = instance)
-
-post_save.connect(create_user_profile, sender=User)
-
 class Post(models.Model):
 	"""
 	A diary post
 	"""
 
-	author = models.ForeignKey(User, verbose_name = _('author'))
+	author = models.ForeignKey(DiaryUser, verbose_name = _('author'))
 	date = models.DateField(verbose_name = ('date'))
 	text = models.TextField(max_length = 350, verbose_name = _('text'))
 	mood = models.IntegerField(verbose_name = _ ('mood'))

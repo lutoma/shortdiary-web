@@ -8,8 +8,7 @@ class TrackLastActivityMiddleware:
 		user = request.user
 
 		if user.is_authenticated():
-			up = user.get_profile()
-			up.last_seen_at = datetime.utcnow().replace(tzinfo=utc)
-			up.save()
+			user.last_seen_at = datetime.utcnow().replace(tzinfo=utc)
+			user.save()
 	
 		return None

@@ -17,7 +17,7 @@
 		<input type='email' name='email' maxlength='100' placeholder='email' value="{% if form.email.value %}{{ form.email.value }}{% else %}{{ user.email }}{% endif %}" required />
 		<small>
 			{% trans 'Status' %}: 
-			{% if user.get_profile.mail_verified %}
+			{% if user.mail_verified %}
 				{% trans 'Verified' %}. 
 			{% else %}
 				<span style="color: red;">{% trans 'Unverified' %}. </span>
@@ -30,7 +30,7 @@
 		<input type='password' name='password' maxlength='100' placeholder='{% trans "New password (or leave empty)" %}' value="{% if form.password.value %}{{ form.password.value }}{% endif %}" />
 		{{ form.password.errors }}
 
-		<label for='public_check'>{% trans "Public account?" %}</label> <input type='checkbox' id='public_check' name='public' {% if form.public.value or user.get_profile.public %}checked{% endif %} />
+		<label for='public_check'>{% trans "Public account?" %}</label> <input type='checkbox' id='public_check' name='public' {% if form.public.value or user.public %}checked{% endif %} />
 		{{ form.public.errors }}
 
 		<button type='submit'>

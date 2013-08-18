@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django.utils.translation import ugettext_lazy as _
-from diary.models import Post, UserProfile
+from diary.models import Post, DiaryUser
 from django.contrib import admin
 
 class PostAdmin(admin.ModelAdmin):
@@ -28,12 +28,12 @@ class PostAdmin(admin.ModelAdmin):
 	list_filter = ['sent', 'created_at']
 	date_hierarchy = 'date'
 
-class UserProfileAdmin(admin.ModelAdmin):
-	list_display = ['user', 'public', 'mail_verified', 'last_seen_at', 'invited_by', 'language']
+class UserAdmin(admin.ModelAdmin):
+	list_display = ['public', 'mail_verified', 'last_seen_at', 'invited_by', 'language']
 	list_filter = ['public', 'mail_verified', 'last_seen_at']
 	readonly_fields=('last_seen_at',)
 	#date_hierarchy = 'user__date_joined'
-	search_fields = ('user__username',)
+	search_fields = ('username',)
 
 admin.site.register(Post, PostAdmin)
-admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(DiaryUser, UserAdmin)
