@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
+from rest_framework.urlpatterns import format_suffix_patterns
+from api.views import PostList, PostDetail, PublicPostDetail
 admin.autodiscover()
 
 if settings.DEBUG:
@@ -10,6 +12,15 @@ if settings.DEBUG:
 	)
 else:
 	urlpatterns = patterns('')
+
+
+api_patterns= format_suffix_patterns(patterns('',
+	url(r'^posts/$', PostList.as_view(), name="api-post-list"),
+ 	url(r'^posts/(?P<pk>\d+)/$', PostDetail.as_view(), name='api-post-detail'),
+ 	url(r'^public/$', PublicPostDetail.as_view(), name='api-public-post'),
+
+
+), allowed=["json", "html"])
 
 urlpatterns += patterns('',
 	url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -36,4 +47,8 @@ urlpatterns += patterns('',
 	url(r'^email/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', 'diary.views.mail_verify'),
 
 	url(r'^/?$', 'diary.views.index'),
+
+    	url(r'^api/', include(api_patterns)),
 )
+
+

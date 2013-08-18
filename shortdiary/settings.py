@@ -171,3 +171,9 @@ AUTH_PROFILE_MODULE = 'diary.UserProfile'
 
 # Cache busting
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'api.permissions.IsOwner',
+    )
+}
