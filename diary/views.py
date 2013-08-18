@@ -13,8 +13,7 @@ from rest_framework import status
 from inviteman.models import Invite
 import django.contrib.auth
 from diary.models import Post
-import django.forms as forms
-
+from diary.forms import PostForm, SignUpForm, LoginForm, AccountSettingsForm
 
 tos = lambda request: render_to_response(
 		'tos.html',
@@ -45,11 +44,6 @@ def index(request):
 		'posts': Post.objects.filter(author = request.user, date__gte = datetime.date.today() - datetime.timedelta(days = 6)).order_by('-date', '-created_at'),
 	}
 	return render_to_response('index.html', context_instance=RequestContext(request, context))
-
-class PostForm(forms.ModelForm):
-	class Meta:
-		model = Post
-		fields = ('text', 'mood', 'date', 'image')
 
 @login_required
 def edit_post(request, post_id = None):
@@ -140,10 +134,6 @@ def switch_language(request, language):
 	request.session['django_language'] = language
 	return HttpResponseRedirect('/')
 
-class SignUpForm(forms.ModelForm):
-	class Meta:
-		model = User
-		fields = ('username', 'email', 'password')
 
 def sign_up(request):
 	if not request.method == 'POST':
@@ -191,10 +181,6 @@ def sign_up(request):
 	return HttpResponseRedirect('/')
 
 
-class LoginForm(forms.Form):
-	username = forms.CharField(max_length = 200)
-	password = forms.CharField(max_length = 200)
-
 
 def login(request):
 	if not request.method == 'POST':
@@ -231,10 +217,6 @@ def mail_verify(request, user_id, hash):
 	profile.save()
 	return HttpResponseRedirect("/")
 
-class AccountSettingsForm(forms.Form):
-	email = forms.EmailField(max_length = 100)
-	public = forms.BooleanField(required = False)
-	password = forms.CharField(max_length = 200, required = False)
 
 def account_settings(request):
 	if not request.method == 'POST':
