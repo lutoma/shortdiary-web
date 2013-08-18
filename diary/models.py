@@ -40,19 +40,26 @@ class UserProfile(models.Model):
 		mail.send()
 
 	def get_streak(self):
-		# FIXME This code is horrible
-		i = 0
-		while True:
-			try:
-				Post.objects.get(author = self, date = datetime.date.today() - datetime.timedelta(days = i + 1))
-			except Post.DoesNotExist:
-				break
-			i += 1
+		"""
+		This returns information on how long the "streak" of this user has been
+		lasting. Streak in this context means continous posts on following days
+		going backwards starting from today or yesterday.
+		"""
 
-		if Post.objects.get(author = self, date = datetime.date.today()):
-			i += 1
+		user_posts = Post.objects.filter(author = self).order_by('-date')
+		today = datetime.date.today()
 
-		return i
+		post = user_posts[0]
+		if post.date != today and post.date != today - datetime.timedelta(days = 1):
+			return 0
+
+		streak = 0
+		for post, previous_post in zip(user_posts, [post] + list(user_posts)):
+			if (previous_post.date - post.date) > datetime.timedelta(days = 1):
+				return streak
+			streak += 1
+
+		return streak
 
 # Automatically create a new user profile when a new user is added
 def create_user_profile(sender, instance, created, **kwargs):
