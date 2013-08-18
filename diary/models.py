@@ -21,15 +21,15 @@ class DiaryUser(AbstractUser):
 	mail_verified = models.BooleanField(default = False, verbose_name = _('email verified?'))
 	language = models.CharField(default = 'en_US', max_length = 5, verbose_name = _('language'))
 
-	get_verification_hash = lambda self: hashlib.sha256(self.user.email.encode('utf-8') + settings.SECRET_KEY).hexdigest()
+	get_verification_hash = lambda self: hashlib.sha256(self.email.encode('utf-8') + settings.SECRET_KEY).hexdigest()
 
 	def send_verification_mail(self):
 		mail_template = get_template('mails/verification.txt')
 		mail = EmailMessage(
-			_('Please verify your email address on shortdiary, {0}'.format(self.user.username)),
-			mail_template.render(Context({'mailuser': self.user, 'hash': self.get_verification_hash()})),
+			_('Please verify your email address on shortdiary, {0}'.format(self.username)),
+			mail_template.render(Context({'mailuser': self, 'hash': self.get_verification_hash()})),
 			'shortdiary <team@shortdiary.me>',
-			['{0} <{1}>'.format(self.user.username, self.user.email)])
+			['{0} <{1}>'.format(self.username, self.email)])
 		mail.send()
 
 	def get_streak(self):
