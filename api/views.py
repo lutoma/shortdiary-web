@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from diary.models import Post
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
-from api.serializers import UserSerializer, PostSerializer, PostCreateSerializer
+from api.serializers import UserSerializer, PostSerializer, PostCreateSerializer, PublicPostSerializer
 from rest_framework.response import Response
 import datetime
 from rest_framework import status
@@ -74,7 +74,7 @@ class PublicPostDetail(APIView):
 	def get(self, request, format=None):
 		try:
 			randompost = Post.objects.filter(author__userprofile__public = True).order_by('?')[:1].get()
-			serializer = PostSerializer(randompost)
+			serializer = PublicPostSerializer(randompost)
 			return Response(serializer.data)
 		except Post.DoesNotExist:
 			randompost = None
