@@ -44,9 +44,12 @@ class UserProfile(models.Model):
 		i = 0
 		while True:
 			try:
-				Post.objects.get(author = self, date = datetime.date.today() - datetime.timedelta(days = i))
+				Post.objects.get(author = self, date = datetime.date.today() - datetime.timedelta(days = i + 1))
 			except Post.DoesNotExist:
 				break
+			i += 1
+
+		if Post.objects.get(author = self, date = datetime.date.today()):
 			i += 1
 
 		return i
