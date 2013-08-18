@@ -6,6 +6,7 @@ from api.serializers import UserSerializer, PostSerializer, PostCreateSerializer
 from rest_framework.response import Response
 import datetime
 from rest_framework import status
+from django.utils.translation import ugettext_lazy as _
 
 
 class PostList(ListCreateAPIView):
@@ -44,6 +45,27 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
 	queryset = Post.objects.all()
 	serializer_class = PostSerializer
 
+
+	def put(self, request, *args, **kwargs):
+		today = datetime.date.today()
+		object = Post.objects.get(pk=kwargs["pk"])
+		if (today - object.date).days > 3:
+			return Response({"Error":_("This entry is to old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
+		return uper(PostDetail, self).update(request, *args, **kwargs)
+
+	def patch(self, request, *args, **kwargs):
+		today = datetime.date.today()
+		object = Post.objects.get(pk=kwargs["pk"])
+		if (today - object.date).days > 3:
+			return Response({"Error":_("This entry is to old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
+		return uper(PostDetail, self).partial_update(request, *args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		today = datetime.date.today()
+		object = Post.objects.get(pk=kwargs["pk"])
+		if (today - object.date).days > 3:
+			return Response({"Error":_("This entry is to old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
+		return  super(PostDetail, self).destroy(request, *args, **kwargs)
 
 class PublicPostDetail(APIView):
 	"""
