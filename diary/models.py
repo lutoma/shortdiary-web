@@ -47,7 +47,6 @@ class UserProfile(models.Model):
 		"""
 
 		user_posts = Post.objects.filter(author = self).order_by('-date')
-		print user_posts
 		if len(user_posts) == 0:
 			return 0
 		today = datetime.date.today()
