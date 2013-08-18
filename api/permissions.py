@@ -6,4 +6,7 @@ class IsOwner(permissions.IsAuthenticated):
     """
 
     def has_object_permission(self, request, view, obj):
-        return (obj.author == request.user)
+        try:
+            return (obj.author == request.user)
+        except:
+            return (obj == request.user)

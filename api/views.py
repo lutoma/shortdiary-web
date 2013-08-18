@@ -1,12 +1,32 @@
-from django.contrib.auth.models import User, Group
-from diary.models import Post
+from diary.models import Post, DiaryUser
 from rest_framework.views import APIView
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
-from api.serializers import UserSerializer, PostSerializer, PostCreateSerializer, PublicPostSerializer
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, GenericAPIView
+from api.serializers import PostSerializer, PostCreateSerializer, PublicPostSerializer, ProfileSerializer
 from rest_framework.response import Response
 import datetime
-from rest_framework import status
+from rest_framework import status, mixins
 from django.utils.translation import ugettext_lazy as _
+
+
+class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
+	model = DiaryUser
+	serializer_class = ProfileSerializer
+
+	def get(self, request, format=None):
+		serializer = ProfileSerializer(request.user)
+		return Response(serializer.data)
+
+	def put(self, request, *args, **kwargs):
+		kwargs["pk"] = request.user.pk
+		return self.update(request, *args, **kwargs)
+
+	def patch(self, request, *args, **kwargs):
+		kwargs["pk"] = request.user.pk
+		return self.partial_update(request, *args, **kwargs)
+
+	def get_object(self, queryset=None):
+		return self.request.user
+
 
 
 class PostList(ListCreateAPIView):

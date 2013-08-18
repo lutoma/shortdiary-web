@@ -1,8 +1,16 @@
-from django.contrib.auth.models import User
-from diary.models import Post
+from diary.models import Post, DiaryUser
 from rest_framework import serializers
 import datetime
 from django.utils.translation import ugettext as _
+
+
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+	lastseen = serializers.CharField(source="last_seen_at", read_only=True)
+
+	class Meta:
+		model = DiaryUser
+		fields = ('username', 'email', 'mail_verified', 'language', 'lastseen', 'public')
+		read_only_fields = ('username', 'mail_verified')
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,7 +24,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 class PublicPostSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Post
-		fields = ('text',)
+		fields = ('text')
 
 class PostCreateSerializer(serializers.ModelSerializer):
 	class Meta:
