@@ -53,6 +53,11 @@ h1 {
 	margin: 0;
 }
 
+.border {
+	border: 1px solid #d4d4d4;
+	border-radius: 2px;
+}
+
 /* Input elements & buttons */
 
 input, select, button, textarea {
@@ -141,11 +146,6 @@ table tr td {
 }
 
 /* Tables with class='border' */
-table.border {
-	border: 1px solid #d4d4d4;
-	border-radius: 2px;
-}
-
 table.border > tbody > tr > td {
 	padding: .1em .5em;
 }
@@ -169,6 +169,10 @@ hr {
 	border-bottom: 1px solid #d4d4d4;
 }
 
+div.border {
+	padding: 8px;
+}
+
 div[role=main] {
 	margin: 0 auto;
 	max-width: 940px;
@@ -177,6 +181,10 @@ div[role=main] {
 
 .right {
 	float: right;
+}
+
+.clear {
+	clear: both;
 }
 
 /* –––––––––––––––––––– */
@@ -282,6 +290,36 @@ div[role=main] {
 .post-list a {
 	text-decoration: none;
 	color: inherit;
+}
+
+#activity-calendar {
+	margin-bottom: 50px;
+}
+
+.activity-calendar-day {
+	width: 15px;
+	height: 15px;
+	overflow: hidden;
+	float: left;
+	background: green;
+	margin: 1px;
+}
+
+.activity-infobox {
+	border-right: 1px solid #d4d4d4;
+	text-align: center;
+	width: 305px;
+	float: left;
+	margin-bottom: 7px;
+}
+
+.activity-infobox.last {
+	border-right: none;
+}
+
+.activity-infobox .factoid {
+	font-size: 2em;
+	display: block;
 }
 
 /* –––––––––––––––––––– */

@@ -61,6 +61,24 @@ class UserProfile(models.Model):
 
 		return streak
 
+	def get_year_history(self):
+		"""
+		Returns the length of posts for a user for the last 356 days.
+		"""
+
+		grid = [None] * 365
+
+		for post in Post.objects.filter(author = self, date__year = datetime.date.today().year):
+			grid[post.date.timetuple().tm_yday] = post
+
+		return grid
+
+	def get_posts(self):
+		return Post.objects.filter(author = self)
+
+	def get_post_characters(self):
+		return reduce(lambda x, post: x + len(post.text), self.get_posts(), 0)
+
 # Automatically create a new user profile when a new user is added
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -114,3 +132,18 @@ class Post(models.Model):
 	is_editable.admin_order_field = 'date'
 	is_editable.boolean = True
 	is_editable.short_description = 'Still editable by user?'
+
+
+	def get_activity_color(self):
+		length = len(self.text)
+
+		if(length <= 50):
+			return '#d6e685'
+
+		if(length <= 150):
+			return '#8cc665'
+
+		if(length <= 250):
+			return '#44a340'
+
+		return '#1e6823'
