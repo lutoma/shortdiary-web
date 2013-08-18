@@ -25,7 +25,7 @@ DATABASES = {
 	}
 }
 
-TIME_ZONE = 'America/Los_Angeles'
+TIME_ZONE = 'Europe/Berlin'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 USE_I18N = True
