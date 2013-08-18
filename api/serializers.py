@@ -16,7 +16,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 class PublicPostSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Post
-		fields = ('text')
+		fields = ('text',)
 
 class PostCreateSerializer(serializers.ModelSerializer):
 	class Meta:
