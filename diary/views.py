@@ -39,7 +39,7 @@ def index(request):
 		return render_to_response('frontpage.html', context_instance=RequestContext(request, context))
 
 	context = {
-		'title': 'Home',
+		'title': 'Dashboard',
 		'randompost': randompost,
 		'posts': Post.objects.filter(author = request.user, date__gte = datetime.date.today() - datetime.timedelta(days = 6)).order_by('-date', '-created_at'),
 	}
