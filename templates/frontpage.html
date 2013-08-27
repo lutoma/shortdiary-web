@@ -9,26 +9,38 @@
 {% endblock %}
 
 {% block maintitle %}
-	<h1 id='title'>Welcome to shortdiary</h1>
+	<div id='jumbotron'>
+		<h1 id='title'>Revisit your past and relive great moments. Remember your future.</h1>
 
-	<h2 style="font-weight: 200; font-size: 35px;">{% trans "shortdiary lets you revisit your past, think of all the great things you have done and all those still on your to do list." %}</h2>
+		It's your plans. Your hopes &amp; dreams. Your ideas. Your achievements &amp; failures. It's who you are, and who you are going to be.  It is your life. And you should remember it.
 
-	<h1 style='font-weight: 400; font-size: 35px; margin-top: 0;'>It's your life – you should remember it</h1>
+		<div id="front-mainsignup">
+			<form id='invite-request-form'>
+				<input type='email' name='email' placeholder='Your email address' pattern="[^ @]+@[^ @]+" required />
+				<button type='submit'>Request invite</button>
+				<i class=""></i> 
+			</form>
+		</div>
+
+	</div>
 {% endblock %}
 
 {%block content %}
-	<div id="front-mainsignup">
-		<form id='invite-request-form'>
-			<input type='email' name='email' placeholder='Your email address' pattern="[^ @]+@[^ @]+" required />
-			<button type='submit'>Request invite</button>
-			<i class=""></i> 
-		</form>
-	</div>
+	<img style="width: 350px; float: right; margin: 10px;" src='{% static "img/screenshot.png" %}' />
+
+	<h2 style="margin-top: 0; font-weight: 200; font-size: 35px;">{% trans "shortdiary lets you think of all the great things you have done and all those still on your to do list." %}</h2>
+
+	<h2 style="margin-top: 30px; margin-bottom: 80px; font-weight: 200; font-style: italic; font-size: 30px;">It's your life. You should remember it.</h2>
+
+
+
+	<hr />
 
 	{% if post %}
 
 		<p id="front-randompost">
 			<h2>{% trans 'Random public post' %}</h2>
+
 			{{ post.text|linebreaks }}
 		</p>
 	{% endif %}

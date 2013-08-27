@@ -33,7 +33,7 @@ def index(request):
 
 	if not request.user.is_authenticated():
 		context = {
-			'title': _('Welcome to shortdiary'),
+			'title': _('It\'s your life. You should remember it.'),
 			'post': randompost,
 		}
 		return render_to_response('frontpage.html', context_instance=RequestContext(request, context))
