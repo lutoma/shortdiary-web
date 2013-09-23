@@ -104,7 +104,7 @@ class Migration(SchemaMigration):
         },
         u'diary.post': {
             'Meta': {'object_name': 'Post'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['diary.DiaryUser']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date': ('django.db.models.fields.DateField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -120,13 +120,13 @@ class Migration(SchemaMigration):
         u'diary.userprofile': {
             'Meta': {'object_name': 'UserProfile'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'invited_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'user_invited_by'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'invited_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'user_invited_by'", 'null': 'True', 'to': u"orm['diary.DiaryUser']"}),
             'invites_left': ('django.db.models.fields.IntegerField', [], {'default': '5'}),
             'language': ('django.db.models.fields.CharField', [], {'default': "'en_US'", 'max_length': '5'}),
             'last_seen_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'mail_verified': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'public': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True'})
+            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['diary.DiaryUser']", 'unique': 'True'})
         }
     }
 
