@@ -1,84 +1,28 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 from django.db import models
 
-
-class Migration(SchemaMigration):
+class Migration(DataMigration):
 
     def forwards(self, orm):
-        # Deleting model 'UserProfile'
-        db.delete_table(u'diary_userprofile')
-
-        # Adding model 'DiaryUser'
-        db.create_table(u'diary_diaryuser', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('is_superuser', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('username', self.gf('django.db.models.fields.CharField')(unique=True, max_length=30)),
-            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
-            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, blank=True)),
-            ('is_staff', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('date_joined', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('public', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('invited_by', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='user_invited_by', null=True, to=orm['diary.DiaryUser'])),
-            ('invites_left', self.gf('django.db.models.fields.IntegerField')(default=5)),
-            ('last_seen_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('mail_verified', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('language', self.gf('django.db.models.fields.CharField')(default='en_US', max_length=5)),
-        ))
-        db.send_create_signal(u'diary', ['DiaryUser'])
-
-        # Adding M2M table for field groups on 'DiaryUser'
-        db.create_table(u'diary_diaryuser_groups', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('diaryuser', models.ForeignKey(orm[u'diary.diaryuser'], null=False)),
-            ('group', models.ForeignKey(orm[u'auth.group'], null=False))
-        ))
-        db.create_unique(u'diary_diaryuser_groups', ['diaryuser_id', 'group_id'])
-
-        # Adding M2M table for field user_permissions on 'DiaryUser'
-        db.create_table(u'diary_diaryuser_user_permissions', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('diaryuser', models.ForeignKey(orm[u'diary.diaryuser'], null=False)),
-            ('permission', models.ForeignKey(orm[u'auth.permission'], null=False))
-        ))
-        db.create_unique(u'diary_diaryuser_user_permissions', ['diaryuser_id', 'permission_id'])
-
-
-        # Changing field 'Post.author'
-        db.alter_column(u'diary_post', 'author_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['diary.DiaryUser']))
+        "Write your forwards methods here."
+        # Note: Don't use "from appname.models import ModelName". 
+        # Use orm.ModelName to refer to models in this application,
+        # and orm['appname.ModelName'] for models in other applications.
+        for userprofile in orm['diary.UserProfile'].objects.all():
+            user = orm['diary.DiaryUser'].objects.get(id=userprofile.user_id)
+            user.public = userprofile.public
+            user.invited_by = userprofile.invited_by
+            user.invites_left = userprofile.invites_left
+            user.last_seen_at = userprofile.last_seen_at
+            user.mail_verified = userprofile.mail_verified
+            user.language = userprofile.language
+            user.save()
 
     def backwards(self, orm):
-        # Adding model 'UserProfile'
-        db.create_table(u'diary_userprofile', (
-            ('public', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('invites_left', self.gf('django.db.models.fields.IntegerField')(default=5)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-            ('language', self.gf('django.db.models.fields.CharField')(default='en_US', max_length=5)),
-            ('mail_verified', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('last_seen_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('invited_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='user_invited_by', null=True, to=orm['auth.User'], blank=True)),
-        ))
-        db.send_create_signal('diary', ['UserProfile'])
-
-        # Deleting model 'DiaryUser'
-        db.delete_table(u'diary_diaryuser')
-
-        # Removing M2M table for field groups on 'DiaryUser'
-        db.delete_table('diary_diaryuser_groups')
-
-        # Removing M2M table for field user_permissions on 'DiaryUser'
-        db.delete_table('diary_diaryuser_user_permissions')
-
-
-        # Changing field 'Post.author'
-        db.alter_column(u'diary_post', 'author_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User']))
+        "Write your backwards methods here."
 
     models = {
         u'auth.group': {
@@ -137,7 +81,19 @@ class Migration(SchemaMigration):
             'mood': ('django.db.models.fields.IntegerField', [], {}),
             'sent': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'text': ('django.db.models.fields.TextField', [], {'max_length': '350'})
+        },
+        u'diary.userprofile': {
+            'Meta': {'object_name': 'UserProfile'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'invited_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'user_invited_by'", 'null': 'True', 'to': u"orm['diary.DiaryUser']"}),
+            'invites_left': ('django.db.models.fields.IntegerField', [], {'default': '5'}),
+            'language': ('django.db.models.fields.CharField', [], {'default': "'en_US'", 'max_length': '5'}),
+            'last_seen_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'mail_verified': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'public': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['diary.DiaryUser']", 'unique': 'True'})
         }
     }
 
     complete_apps = ['diary']
+    symmetrical = True
