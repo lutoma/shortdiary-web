@@ -1,18 +1,31 @@
 body {
-	background: url(../img/frontpage-bg-hill.jpg) #F7F5FA;
-	color: #fff;
-	background-attachment: fixed;
-	background-size: cover;
+	background: url(../img/frontpage-bg-jumbotron.jpg) #F7F5FA no-repeat;
+	background-size: auto 600px;
 }
 
-a, a:hover {
-	color: #fff;
+#top-block {
+	background: none;
+	padding-bottom: 7px;
+	border-bottom: 1px solid #ddd;
 }
+
+#jumbotron {
+	height: 550px;
+	text-align: center;
+}
+
+#title {
+	margin-top: 60px;
+	text-align: center;
+	font-size: 2.7em;
+	font-weight: 200;
+}
+
 
 #front-mainsignup {
 	display: block;
-	margin-top: 70px;
-	margin-bottom: 120px;
+	margin-top: 100px;
+	margin-bottom: 70px;
 	text-align: center;
 }
 
@@ -63,10 +76,4 @@ a, a:hover {
 
 #front-randompost {
 	margin-top: 20px;
-}
-
-#footer {
-	display: block;
-	color: #fff;
-	border-top: 1px solid #949494;
 }
