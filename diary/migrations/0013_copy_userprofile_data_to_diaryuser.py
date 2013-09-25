@@ -35,7 +35,12 @@ class Migration(DataMigration):
         for userprofile in orm['diary.UserProfile'].objects.all():
             user = orm['diary.DiaryUser'].objects.get(id=userprofile.user_id)
             user.public = userprofile.public
-            user.invited_by = userprofile.invited_by
+            
+            try:
+                user.invited_by = orm['diary.DiaryUser'].objects.get(id = userprofile.invited_by.id)
+            except AttributeError:
+                user.invited_by = None
+            
             user.invites_left = userprofile.invites_left
             user.last_seen_at = userprofile.last_seen_at
             user.mail_verified = userprofile.mail_verified
