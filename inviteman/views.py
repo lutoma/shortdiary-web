@@ -20,7 +20,7 @@ class InviteForm(forms.Form):
 def invite(request):
 	context = {
 		'title': 'Invite someone',
-		'invites_left': request.user.get_profile().invites_left,
+		'invites_left': request.user.invites_left,
 	}
 
 	if not request.method == 'POST':
@@ -33,12 +33,9 @@ def invite(request):
 		context['form'] = form
 		return render_to_response('invite.html', context_instance=RequestContext(request, context))
 
-	# Check if user has enough invites left
-	profile = request.user.get_profile()
-
 	# Since you shouldn't be able to do this unless you do nasty stuff anyways,
 	# no need for a pretty error page
-	if profile.invites_left < 1:
+	if request.user.invites_left < 1:
 		return HttpResponse('Sorry, you don\'t have any invites left.')
 
 	mail_template = get_template('mails/invite_friend.txt')
@@ -48,9 +45,9 @@ def invite(request):
 	invite.save()
 
 	# Remove from invites_left field
-	profile.invites_left -= 1
-	context['invites_left'] = profile.invites_left
-	profile.save()
+	request.user.invites_left -= 1
+	context['invites_left'] = request.user.invites_left
+	request.user.save()
 
 	mail_context = Context({
 		'user': request.user,
