@@ -30,3 +30,6 @@ djangorestframework
 # Authentication
 python-openid
 django-allauth
+
+# Caching
+python-memcached
