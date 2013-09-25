@@ -169,7 +169,7 @@ def sign_up(request):
 
 	userpublic = request.POST.get('public', False)
 	userinvited_by = invite.generated_by
-	usersave()
+	user.save()
 
 	invite.delete()
 
