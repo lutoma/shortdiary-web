@@ -8,11 +8,64 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.rename_table('auth_user', 'diary_diaryuser')
+        # Adding model 'DiaryUser'
+        db.create_table(u'diary_diaryuser', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('is_superuser', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('username', self.gf('django.db.models.fields.CharField')(unique=True, max_length=30)),
+            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, blank=True)),
+            ('is_staff', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('date_joined', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('public', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('invited_by', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='user_invited_by', null=True, to=orm['diary.DiaryUser'])),
+            ('invites_left', self.gf('django.db.models.fields.IntegerField')(default=5)),
+            ('last_seen_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('mail_verified', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('language', self.gf('django.db.models.fields.CharField')(default='en_US', max_length=5)),
+        ))
+        db.send_create_signal(u'diary', ['DiaryUser'])
+
+        # Adding M2M table for field groups on 'DiaryUser'
+        m2m_table_name = db.shorten_name(u'diary_diaryuser_groups')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('diaryuser', models.ForeignKey(orm[u'diary.diaryuser'], null=False)),
+            ('group', models.ForeignKey(orm[u'auth.group'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['diaryuser_id', 'group_id'])
+
+        # Adding M2M table for field user_permissions on 'DiaryUser'
+        m2m_table_name = db.shorten_name(u'diary_diaryuser_user_permissions')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('diaryuser', models.ForeignKey(orm[u'diary.diaryuser'], null=False)),
+            ('permission', models.ForeignKey(orm[u'auth.permission'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['diaryuser_id', 'permission_id'])
+
+
+        # Changing field 'Post.author'
+        db.alter_column(u'diary_post', 'author_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['diary.DiaryUser']))
 
     def backwards(self, orm):
-        db.rename_table('diary_diaryuser', 'auth_user')
-    
+        # Deleting model 'DiaryUser'
+        db.delete_table(u'diary_diaryuser')
+
+        # Removing M2M table for field groups on 'DiaryUser'
+        db.delete_table(db.shorten_name(u'diary_diaryuser_groups'))
+
+        # Removing M2M table for field user_permissions on 'DiaryUser'
+        db.delete_table(db.shorten_name(u'diary_diaryuser_user_permissions'))
+
+
+        # Changing field 'Post.author'
+        db.alter_column(u'diary_post', 'author_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User']))
+
     models = {
         u'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -27,7 +80,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        u'auth.User': {
+        u'auth.user': {
             'Meta': {'object_name': 'User'},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
@@ -57,18 +110,24 @@ class Migration(SchemaMigration):
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'invited_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'user_invited_by'", 'null': 'True', 'to': u"orm['diary.DiaryUser']"}),
+            'invites_left': ('django.db.models.fields.IntegerField', [], {'default': '5'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'language': ('django.db.models.fields.CharField', [], {'default': "'en_US'", 'max_length': '5'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'last_seen_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'mail_verified': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'public': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         u'diary.post': {
             'Meta': {'object_name': 'Post'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['diary.DiaryUser']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date': ('django.db.models.fields.DateField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
