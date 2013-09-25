@@ -1,5 +1,4 @@
 {% load i18n %}
-{% load gravatar %}
 {% load staticfiles %}
 
 <!doctype html>
@@ -67,7 +66,7 @@
 
 				<span class="right">
 					{% if user.is_authenticated %}
-						<a href='/'>{% gravatar user.email 25 %} {{ user.username }}</a>
+						<a href='/'>{{ user.username }}</a>
 						
 						<span class="nav-icons">
 							<a href="/accounts/settings/" title="{% trans 'Account settings' %}"><i class="icon-wrench"></i></a>
