@@ -33,3 +33,4 @@ django-allauth
 
 # Caching
 python-memcached
+psycopg2
