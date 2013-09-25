@@ -8,7 +8,7 @@ class Migration(DataMigration):
 
     def forwards(self, orm):
         # ONLY UNCOMMENT THIS IF YOU KNOW WHAT YOU ARE DOING.
-        return
+        #return
 
         for old_user in orm['auth.User'].objects.all():
 
