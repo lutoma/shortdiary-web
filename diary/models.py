@@ -89,8 +89,8 @@ class Post(models.Model):
 
 	sent = models.BooleanField(default = False, verbose_name = _('mail sent?'))
 
-	location_lat = models.DecimalField(max_digits=10, decimal_places=6, blank = True, null = True, verbose_name = _('Location latitude'))
-	location_lon = models.DecimalField(max_digits=10, decimal_places=6, blank = True, null = True, verbose_name = _('Location longitude'))
+	location_lat = models.DecimalField(max_digits=16, decimal_places=12, blank = True, null = True, verbose_name = _('Location latitude'))
+	location_lon = models.DecimalField(max_digits=16, decimal_places=12, blank = True, null = True, verbose_name = _('Location longitude'))
 	location_verbose = models.CharField(max_length = 400, blank = True, verbose_name = _('Location name'))
 
 	__unicode__ = lambda self: _('{0} at {1}').format(self.author, self.date)
