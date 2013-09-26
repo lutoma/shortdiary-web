@@ -166,8 +166,6 @@ def sign_up(request):
 	# Fixme
 	user = form.save(commit = False)
 	user.set_password(request.POST.get('password', None))
-	user.save()
-
 	user.invited_by = invite.generated_by
 	user.save()
 

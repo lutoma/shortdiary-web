@@ -1,6 +1,5 @@
 import django.forms as forms
-from diary.models import Post
-from django.contrib.auth.models import User
+from diary.models import Post, DiaryUser
 import datetime
 from django.utils.translation import ugettext as _
 
@@ -21,7 +20,7 @@ class PostForm(forms.ModelForm):
 
 class SignUpForm(forms.ModelForm):
 	class Meta:
-		model = User
+		model = DiaryUser
 		fields = ('username', 'email', 'password')
 
 

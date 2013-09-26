@@ -84,6 +84,7 @@ class Post(models.Model):
 	mood = models.IntegerField(verbose_name = _ ('mood'))
 	image = models.ImageField(upload_to = 'postimages/%d%m%y/', blank = True, verbose_name = _('image'))
 	public = models.BooleanField(verbose_name = _('public'), default = False)
+	part_of = models.CharField(blank = True, null = True, max_length = 600, verbose_name = _('part of'))
 
 	created_at = models.DateTimeField(auto_now_add = True, verbose_name = _('created at'))
 	last_changed_at = models.DateTimeField(auto_now = True, verbose_name = _('last changed at'))

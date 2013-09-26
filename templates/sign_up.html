@@ -6,6 +6,9 @@
 		<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
 	{% endif %}
 
+	<p style="font-size: 1.3em; font-weight: 300; margin: 0;">Welcome aboard!</p>
+	<p style="font-size: 1.3em; font-weight: 200; margin: 0; margin-bottom: 25px;">This will be awesome. Just fill out this fancy form and we're good to go!</p>
+
 	<form action='' method='POST' enctype='multipart/form-data'>
 		{% csrf_token %}
 		<input type='text' name='username' maxlength='100' placeholder='username'  value="{% if form.username.value %}{{ form.username.value }}{% endif %}" />
@@ -20,6 +23,9 @@
 		<input type='text' name='invite_code' maxlength='100' placeholder='invite code' />
 		{% if noinvite %}{% trans 'The invite you entered is invalid. Please try again. ' %}{% endif %}
 
-		<input type='submit' value='{% trans "submit" %}' />
+		<button type='submit' style='height: 35px;'>
+			<i class='icon-bolt'></i> {% trans "Make it so!" %}
+		</button>
+
 	</form>
 {% endblock %}
