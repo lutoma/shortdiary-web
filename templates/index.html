@@ -79,7 +79,7 @@
 						</td>
 					</tr>
 			{% empty %}
-				{% trans 'No posts to show – Try <a href="/posts/new/">adding a new post</a>!'%}
+				<tr><td>{% trans 'No posts to show – Try <a href="/posts/new/">adding a new post</a>!'%}</td></tr>
 			{% endfor %}
 		</tbody>
 	</table>
