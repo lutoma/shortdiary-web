@@ -62,16 +62,19 @@
 
 	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
 		<div style='padding-right: 20px'>
-			<h2>Your most mentioned names</h2>
+			<h2>Leaderboard: Number of posts</h2>
 			<table class="border alternate">
 				<tbody>
-					{% for user in streak_leaders_derp %}
+					{% for user in posts_leaders %}
 							<tr>
+								<td>
+									#{{ forloop.counter }}
+								</td>
 								<td style="width: 250px;">
 									{{ user.username }}
 								</td>
 								<td>
-									{{ user.get_streak }} day{{ user.get_streak|pluralize }}
+									{{ user.post_set.all|length }} posts
 								</td>
 							</tr>
 					{% endfor %}
@@ -81,7 +84,7 @@
 	</div>
 	<div style="width: 50%; padding: 0; margin: 0; float: right;">
 		<div style='padding-left: 20px'>
-			<h2>Streak leaderboard</h2>
+			<h2>Leaderboard: Longest streak</h2>
 			<table class="border alternate">
 				<tbody>
 					{% for user in streak_leaders %}
@@ -93,7 +96,7 @@
 									{{ user.username }}
 								</td>
 								<td>
-									{{ user.get_streak }} day{{ user.get_streak|pluralize }}
+									{{ user.get_streak }} days
 								</td>
 							</tr>
 					{% endfor %}

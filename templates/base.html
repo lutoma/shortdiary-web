@@ -56,6 +56,7 @@
 			<div id="navigation">
 				{% if user.is_authenticated %}
 					<a href="/posts/new/">{% trans 'New post' %}</a>
+					<a href="/stats/">{% trans 'Stats' %}</a>
 					<a href="/invite/">{% trans 'Invite someone' %}</a>
 				{% else %}
 					<a href="/accounts/login/">{% trans 'Log in' %}</a>
