@@ -271,13 +271,13 @@ def stats(request):
 		randompost = None
 
 	streak_leaders = DiaryUser.objects.all()
-	streak_leaders = sorted(streak_leaders, key = lambda t: t.get_streak(), reverse = True)[10:]
+	streak_leaders = sorted(streak_leaders, key = lambda t: t.get_streak(), reverse = True)[:10]
 	streak_leaders = filter(lambda t: t.get_streak() > 1, streak_leaders)
 
 	context = {
 		'title': 'Stats',
 		'randompost': randompost,
 		'streak_leaders': streak_leaders,
-		'posts': Post.objects.filter(author = request.user)
+		'posts': Post.objects.filter(author = request.user).order_by('date')
 	}
 	return render_to_response('stats.html', context_instance=RequestContext(request, context))
