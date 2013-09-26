@@ -33,6 +33,9 @@
 		<label for='public_check'>{% trans "Public account?" %}</label> <input type='checkbox' id='public_check' name='public' {% if form.public.value or user.public %}checked{% endif %} />
 		{{ form.public.errors }}
 
+		<label for='geolocation_enabled_check'>{% trans "Add location to posts" %}</label> <input type='checkbox' id='geolocation_enabled_check' name='geolocation_enabled' {% if form.geolocation_enabled.value or user.geolocation_enabled %}checked{% endif %} />
+		{{ form.public.errors }}
+
 		<button type='submit'>
 				<i class='icon-share-alt'></i> {% trans "submit" %}
 		</button>

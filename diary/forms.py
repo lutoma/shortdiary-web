@@ -7,7 +7,7 @@ from django.utils.translation import ugettext as _
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('text', 'mood', 'date', 'image')
+        fields = ('text', 'mood', 'date', 'image', 'location_lat', 'location_lon', 'location_verbose')
 
     def clean_date(self):
         date = self.cleaned_data["date"]
@@ -33,4 +33,5 @@ class LoginForm(forms.Form):
 class AccountSettingsForm(forms.Form):
     email = forms.EmailField(max_length = 100)
     public = forms.BooleanField(required = False)
+    geolocation_enabled = forms.BooleanField(required = False)
     password = forms.CharField(max_length = 200, required = False)

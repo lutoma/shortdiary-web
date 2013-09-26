@@ -17,5 +17,7 @@
 
 	{{ post.text|linebreaks }}
 
+	<p><small>From {{ post.location_verbose }}</small></p>
+
 	<a href='/posts/{{ post.id }}/edit/'><i class='icon-edit'></i> {% trans 'Edit' %}</a>
 {% endblock %}

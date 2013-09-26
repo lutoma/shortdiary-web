@@ -242,6 +242,7 @@ def account_settings(request):
 		request.user.send_verification_mail()
 
 	request.user.public = form.cleaned_data['public']
+	request.user.geolocation_enabled = form.cleaned_data['geolocation_enabled']
 
 	request.user.save()
 
