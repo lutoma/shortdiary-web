@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load i18n %} 
+{% load l10n %} 
+{% load humanize %}
+{% load staticfiles %}
+
+{% block headeradd %}
+	<script src='{% static "js/index.js" %}'></script>
+{% endblock %}
+
+{%block content %}
+	<h2>Streak leaderboard</h2>
+	<!-- <a href='/post/{{ post.id }}/'> -->
+	<table class="post-list border alternate">
+		<tbody>
+			{% for user in streak_leaders %}
+					<tr>
+						</td>
+						<td style="width: 250px;">
+							{{ user.username }}
+						</td>
+						<td>
+							{{ user.get_streak }} day{{ user.get_streak|pluralize }}
+						</td>
+					</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

@@ -43,6 +43,8 @@ urlpatterns += patterns('',
 	url(r'^posts/(?P<post_id>[0-9]+)/edit/$', 'diary.views.edit_post'),
 	url(r'^posts/(?P<post_id>[0-9]+)/delete/$', 'diary.views.delete_post'),
 
+	url(r'^stats/$', 'diary.views.stats'),
+
 	url(r'^email/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', 'diary.views.mail_verify'),
 
 	url(r'^/?$', 'diary.views.index'),

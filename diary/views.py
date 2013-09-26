@@ -262,3 +262,20 @@ def delete_post(request, post_id):
 
 	post.delete()
 	return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+def stats(request):
+	try:
+		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
+	except Post.DoesNotExist:
+		randompost = None
+
+	streak_leaders = DiaryUser.objects.all()
+	streak_leaders = sorted(streak_leaders, key = lambda t: t.get_streak())
+
+	context = {
+		'title': 'Stats',
+		'randompost': randompost,
+		'streak_leaders': streak_leaders,
+	}
+	return render_to_response('stats.html', context_instance=RequestContext(request, context))
