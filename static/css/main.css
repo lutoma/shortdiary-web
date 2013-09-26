@@ -71,8 +71,6 @@ input, select, button, textarea {
 input[type=text], input[type=password], input[type=email], textarea
 {
 	background-color: #FEFEFE;
-	border: 1px solid #D4D4D4;
-	border-top: 1px solid #A4A4A4;
 	border-left: 1px solid #A4A4A4;
 	width: 300px;
 }
