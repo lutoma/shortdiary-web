@@ -168,8 +168,7 @@ def sign_up(request):
 	user.set_password(request.POST.get('password', None))
 	user.save()
 
-	userpublic = request.POST.get('public', False)
-	userinvited_by = invite.generated_by
+	user.invited_by = invite.generated_by
 	user.save()
 
 	invite.delete()
