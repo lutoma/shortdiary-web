@@ -108,6 +108,17 @@ input[type=submit], input[type=button], button, .button {
 	border-radius: 2px;
 }
 
+.button-gold {
+	background-color: #CDB380;
+	background-image: -moz-linear-gradient(#CDB380, #BDA370);
+	background-image: -webkit-linear-gradient(#CDB380, #BDA370);
+	background-image: linear-gradient(#CDB380, #BDA370);
+	text-shadow: 0 1px 0 #EDD3A0;
+
+	border: 1px solid #AD9360;
+	border-bottom-color: #AD9360;
+}
+
 input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover {
 	cursor: pointer;
 	color: white;

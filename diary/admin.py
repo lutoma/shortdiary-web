@@ -10,7 +10,7 @@ class PostAdmin(admin.ModelAdmin):
 	# user data.
 
 	fieldsets = [
-		(None, {'fields': ['author', 'date', 'sent']}),
+		(None, {'fields': ['author', 'date', 'sent', 'public']}),
 		(
 			_('Privacy section. Only open if absolutely needed (Mood, Text, Image)'),
 			{'fields': [
@@ -24,15 +24,15 @@ class PostAdmin(admin.ModelAdmin):
 		),
 	]
 
-	list_display = ['author', 'date', 'sent', 'is_editable']
+	list_display = ['author', 'date', 'public', 'sent', 'is_editable']
 	list_filter = ['sent', 'created_at']
 	date_hierarchy = 'date'
 
 class UserAdmin(admin.ModelAdmin):
-	list_display = ['public', 'mail_verified', 'last_seen_at', 'invited_by', 'language']
-	list_filter = ['public', 'mail_verified', 'last_seen_at']
+	list_display = ['username', 'email', 'last_seen_at', 'invited_by', 'language']
+	list_filter = ['mail_verified', 'last_seen_at', 'geolocation_enabled']
 	readonly_fields=('last_seen_at',)
-	#date_hierarchy = 'user__date_joined'
+	date_hierarchy = 'last_seen_at'
 	search_fields = ('username',)
 
 admin.site.register(Post, PostAdmin)

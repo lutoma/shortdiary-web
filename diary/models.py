@@ -14,7 +14,6 @@ class DiaryUser(AbstractUser):
 	The extended user
 	"""
 
-	public = models.BooleanField(verbose_name = _('public'))
 	invited_by = models.ForeignKey("DiaryUser", related_name = 'user_invited_by', blank = True, null = True, verbose_name = _('invited by'))
 	invites_left = models.IntegerField(default = 5, verbose_name = _('invites left'))
 	last_seen_at = models.DateTimeField(blank = True, null = True, verbose_name = _('last seen at'))
@@ -84,6 +83,7 @@ class Post(models.Model):
 	text = models.TextField(max_length = 350, verbose_name = _('text'))
 	mood = models.IntegerField(verbose_name = _ ('mood'))
 	image = models.ImageField(upload_to = 'postimages/%d%m%y/', blank = True, verbose_name = _('image'))
+	public = models.BooleanField(verbose_name = _('public'), default = False)
 
 	created_at = models.DateTimeField(auto_now_add = True, verbose_name = _('created at'))
 	last_changed_at = models.DateTimeField(auto_now = True, verbose_name = _('last changed at'))

@@ -84,9 +84,15 @@
 
 			{{ form.file.errors }}
 
-			<button type='submit'>
-				<i class='icon-share-alt'></i> {% trans "Submit" %}
+			<div style="padding-top: 30px;">
+				<button type='submit' class='button-gold' name='public' value='false' style='float: left; margin-right: 20px; height: 35px;'>
+					<i class='icon-lock'></i> {% trans "Create private post" %}
+				</button>
+
+				<button type='submit' name='public' value='true' style='height: 35px;'>
+					<i class='icon-unlock'></i> {% trans "Create public post" %}
 			</button>
+			</div>
 		</form>
 
 		<br style='clear: both;' />

@@ -26,7 +26,7 @@ about = lambda request: render_to_response(
 
 def index(request):
 	try:
-		randompost = Post.objects.filter(author__public = True).order_by('?')[:1].get()
+		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
 	except Post.DoesNotExist:
 		randompost = None
 
@@ -241,9 +241,7 @@ def account_settings(request):
 		request.user.email = form.cleaned_data['email']
 		request.user.send_verification_mail()
 
-	request.user.public = form.cleaned_data['public']
 	request.user.geolocation_enabled = form.cleaned_data['geolocation_enabled']
-
 	request.user.save()
 
 	context = {
