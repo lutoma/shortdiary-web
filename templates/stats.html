@@ -5,25 +5,87 @@
 {% load staticfiles %}
 
 {% block headeradd %}
-	<script src='{% static "js/index.js" %}'></script>
+	<!--[if lte IE 8]>
+		<script language="javascript" type="text/javascript" src="{% static "js/excanvas.min.js" %}"></script>
+	<![endif]-->
+
+	<script language="javascript" type="text/javascript" src="{% static "js/jquery.flot.min.js" %}"></script>
+
+	<script type="text/javascript">
+
+	$(function() {
+
+		var mood = [
+			{% for post in posts %}
+				["{{ post.id }}", {{ post.mood }}] {% if not forloop.last %},{% endif %}
+			{% endfor %}
+		];
+
+		var length = [
+			{% for post in posts %}
+				["{{ post.id }}", {{ post.text|length }}] {% if not forloop.last %},{% endif %}
+			{% endfor %}
+		];
+
+		$("#post-length-placeholder").html('');
+		$.plot("#post-length-placeholder", [length]);
+
+		$("#post-mood-placeholder").html('');
+		$.plot("#post-mood-placeholder", [mood]);
+
+		// Add the Flot version string to the footer
+	});
+
+	</script>
 {% endblock %}
 
 {%block content %}
-	<h2>Streak leaderboard</h2>
-	<!-- <a href='/post/{{ post.id }}/'> -->
-	<table class="post-list border alternate">
-		<tbody>
-			{% for user in streak_leaders %}
-					<tr>
-						</td>
-						<td style="width: 250px;">
-							{{ user.username }}
-						</td>
-						<td>
-							{{ user.get_streak }} day{{ user.get_streak|pluralize }}
-						</td>
-					</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+	<h2>Post length over time</h2>
+	<div id='post-length-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> Loading, please wait…</div>
+
+	<h2>Mood over time</h2>
+	<div id='post-mood-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> Loading, please wait…</div>
+
+
+	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
+		<div style='padding-right: 20px'>
+			<h2>Your most mentioned names</h2>
+			<table class="post-list border alternate">
+				<tbody>
+					{% for user in streak_leaders %}
+							<tr>
+								</td>
+								<td style="width: 250px;">
+									{{ user.username }}
+								</td>
+								<td>
+									{{ user.get_streak }} day{{ user.get_streak|pluralize }}
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div style="width: 50%; padding: 0; margin: 0; float: right;">
+		<div style='padding-left: 20px'>
+			<h2>Streak leaderboard</h2>
+			<table class="post-list border alternate">
+				<tbody>
+					{% for user in streak_leaders %}
+							<tr>
+								</td>
+								<td style="width: 250px;">
+									{{ user.username }}
+								</td>
+								<td>
+									{{ user.get_streak }} day{{ user.get_streak|pluralize }}
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<br class='clear' />
 {% endblock %}
