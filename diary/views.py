@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -180,7 +181,6 @@ def sign_up(request):
 	return HttpResponseRedirect('/')
 
 
-
 def login(request):
 	if not request.method == 'POST':
 		context = {
@@ -214,7 +214,6 @@ def mail_verify(request, user_id, hash):
 	user.mail_verified = True
 	user.save()
 	return HttpResponseRedirect("/")
-
 
 def account_settings(request):
 	if not request.method == 'POST':

@@ -14,12 +14,43 @@
 
 	<style>
 		#map-canvas {
-			width: 634px;
-			height: 150px;
 			z-index: 0;
+			height: 200px;
+			width: 100%;
+			margin-top: 10px;
+		}
+
+		#image-upload {
+			margin-top: 20px;
+			width: 634px;
+			height: 115px;
+			background: rgba(0, 0, 0, 0.04);
+			border-radius: 3px;
+			text-align: center;
+			cursor: pointer;
+			background-size: auto 100%;
+		}
+
+		#image-upload-info {
+			padding-top: 35px;
+			font-size: 1.5em;
+			font-weight: 200;
+			margin: 0;
+		}
+
+		#image-upload-info-small {
+			margin: 0;
+			font-size: 1em;
+			font-weight: 200;
+		}
+
+		#title-light {
+			font-weight: 100;
 		}
 	</style>
 {% endblock %}
+
+{% block maintitle %}<h1 id="title">Chronicle <span id='title-light'>your adventures</span></h1>{% endblock %}
 
 {%block content %}
 	<!--
@@ -61,18 +92,22 @@
 				<div class='label'><i class='icon-thumbs-up'></i> Mood: <span id='mood-slider-value'>6</span> / 10</div>
 				<input id="mood" name="mood" type="range" min="1" max="10" step="1" value="6" onchange="$('#mood-slider-value').html(this.value)" style='display: inline-block;' />
 
-				<div class='label'><i class='icon-camera'></i> Image (optional)</div>
-				{% if not edit_post %}
-					<input type='file' name='image' />
+				{% if user.geolocation_enabled %}
+					<div class='label'><i class='icon-location-arrow'></i><span id='post-location-info'>Location</span></div>
+					<div id="map-canvas">We're requesting your location to add it to the post. You can disable this in your settings.</div>
 				{% endif %}
 			</aside>
 
 			<textarea id="text-input" name='text' placeholder="To be or not to be, that is the question: Whether 'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles, and by opposing, end them? To die: to sleep; no more; and by a sleep to say we end the heart-ache and the thousand natural shocks that flesh is heir to, ’tis a consummation devoutly to be wish’d. To die, to sleep; to sleep: perchance to dream: ay, there’s the rub;" required>{% if form.text.value %}{{ form.text.value }}{% endif %}{{ edit_post.text }}</textarea>
 			<small id="new-post-char-counter">350</small>
-			<small id='post-location-info' style='display: none;'>We're requesting your location to add it to the post. You can disable this in your settings.</small>
 			
-			{% if user.geolocation_enabled %}
-				<div id="map-canvas"></div>
+			{% if not edit_post %}
+				<input id='image-upload-input' type='file' name='image' onchange="image_field_change(this);" style='display: none;' />
+				<div id='image-upload'>
+						<p id='image-upload-info'><strong>Click</strong> to upload image</p>
+						<!--<p id='image-upload-info-small'>(or click)</p>-->
+					
+				</div>
 			{% endif %}
 
 
