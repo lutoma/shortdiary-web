@@ -6,7 +6,7 @@ from django.utils.translation import ugettext as _
 class PostForm(forms.ModelForm):
 	class Meta:
 		model = Post
-		fields = ('text', 'mood', 'date', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public')
+		fields = ('text', 'mood', 'date', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'part_of')
 
 	def clean_date(self):
 		date = self.cleaned_data["date"]

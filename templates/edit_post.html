@@ -101,7 +101,7 @@
 			<textarea id="text-input" name='text' placeholder="To be or not to be, that is the question: Whether 'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles, and by opposing, end them? To die: to sleep; no more; and by a sleep to say we end the heart-ache and the thousand natural shocks that flesh is heir to, ’tis a consummation devoutly to be wish’d. To die, to sleep; to sleep: perchance to dream: ay, there’s the rub;" required>{% if form.text.value %}{{ form.text.value }}{% endif %}{{ edit_post.text }}</textarea>
 			<small id="new-post-char-counter">350</small>
 
-			This is part of <input type='text' placeholder="e.g. Trip to San Francisco, Comic Con, Weekend with Tom, Mountain Expedition" style='width: 622px' />
+			This is part of <input type='text' name='part_of' placeholder="e.g. Trip to San Francisco, Comic Con, Weekend with Tom, Mountain Expedition" style='width: 622px' />
 			
 			{% if not edit_post %}
 				<input id='image-upload-input' type='file' name='image' onchange="image_field_change(this);" style='display: none;' />

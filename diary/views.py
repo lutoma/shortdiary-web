@@ -164,7 +164,7 @@ def sign_up(request):
 		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
 
 	# Fixme
-	user = form.save(commit = False)
+	user = form.save()
 	user.set_password(request.POST.get('password', None))
 	user.invited_by = invite.generated_by
 	user.save()

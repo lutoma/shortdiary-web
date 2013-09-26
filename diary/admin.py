@@ -16,6 +16,7 @@ class PostAdmin(admin.ModelAdmin):
 			{'fields': [
 				'mood',
 				'text',
+				'part_of',
 				'image',
 				'location_verbose',
 				'location_lat',
