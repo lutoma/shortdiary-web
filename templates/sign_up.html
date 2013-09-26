@@ -17,9 +17,6 @@
 		<input type='password' name='password' maxlength='100' placeholder='password' value="{% if form.password.value %}{{ form.password.value }}{% endif %}" />
 		{{ form.password.errors }}
 
-		<label for='public_check'>Public account?</label> <small>(If your account is public, your posts may be displayed <i>anonymously</i>).</small><input type='checkbox' id='public_check' name='public' {% if form.public.value %}checked{% endif %} />
-		{{ form.public.errors }}
-
 		<input type='text' name='invite_code' maxlength='100' placeholder='invite code' />
 		{% if noinvite %}{% trans 'The invite you entered is invalid. Please try again. ' %}{% endif %}
 
