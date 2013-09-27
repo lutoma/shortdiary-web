@@ -127,9 +127,13 @@ def show_post(request, post_id):
 		return HttpResponseForbidden('This post is not public.')
 
 	context = {
-		'title': _('Post #{}').format(post.get_user_id()),
 		'post': post,
+		'title': _('Post #{} from {}').format(post.id, post.date),
 	}
+
+	if post.author == request.user:
+		context['title'] = _('Your post #{}').format(post.get_user_id(), post.date)
+
 	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
 
 def switch_language(request, language):
