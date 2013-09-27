@@ -25,32 +25,34 @@
 	<meta name="twitter:title" content="Post #{{ post.id }} from {{ post.date }}" />
 	<meta name="twitter:description" content="{{ post.text|remove_newlines|truncatechars:200 }}" />
 
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true"></script>
+	{% if post.location_lat and post.location_lon and post.location_verbose %}
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true"></script>
 
-	<style>
-		#map-canvas {
-			z-index: 0;
-			height: 200px;
-			width: 100%;
-			margin-top: 10px;
-		}
-	</style>
-
-	<script>
-		$(document).ready(function() {
-			var pos = new google.maps.LatLng({{ post.location_lat }}, {{ post.location_lon }});
-			var map_options = {
-				zoom: 12,
-				center: pos,
-				mapTypeId: google.maps.MapTypeId.ROADMAP,
-				streetViewControl: false,
-				mapTypeControl: false
+		<style>
+			#map-canvas {
+				z-index: 0;
+				height: 200px;
+				width: 100%;
+				margin-top: 10px;
 			}
+		</style>
 
-			map = new google.maps.Map($("#map-canvas").get(0), map_options);
-			new google.maps.Marker({position: pos, map: map});
-		});
-		</script>
+		<script>
+			$(document).ready(function() {
+				var pos = new google.maps.LatLng({{ post.location_lat }}, {{ post.location_lon }});
+				var map_options = {
+					zoom: 12,
+					center: pos,
+					mapTypeId: google.maps.MapTypeId.ROADMAP,
+					streetViewControl: false,
+					mapTypeControl: false
+				}
+
+				map = new google.maps.Map($("#map-canvas").get(0), map_options);
+				new google.maps.Marker({position: pos, map: map});
+			});
+			</script>
+	{% endif %}
 {% endblock %}
 
 {%block content %}
@@ -67,9 +69,10 @@
 		<div class='label first'><i class='icon-upload'></i>Created</div>
 		{{ post.created_at }}
 
-
-		<div class='label'><i class='icon-location-arrow'></i>Location: {{ post.location_verbose }}</div>
-		<div id="map-canvas"><i class='icon-spinner icon-spin'></i> Loading map…</div>
+		{% if post.location_lat and post.location_lon and post.location_verbose %}
+			<div class='label'><i class='icon-location-arrow'></i>Location: {{ post.location_verbose }}</div>
+			<div id="map-canvas"><i class='icon-spinner icon-spin'></i> Loading map…</div>
+		{% endif %}
 	</aside>
 	
 	<article>{{ post.text|linebreaks }}</article>
