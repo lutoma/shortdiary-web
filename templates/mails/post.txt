@@ -1,8 +1,8 @@
-{% load i18n %}{% blocktrans with user=post.author.username date=post.date mood=post.mood %}Hey {{ user }},
+{% load i18n %}{% load humanize %}{% blocktrans with user=post.author.username date=post.date mood=post.mood %}Hey {{ user }},
 
-this is your shortdiary post from {{ date }}. Back then, your mood was {{ mood }}.{% endblocktrans %}
+do you still remember what you did exactly one year ago, on the {{ date }}? Well, I do!{% endblocktrans %}
 {% if post.image %}
-{% blocktrans with host=MEDIA_URL image=post.image %}You added an image to your post! You can find it here: http:{{ host }}{{ image }} (We also attached it to this email).{% endblocktrans %}{% endif %}
+{% blocktrans with host=MEDIA_URL image=post.image %}You also added an image to your post! You can find it here: http:{{ host }}{{ image }} (We also attached it to this email).{% endblocktrans %}{% endif %}
 
 ––––––––––––––––––––––
 
