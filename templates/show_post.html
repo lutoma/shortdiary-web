@@ -1,23 +1,86 @@
 {% extends 'base.html' %}
 {% load i18n %} 
 {% load humanize %}
+{% load remove_newlines %}
 
-{%block content %}
-	<ul style="list-style-type: none; padding-left: 5px;">
-		<li><i class='icon-thumbs-up'></i> {% trans 'Mood' %}: {{ post.mood }}</li>
-		<li><i class='icon-calendar'></i> {% trans 'Post date' %}: {{ post.date }}</li>
-		<li><i class='icon-upload'></i> {% trans 'Created at' %}: {{ post.created_at }}</li>
-		<li><i class='icon-sort'></i> {% trans 'This is your ' %} {{ post.get_user_id|ordinal }} {% trans 'post' %}</li>
-		<li><i class='icon-envelope'></i> {% trans 'The email for this post has ' %} {% if not post.mail_sent %}{% trans 'not yet' %}{% endif %}{% trans ' been sent' %}</li>
-	</ul>
-	
+{% block headeradd %}
+	<meta name="description" content="{{ post.text|remove_newlines|truncatechars:200 }}" />
+
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="Post #{{ post.id }} from {{ post.date }}">
+	<meta property="fb:page_id" content="706681056027948" />
+
 	{% if post.image %}
-		<a href="{{ MEDIA_URL }}{{ post.image }}" target="_blank"><img class="post-image" src="{{ MEDIA_URL }}{{ post.image }}" /></a>
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image:src" content="{{ post.image }}">
+
+		<meta property="og:image" content="{{ post.image }}">
+		<meta property="og:image:secure_url" content="{{ post.image }}">
+	{% else %}
+		<meta name="twitter:card" content="summary" />
 	{% endif %}
 
-	{{ post.text|linebreaks }}
+	<meta name="twitter:domain" content="shortdiary.me">
+	<meta name="twitter:site" content="@shortdiaryme" />
+	<meta name="twitter:title" content="Post #{{ post.id }} from {{ post.date }}" />
+	<meta name="twitter:description" content="{{ post.text|remove_newlines|truncatechars:200 }}" />
 
-	<p><small>From {{ post.location_verbose }}</small></p>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true"></script>
 
-	<a href='/posts/{{ post.id }}/edit/'><i class='icon-edit'></i> {% trans 'Edit' %}</a>
+	<style>
+		#map-canvas {
+			z-index: 0;
+			height: 200px;
+			width: 100%;
+			margin-top: 10px;
+		}
+	</style>
+
+	<script>
+		$(document).ready(function() {
+			var pos = new google.maps.LatLng({{ post.location_lat }}, {{ post.location_lon }});
+			var map_options = {
+				zoom: 12,
+				center: pos,
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				streetViewControl: false,
+				mapTypeControl: false
+			}
+
+			map = new google.maps.Map($("#map-canvas").get(0), map_options);
+			new google.maps.Marker({position: pos, map: map});
+		});
+		</script>
+{% endblock %}
+
+{%block content %}
+	<aside>
+
+		<div class='label first'><i class='icon-calendar'></i>Date</div>
+		<time pubdate datetime="{{ post.date|date:"Y-m-d" }}">{{ post.date }}</time>
+
+		{% if user.is_authenticated and user == post.author %}
+			<div class='label first'><i class='icon-thumbs-up'></i>Mood</div>
+			{{ post.mood }} / 10
+		{% endif %}
+
+		<div class='label first'><i class='icon-upload'></i>Created</div>
+		{{ post.created_at }}
+
+
+		<div class='label'><i class='icon-location-arrow'></i>Location: {{ post.location_verbose }}</div>
+		<div id="map-canvas"><i class='icon-spinner icon-spin'></i> Loading map…</div>
+	</aside>
+	
+	<article>{{ post.text|linebreaks }}</article>
+
+	{% if post.image %}
+		<a href="{{ MEDIA_URL }}{{ post.image }}" target="_blank"><img itemprop="image" class="post-image" src="{{ MEDIA_URL }}{{ post.image }}" /></a>
+	{% endif %}
+
+	{% if user.is_authenticated and user == post.author and post.is_editable %}
+		 <a href='/posts/{{ post.id }}/edit/'><i class='icon-edit'></i> {% trans 'Edit' %}</a>
+	{% endif %}
+
+	<br class='clear' />
 {% endblock %}

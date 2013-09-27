@@ -9,9 +9,6 @@ docutils
 # For the Imagefields
 PIL
 
-# For the API
-#django-piston
-
 # Async jobs
 django-celery>=3.0.11
 
@@ -33,4 +30,9 @@ django-allauth
 
 # Caching
 python-memcached
+
+# Database
 psycopg2
+
+# Twitter cards
+git+git://github.com/leveille/django-twittercard.git#egg=twittercard

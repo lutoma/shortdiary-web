@@ -1,6 +1,6 @@
 # coding: utf-8
 import datetime
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
@@ -120,12 +120,14 @@ def edit_post(request, post_id = None):
 
 	return HttpResponseRedirect('/')
 
-@login_required
 def show_post(request, post_id):
-	post = get_object_or_404(Post, id = post_id, author = request.user)
+	post = get_object_or_404(Post, id = post_id)
+
+	if(not post.public and post.author != request.user):
+		return HttpResponseForbidden('This post is not public.')
 
 	context = {
-		'title': _('Your post #{}').format(post.get_user_id()),
+		'title': _('Post #{}').format(post.get_user_id()),
 		'post': post,
 	}
 	return render_to_response('show_post.html', context_instance=RequestContext(request, context))

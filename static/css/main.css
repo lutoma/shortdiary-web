@@ -199,6 +199,40 @@ div[role=main] {
 	clear: both;
 }
 
+aside {
+	float: right;
+	
+	padding: 10px 15px;
+
+	width: 250px;
+	min-height: 500px;
+
+
+	border-left: 1px solid #ddd;
+	padding-left: 20px;
+	margin-left: 20px;
+	background: rgba(0, 0, 0, 0.02);
+}
+
+aside > .label {
+	display: block;
+	text-transform: uppercase;
+	font-size: 13px;
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 2px;
+	margin-top: 50px;
+	padding-bottom: 3px;
+}
+
+aside > .label i {
+	margin-right: 5px;
+}
+
+aside > .first {
+	margin-top: 10px;
+}
+
+
 /* –––––––––––––––––––– */
 /*        Top bar       */
 /* –––––––––––––––––––– */
@@ -352,40 +386,6 @@ div[role=main] {
 	width: 620px;
 	padding-top: 5px;
 	text-align: right;
-}
-
-#edit-post-aside {
-	float: right;
-	
-	padding: 10px 15px;
-
-	width: 250px;
-	min-height: 500px;
-
-
-	border-left: 1px solid #ddd;
-	padding-left: 20px;
-	margin-left: 20px;
-	background: rgba(0, 0, 0, 0.02);
-}
-
-#edit-post-aside .label {
-	display: block;
-	text-transform: uppercase;
-	font-size: 13px;
-	border-bottom: 1px solid #ccc;
-	margin-bottom: 2px;
-	margin-top: 50px;
-	padding-bottom: 3px;
-}
-
-#edit-post-aside .label i {
-	margin-right: 5px;
-}
-
-
-#edit-post-aside .first {
-	margin-top: 10px;
 }
 
 #edit-post-aside input[type=range] {
