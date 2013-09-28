@@ -36,15 +36,17 @@ class DiaryUser(AbstractUser):
 		"""
 		This returns information on how long the "streak" of this user has been
 		lasting. Streak in this context means continous posts on following days
-		going backwards starting from today or yesterday.
+		going backwards starting from today or yesterday or the day before.
 		"""
-
 		user_posts = Post.objects.filter(author = self).order_by('-date')
+
 		if len(user_posts) == 0:
 			return 0
-		today = datetime.date.today()
+
+		first_posssible = datetime.date.today() - datetime.timedelta(days = 2)
 		post = user_posts[0]
-		if post.date != today and post.date != today - datetime.timedelta(days = 1):
+
+		if first_posssible - post.date > datetime.timedelta(days = 1):
 			return 0
 
 		streak = 0
