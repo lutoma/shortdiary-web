@@ -218,6 +218,7 @@ def mail_verify(request, user_id, hash):
 	user.save()
 	return HttpResponseRedirect("/")
 
+@login_required
 def account_settings(request):
 	if not request.method == 'POST':
 		context = {
@@ -272,7 +273,7 @@ def delete_post(request, post_id):
 	post.delete()
 	return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+@login_required
 def stats(request):
 	try:
 		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
