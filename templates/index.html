@@ -16,19 +16,19 @@
 	<h2>Your activity</h2>
 	<div id='activity-calendar' class='border'>
 		<div class='activity-infobox'>
-			<span class='factoid'>{{ user.get_streak }}</span>
+			<span class='factoid'>{% if user.get_streak %}{{ user.get_streak|intcomma }}{% else %}0{% endif %}</span>
 
 			day posting streak
 		</div>
 
 		<div class='activity-infobox'>
-			<span class='factoid'>{{ user.get_posts|length }}</span>
+			<span class='factoid'>{{ user.get_posts|length|intcomma }}</span>
 
 			total posts
 		</div>
 
 		<div class='activity-infobox last'>
-			<span class='factoid'>{{ user.get_post_characters }}</span>
+			<span class='factoid'>{{ user.get_post_characters|intcomma }}</span>
 
 			total characters in posts
 		</div>
@@ -68,7 +68,7 @@
 									</tr>
 									<tr>
 										<td>
-											<a href='/posts/{{ post.id }}'><small style='font-size: .8em; font-weight: 300;'>Posted {{ post.created_at }}</small></a>
+											<a href='/posts/{{ post.id }}'><small style='font-size: .8em; font-weight: 300;'>Posted {{ post.created_at|naturaltime }}</small></a>
 										</td>
 									</tr>
 								</tbody>
