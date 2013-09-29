@@ -12,6 +12,8 @@
 
 	<script language="javascript" type="text/javascript" src="{% static "js/jquery.flot.min.js" %}"></script>
 	<script language="javascript" type="text/javascript" src="{% static "js/jquery.flot.time.min.js" %}"></script>
+	<script language="javascript" type="text/javascript" src="{% static "js/jquery.flot.resize.min.js" %}"></script>
+	<script language="javascript" type="text/javascript" src="{% static "js/jquery.flot.rangeselection.js" %}"></script>
 
 	<script type="text/javascript">
 
@@ -29,24 +31,35 @@
 			{% endfor %}
 		];
 
-		var options = {
+		var length_options = {
+			legend: { show: false },
+			series: {
+				lines: { show: false, shadowSize: 1 },
+				points: { show: false },
+				bars: { show: true },
+			},
+
+			yaxis: { ticks: 3, max: 350 },
+			xaxis: { mode: "time", timeformat: "%d.%m.%y"},
+			selection: { mode: "x" }
+		};
+
+		var mood_options = {
 			legend: { show: false },
 			series: {
 				lines: { show: true, shadowSize: 1 },
 				points: { show: false }
 			},
-			yaxis: { ticks: 1 },
+			yaxis: { ticks: 5, max: 10, min: 1 },
 			xaxis: { mode: "time", timeformat: "%d.%m.%y"},
 			selection: { mode: "x" }
 		};
 
 		$("#post-length-placeholder").html('');
-		$.plot("#post-length-placeholder", [length], options);
+		$.plot("#post-length-placeholder", [length], length_options);
 
 		$("#post-mood-placeholder").html('');
-		$.plot("#post-mood-placeholder", [mood], options);
-
-		// Add the Flot version string to the footer
+		$.plot("#post-mood-placeholder", [mood], mood_options);
 	});
 
 	</script>
