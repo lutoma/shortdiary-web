@@ -25,6 +25,13 @@ DATABASES = {
 	}
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'shortdiary-main'
+    }
+}
+
 TIME_ZONE = 'Europe/Berlin'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
