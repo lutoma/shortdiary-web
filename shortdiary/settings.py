@@ -140,6 +140,7 @@ INSTALLED_APPS = (
 	'djcelery',
 	'django_gravatar',
 	'rest_framework',
+	'email_extras',
 	'diary',
 	'inviteman',
 )

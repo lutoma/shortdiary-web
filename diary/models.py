@@ -3,11 +3,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import get_template, Context
 from django.conf import settings
+from email_extras.utils import send_mail_template
 import hashlib
 import datetime
+import gnupg
 
 class DiaryUser(AbstractUser):
 	"""
@@ -138,3 +140,30 @@ class Post(models.Model):
 			return '#44a340'
 
 		return '#1e6823'
+
+	def send_mail(self):
+		"""
+		Sends out the mail for this post
+		"""
+
+		mail_template = get_template('mails/post.txt')
+		#gpg = gnupg.GPG(gnupghome='/tmp/sd-gpg/')
+		#gpg.encoding = 'utf-8'
+
+		#data = mail_template.render(Context({'post': self, 'MEDIA_URL': settings.MEDIA_URL}))
+		#pgp_signature = gpg.sign(data, keyid = '0x95CAF8BC', detach = True).data
+		#data = gpg.encrypt(data, 'hello@lutoma.org', always_trust = True, sign = '0x95CAF8BC').data
+
+		send_mail_template(
+			_('A chunk of your past - Here\'s what you did last year ({0})!').format(self.date),
+			'post',
+			'Shortdiary Robot <team@shortdiary.me>',
+			['{0} <{1}>'.format(self.author.username, self.author.email)],
+			context = {'post': self}
+		)
+
+		self.sent = True
+		self.save()
+
+		#if self.image:
+		#	message.attach_file(os.path.split(self.image.path))

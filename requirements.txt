@@ -36,3 +36,7 @@ psycopg2
 
 # Twitter cards
 git+git://github.com/leveille/django-twittercard.git#egg=twittercard
+
+# GnuPG for outgoing post mails
+python-gnupg
+django-email-extras

@@ -1,0 +1,22 @@
+{% load humanize %}
+News from last year!
+
+Hi {{ post.author }},
+
+do you still remember what you did exactly one year ago, on {{ post.date }}?
+
+Well, I do! You were all like
+
+
+{{ post.text }}
+
+You can access this post on the internet at https://shortdiary.me/posts/{{ post.id }}. {% if post.public %}You made this post public, so you can also share that link with your friends if you want to!{% endif %}
+
+{% if post.image %}<i>You also added an image to your post! You can find it here: http:{{ host }}{{ image }} (We also attached it to this email).</i>{% endif %}
+
+Kindly yours,
+
+         the friendly shortdiary robot
+
+-- 
+You received this mail because you signed up on shortdiary. If you don't wish to receive these emails anymore, log in to your shortdiary account at https://shortdiary.me/accounts/login and change your email preferences.
