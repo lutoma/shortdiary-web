@@ -146,7 +146,6 @@ class Post(models.Model):
 		Sends out the mail for this post
 		"""
 
-		mail_template = get_template('mails/post.txt')
 		#gpg = gnupg.GPG(gnupghome='/tmp/sd-gpg/')
 		#gpg.encoding = 'utf-8'
 
