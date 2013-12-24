@@ -12,7 +12,7 @@ Well, I do! You were all like
 
 You can access this post on the internet at https://shortdiary.me/posts/{{ post.id }}. {% if post.public %}You made this post public, so you can also share that link with your friends if you want to!{% endif %}
 
-{% if post.image %}<i>You also added an image to your post! You can find it here: http:{{ host }}{{ image }} (We also attached it to this email).</i>{% endif %}
+{% if post.image %}You also added an image! You can view it in the web version of this post.{% endif %}
 
 Kindly yours,
 
