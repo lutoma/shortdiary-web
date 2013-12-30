@@ -1,19 +1,16 @@
 function show_chars() {
-	var chars_left = 350 - $(this).val().length;
-	$('#new-post-char-counter').html(chars_left);
+	var chars = $(this).val().length;
+	var words = $(this).val().split(' ').length - 1;
+	var sentences = $(this).val().split(/[\.\?\!:;…‽⸮"«“]+/).length - 1;
 
-	if(chars_left < 0)
-		$('#new-post-char-counter').css('color', 'red');
-	else if(chars_left < 15)
-		$('#new-post-char-counter').css('color', 'orange');
+	if(chars > 350)
+		$('#new-post-char-counter').html('Wow, what an eventful day! – ' + sentences + ' sentences, ' + words + ' words, ' + chars + ' characters');
 	else
-		$('#new-post-char-counter').css('color', 'inherit');
+		$('#new-post-char-counter').html(sentences + ' sentences, ' + words + ' words, ' + chars + ' characters');
 }
 
 function image_field_change(input) {
 		if(input.files && input.files[0]) {
-			console.log('valid input n stuff');
-
 			var reader = new FileReader();
 			reader.onload = function(e) {
 				$('#image-upload').css('background', "url(" + e.target.result + ")").html('');
