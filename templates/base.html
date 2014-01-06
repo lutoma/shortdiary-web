@@ -51,28 +51,29 @@
 	</head>
 	<body>
 		<div id="top-block">
-			<a href="/"><h1 id="name">shortdiary</h1></a>
+			<div class='inner'>
+				<a href="/"><h1 id="name">shortdiary</h1></a>
 
-			<div id="navigation">
-				{% if user.is_authenticated %}
-					<a href="/posts/new/">{% trans 'New post' %}</a>
-					<a href="/stats/">{% trans 'Stats' %}</a>
-					<a href="/invite/">{% trans 'Invite someone' %}</a>
-				{% else %}
-					<a href="/accounts/login/">{% trans 'Log in' %}</a>
-					<a href="/accounts/signup/">{% trans 'Sign up' %}</a>
-				{% endif %}
+				<nav>
+					<ul>
+						{% if user.is_authenticated %}
+							<li {% if request.path == '/' %}class='active'{% endif %}><a href="/">{% trans 'Home' %}</a></li>
+							<li {% if request.path == '/posts/new/' %}class='active'{% endif %}><a href="/posts/new/">{% trans 'New post' %}</a></li>
+							<li {% if request.path == '/stats/' %}class='active'{% endif %}><a href="/stats/">{% trans 'Stats' %}</a></li>
+							<li {% if request.path == '/invite/' %}class='active'{% endif %}><a href="/invite/">{% trans 'Invite someone' %}</a></li>
+						{% else %}
+							<li><a href="/accounts/login/">{% trans 'Log in' %}</a></li>
+							<li><a href="/accounts/signup/">{% trans 'Sign up' %}</a></li>
+						{% endif %}
+					</ul>
 
-				<span class="right">
-					{% if user.is_authenticated %}
-						<a href='/'>{{ user.username }}</a>
-						
-						<span class="nav-icons">
-							<a href="/accounts/settings/" title="{% trans 'Account settings' %}"><i class="icon-wrench"></i></a>
-							<a href="/accounts/logout/" title="{% trans 'Sign out' %}"><i class="icon-signout"></i></a>
-						</span>
-					{% endif %}
-				</span>
+					<ul class="right">
+						{% if user.is_authenticated %}
+							<li><a href="/accounts/settings/" title="{% trans 'Account settings' %}"><i class="icon-wrench"></i></a></li>
+							<li><a href="/accounts/logout/" title="{% trans 'Sign out' %}"><i class="icon-signout"></i></a></li>
+						{% endif %}
+					</ul>
+				</nav>
 			</div>
 		</div>
 		<div role="main">

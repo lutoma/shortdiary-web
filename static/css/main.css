@@ -239,13 +239,17 @@ aside > .first {
 
 #top-block {
 	margin: 0 auto;
-	max-width: 940px;
 
 	color: #ffffff;
 	background-color: #036564;
-	padding: 3px;
-	height: 40px;
+	padding: 0;
+	height: 46px;
 	border-bottom: 4px solid #CDB380;
+}
+
+#top-block > .inner {
+	max-width: 960px;
+	margin: 0 auto;
 }
 
 #name {
@@ -260,34 +264,49 @@ aside > .first {
 }
 
 /* Navigation */
-
-#navigation {
-	margin-top: 6px;
-	margin-right: 20px;
+#top-block nav > ul {
+	list-style-type: none;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	height: 46px;
+	font-size: 0;
+	line-height: 0;
+	border-left: solid #025554 1px;
 }
 
-#navigation a {
-	color: #ffffff;
-	margin-right: 10px;
+
+#top-block nav > ul > li {
+	list-style-type: none;
+	display: inline-block;
+	margin: 0 !important;
+	height: 46px;
+	padding-left: 8px;
+	padding-right: 8px;
+	border-right: solid #025554 1px;
 }
 
-#navigation .gravatar{
-	margin-top: 2px;
-	float: left;
-	margin-right: 7px;
-	border-radius: 2px;
+#top-block nav > ul > li.active {
+	background-color: rgba(0, 0, 0, 0.1);
 }
 
-#navigation .nav-icons {
-	margin-left: 10px;
+#top-block nav > ul > li > a {
+	display: inline-block;
+	margin-top: 9px;
+	color: #eaeaea;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.7;
 }
 
-#navigation .nav-icons a {
+#top-block nav > ul > li > a:hover {
 	text-decoration: none;
+	color: #ffffff;
 }
 
-#navigation .nav-icons a:hover {
-	color: #CDB380;
+#top-block nav .right li {
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 #title {
