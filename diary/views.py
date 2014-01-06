@@ -33,13 +33,13 @@ def index(request):
 
 	if not request.user.is_authenticated():
 		context = {
-			'title': _('It\'s your life. You should remember it.'),
+			'title': None,
 			'post': randompost,
 		}
 		return render_to_response('frontpage.html', context_instance=RequestContext(request, context))
 
 	context = {
-		'title': 'Dashboard',
+		'title': None,
 		'randompost': randompost,
 		'posts': Post.objects.filter(author = request.user, date__gte = datetime.date.today() - datetime.timedelta(days = 6)).order_by('-date', '-created_at'),
 	}
