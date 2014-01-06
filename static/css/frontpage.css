@@ -3,12 +3,6 @@ body {
 	background-size: auto 600px;
 }
 
-#top-block {
-	background: none;
-	padding-bottom: 7px;
-	border-bottom: 1px solid #ddd;
-}
-
 #jumbotron {
 	height: 550px;
 	text-align: center;
