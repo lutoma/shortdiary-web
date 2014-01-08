@@ -6,7 +6,7 @@
 	<head>
 		<meta charset="utf-8" />
 
-		<title>{% if title %}{{ title }} – {%endif%}shortdiary</title>
+		<title>{% block title %}{% if title %}{{ title }} – {%endif%}shortdiary{% endblock %}</title>
 
 		<!--[if lt IE 9]>
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -46,6 +46,11 @@
 		<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
 		<script src='{% static "js/csrf.js" %}'></script>
 
+		<meta property="fb:page_id" content="706681056027948" />
+		<meta name="twitter:domain" content="shortdiary.me">
+		<meta name="twitter:site" content="@shortdiaryme" />
+		<meta property="og:type" content="website">
+		
 		{% block headeradd %}
 		{% endblock %}
 	</head>

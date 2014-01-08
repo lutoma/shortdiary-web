@@ -3,16 +3,22 @@
 {% load humanize %}
 {% load staticfiles %}
 
+{% block title %}shortdiary: It's your life. You should remember it{% endblock %}
+
 {% block headeradd %}
+	<meta name="description" content="Remember what you did one year ago. Revisit your past, relive great moments. shortdiary sends you diary entries from your past." />
+	<meta property="og:title" content="shortdiary: It's your life. You should remember it">
+	<meta name="twitter:title" content="shortdiary: It's your life. You should remember it" />
+	<meta name="twitter:description" content="Remember what you did one year ago. Revisit your past, relive great moments. shortdiary sends you diary entries from your past." />
+
 	<link href='{% static "css/frontpage.css" %}' rel="stylesheet" />
 	<script src='{% static "js/frontpage.js" %}'></script>
 {% endblock %}
 
 {% block maintitle %}
 	<div id='jumbotron'>
-		<h1 id='title'>Revisit your past and relive great moments. Remember your future.</h1>
-
-		It's your plans. Your hopes &amp; dreams. Your ideas. Your achievements &amp; failures. It's who you are, and who you are going to be.  It is your life. And you should remember it.
+		<h1 id='title'>Remember what you did one year ago. Revisit your past, relive great moments.</h1>
+		shortdiary sends you diary entries from your past. Little chunks of your dreams, achievements and plans from one year ago. It allows you to relive what you did, and make sure you don't do the same mistakes again.
 
 		<div id="front-mainsignup">
 			<form id='invite-request-form'>

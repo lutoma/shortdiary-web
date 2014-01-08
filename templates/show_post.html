@@ -5,10 +5,7 @@
 
 {% block headeradd %}
 	<meta name="description" content="{{ post.text|remove_newlines|truncatechars:200 }}" />
-
-	<meta property="og:type" content="website">
 	<meta property="og:title" content="Post #{{ post.id }} from {{ post.date }}">
-	<meta property="fb:page_id" content="706681056027948" />
 
 	{% if post.image %}
 		<meta name="twitter:card" content="summary_large_image" />
@@ -20,8 +17,6 @@
 		<meta name="twitter:card" content="summary" />
 	{% endif %}
 
-	<meta name="twitter:domain" content="shortdiary.me">
-	<meta name="twitter:site" content="@shortdiaryme" />
 	<meta name="twitter:title" content="Post #{{ post.id }} from {{ post.date }}" />
 	<meta name="twitter:description" content="{{ post.text|remove_newlines|truncatechars:200 }}" />
 
