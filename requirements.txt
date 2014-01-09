@@ -13,20 +13,20 @@ PIL
 django-celery>=3.0.11
 
 # Timezonefoo
-pytz==2013d
+pytz>dev
 
 # Gravatar
 django-gravatar2
 
 # HTML minifying
-django-htmlmin
+#django-htmlmin
 
 # AJAX & API
 djangorestframework
 
 # Authentication
-python-openid
-django-allauth
+#python-openid
+#django-allauth
 
 # Caching
 python-memcached
