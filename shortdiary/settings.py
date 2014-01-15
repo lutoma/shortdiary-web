@@ -189,3 +189,10 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'diary.DiaryUser'
+
+# Use the file local_settings.py to overwrite the defaults with your own settings
+try:
+	from local_settings import *
+except ImportError:
+	pass
+
