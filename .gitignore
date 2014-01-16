@@ -2,3 +2,4 @@
 development.db
 celery
 celerybeat-schedule
+.virtualenv
