@@ -77,19 +77,26 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
 	queryset = Post.objects.all()
 	serializer_class = PostSerializer
 
+	def get(self, request, *args, **kwargs):
+		today = datetime.date.today()
+		object = Post.objects.get(pk=kwargs["pk"])
+		if (today - object.date).days > 3:
+			return Response({"Error":_("This entry is too old to be viewed.")}, status=status.HTTP_400_BAD_REQUEST)
+		return super(PostDetail, self).get(request, *args, **kwargs)
+
 
 	def put(self, request, *args, **kwargs):
 		today = datetime.date.today()
 		object = Post.objects.get(pk=kwargs["pk"])
 		if (today - object.date).days > 3:
-			return Response({"Error":_("This entry is to old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({"Error":_("This entry is too old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
 		return super(PostDetail, self).update(request, *args, **kwargs)
 
 	def patch(self, request, *args, **kwargs):
 		today = datetime.date.today()
 		object = Post.objects.get(pk=kwargs["pk"])
 		if (today - object.date).days > 3:
-			return Response({"Error":_("This entry is to old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({"Error":_("This entry is too old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
 		return super(PostDetail, self).partial_update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
