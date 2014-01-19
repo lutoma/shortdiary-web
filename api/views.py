@@ -13,7 +13,7 @@ class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
 	serializer_class = ProfileSerializer
 
 	def get(self, request, format=None):
-		serializer = ProfileSerializer(request.user)
+		serializer = self.serializer_class(request.user)
 		return Response(serializer.data)
 
 	def put(self, request, *args, **kwargs):
@@ -105,6 +105,22 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
 		if (today - object.date).days > 3:
 			return Response({"Error":_("This entry is to old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
 		return  super(PostDetail, self).destroy(request, *args, **kwargs)
+
+class PostYearAgo(GenericAPIView):
+	serializer_class = PostSerializer
+
+	def get(self, request, format=None):
+		today = datetime.date.today()
+		yearago = datetime.date(today.year-1, today.month, today.day)
+		try:
+			post = Post.objects.get(author=request.user, date=yearago)
+			serializer = self.serializer_class(post)
+			response = Response(serializer.data)
+		except:
+			response = Response("No post for last year")
+			response.status_code = 404
+		return response
+
 
 class PublicPostDetail(APIView):
 	"""
