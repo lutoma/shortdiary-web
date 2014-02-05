@@ -145,6 +145,8 @@ INSTALLED_APPS = (
 	'email_extras',
 	'diary',
 	'inviteman',
+	'provider',
+    'provider.oauth2',
 )
 
 # Asynchronous jobs
@@ -185,7 +187,11 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStora
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'api.permissions.IsOwner',
-    )
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+    	'rest_framework.authentication.OAuth2Authentication',
+    	'rest_framework.authentication.SessionAuthentication',
+	),
 }
 
 AUTH_USER_MODEL = 'diary.DiaryUser'

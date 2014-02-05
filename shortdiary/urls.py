@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
-from api.views import PostList, PostDetail, PublicPostDetail, ProfileDetail
+from api.views import PostList, PostDetail, PublicPostDetail, ProfileDetail, PostYearAgo
 admin.autodiscover()
 
 if settings.DEBUG:
@@ -17,6 +17,7 @@ else:
 api_patterns= format_suffix_patterns(patterns('',
 	url(r'^posts/$', PostList.as_view(), name="api-post-list"),
  	url(r'^posts/(?P<pk>\d+)/$', PostDetail.as_view(), name='api-post-detail'),
+ 	url(r'^posts/year_ago/$', PostYearAgo.as_view(), name='api-post-yearago'),
  	url(r'^public/$', PublicPostDetail.as_view(), name='api-public-post'),
 	url(r'^profile$', ProfileDetail.as_view(), name='api-profile-detail'),
 ), allowed=["json", "html"])
@@ -49,7 +50,8 @@ urlpatterns += patterns('',
 
 	url(r'^/?$', 'diary.views.index'),
 
-    	url(r'^api/', include(api_patterns)),
+    url(r'^api/', include(api_patterns)),
+    url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
 )
 
 

@@ -9,7 +9,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
 	class Meta:
 		model = DiaryUser
-		fields = ('username', 'email', 'mail_verified', 'language', 'lastseen', 'public')
+		fields = ('username', 'email', 'mail_verified', 'language', 'lastseen', 'geolocation_enabled')
 		read_only_fields = ('username', 'mail_verified')
 
 
@@ -19,7 +19,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 	)
 	class Meta:
 		model = Post
-		fields = ('url', 'date', 'text', 'mood', 'image')
+		fields = ('url', 'date', 'text', 'mood', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'part_of')
 
 class PublicPostSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -38,3 +38,4 @@ class PostCreateSerializer(serializers.ModelSerializer):
 		check_post = Post.objects.filter(author = attrs["author"], date = value)
 		if len(check_post) != 0:
 			raise serializers.ValidationError(_("Invalid date. There already is a post for this date"))
+		return attrs

@@ -40,3 +40,6 @@ git+git://github.com/leveille/django-twittercard.git#egg=twittercard
 # GnuPG for outgoing post mails
 python-gnupg
 django-email-extras
+
+# API authentication
+django-oauth2-provider
