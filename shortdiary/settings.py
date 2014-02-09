@@ -146,7 +146,7 @@ INSTALLED_APPS = (
 	'diary',
 	'inviteman',
 	'provider',
-    'provider.oauth2',
+	'provider.oauth2',
 )
 
 # Asynchronous jobs

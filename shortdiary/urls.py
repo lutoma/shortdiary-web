@@ -50,8 +50,8 @@ urlpatterns += patterns('',
 
 	url(r'^/?$', 'diary.views.index'),
 
-    url(r'^api/', include(api_patterns)),
-    url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
+	url(r'^api/', include(api_patterns)),
+	url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
 )
 
 
