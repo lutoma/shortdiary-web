@@ -1,5 +1,6 @@
-# Sample settings for local installation.
-# Production settings are different
+# Default settings
+# DO NOT MODIFY THIS FILE FOR YOUR LOCAL INSTALLATION.
+# Instead, create a file called local_settings.py and override stuff you want to change there.
 
 import os
 
@@ -9,7 +10,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-	('Lukas Martini', 'hello@lutoma.org'),
+	('Example Admin', 'shortdiary-admin@example.org'),
 )
 
 MANAGERS = ADMINS
@@ -42,7 +43,6 @@ USE_TZ = True
 LANGUAGES = (
     ('en', 'English'),
     ('de', 'Deutsch'),
-    ('eo', 'Esperanto'),
 )
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
