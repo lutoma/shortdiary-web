@@ -1,6 +1,6 @@
 body {
 	background: url(../img/frontpage-bg-jumbotron.jpg) #F7F5FA no-repeat;
-	background-size: auto 600px;
+	background-size: 100% 600px;
 }
 
 #jumbotron {
