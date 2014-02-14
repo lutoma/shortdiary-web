@@ -123,7 +123,10 @@ def edit_post(request, post_id = None):
 def show_post(request, post_id):
 	post = get_object_or_404(Post, id = post_id)
 
-	if(not post.public and post.author != request.user):
+	if not post.public and not request.user.is_authenticated():
+		return HttpResponseRedirect('/accounts/login/?next={}'.format(request.get_full_path()))
+
+	if not post.public and post.author != request.user:
 		return HttpResponseForbidden('This post is not public.')
 
 	context = {
