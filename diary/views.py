@@ -186,31 +186,6 @@ def sign_up(request):
 	django.contrib.auth.login(request, login_user)
 	return HttpResponseRedirect('/')
 
-
-def login(request):
-	if not request.method == 'POST':
-		context = {
-			'title': _('Login'),
-		}
-		return render_to_response('login.html', context_instance=RequestContext(request, context))
-
-	# Request method is POST
-	username = request.POST['username']
-	password = request.POST['password']
-
-	user = django.contrib.auth.authenticate(username = username, password = password)
-	if user is not None and user.is_active:
-		django.contrib.auth.login(request, user)
-		user.last_login_at = datetime.datetime.now()
-		user.save()
-		return HttpResponseRedirect('/')
-
-	context = {
-		'title': _('Login'),
-		'errors': True,
-	}
-	return render_to_response('login.html', context_instance = RequestContext(request, context))
-
 def mail_verify(request, user_id, hash):
 	user = get_object_or_404(DiaryUser, id = user_id)
 
