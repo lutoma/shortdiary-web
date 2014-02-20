@@ -127,7 +127,11 @@ def show_post(request, post_id):
 		return HttpResponseRedirect('/accounts/login/?next={}'.format(request.get_full_path()))
 
 	if not post.public and post.author != request.user:
-		return HttpResponseForbidden('This post is not public.')
+		context = {
+			'title': _('Sorry! :('),
+		}
+		
+		return render_to_response('not_public.html', context_instance=RequestContext(request, context))
 
 	context = {
 		'post': post,
