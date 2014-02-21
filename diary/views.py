@@ -14,6 +14,7 @@ from inviteman.models import Invite
 import django.contrib.auth
 from diary.models import Post, DiaryUser
 from diary.forms import PostForm, SignUpForm, LoginForm, AccountSettingsForm
+from django.views.decorators.cache import cache_page
 
 tos = lambda request: render_to_response(
 		'tos.html',
@@ -256,6 +257,7 @@ def delete_post(request, post_id):
 	return Response(status=status.HTTP_204_NO_CONTENT)
 
 @login_required
+@cache_page(60 * 60 * 24)
 def stats(request):
 	try:
 		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
