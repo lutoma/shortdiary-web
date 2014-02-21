@@ -362,8 +362,8 @@ aside > .first {
 }
 
 .activity-calendar-day {
-	width: 15px;
-	height: 15px;
+	width: 13px;
+	height: 13px;
 	overflow: hidden;
 	float: left;
 	background: green;
