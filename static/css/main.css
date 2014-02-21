@@ -1,7 +1,7 @@
 body {
 	font-family: Exo, 'Exo', sans-serif;
-	color: #515151;
-	background: #F7F5FA;
+	color: #313131;
+	background: #ffffff;
 	margin: 0;
 	padding: 0;
 	font-size: 18px;
@@ -164,7 +164,7 @@ table.border > tbody > tr > td {
 
 /* Tables with class='alternate' */
 table.alternate > tbody > tr:nth-child(even) {
-	background: #f0f0f0;
+	background: #f8f8f8;
 }
 
 select {
