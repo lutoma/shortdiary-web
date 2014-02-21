@@ -3,26 +3,6 @@
 {% load staticfiles %}
 
 {%block content %}
-	<h2>{% trans 'The team' %}</h2>
-
-	<p style="float: left; width: 45%;">
-		<img src='{% static "img/stephan.jpg" %}' alt='Stephan' style=' height: 200px; float: left; margin-right: 20px;' />
-
-		{% blocktrans %}Stephan is probably best described as strategist or concept developer. He's the guy who comes up with all the ideas. He does the conception of the service and originally thought up the idea that led to shortdiary. You'll probably see him fiddling some roadmap or pondering of a great new feature.{% endblocktrans %}<br /><br />
-
-		{% blocktrans %}You can follow Stephan on <a href='https://twitter.com/herrurbach'>twitter</a> or visit his <a href='http://stephanurbach.de/'>homepage</a>{% endblocktrans %}.
-	</p>
-
-	<p style='float: left; width: 45%; margin-left: 10%;'>
-		<img src='{% static "img/lukas.jpg" %}' alt='Lukas' style='height: 200px;  float: left; margin-right: 20px;' />
-
-		{% blocktrans %}Lukas is responsible for the technical side of shortdiary. He wrote all of the code and takes care of our servers. The design is also his fault. You'll probably see him thinking about some tricky code issue or sitting between piles of hard drives.{% endblocktrans %}<br /><br />
-
-		{% blocktrans %}You can follow Lukas on <a href='https://twitter.com/lutoma'>twitter</a> or <a href='https://github.com/lutoma'>github</a> and visit his <a href='https://lutoma.org'>homepage</a>. Or you could <a href='https://facebook.com/lutoma'>subscribe to his posts on Facebook</a>, if that's more of your thing.{% endblocktrans %}
-	</p>
-	
-	<br style='clear: both;' />
-
 	<h2>{% trans 'Hosting &amp; Data security' %}</h2>
 	<p>{% blocktrans %}Shortdiary is hosted at <a href='https://hetzner.de/'>Hetzner</a> in Germany on infrastructure provided by the <a href='https://ohai.su/'>ohai.su</a> project, a non-profit that aims to improve the web by providing open services. Your data never leaves the European Union (Unless, of course, you access shortdiary from outside the EU).{% endblocktrans %}</p>
 
