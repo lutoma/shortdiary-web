@@ -67,8 +67,8 @@
 							<li {% if request.path == '/stats/' %}class='active'{% endif %}><a href="/stats/">{% trans 'Stats' %}</a></li>
 							<li {% if request.path == '/invite/' %}class='active'{% endif %}><a href="/invite/">{% trans 'Invite someone' %}</a></li>
 						{% else %}
-							<li><a href="/accounts/login/">{% trans 'Log in' %}</a></li>
-							<li><a href="/accounts/signup/">{% trans 'Sign up' %}</a></li>
+							<li {% if request.path == '/accounts/login/' %}class='active'{% endif %}><a href="/accounts/login/">{% trans 'Log in' %}</a></li>
+							<li {% if request.path == '/accounts/signup/' %}class='active'{% endif %}><a href="/accounts/signup/">{% trans 'Sign up' %}</a></li>
 						{% endif %}
 					</ul>
 
