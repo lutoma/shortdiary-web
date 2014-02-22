@@ -222,9 +222,6 @@ def account_settings(request):
 		request.user.email = form.cleaned_data['email']
 		request.user.send_verification_mail()
 
-	if 'password' in form.cleaned_data:
-		request.user.set_password(form.cleaned_data['password'])
-
 	request.user.geolocation_enabled = form.cleaned_data['geolocation_enabled']
 	request.user.save()
 

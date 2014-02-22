@@ -10,8 +10,6 @@
 		<p><strong>{% trans 'Your changes have been saved!' %}</strong></p>
 	{% endif %}
 
-	<p>{% trans 'You can change most of your account settings here <small>(Hint: You can change your avatar at <a href="https://gravatar.com/">gravatar.com</a>)</small>.' %}</p>
-
 	<form action='' method='POST' enctype='multipart/form-data'>
 		{% csrf_token %}
 		<input type='email' name='email' maxlength='100' placeholder='email' value="{% if form.email.value %}{{ form.email.value }}{% else %}{{ user.email }}{% endif %}" required />
@@ -23,15 +21,16 @@
 				<span style="color: red;">{% trans 'Unverified' %}. </span>
 			{% endif %}
 
-			{% trans "<strong>Caution:</strong> If you change your email address, you won't receive any mails until you've verified the new address, so be sure to do that quickly!" %}
+			<p>{% trans "<strong>Caution:</strong> If you change your email address, you won't receive any mails until you've verified the new address, so be sure to do that quickly!" %}</p>
 		</small>
 		{{ form.email.errors }}
 
-		<input type='password' name='password' maxlength='100' placeholder='{% trans "New password (or leave empty)" %}' value="{% if form.password.value %}{{ form.password.value }}{% endif %}" autocomplete="off" />
-		{{ form.password.errors }}
+		<p>
+			<label for='geolocation_enabled_check'>{% trans "Add location to posts" %}</label> <input type='checkbox' id='geolocation_enabled_check' name='geolocation_enabled' {% if form.geolocation_enabled.value or user.geolocation_enabled %}checked{% endif %} />
+			{{ form.geolocation.errors }}
+		</p>
 
-		<label for='geolocation_enabled_check'>{% trans "Add location to posts" %}</label> <input type='checkbox' id='geolocation_enabled_check' name='geolocation_enabled' {% if form.geolocation_enabled.value or user.geolocation_enabled %}checked{% endif %} />
-		{{ form.public.errors }}
+		<p><a href='{% url "django.contrib.auth.views.password_change" %}'>Change my password</a></p>
 
 		<button type='submit'>
 				<i class='icon-share-alt'></i> {% trans "submit" %}

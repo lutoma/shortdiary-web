@@ -32,4 +32,3 @@ class LoginForm(forms.Form):
 class AccountSettingsForm(forms.Form):
 	email = forms.EmailField(max_length = 100)
 	geolocation_enabled = forms.BooleanField(required = False)
-	password = forms.CharField(max_length = 200, required = False)
