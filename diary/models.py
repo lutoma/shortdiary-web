@@ -80,7 +80,11 @@ class DiaryUser(AbstractUser):
 
 	def get_average_post_length(self):
 		# Todo replace this with an QuerySet aggregate
-		return self.get_post_characters() / self.get_posts().count()
+		own_posts = self.get_posts()
+		if own_posts < 1:
+			return 0
+
+		return self.get_post_characters() / own_posts
 
 class Post(models.Model):
 	"""
