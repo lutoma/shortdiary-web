@@ -251,19 +251,37 @@ def stats(request):
 	except Post.DoesNotExist:
 		randompost = None
 
-	streak_leaders = DiaryUser.objects.all()
-	streak_leaders = sorted(streak_leaders, key = lambda t: t.get_streak(), reverse = True)[:10]
-	streak_leaders = filter(lambda t: t.get_streak() > 1, streak_leaders)
-
-	posts_leaders = DiaryUser.objects.all()
-	posts_leaders = sorted(posts_leaders, key = lambda t: len(t.post_set.all()), reverse = True)[:10]
-	posts_leaders = filter(lambda t: len(t.post_set.all()) > 1, posts_leaders)
-
 	context = {
 		'title': 'Stats',
 		'randompost': randompost,
-		'streak_leaders': streak_leaders,
-		'posts_leaders': posts_leaders,
 		'posts': Post.objects.filter(author = request.user).order_by('date')
 	}
 	return render_to_response('stats.html', context_instance=RequestContext(request, context))
+
+#@cache_page(60 * 60 * 24)
+def leaderboard(request):
+	users = DiaryUser.objects.all()
+
+	# We use .all() below to get copies of the QuerySet since otherwise we
+	# would modify the same one twice.
+
+	streak_leaders = sorted(users.all(), key = lambda t: t.get_streak(), reverse = True)[:10]
+	streak_leaders = filter(lambda t: t.get_streak() > 1, streak_leaders)
+
+	posts_leaders = sorted(users.all(), key = lambda t: t.post_set.all().count(), reverse = True)[:10]
+	posts_leaders = filter(lambda t: t.post_set.all().count() > 1, posts_leaders)
+
+	char_leaders = sorted(users.all(), key = lambda t: t.get_post_characters(), reverse = True)[:10]
+	char_leaders = filter(lambda t: t.get_post_characters() > 1, posts_leaders)
+
+	avg_post_length_leaders = sorted(users.all(), key = lambda t: t.get_average_post_length(), reverse = True)[:10]
+	avg_post_length_leaders = filter(lambda t: t.get_average_post_length() > 1, posts_leaders)
+
+	context = {
+		'title': 'Leaderboard',
+		'streak_leaders': streak_leaders,
+		'posts_leaders': posts_leaders,
+		'chars_leaders': char_leaders,
+		'avg_post_length_leaders': avg_post_length_leaders,
+	}
+	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))

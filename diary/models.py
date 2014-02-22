@@ -7,6 +7,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import get_template, Context
 from django.conf import settings
 from email_extras.utils import send_mail_template
+from django.db.models import Avg
 import hashlib
 import datetime
 import gnupg
@@ -76,6 +77,10 @@ class DiaryUser(AbstractUser):
 
 	def get_post_characters(self):
 		return reduce(lambda x, post: x + len(post.text), self.get_posts(), 0)
+
+	def get_average_post_length(self):
+		# Todo replace this with an QuerySet aggregate
+		return self.get_post_characters() / self.get_posts().count()
 
 class Post(models.Model):
 	"""

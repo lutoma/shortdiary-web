@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load i18n %} 
+{% load l10n %} 
+{% load humanize %}
+{% load staticfiles %}
+{% load timetags %}
+
+{%block content %}
+	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
+		<div style='padding-right: 20px'>
+			<h2>Number of posts</h2>
+			<table class="border alternate">
+				<tbody>
+					{% for user in posts_leaders %}
+							<tr>
+								<td style='width: 25px;'>
+									#{{ forloop.counter }}
+								</td>
+								<td>
+									{{ user.username }}
+								</td>
+								<td style='width: 170px;'>
+									{{ user.post_set.all|length }} posts
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div style="width: 50%; padding: 0; margin: 0; float: right;">
+		<div style='padding-left: 20px'>
+			<h2>Longest streak</h2>
+			<table class="border alternate">
+				<tbody>
+					{% for user in streak_leaders %}
+							<tr>
+								<td style='width: 25px;'>
+									#{{ forloop.counter }}
+								</td>
+								<td>
+									{{ user.username }}
+								</td>
+								<td style='width: 170px;'>
+									{{ user.get_streak }} days
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<br class='clear' />
+	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
+		<div style='padding-right: 20px'>
+			<h2>Most characters</h2>
+			<table class="border alternate">
+				<tbody>
+					{% for user in chars_leaders %}
+							<tr>
+								<td style='width: 25px;'>
+									#{{ forloop.counter }}
+								</td>
+								<td>
+									{{ user.username }}
+								</td>
+								<td style='width: 170px;'>
+									{{ user.get_post_characters|intcomma }} characters
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div style="width: 50%; padding: 0; margin: 0; float: right;">
+		<div style='padding-left: 20px'>
+			<h2>Average post length</h2>
+			<table class="border alternate">
+				<tbody>
+					{% for user in avg_post_length_leaders %}
+							<tr>
+								<td style='width: 25px;'>
+									#{{ forloop.counter }}
+								</td>
+								<td>
+									{{ user.username }}
+								</td>
+								<td style='width: 170px;'>
+									{{ user.get_average_post_length }} characters
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<br class='clear' />
+{% endblock %}
