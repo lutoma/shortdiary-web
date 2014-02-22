@@ -80,7 +80,7 @@ class DiaryUser(AbstractUser):
 
 	def get_average_post_length(self):
 		# Todo replace this with an QuerySet aggregate
-		own_posts = self.get_posts()
+		own_posts = self.get_posts().count()
 		if own_posts < 1:
 			return 0
 
