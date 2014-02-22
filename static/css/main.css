@@ -1,8 +1,7 @@
-
 body {
 	font-family: Exo, 'Exo', sans-serif;
-	color: #515151;
-	background: #F7F5FA;
+	color: #313131;
+	background: #ffffff;
 	margin: 0;
 	padding: 0;
 	font-size: 18px;
@@ -24,9 +23,9 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	font-weight: 300;
+	font-weight: 200;
 	margin: 0;
-	margin-bottom: .3em;
+	margin-bottom: .6em;
 	margin-top: 1.4em;
 }
 
@@ -51,12 +50,12 @@ h1 {
 }
 
 .buttonpane > h2 {
-	margin: 0;
+	margin-top: 0;
 }
 
 .border {
 	border: 1px solid #d4d4d4;
-	border-radius: 2px;
+	border-radius: 3px;
 }
 
 /* Input elements & buttons */
@@ -74,7 +73,8 @@ input[type=text], input[type=password], input[type=email], textarea
 {
 	background-color: rgba(255,255,255,0.9);
 	border: none;
-	border-left: 3px solid #CDB380;
+	border: 1px solid #ccc;
+	border-radius: 2px;
 	width: 300px;
 }
 
@@ -160,11 +160,12 @@ table tr td {
 /* Tables with class='border' */
 table.border > tbody > tr > td {
 	padding: .1em .5em;
+	border-radius: 4px;
 }
 
 /* Tables with class='alternate' */
 table.alternate > tbody > tr:nth-child(even) {
-	background: #f0f0f0;
+	background: #f8f8f8;
 }
 
 select {
@@ -244,7 +245,7 @@ aside > .first {
 	background-color: #036564;
 	padding: 0;
 	height: 46px;
-	border-bottom: 4px solid #CDB380;
+	border-bottom: 3px solid #CDB380;
 }
 
 #top-block > .inner {
@@ -256,7 +257,7 @@ aside > .first {
 	display: inline-block;
 	font-size: 25px;
 	margin: 0;
-	font-weight: 700;
+	font-weight: 600;
 	margin-left: 20px;
 	color: #ffffff;
 	float: left;
@@ -362,8 +363,8 @@ aside > .first {
 }
 
 .activity-calendar-day {
-	width: 15px;
-	height: 15px;
+	width: 13px;
+	height: 13px;
 	overflow: hidden;
 	float: left;
 	background: green;
