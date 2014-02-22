@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 from api.views import PostList, PostDetail, PublicPostDetail, ProfileDetail, PostYearAgo
+from django.views.generic import TemplateView
 admin.autodiscover()
 
 if settings.DEBUG:
@@ -45,8 +46,8 @@ urlpatterns += patterns('',
 	url(r'^invite/$', 'inviteman.views.invite'),
 	url(r'^invite/request/$', 'inviteman.views.invite_request'),
 
-	url(r'^tos/$', 'diary.views.tos'),
-	url(r'^about/$', 'diary.views.about'),
+	url(r'^tos/$', TemplateView.as_view(template_name = 'tos.html')),
+	url(r'^about/$', TemplateView.as_view(template_name = 'about.html')),
 
 	url(r'^posts/new/$', 'diary.views.edit_post'),
 	url(r'^posts/(?P<post_id>[0-9]+)/$', 'diary.views.show_post'),

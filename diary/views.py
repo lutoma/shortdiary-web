@@ -16,16 +16,6 @@ from diary.models import Post, DiaryUser
 from diary.forms import PostForm, SignUpForm, LoginForm, AccountSettingsForm
 from django.views.decorators.cache import cache_page
 
-tos = lambda request: render_to_response(
-		'tos.html',
-		context_instance = RequestContext(request, {'title': _('Terms of service')}),
-	)
-
-about = lambda request: render_to_response(
-		'about.html',
-		context_instance = RequestContext(request, {'title': _('About shortdiary')}),
-	)
-
 def index(request):
 	try:
 		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
