@@ -260,21 +260,20 @@ def stats(request):
 
 #@cache_page(60 * 60 * 24)
 def leaderboard(request):
-	users = DiaryUser.objects.all()
-
 	# We use .all() below to get copies of the QuerySet since otherwise we
 	# would modify the same one twice.
 
-	streak_leaders = sorted(users.all(), key = lambda t: t.get_streak(), reverse = True)[:10]
+	streak_leaders = sorted(DiaryUser.objects.all(), key = lambda t: t.get_streak(), reverse = True)[:10]
 	streak_leaders = filter(lambda t: t.get_streak() > 1, streak_leaders)
 
-	posts_leaders = sorted(users.all(), key = lambda t: t.post_set.all().count(), reverse = True)[:10]
+	posts_leaders = sorted(DiaryUser.objects.all(), key = lambda t: t.post_set.all().count(), reverse = True)[:10]
 	posts_leaders = filter(lambda t: t.post_set.all().count() > 1, posts_leaders)
 
-	char_leaders = sorted(users.all(), key = lambda t: t.get_post_characters(), reverse = True)[:10]
+	char_leaders = sorted(DiaryUser.objects.all(), key = lambda t: t.get_post_characters(), reverse = True)[:10]
 	char_leaders = filter(lambda t: t.get_post_characters() > 1, posts_leaders)
 
-	avg_post_length_leaders = sorted(users.all(), key = lambda t: t.get_average_post_length(), reverse = True)[:10]
+	avg_post_length_leaders = sorted(DiaryUser.objects.all(),
+		key = lambda t: t.get_average_post_length(), reverse = True)[:10]
 	avg_post_length_leaders = filter(lambda t: t.get_average_post_length() > 1, posts_leaders)
 
 	context = {
