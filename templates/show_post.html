@@ -77,7 +77,7 @@
 	{% endif %}
 
 	{% if user.is_authenticated and user == post.author and post.is_editable %}
-		 <a href='/posts/{{ post.id }}/edit/'><i class='icon-edit'></i> {% trans 'Edit' %}</a>
+		 <a href='{% url "diary.views.edit_post" post.id %}'><i class='icon-edit'></i> {% trans 'Edit' %}</a>
 	{% endif %}
 
 	<br class='clear' />

@@ -74,8 +74,8 @@
 
 					<ul class="right">
 						{% if user.is_authenticated %}
-							<li><a href="/accounts/settings/" title="{% trans 'Account settings' %}"><i class="icon-wrench"></i></a></li>
-							<li><a href="/accounts/logout/" title="{% trans 'Sign out' %}"><i class="icon-signout"></i></a></li>
+							<li><a href="{% url 'diary.views.account_settings' %}" title="{% trans 'Account settings' %}"><i class="icon-wrench"></i></a></li>
+							<li><a href="{% url 'django.contrib.auth.views.logout' %}" title="{% trans 'Sign out' %}"><i class="icon-signout"></i></a></li>
 						{% endif %}
 					</ul>
 				</nav>
@@ -93,17 +93,17 @@
 			{% endblock %}
 
 			<div id='footer'>
-				shortdiary {% include 'current_git_version.txt' %} | <a href="/tos/">{% trans 'TOS' %}</a> | <a href='/about/'>{% trans 'Security &amp; Imprint' %}</a>. | <a href="https://github.com/shortdiary/shortdiary/issues/new" target="_blank">{% trans 'Report bug' %}</a>
+				shortdiary {% include 'current_git_version.txt' %} | <a href="{% url 'tos' %}">{% trans 'TOS' %}</a> | <a href='{% url "about" %}'>{% trans 'Security &amp; Imprint' %}</a>. | <a href="https://github.com/shortdiary/shortdiary/issues/new" target="_blank">{% trans 'Report bug' %}</a>
 
 				{% if user.is_superuser %}
-					 | <a href="/admin/">{% trans 'Admin' %}</a>
+					 | <a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
 				{% endif %}
 
 
 				<span id="languages">
 					<i class="icon-flag" style="margin-right: 7px;"></i>
 					{% for lang in LANGUAGES %}
-						<a href="/i18n/setlang/{{ lang.0 }}/">{{ lang.1 }}</a>{% if not forloop.last %} |{% endif %}
+						<a href="{%url 'diary.views.switch_language' lang.0 %}">{{ lang.1 }}</a>{% if not forloop.last %} |{% endif %}
 					{% endfor %}
 				</span>
 			</div>

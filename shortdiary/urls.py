@@ -27,7 +27,7 @@ urlpatterns += patterns('',
 	url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 	url(r'^admin/', include(admin.site.urls)),
 
-	url(r'^i18n/setlang/(?P<language>[a-z]+)', 'diary.views.switch_language'),
+	url(r'^i18n/setlang/(?P<language>[a-z]+)/', 'diary.views.switch_language'),
 
 	url(r'^accounts/login/$','django.contrib.auth.views.login',{'template_name':'login.html'}),
 	url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
@@ -46,8 +46,8 @@ urlpatterns += patterns('',
 	url(r'^invite/$', 'inviteman.views.invite'),
 	url(r'^invite/request/$', 'inviteman.views.invite_request'),
 
-	url(r'^tos/$', TemplateView.as_view(template_name = 'tos.html')),
-	url(r'^about/$', TemplateView.as_view(template_name = 'about.html')),
+	url(r'^tos/$', TemplateView.as_view(template_name = 'tos.html'), name = 'tos'),
+	url(r'^about/$', TemplateView.as_view(template_name = 'about.html'), name = 'about'),
 
 	url(r'^posts/new/$', 'diary.views.edit_post'),
 	url(r'^posts/(?P<post_id>[0-9]+)/$', 'diary.views.show_post'),
