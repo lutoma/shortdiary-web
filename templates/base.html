@@ -93,7 +93,7 @@
 			{% endblock %}
 
 			<div id='footer'>
-				shortdiary {% include 'current_git_version.txt' %} | <a href="{% url 'tos' %}">{% trans 'TOS' %}</a> | <a href='{% url "about" %}'>{% trans 'Security &amp; Imprint' %}</a> | <a href="https://github.com/shortdiary/shortdiary/issues/new" target="_blank">{% trans 'Report bug' %}</a>
+				shortdiary {% include 'current_git_version.txt' %} | <a href="{% url 'tos' %}">{% trans 'TOS' %}</a> | <a href='{% url "about" %}'>{% trans 'Security &amp; Imprint' %}</a>
 
 				{% if user.is_superuser %}
 					 | <a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
