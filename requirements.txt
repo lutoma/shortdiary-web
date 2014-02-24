@@ -7,7 +7,7 @@ south
 docutils
 
 # For the Imagefields
-PIL
+Pillow
 
 # Async jobs
 django-celery>=3.0.11
