@@ -106,7 +106,11 @@ def edit_post(request, post_id = None):
 	else:
 		# This is an edit of an existing post
 		edit_post.text = form.cleaned_data['text']		
-		edit_post.mood = form.cleaned_data['mood']	
+		edit_post.mood = form.cleaned_data['mood']
+		edit_post.public = form.cleaned_data['public']
+		edit_post.location_lat = form.cleaned_data['location_lat']
+		edit_post.location_lon = form.cleaned_data['location_lon']
+		edit_post.location_verbose = form.cleaned_data['location_verbose']	
 		edit_post.save()	
 
 	return HttpResponseRedirect('/')
