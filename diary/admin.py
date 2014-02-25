@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django.utils.translation import ugettext_lazy as _
-from diary.models import Post, DiaryUser
+from diary.models import Post, DiaryUser, Payment
 from django.contrib import admin
 
 class PostAdmin(admin.ModelAdmin):
@@ -38,3 +38,4 @@ class UserAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(DiaryUser, UserAdmin)
+admin.site.register(Payment)

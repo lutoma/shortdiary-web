@@ -175,3 +175,16 @@ class Post(models.Model):
 
 		#if self.image:
 		#	message.attach_file(os.path.split(self.image.path))
+
+class Payment(models.Model):
+	user = models.ForeignKey(DiaryUser, verbose_name = _('paying user'))
+	created_at = models.DateTimeField(auto_now_add = True, verbose_name = _('created at'))
+	gateway = models.CharField(max_length = 200, verbose_name = _('payment gateway'))
+	gateway_identifier = models.CharField(max_length = 500, verbose_name = _('identifier of this payment at payment gateway'))
+	amount = models.IntegerField(verbose_name = _('amount paid'))
+	currency = models.CharField(max_length = 3, verbose_name = _('currency'))
+	valid_from = models.DateTimeField(verbose_name = _('payment valid from'))
+	valid_until = models.DateTimeField(verbose_name = _('payment valid until'))
+	recurring = models.BooleanField(verbose_name = _('recurring'))
+
+	__unicode__ = lambda self: _('{0} {1} by {2} via {3}').format(self.amount / 100, self.currency, self.user, self.gateway)
