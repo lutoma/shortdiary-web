@@ -14,25 +14,28 @@
 		{% csrf_token %}
 
 
-		<table class=''></table>
+		<table class='border alternate'>
+			<tbody>
+				<tr>
+					<td>Email address {{ form.email.errors }}</td>
+					<td><input type='email' name='email' maxlength='100' placeholder='email' value="{% if form.email.value %}{{ form.email.value }}{% else %}{{ user.email }}{% endif %}" required /></td>
+				</tr>
+				<tr>
+					<td><label for='geolocation_enabled_check'>Add location to posts</label></td>
+					<td><input type='checkbox' id='geolocation_enabled_check' name='geolocation_enabled' {% if form.geolocation_enabled.value or user.geolocation_enabled %}checked{% endif %} /></td>
+				</tr>
+			</tbody>
+		</table>
 
-		<input type='email' name='email' maxlength='100' placeholder='email' value="{% if form.email.value %}{{ form.email.value }}{% else %}{{ user.email }}{% endif %}" required />
 		<small>
-			{% trans 'Status' %}: 
+			<p>{% trans "<strong>Caution:</strong> If you change your email address, you won't receive any mails until you've verified the new address, so be sure to do that quickly!" %}</p>
+			{% trans 'Current status' %}: 
 			{% if user.mail_verified %}
 				{% trans 'Verified' %}. 
 			{% else %}
 				<span style="color: red;">{% trans 'Unverified' %}. </span>
 			{% endif %}
-
-			<p>{% trans "<strong>Caution:</strong> If you change your email address, you won't receive any mails until you've verified the new address, so be sure to do that quickly!" %}</p>
 		</small>
-		{{ form.email.errors }}
-
-		<p>
-			<label for='geolocation_enabled_check'>{% trans "Add location to posts" %}</label> <input type='checkbox' id='geolocation_enabled_check' name='geolocation_enabled' {% if form.geolocation_enabled.value or user.geolocation_enabled %}checked{% endif %} />
-			{{ form.geolocation.errors }}
-		</p>
 
 		<p><a href='{% url "django.contrib.auth.views.password_change" %}'>Change my password</a></p>
 
