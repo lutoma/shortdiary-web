@@ -86,6 +86,12 @@ class DiaryUser(AbstractUser):
 
 		return self.get_post_characters() / own_posts
 
+	def has_paid(self):
+		if self.is_superuser or self.is_staff:
+			return True
+		
+		return self.payment_set.filter(valid_until__gte = datetime.datetime.now(), valid_from__lte = datetime.datetime.now()).count() > 0
+
 class Post(models.Model):
 	"""
 	A diary post

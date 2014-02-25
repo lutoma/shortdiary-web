@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.template.context import RequestContext
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_http_methods
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -37,6 +37,7 @@ def index(request):
 	return render_to_response('index.html', context_instance=RequestContext(request, context))
 
 @login_required
+@user_passes_test(lambda u: u.has_paid(), login_url = '/pay/')
 def edit_post(request, post_id = None):
 	"""
 	Edit or add post.
