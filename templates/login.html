@@ -16,7 +16,7 @@
 		<input type="password" name="password" id="id_password" placeholder="{{ form.password.label }}" />
 
 		<input type="submit" value="{% trans 'Log in' %}" />
-		<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}/{% endif %}" />
+		{% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
 	</form>
 
 	<p><a href='{% url "django.contrib.auth.views.password_reset" %}'>Forgot password?</a></p>
