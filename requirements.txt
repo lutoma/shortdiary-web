@@ -43,3 +43,6 @@ django-email-extras
 
 # API authentication
 django-oauth2-provider
+
+# Stripe payments
+stripe

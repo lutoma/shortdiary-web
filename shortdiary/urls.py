@@ -49,6 +49,10 @@ urlpatterns += patterns('',
 	url(r'^tos/$', TemplateView.as_view(template_name = 'tos.html'), name = 'tos'),
 	url(r'^about/$', TemplateView.as_view(template_name = 'about.html'), name = 'about'),
 
+	url(r'^pay/$', TemplateView.as_view(template_name = 'pay.html'), name = 'pay'),
+	url(r'^pay/success/$', TemplateView.as_view(template_name = 'pay_success.html'), name = 'pay'),
+	url(r'^pay/stripe/$', 'diary.views.pay_stripe_handle'),
+
 	url(r'^posts/new/$', 'diary.views.edit_post'),
 	url(r'^posts/(?P<post_id>[0-9]+)/$', 'diary.views.show_post'),
 	url(r'^posts/(?P<post_id>[0-9]+)/edit/$', 'diary.views.edit_post'),

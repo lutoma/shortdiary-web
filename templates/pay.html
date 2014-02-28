@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load settings_value %}
+
+{%block content %}
+<h2>Sorry, but your free trial is over :(</h2>
+
+<p>We both knew it would come to this. Your free trial is over and now we're greedily asking you for your precious, hard-earned money. Who do these diary people think they are anyways! Just asking for people's money like that!</p>
+<p>Obviously, it isn't as simple as this. Running and developing shortdiary costs a lot of money. And making sure your data stays private does, too. Blah blah blah.</p>
+
+<h2>Simple & fair pricing</h2>
+
+<p>Our pricing is both fair and simple: 1€ per month, that's it. And you can cancel anytime, just by clicking a button!<br />No shady adhesion contracts.</p>
+
+<form action="/pay/stripe/" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="{% settings_value 'STRIPE_PUBLIC_KEY' %}"
+    data-name="Shortdiary"
+    data-description="Subscription 6 months"
+    data-amount="200"
+    data-currency="EUR"
+    data-email="{{ user.email }}"
+    data-label="Pay with Credit Card"
+    data-panel-label="Subscribe for {% verbatim %}{{amount}}{% endverbatim %} / month">
+  </script>
+</form>
+
+<p>Haven't tested just everything yet? We've got you covered.</p>
+<p><button>Give me more free trial</button></p>
+
+{% endblock %}
+

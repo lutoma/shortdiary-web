@@ -6,15 +6,18 @@ from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from inviteman.models import Invite
 import django.contrib.auth
-from diary.models import Post, DiaryUser
+from diary.models import Post, DiaryUser, Payment
 from diary.forms import PostForm, SignUpForm, LoginForm, AccountSettingsForm
 from django.views.decorators.cache import cache_page
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+import stripe
 
 def index(request):
 	try:
@@ -289,3 +292,38 @@ def leaderboard(request):
 		'avg_post_length_leaders': avg_post_length_leaders,
 	}
 	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))
+
+@login_required
+@require_POST
+@csrf_exempt
+def pay_stripe_handle(request):
+	stripe.api_key = getattr(settings, 'STRIPE_PRIVATE_KEY', None)
+
+	if not stripe.api_key:
+		return HttpResponse('Not configured for Stripe.')
+
+	token = request.POST['stripeToken']
+
+	try:
+		charge = stripe.Charge.create(
+			amount = 200,
+			currency = "eur",
+			card = token,
+			description='Subscription {}'.format(request.user.email)
+		)
+	except stripe.CardError, e:
+		return HttpResponse('Card declined.')
+
+	Payment(
+		user = request.user,
+		gateway = 'stripe',
+		gateway_identifier = request.POST['stripeToken'],
+		amount = 500,
+		currency = 'EUR',
+		valid_from = datetime.datetime.now(),
+		valid_until = datetime.datetime.now() + datetime.timedelta(6*30),
+		recurring = False,
+	).save()
+
+	return HttpResponseRedirect('/pay/success/')
+
