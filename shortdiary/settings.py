@@ -199,6 +199,7 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'diary.DiaryUser'
+LOGIN_REDIRECT_URL = '/'
 
 # Use the file local_settings.py to overwrite the defaults with your own settings
 try:
