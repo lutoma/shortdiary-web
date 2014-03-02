@@ -18,6 +18,7 @@ from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from django.conf import settings
 import diary.tasks as tasks
+from django.db.models import Q, Count
 
 def index(request):
 	try:
@@ -258,10 +259,13 @@ def stats(request):
 	except Post.DoesNotExist:
 		randompost = None
 
+	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:5]
+
 	context = {
 		'title': 'Stats',
 		'randompost': randompost,
-		'posts': Post.objects.filter(author = request.user).order_by('date')
+		'posts': Post.objects.filter(author = request.user).order_by('date'),
+		'top_locations': top_locations,
 	}
 	return render_to_response('stats.html', context_instance=RequestContext(request, context))
 
