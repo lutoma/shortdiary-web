@@ -15,6 +15,9 @@ import django.contrib.auth
 from diary.models import Post, DiaryUser
 from diary.forms import PostForm, SignUpForm, LoginForm, AccountSettingsForm
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
+from django.conf import settings
+import diary.tasks as tasks
 
 def index(request):
 	try:
@@ -262,29 +265,31 @@ def stats(request):
 	}
 	return render_to_response('stats.html', context_instance=RequestContext(request, context))
 
-#@cache_page(60 * 60 * 24)
 def leaderboard(request):
-	# We use .all() below to get copies of the QuerySet since otherwise we
-	# would modify the same one twice.
+	leaders = cache.get_many([
+			'leaderboard_streak_leaders',
+			'leaderboard_posts_leaders',
+			'leaderboard_char_leaders',
+			'leaderboard_avg_post_length_leaders',
+			'leaderboard_last_update',
+	])
 
-	streak_leaders = sorted(DiaryUser.objects.all(), key = lambda t: t.get_streak(), reverse = True)[:10]
-	streak_leaders = filter(lambda t: t.get_streak() > 1, streak_leaders)
+	if(len(leaders) < 5):
+		# Cache is empty, render error page and start async generation of data
+		if settings.DEBUG:
+			tasks.update_leaderboard()
+		else:
+			tasks.update_leaderboard.delay()
 
-	posts_leaders = sorted(DiaryUser.objects.all(), key = lambda t: t.post_set.all().count(), reverse = True)[:10]
-	posts_leaders = filter(lambda t: t.post_set.all().count() > 1, posts_leaders)
-
-	char_leaders = sorted(DiaryUser.objects.all(), key = lambda t: t.get_post_characters(), reverse = True)[:10]
-	char_leaders = filter(lambda t: t.get_post_characters() > 1, posts_leaders)
-
-	avg_post_length_leaders = sorted(DiaryUser.objects.all(),
-		key = lambda t: t.get_average_post_length(), reverse = True)[:10]
-	avg_post_length_leaders = filter(lambda t: t.get_average_post_length() > 1, posts_leaders)
+		return render_to_response('leaderboard_wait.html')
 
 	context = {
 		'title': 'Leaderboard',
-		'streak_leaders': streak_leaders,
-		'posts_leaders': posts_leaders,
-		'chars_leaders': char_leaders,
-		'avg_post_length_leaders': avg_post_length_leaders,
+		'streak_leaders': leaders['leaderboard_streak_leaders'],
+		'posts_leaders': leaders['leaderboard_posts_leaders'],
+		'chars_leaders': leaders['leaderboard_char_leaders'],
+		'avg_post_length_leaders': leaders['leaderboard_avg_post_length_leaders'],
+		'last_update': leaders['leaderboard_last_update'],
 	}
+
 	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))
