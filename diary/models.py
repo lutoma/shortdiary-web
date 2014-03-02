@@ -2,7 +2,7 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import get_template, Context
 from django.conf import settings
@@ -173,3 +173,4 @@ def update_streak_signal(sender, instance, **kwargs):
 	tasks.update_streak.delay(sender)
 
 post_save.connect(update_streak_signal, sender=Post, dispatch_uid="update_streak_signal")
+post_delete.connect(update_streak_signal, sender=Post, dispatch_uid="update_streak_signal")
