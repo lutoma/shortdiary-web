@@ -252,7 +252,6 @@ def delete_post(request, post_id):
 	return Response(status=status.HTTP_204_NO_CONTENT)
 
 @login_required
-@cache_page(60 * 60 * 24)
 def stats(request):
 	try:
 		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
