@@ -10,7 +10,7 @@ from email_extras.utils import send_mail_template
 from django.db.models import Avg
 from django.core.cache import cache
 import diary.tasks as tasks
-import hashlib
+import hashlib, base64
 import datetime
 import gnupg
 
@@ -38,7 +38,10 @@ class DiaryUser(AbstractUser):
 		mail.send()
 
 	def get_streak(self):
-		cached_streak = cache.get('diary_{}_streak'.format(self.username))
+		# We need to base64 this since the username might contain characters
+		# that are invalid as memcache keys.
+		cache_key = base64.b64encode('diary_{}_streak'.format(self.username))
+		cached_streak = cache.get(cache_key)
 
 		if cached_streak:
 			return cached_streak
@@ -47,7 +50,7 @@ class DiaryUser(AbstractUser):
 
 		# Infinite lifetime since this is invalidated as soon as a new
 		# post is written by the user
-		cache.set('diary_{}_streak'.format(self.username), streak, None)
+		cache.set(cache_key, streak, None)
 		return streak
 
 	def get_year_history(self):
