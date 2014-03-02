@@ -1,0 +1,67 @@
+{% load humanize %}
+<html>
+
+<head>
+	<title>Don't loose your streak, {{ user.username }}!</title>
+</head>
+
+<body bgcolor="#FFFFFF" style="margin: 0; padding: 0; padding-left: 40px; padding-right: 40px; border: 0; background-color: #FFFFFF;">
+	<style media="all" type="text/css">
+	  @import url(http://fonts.googleapis.com/css?family=Exo:200,400,700);
+
+		html {
+			min-height: 100%;
+		}
+		body {
+			min-height: 100%;
+			-webkit-text-size-adjust: none;
+		}
+
+		@media screen and (max-device-width: 320px) {
+				body {
+					padding-left: 0px !important;
+					padding-right: 0px !important;
+				}
+		}
+
+		::-moz-selection {
+			background: #F83265;
+			color: white;
+		}
+
+		::selection {
+			background: #F83265;
+			color: white;
+		}
+
+		a {
+			color: #033649;
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+	</style>
+
+	<div style='width: 100%; background-color: #F7F5FA; min-width: 400px; color: #515151; font-family: Exo, sans-serif; border-radius: 2px; margin-bottom: 20px;'>
+		<div style='height: 40px; background-color: #036564; color: #ffffff; border-radius: 2px; border-bottom: 4px solid #CDB380;'>
+			<a href='https://shortdiary.me'><img src='http://i.imgur.com/DWWg44t.png' alt='Shortdiary' style='border-top-left-radius: 2px;' /></a>
+		</div>
+
+		<div style='padding: 15px;'>
+			<h2 style='color: #036564; font-size: 2em;'>Don't loose your streak, {{ user.username }}!</h2>
+
+			<p>Hi {{ user.username }},</p>
+
+			<p>I couldn't help but notice you haven't added a post for yesterday yet.</p>
+			<p>Don't forget to do so – After all, you're on a {{ user.get_streak|apnumber }} day streak right now!</p>
+
+			<p>Kindly yours,<br />
+			<div style='margin-left: 40px;'>the friendly shortdiary robot</div></p>
+
+		</div>
+	</div>
+
+	<div style='margin-left: 40px; margin-right: 40x; color: #777; font-size: 11px; margin-bottom: 30px;'>You received this mail because you signed up on shortdiary. If you don't wish to receive these emails anymore, <a href='https://shortdiary.me/accounts/login'>log in to your shortdiary account</a> and change your email preferences.</div>
+</body>

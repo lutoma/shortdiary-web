@@ -9,6 +9,8 @@ import diary.models
 from django.template.loader import get_template, Context
 from django.conf import settings
 from django.core.cache import cache
+from email_extras.utils import send_mail_template
+from django.contrib.humanize.templatetags.humanize import apnumber
 
 def process_mails(searched_date):
 	print('Sending mails for {0}…'.format(searched_date))
@@ -78,3 +80,27 @@ def update_streak(user):
 		streak += 1
 
 	return streak
+
+def send_reminder_mail(user):
+	"""
+	Sends out the mail for this post
+	"""
+
+	send_mail_template(
+		_('Don\'t loose your {0} day streak, {1}!').format(apnumber(user.get_streak()), user),
+		'reminder',
+		'Shortdiary <yourfriends@shortdiary.me>',
+		['{0} <{1}>'.format(user.username, user.email)],
+		context = {'user': user}
+	)
+
+@periodic_task(run_every = crontab(hour="11", minute="0", day_of_week="*"))
+def send_reminder_mails():
+
+	# Get all relevant users (Have streak, last post 2 days ago)
+	two_days_ago = datetime.date.today() - datetime.timedelta(days = 2)
+	users = diary.models.DiaryUser.objects.all()
+	users = filter(lambda t: t.get_streak() > 0 and t.post_set.order_by('-date')[0].date == two_days_ago, users)
+
+	map(send_reminder_mail, users)
+
