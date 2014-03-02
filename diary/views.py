@@ -259,7 +259,7 @@ def stats(request):
 	except Post.DoesNotExist:
 		randompost = None
 
-	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:5]
+	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:10]
 
 	context = {
 		'title': 'Stats',
