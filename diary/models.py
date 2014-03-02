@@ -8,6 +8,8 @@ from django.template.loader import get_template, Context
 from django.conf import settings
 from email_extras.utils import send_mail_template
 from django.db.models import Avg
+from django.core.cache import cache
+import diary.tasks as tasks
 import hashlib
 import datetime
 import gnupg
@@ -36,28 +38,16 @@ class DiaryUser(AbstractUser):
 		mail.send()
 
 	def get_streak(self):
-		"""
-		This returns information on how long the "streak" of this user has been
-		lasting. Streak in this context means continous posts on following days
-		going backwards starting from today or yesterday or the day before.
-		"""
-		user_posts = Post.objects.filter(author = self).order_by('-date')
+		cached_streak = cache.get('diary_{}_streak'.format(self.username))
 
-		if len(user_posts) == 0:
-			return 0
+		if cached_streak:
+			return cached_streak
 
-		first_posssible = datetime.date.today() - datetime.timedelta(days = 2)
-		post = user_posts[0]
+		streak = tasks.update_streak(self)
 
-		if first_posssible - post.date > datetime.timedelta(days = 1):
-			return 0
-
-		streak = 0
-		for post, previous_post in zip(user_posts, [post] + list(user_posts)):
-			if (previous_post.date - post.date) > datetime.timedelta(days = 1):
-				return streak
-			streak += 1
-
+		# Infinite lifetime since this is invalidated as soon as a new
+		# post is written by the user
+		cache.set('diary_{}_streak'.format(self.username), streak, None)
 		return streak
 
 	def get_year_history(self):
@@ -175,3 +165,8 @@ class Post(models.Model):
 
 		#if self.image:
 		#	message.attach_file(os.path.split(self.image.path))
+
+def update_streak_signal(sender, instance, **kwargs):
+	tasks.update_streak.delay(sender)
+
+post_save.connect(update_streak_signal, sender=Post, dispatch_uid="update_streak_signal")
