@@ -1,0 +1,13 @@
+{% load humanize %}
+Don't loose your streak, {{ user.username }}!
+
+I couldn't help but notice you haven't added a post for yesterday yet.
+
+Don't forget to do so – After all, you're on a {{ user.get_streak|apnumber }} day streak right now!
+
+Kindly yours,
+
+         the friendly shortdiary robot
+
+-- 
+You received this mail because you signed up on shortdiary. If you don't wish to receive these emails anymore, log in to your shortdiary account at https://shortdiary.me/accounts/login and change your email preferences.

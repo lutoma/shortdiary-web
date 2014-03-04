@@ -68,6 +68,31 @@
 {%block content %}
 	<p><a href='{%url "diary.views.leaderboard" %}'>Leaderboard</a></p>
 
+	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
+		<div style='padding-right: 20px'>
+			<h2>Your most popular locations</h2>
+			<table class="border alternate">
+				<tbody>
+					{% for location in top_locations %}
+							<tr>
+								<td style='width: 25px;'>
+									#{{ forloop.counter }}
+								</td>
+								<td>
+									{{ location.location_verbose }}
+								</td>
+								<td style='width: 170px;'>
+									{{ location.location_count }} posts
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<br class='clear' />
+
 	<h2>Post length over time</h2>
 	<div id='post-length-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> Loading, please wait…</div>
 

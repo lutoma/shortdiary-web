@@ -2,13 +2,15 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import get_template, Context
 from django.conf import settings
 from email_extras.utils import send_mail_template
 from django.db.models import Avg
-import hashlib
+from django.core.cache import cache
+import diary.tasks as tasks
+import hashlib, base64
 import datetime
 import gnupg
 
@@ -36,28 +38,19 @@ class DiaryUser(AbstractUser):
 		mail.send()
 
 	def get_streak(self):
-		"""
-		This returns information on how long the "streak" of this user has been
-		lasting. Streak in this context means continous posts on following days
-		going backwards starting from today or yesterday or the day before.
-		"""
-		user_posts = Post.objects.filter(author = self).order_by('-date')
+		# We need to base64 this since the username might contain characters
+		# that are invalid as memcache keys.
+		cache_key = base64.b64encode('diary_{}_streak'.format(self.username))
+		cached_streak = cache.get(cache_key)
 
-		if len(user_posts) == 0:
-			return 0
+		if cached_streak:
+			return cached_streak
 
-		first_posssible = datetime.date.today() - datetime.timedelta(days = 2)
-		post = user_posts[0]
+		streak = tasks.update_streak(self)
 
-		if first_posssible - post.date > datetime.timedelta(days = 1):
-			return 0
-
-		streak = 0
-		for post, previous_post in zip(user_posts, [post] + list(user_posts)):
-			if (previous_post.date - post.date) > datetime.timedelta(days = 1):
-				return streak
-			streak += 1
-
+		# Infinite lifetime since this is invalidated as soon as a new
+		# post is written by the user
+		cache.set(cache_key, streak, None)
 		return streak
 
 	def get_year_history(self):
@@ -181,6 +174,13 @@ class Post(models.Model):
 
 		#if self.image:
 		#	message.attach_file(os.path.split(self.image.path))
+
+def update_streak_signal(sender, instance, **kwargs):
+	tasks.update_streak.delay(sender)
+
+post_save.connect(update_streak_signal, sender=Post, dispatch_uid="update_streak_signal")
+post_delete.connect(update_streak_signal, sender=Post, dispatch_uid="update_streak_signal")
+
 
 class Payment(models.Model):
 	user = models.ForeignKey(DiaryUser, verbose_name = _('paying user'))

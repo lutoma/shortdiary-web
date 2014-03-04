@@ -95,7 +95,7 @@
 			<div id='footer'>
 				shortdiary {% include 'current_git_version.txt' %} | <a href="{% url 'tos' %}">{% trans 'TOS' %}</a> | <a href='{% url "about" %}'>{% trans 'Security &amp; Imprint' %}</a>
 
-				{% if user.is_superuser %}
+				{% if user.is_staff %}
 					 | <a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
 				{% endif %}
 
