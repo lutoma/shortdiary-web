@@ -24,7 +24,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 class PublicPostSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Post
-		fields = ('text')
+		fields = ('get_public_text')
 
 class PostCreateSerializer(serializers.ModelSerializer):
 	class Meta:

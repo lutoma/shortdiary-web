@@ -13,6 +13,7 @@ import diary.tasks as tasks
 import hashlib, base64
 import datetime
 import gnupg
+import re
 
 class DiaryUser(AbstractUser):
 	"""
@@ -168,6 +169,13 @@ class Post(models.Model):
 
 		#if self.image:
 		#	message.attach_file(os.path.split(self.image.path))
+
+	def get_public_text(self):
+		"""
+		The public version of this post's text (i.e. with all names replaced)
+		"""
+
+		return re.sub(r'(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9]+)', '***', self.text)
 
 def update_streak_signal(sender, instance, **kwargs):
 	tasks.update_streak.delay(sender)

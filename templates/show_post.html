@@ -70,7 +70,11 @@
 		{% endif %}
 	</aside>
 	
-	<article>{{ post.text|linebreaks }}</article>
+	{% if user.is_authenticated and user == post.author %}
+		<article>{{ post.text|linebreaks }}</article>
+	{% else %}
+		<article>{{ post.get_public_text|linebreaks }}</article>
+	{% endif %}
 
 	{% if post.image %}
 		<a href="{{ MEDIA_URL }}{{ post.image }}" target="_blank"><img itemprop="image" class="post-image" src="{{ MEDIA_URL }}{{ post.image }}" /></a>
