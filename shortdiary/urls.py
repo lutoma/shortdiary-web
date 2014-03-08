@@ -57,6 +57,7 @@ urlpatterns += patterns('',
 	url(r'^stats/$', 'diary.views.stats'),
 	url(r'^stats/leaderboard/$', 'diary.views.leaderboard'),
 
+	url(r'^explore/?$', 'diary.views.explore'),
 
 	url(r'^email/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', 'diary.views.mail_verify'),
 

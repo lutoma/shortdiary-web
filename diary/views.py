@@ -296,3 +296,15 @@ def leaderboard(request):
 	}
 
 	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))
+
+def explore(request):
+	try:
+		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
+	except Post.DoesNotExist:
+		randompost = None
+
+	context = {
+		'title': 'Explore',
+		'post': randompost,
+	}
+	return render_to_response('explore.html', context_instance=RequestContext(request, context))

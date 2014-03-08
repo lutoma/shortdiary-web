@@ -84,9 +84,4 @@
 		</tbody>
 	</table>
 	<p><small>(You can view posts from the last 7 days and edit posts from the last 3 days).</small></p>
-
-	{% if randompost %}
-		<h2>{% trans 'Random public post' %}</h2>
-		<p>{{ randompost.text|linebreaks }}</p>
-	{% endif %}
 {% endblock %}
