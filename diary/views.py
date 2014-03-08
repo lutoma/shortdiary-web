@@ -253,16 +253,10 @@ def delete_post(request, post_id):
 
 @login_required
 def stats(request):
-	try:
-		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
-	except Post.DoesNotExist:
-		randompost = None
-
 	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:10]
 
 	context = {
 		'title': 'Stats',
-		'randompost': randompost,
 		'posts': Post.objects.filter(author = request.user).order_by('date'),
 		'top_locations': top_locations,
 	}
