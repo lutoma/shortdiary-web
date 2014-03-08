@@ -20,6 +20,20 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "shortdiary.settings")
 import djcelery
 djcelery.setup_loader()
 
+# Load newrelic if installed & config exists
+try:
+	import newrelic.agent
+
+	# This try block has to be in the other one since we use an Exception we only
+	# get if the import succeeds.
+	try:
+		newrelic.agent.initialize('newrelic.ini')
+	except newrelic.api.exceptions.ConfigurationError:
+		pass
+
+except ImportError:
+	pass
+
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
