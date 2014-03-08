@@ -61,6 +61,11 @@
 			{{ post.mood }} / 10
 		{% endif %}
 
+		{% if user.is_authenticated and user == post.author %}
+			<div class='label first'><i class='icon-shield'></i>Privacy</div>
+			This post is {% if post.public %}public{% else %}private{% endif %}.
+		{% endif %}
+
 		<div class='label first'><i class='icon-upload'></i>Created</div>
 		{{ post.created_at }}
 
