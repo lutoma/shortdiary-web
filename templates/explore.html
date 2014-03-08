@@ -15,6 +15,9 @@
 
 		<div class='label first'><i class='icon-upload'></i>Created</div>
 		{{ post.created_at }}
+
+		<div class='label first'><i class='icon-link'></i>Link</div>
+		<a href='{% url "diary.views.show_post" post.id %}'>Permalink</a>
 	</aside>
 	
 	<article>{{ post.get_public_text|linebreaks }}</article>
