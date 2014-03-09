@@ -269,7 +269,7 @@ def leaderboard(request):
 		else:
 			tasks.update_leaderboard.delay()
 
-		return render_to_response('leaderboard_wait.html')
+		return render_to_response('leaderboard_wait.html', context_instance=RequestContext(request))
 
 	context = {
 		'title': 'Leaderboard',
