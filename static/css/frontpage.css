@@ -1,5 +1,5 @@
 body {
-	background: url(../img/frontpagebg.png) #ffffff no-repeat;
+	background: url(../img/frontpagebg.jpg) #ffffff no-repeat;
 	background-size: cover;
 }
 
@@ -68,7 +68,7 @@ body {
 	position: fixed; right: 0; bottom: 0;
 	min-width: 100%; min-height: 100%;
 	width: auto; height: auto; z-index: -100;
-	background: url(../img/frontpagebg.png) no-repeat;
+	background: url(../img/frontpagebg.jpg) no-repeat;
 	background-size: cover;
 }
 
