@@ -58,19 +58,13 @@ body {
 	margin-left: 6px;
 }
 
-#backdrop {
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: -1;
-}
-
 #frontpage-bg {
 	position: fixed; right: 0; bottom: 0;
 	min-width: 100%; min-height: 100%;
 	width: auto; height: auto; z-index: -100;
 	background: url(../img/frontpagebg.jpg) no-repeat;
 	background-size: cover;
+	z-index: -1;
 }
 
 #footer {
