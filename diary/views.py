@@ -239,11 +239,16 @@ def delete_post(request, post_id):
 
 @login_required
 def stats(request):
+	user_posts = Post.objects.filter(author = request.user).order_by('date')
+
+	if user_posts.count() < 1:
+		return render_to_response('stats_noposts.html', context_instance=RequestContext(request))
+
 	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:10]
 
 	context = {
 		'title': 'Stats',
-		'posts': Post.objects.filter(author = request.user).order_by('date'),
+		'posts': user_posts,
 		'top_locations': top_locations,
 	}
 	return render_to_response('stats.html', context_instance=RequestContext(request, context))
