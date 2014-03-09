@@ -164,24 +164,10 @@ def sign_up(request):
 		}
 		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
 
-	# Check invite code
-	try:
-		invite = Invite.objects.get(code = request.POST.get('invite_code', None))
-	except Invite.DoesNotExist:
-		context = {
-			'title': _('Sign up'),
-			'form': form,
-			'noinvite': True,
-		}
-		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
-
 	# Fixme
 	user = form.save()
 	user.set_password(request.POST.get('password', None))
-	user.invited_by = invite.generated_by
 	user.save()
-
-	invite.delete()
 
 	user.send_verification_mail()
 
