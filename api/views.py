@@ -122,7 +122,7 @@ class PublicPostDetail(APIView):
 	"""
 	def get(self, request, format=None):
 		try:
-			randompost = Post.objects.filter(author__userprofile__public = True).order_by('?')[:1].get()
+			randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
 			serializer = PublicPostSerializer(randompost)
 			return Response(serializer.data)
 		except Post.DoesNotExist:

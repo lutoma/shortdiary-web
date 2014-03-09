@@ -17,14 +17,25 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 	url = serializers.HyperlinkedIdentityField(
 		view_name='api-post-detail',
 	)
+
+	public_text = serializers.SerializerMethodField('get_public_text')
+	get_public_text = lambda self, obj: obj.get_public_text()
+
 	class Meta:
 		model = Post
-		fields = ('id', 'url', 'date', 'text', 'mood', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'part_of')
+		fields = ('id', 'url', 'date', 'text', 'public_text', 'mood', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'part_of')
 
 class PublicPostSerializer(serializers.ModelSerializer):
+	url = serializers.HyperlinkedIdentityField(
+		view_name='api-post-detail',
+	)
+
+	public_text = serializers.SerializerMethodField('get_public_text')
+	get_public_text = lambda self, obj: obj.get_public_text()
+
 	class Meta:
 		model = Post
-		fields = ('get_public_text')
+		fields = ('id', 'url', 'date', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'public_text',)
 
 class PostCreateSerializer(serializers.ModelSerializer):
 	class Meta:
