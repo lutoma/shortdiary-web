@@ -12,7 +12,7 @@
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 
-		<link href='//fonts.googleapis.com/css?family=Exo:100,200,300,400,600,700' rel='stylesheet' type='text/css'>
+		<link href='//fonts.googleapis.com/css?family=Exo:100,200,300,400,600,700,900' rel='stylesheet' type='text/css'>
 
 		<link href="{% static 'css/main.css' %}" rel="stylesheet" />
 		<link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
@@ -93,21 +93,23 @@
 				{% endif %}
 			{% endblock %}
 
-			<div id='footer'>
-				shortdiary {% include 'current_git_version.txt' %} | <a href="{% url 'tos' %}">{% trans 'TOS' %}</a> | <a href='{% url "about" %}'>{% trans 'Security &amp; Imprint' %}</a>
+			{% block footer %}
+				<div id='footer'>
+					shortdiary {% include 'current_git_version.txt' %} | <a href="{% url 'tos' %}">{% trans 'TOS' %}</a> | <a href='{% url "about" %}'>{% trans 'Security &amp; Imprint' %}</a>
 
-				{% if user.is_staff %}
-					 | <a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
-				{% endif %}
+					{% if user.is_staff %}
+						 | <a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
+					{% endif %}
 
 
-				<span id="languages">
-					<i class="icon-flag" style="margin-right: 7px;"></i>
-					{% for lang in LANGUAGES %}
-						<a href="{%url 'diary.views.switch_language' lang.0 %}">{{ lang.1 }}</a>{% if not forloop.last %} |{% endif %}
-					{% endfor %}
-				</span>
-			</div>
+					<span id="languages">
+						<i class="icon-flag" style="margin-right: 7px;"></i>
+						{% for lang in LANGUAGES %}
+							<a href="{%url 'diary.views.switch_language' lang.0 %}">{{ lang.1 }}</a>{% if not forloop.last %} |{% endif %}
+						{% endfor %}
+					</span>
+				</div>
+			{% endblock %}
 		</div>
 
 		{% if not DEBUG %}
