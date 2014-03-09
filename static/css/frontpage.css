@@ -5,6 +5,7 @@ body {
 
 #jumbotron {
 	text-align: center;
+	z-index: 50;
 }
 
 #title {
@@ -78,6 +79,7 @@ body {
 	position: absolute;
 	left: 10px;
 	bottom: 5px;
+	z-index: 50;
 }
 
 #footer, #footer a {
