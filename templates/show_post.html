@@ -76,9 +76,9 @@
 	</aside>
 	
 	{% if user.is_authenticated and user == post.author %}
-		<article>{{ post.text|linebreaks }}</article>
+		<article>{{ post.text|urlize|linebreaks }}</article>
 	{% else %}
-		<article>{{ post.get_public_text|linebreaks }}</article>
+		<article>{{ post.get_public_text|urlize|linebreaks }}</article>
 	{% endif %}
 
 	{% if post.image %}

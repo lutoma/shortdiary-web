@@ -20,7 +20,7 @@
 		<a href='{% url "diary.views.show_post" post.id %}'>Permalink</a>
 	</aside>
 	
-	<article>{{ post.get_public_text|linebreaks }}</article>
+	<article>{{ post.get_public_text|urlize|linebreaks }}</article>
 
 	{% if post.image %}
 		<a href="{{ MEDIA_URL }}{{ post.image }}" target="_blank"><img itemprop="image" class="post-image" src="{{ MEDIA_URL }}{{ post.image }}" /></a>
