@@ -93,6 +93,10 @@
 				{% endfor %}
 
 				map.fitBounds(bounds);
+				
+				// Enforce minimum zoom level of 12
+				var zoom = map.getZoom();
+				map.setZoom(zoom > 12 ? 12 : zoom);
 			});
 		</script>
 	{% endif %}
