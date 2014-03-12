@@ -79,8 +79,6 @@
 				map = new google.maps.Map($("#map-canvas").get(0), map_options);
 				var bounds = new google.maps.LatLngBounds();
 				
-				var map = new google.maps.Map(mapElement, myOptions);
-				
 				// Enforce minimum zoom level of 12
 				// Has to be done using a callback since the map rendering is asynchronous
 				google.maps.event.addListenerOnce(map, 'zoom_changed', function() {
