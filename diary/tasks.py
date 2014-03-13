@@ -43,10 +43,10 @@ def update_leaderboard():
 	char_leaders = sorted(diary.models.DiaryUser.objects.all(), key = lambda t: t.get_post_characters(), reverse = True)[:10]
 	char_leaders = filter(lambda t: t.get_post_characters() > 1, posts_leaders)
 
-	avg_post_length_leaders = sorted(diary.models.DiaryUser.objects.all(),
+	avg_post_length_leaders = filter(lambda t: t.post_set.all().count() > 20, diary.models.DiaryUser.objects.all())
+	avg_post_length_leaders = sorted(avg_post_length_leaders,
 		key = lambda t: t.get_average_post_length(), reverse = True)[:10]
-	avg_post_length_leaders = filter(lambda t: t.post_set.all().count() > 20, avg_post_length_leaders)
-
+	
 	cache.set_many({
 		'leaderboard_streak_leaders': streak_leaders,
 		'leaderboard_posts_leaders': posts_leaders,
