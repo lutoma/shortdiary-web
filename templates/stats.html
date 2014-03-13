@@ -78,6 +78,17 @@
 
 				map = new google.maps.Map($("#map-canvas").get(0), map_options);
 				var bounds = new google.maps.LatLngBounds();
+				
+				// Enforce minimum zoom level of 12
+				// Has to be done using a callback since the map rendering is asynchronous
+				google.maps.event.addListenerOnce(map, 'zoom_changed', function() {
+					google.maps.event.addListener(map, 'bounds_changed', function(event) {
+						if (this.getZoom() > 12 && this.initialZoom == true) {
+							this.setZoom(12);
+							this.initialZoom = false;
+						}
+					});
+				});
 
 				{% for post in posts %}
 					{% if post.location_lat and post.location_lon %}
@@ -92,6 +103,7 @@
 					{% endif %}				
 				{% endfor %}
 
+				map.initialZoom = true;
 				map.fitBounds(bounds);
 			});
 		</script>
