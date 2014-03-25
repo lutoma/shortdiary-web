@@ -1,5 +1,5 @@
 {% load humanize %}
-Don't loose your streak, {{ user.username }}!
+Don't lose your streak, {{ user.username }}!
 
 I couldn't help but notice you haven't added a post for yesterday yet.
 
