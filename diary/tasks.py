@@ -11,6 +11,7 @@ from django.conf import settings
 from django.core.cache import cache
 from email_extras.utils import send_mail_template
 from django.contrib.humanize.templatetags.humanize import apnumber
+import hashlib, base64
 
 def process_mails(searched_date):
 	print('Sending mails for {0}…'.format(searched_date))
@@ -43,10 +44,10 @@ def update_leaderboard():
 	char_leaders = sorted(diary.models.DiaryUser.objects.all(), key = lambda t: t.get_post_characters(), reverse = True)[:10]
 	char_leaders = filter(lambda t: t.get_post_characters() > 1, posts_leaders)
 
-	avg_post_length_leaders = sorted(diary.models.DiaryUser.objects.all(),
+	avg_post_length_leaders = filter(lambda t: t.post_set.all().count() > 20, diary.models.DiaryUser.objects.all())
+	avg_post_length_leaders = sorted(avg_post_length_leaders,
 		key = lambda t: t.get_average_post_length(), reverse = True)[:10]
-	avg_post_length_leaders = filter(lambda t: t.get_average_post_length() > 1, posts_leaders)
-
+	
 	cache.set_many({
 		'leaderboard_streak_leaders': streak_leaders,
 		'leaderboard_posts_leaders': posts_leaders,
@@ -62,6 +63,9 @@ def update_streak(user):
 	lasting. Streak in this context means continous posts on following days
 	going backwards starting from today or yesterday or the day before.
 	"""
+
+	# It probably makes sense to move this function back to models.py
+
 	user_posts = diary.models.Post.objects.filter(author = user).order_by('-date')
 
 	if len(user_posts) == 0:
@@ -80,6 +84,15 @@ def update_streak(user):
 		streak += 1
 
 	return streak
+
+@task
+def async_update_streak(user):
+		cache_key = base64.b64encode('diary_{}_streak'.format(user.username))
+		streak = update_streak(user)
+
+		# Infinite lifetime since this is invalidated as soon as a new
+		# post is written by the user
+		cache.set(cache_key, streak, None)
 
 def send_reminder_mail(user):
 	"""

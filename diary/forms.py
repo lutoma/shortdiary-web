@@ -8,16 +8,6 @@ class PostForm(forms.ModelForm):
 		model = Post
 		fields = ('text', 'mood', 'date', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'part_of')
 
-	def clean_date(self):
-		date = self.cleaned_data["date"]
-		today = datetime.date.today()
-		delta = today - date
-		
-		if delta.days > 1:
-			raise forms.ValidationError(_("Invalid date. You can't go that far back."))
-
-		return date
-
 class SignUpForm(forms.ModelForm):
 	class Meta:
 		model = DiaryUser

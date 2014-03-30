@@ -63,33 +63,88 @@
 	});
 
 	</script>
+
+	{% if user.geolocation_enabled %}
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var map_options = {
+					zoom: 1,
+					center: new google.maps.LatLng(0, 0),
+					mapTypeId: google.maps.MapTypeId.ROADMAP,
+					streetViewControl: true,
+					mapTypeControl: true
+				}
+
+				map = new google.maps.Map($("#map-canvas").get(0), map_options);
+				var bounds = new google.maps.LatLngBounds();
+				
+				// Enforce minimum zoom level of 12
+				// Has to be done using a callback since the map rendering is asynchronous
+				google.maps.event.addListenerOnce(map, 'zoom_changed', function() {
+					google.maps.event.addListener(map, 'bounds_changed', function(event) {
+						if (this.getZoom() > 12 && this.initialZoom == true) {
+							this.setZoom(12);
+							this.initialZoom = false;
+						}
+					});
+				});
+
+				{% for post in posts %}
+					{% if post.location_lat and post.location_lon %}
+						
+						var marker = new google.maps.Marker({
+							position: new google.maps.LatLng({{ post.location_lat}}, {{ post.location_lon }}),
+							map: map,
+							animation: google.maps.Animation.DROP
+						});
+
+						bounds.extend(marker.position);
+					{% endif %}				
+				{% endfor %}
+
+				map.initialZoom = true;
+				map.fitBounds(bounds);
+			});
+		</script>
+	{% endif %}
 {% endblock %}
 
 {%block content %}
 	<p><a href='{%url "diary.views.leaderboard" %}'>Leaderboard</a></p>
 
-	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
-		<div style='padding-right: 20px'>
-			<h2>Your most popular locations</h2>
-			<table class="border alternate">
-				<tbody>
-					{% for location in top_locations %}
-							<tr>
-								<td style='width: 25px;'>
-									#{{ forloop.counter }}
-								</td>
-								<td>
-									{{ location.location_verbose }}
-								</td>
-								<td style='width: 170px;'>
-									{{ location.location_count }} posts
-								</td>
-							</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+	{% if user.geolocation_enabled %}
+		<div style='width: 50%; float: left; padding: 0; margin: 0; min-height: 400px;'>
+			<div style='padding-right: 20px'>
+				<h2>Your most popular locations</h2>
+				<table class="border alternate">
+					<tbody>
+						{% for location in top_locations %}
+								<tr>
+									<td style='width: 25px;'>
+										#{{ forloop.counter }}
+									</td>
+									<td>
+										{{ location.location_verbose }}
+									</td>
+									<td style='width: 170px;'>
+										{{ location.location_count }} posts
+									</td>
+								</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 		</div>
-	</div>
+
+		<div style="width: 50%; padding: 0; margin: 0; float: right; min-height: 400px;">
+			<div style='padding-right: 20px'>
+				<h2>Locations</h2>
+
+				<div id='map-canvas' style='height: 350px;'><i class='icon-spinner icon-spin'></i> Loading, please wait…</div>
+			</div>
+		</div>
+	{% endif %}
 
 	<br class='clear' />
 

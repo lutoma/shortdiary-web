@@ -43,13 +43,11 @@ class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
 
 class PostList(ListCreateAPIView):
 	"""
-	List your recent posts
+	List your posts
 	"""
 	serializer_class=PostSerializer
 	def get(self, request, format=None):
-		today = datetime.date.today()
-		weekago = today - datetime.timedelta(days=7)
-		posts = Post.objects.filter(author=request.user, date__gte=weekago).order_by("-date")
+		posts = Post.objects.filter(author=request.user).order_by("-date")
 		serializer = PostSerializer(posts, many=True)
 		return Response(serializer.data)
 
@@ -77,10 +75,7 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
 	serializer_class = PostSerializer
 
 	def get(self, request, *args, **kwargs):
-		today = datetime.date.today()
 		object = Post.objects.get(pk=kwargs["pk"])
-		if (today - object.date).days > 3:
-			return Response({"Error":_("This entry is too old to be viewed.")}, status=status.HTTP_400_BAD_REQUEST)
 		return super(PostDetail, self).get(request, *args, **kwargs)
 
 
@@ -127,7 +122,7 @@ class PublicPostDetail(APIView):
 	"""
 	def get(self, request, format=None):
 		try:
-			randompost = Post.objects.filter(author__userprofile__public = True).order_by('?')[:1].get()
+			randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
 			serializer = PublicPostSerializer(randompost)
 			return Response(serializer.data)
 		except Post.DoesNotExist:

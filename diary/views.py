@@ -164,24 +164,10 @@ def sign_up(request):
 		}
 		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
 
-	# Check invite code
-	try:
-		invite = Invite.objects.get(code = request.POST.get('invite_code', None))
-	except Invite.DoesNotExist:
-		context = {
-			'title': _('Sign up'),
-			'form': form,
-			'noinvite': True,
-		}
-		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
-
 	# Fixme
 	user = form.save()
 	user.set_password(request.POST.get('password', None))
-	user.invited_by = invite.generated_by
 	user.save()
-
-	invite.delete()
 
 	user.send_verification_mail()
 
@@ -253,17 +239,16 @@ def delete_post(request, post_id):
 
 @login_required
 def stats(request):
-	try:
-		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
-	except Post.DoesNotExist:
-		randompost = None
+	user_posts = Post.objects.filter(author = request.user).order_by('date')
+
+	if user_posts.count() < 1:
+		return render_to_response('stats_noposts.html', context_instance=RequestContext(request))
 
 	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:10]
 
 	context = {
 		'title': 'Stats',
-		'randompost': randompost,
-		'posts': Post.objects.filter(author = request.user).order_by('date'),
+		'posts': user_posts,
 		'top_locations': top_locations,
 	}
 	return render_to_response('stats.html', context_instance=RequestContext(request, context))
@@ -284,7 +269,7 @@ def leaderboard(request):
 		else:
 			tasks.update_leaderboard.delay()
 
-		return render_to_response('leaderboard_wait.html')
+		return render_to_response('leaderboard_wait.html', context_instance=RequestContext(request))
 
 	context = {
 		'title': 'Leaderboard',
@@ -296,3 +281,15 @@ def leaderboard(request):
 	}
 
 	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))
+
+def explore(request):
+	try:
+		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
+	except Post.DoesNotExist:
+		randompost = None
+
+	context = {
+		'title': 'Explore',
+		'post': randompost,
+	}
+	return render_to_response('explore.html', context_instance=RequestContext(request, context))
