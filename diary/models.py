@@ -9,6 +9,7 @@ from django.conf import settings
 from email_extras.utils import send_mail_template
 from django.db.models import Avg
 from django.core.cache import cache
+from django.dispatch import receiver
 import diary.tasks as tasks
 import hashlib, base64
 import datetime
@@ -177,8 +178,7 @@ class Post(models.Model):
 
 		return re.sub(r'(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9]+)', '***', self.text)
 
+@receiver(post_save, sender=Post)
+@receiver(post_delete, sender=Post)
 def update_streak_signal(sender, instance, **kwargs):
-	tasks.update_streak.delay(sender)
-
-post_save.connect(update_streak_signal, sender=Post, dispatch_uid="update_streak_signal")
-post_delete.connect(update_streak_signal, sender=Post, dispatch_uid="update_streak_signal")
+	tasks.async_update_streak.delay(instance.author)
