@@ -99,6 +99,8 @@ def send_reminder_mail(user):
 	Sends out the mail for this post
 	"""
 
+	print('Sending reminder mail to user {}'.format(user.username))
+
 	send_mail_template(
 		_('Don\'t loose your {0} day streak, {1}!').format(apnumber(user.get_streak()), user),
 		'reminder',
