@@ -45,5 +45,5 @@ django-email-extras
 django-oauth2-provider
 
 # Language detection
-language-guesser
+guess-language
 babel
