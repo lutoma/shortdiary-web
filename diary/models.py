@@ -187,5 +187,5 @@ def update_post_signal(sender, instance, **kwargs):
 
 	# Only run the post language guesser if other fields than the natural
 	# language were updated. Otherwise, this would result in recursion.
-	if not ('update_fields' in kwargs and kwargs['update_fields'] == ['natural_language']):
+	if not ('update_fields' in kwargs and kwargs['update_fields'] == frozenset(['natural_language'])):
 		tasks.guess_post_language.delay(instance)
