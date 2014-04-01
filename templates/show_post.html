@@ -66,6 +66,9 @@
 			This post is {% if post.public %}public{% else %}private{% endif %}.
 		{% endif %}
 
+		<div class='label first'><i class='icon-flag'></i>Language</div>
+		{{ language }}
+
 		<div class='label first'><i class='icon-upload'></i>Created</div>
 		{{ post.created_at }}
 
