@@ -180,6 +180,14 @@ class Post(models.Model):
 
 		return re.sub(r'(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9]+)', '***', self.text)
 
+	def uses_pgp(self):
+		"""
+		If this post makes use of PGP encryption (Used to exclude it from
+		language statistics and such)
+		"""
+
+		return '-BEGIN PGP MESSAGE-' in self.text
+
 @receiver(post_save, sender=Post)
 @receiver(post_delete, sender=Post)
 def update_post_signal(sender, instance, **kwargs):
