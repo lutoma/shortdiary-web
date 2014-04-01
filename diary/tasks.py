@@ -11,6 +11,7 @@ from django.conf import settings
 from django.core.cache import cache
 from email_extras.utils import send_mail_template
 from django.contrib.humanize.templatetags.humanize import apnumber
+from django.db.models import Count
 import hashlib, base64
 import guess_language
 
@@ -48,12 +49,16 @@ def update_leaderboard():
 	avg_post_length_leaders = filter(lambda t: t.post_set.all().count() > 20, diary.models.DiaryUser.objects.all())
 	avg_post_length_leaders = sorted(avg_post_length_leaders,
 		key = lambda t: t.get_average_post_length(), reverse = True)[:10]
+
+	popular_languages = Post.objects.values('natural_language').annotate(count=Count('natural_language'))
+	popular_languages = sorted(popular_languages, key = lambda t: t['count'], reverse = True)[:10]
 	
 	cache.set_many({
 		'leaderboard_streak_leaders': streak_leaders,
 		'leaderboard_posts_leaders': posts_leaders,
 		'leaderboard_char_leaders': char_leaders,
 		'leaderboard_avg_post_length_leaders': avg_post_length_leaders,
+		'leaderboard_popular_languages': popular_languages,
 		'leaderboard_last_update': datetime.datetime.now(),
 	})
 
