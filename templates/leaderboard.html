@@ -96,6 +96,29 @@
 		</div>
 	</div>
 	<br class='clear' />
+	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
+		<div style='padding-right: 20px'>
+			<h2>Popular languages</h2>
+			<table class="border alternate">
+				<tbody>
+					{% for language in popular_languages %}
+							<tr>
+								<td style='width: 25px;'>
+									#{{ forloop.counter }}
+								</td>
+								<td>
+									{{ language.name }}
+								</td>
+								<td style='width: 170px;'>
+									{{ language.count }} posts
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<br class='clear' />
 
 	<p><small>This page is regenerated every 5 minutes. Last update {{ last_update|naturaltime }}.</small></p>
 {% endblock %}
