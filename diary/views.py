@@ -295,12 +295,19 @@ def leaderboard(request):
 
 def explore(request):
 	try:
-		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
+		post = Post.objects.filter(public = True).order_by('?')[:1].get()
 	except Post.DoesNotExist:
-		randompost = None
+		post = None
+
+	verbose_language = _('Unknown')
+	if post.natural_language:
+		verbose_language = Locale(post.natural_language).get_display_name(get_language_from_request(request))
+	elif post.uses_pgp():
+		verbose_language = _('PGP encrypted')
 
 	context = {
 		'title': 'Explore',
-		'post': randompost,
+		'post': post,
+		'language': verbose_language,
 	}
-	return render_to_response('explore.html', context_instance=RequestContext(request, context))
+	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
