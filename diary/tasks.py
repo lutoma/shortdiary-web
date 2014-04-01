@@ -12,6 +12,7 @@ from django.core.cache import cache
 from email_extras.utils import send_mail_template
 from django.contrib.humanize.templatetags.humanize import apnumber
 import hashlib, base64
+import guess_language
 
 def process_mails(searched_date):
 	print('Sending mails for {0}…'.format(searched_date))
@@ -119,3 +120,12 @@ def send_reminder_mails():
 
 	map(send_reminder_mail, users)
 
+@task
+def guess_post_language(post):
+	guess = guess_language.guessLanguage(post.text)
+	
+	if guess == 'UNKNOWN':
+		return
+
+	post.natural_language = guess
+	post.save()

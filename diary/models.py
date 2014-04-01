@@ -103,6 +103,8 @@ class Post(models.Model):
 	location_lon = models.DecimalField(max_digits=16, decimal_places=12, blank = True, null = True, verbose_name = _('Location longitude'))
 	location_verbose = models.CharField(max_length = 400, blank = True, verbose_name = _('Location name'))
 
+	natural_language = models.CharField(max_length = 5, blank = True, null = True, verbose_name = _('Natural language'))
+
 	__unicode__ = lambda self: _('{0} at {1}').format(self.author, self.date)
 
 	class Meta:
@@ -180,5 +182,6 @@ class Post(models.Model):
 
 @receiver(post_save, sender=Post)
 @receiver(post_delete, sender=Post)
-def update_streak_signal(sender, instance, **kwargs):
+def update_post_signal(sender, instance, **kwargs):
 	tasks.async_update_streak.delay(instance.author)
+	tasks.guess_post_language.delay(instance)

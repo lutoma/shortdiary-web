@@ -10,7 +10,7 @@ class PostAdmin(admin.ModelAdmin):
 	# user data.
 
 	fieldsets = [
-		(None, {'fields': ['author', 'date', 'sent', 'public']}),
+		(None, {'fields': ['author', 'date', 'sent', 'public', 'natural_language']}),
 		(
 			_('Privacy section. Only open if absolutely needed (Mood, Text, Image)'),
 			{'fields': [
