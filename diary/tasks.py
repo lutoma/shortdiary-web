@@ -52,7 +52,7 @@ def update_leaderboard():
 		key = lambda t: t.get_average_post_length(), reverse = True)[:10]
 
 	popular_languages = diary.models.Post.objects.filter(natural_language__isnull = False)
-	popular_languages = popular_languages.values('natural_language', 'text').annotate(count=Count('natural_language'))
+	popular_languages = popular_languages.values('natural_language').annotate(count=Count('natural_language'))
 	popular_languages = sorted(popular_languages, key = lambda t: t['count'], reverse = True)[:10]
 	popular_languages = map(lambda l: dict(l.items() + [('name', Locale(l['natural_language']).get_display_name('en_US'))]), popular_languages)
 
