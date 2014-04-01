@@ -128,4 +128,7 @@ def guess_post_language(post):
 		return
 
 	post.natural_language = guess
-	post.save()
+
+	# This update_fields part here is crucial since this allows us to filter
+	# in the event to avoid recursion, so don't remove it!
+	post.save(update_fields=['natural_language'])

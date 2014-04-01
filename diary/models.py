@@ -184,4 +184,8 @@ class Post(models.Model):
 @receiver(post_delete, sender=Post)
 def update_post_signal(sender, instance, **kwargs):
 	tasks.async_update_streak.delay(instance.author)
-	tasks.guess_post_language.delay(instance)
+
+	# Only run the post language guesser if other fields than the natural
+	# language were updated. Otherwise, this would result in recursion.
+	if not ('update_fields' in kwargs and kwargs['update_fields'] == ['natural_language']):
+		tasks.guess_post_language.delay(instance)
