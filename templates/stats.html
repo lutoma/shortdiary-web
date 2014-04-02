@@ -111,12 +111,12 @@
 {% endblock %}
 
 {%block content %}
-	<p><a href='{%url "diary.views.leaderboard" %}'>Leaderboard</a></p>
+	<p><a href='{%url "diary.views.leaderboard" %}'>{% trans "Leaderboard" %}</a></p>
 
 	{% if user.geolocation_enabled %}
 		<div style='width: 50%; float: left; padding: 0; margin: 0; min-height: 400px;'>
 			<div style='padding-right: 20px'>
-				<h2>Your most popular locations</h2>
+				<h2>{% trans "Your most popular locations" %}</h2>
 				<table class="border alternate">
 					<tbody>
 						{% for location in top_locations %}
@@ -139,18 +139,18 @@
 
 		<div style="width: 50%; padding: 0; margin: 0; float: right; min-height: 400px;">
 			<div style='padding-right: 20px'>
-				<h2>Locations</h2>
+				<h2>{% trans "Locations" %}</h2>
 
-				<div id='map-canvas' style='height: 350px;'><i class='icon-spinner icon-spin'></i> Loading, please wait…</div>
+				<div id='map-canvas' style='height: 350px;'><i class='icon-spinner icon-spin'></i> {% trans "Loading, please wait…" %}</div>
 			</div>
 		</div>
 	{% endif %}
 
 	<br class='clear' />
 
-	<h2>Post length over time</h2>
-	<div id='post-length-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> Loading, please wait…</div>
+	<h2>{% trans "Post length over time" %}</h2>
+	<div id='post-length-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> {% trans "Loading, please wait…" %}</div>
 
-	<h2>Mood over time</h2>
-	<div id='post-mood-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> Loading, please wait…</div>
+	<h2>{% trans "Mood over time" %}</h2>
+	<div id='post-mood-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> {% trans "Loading, please wait…" %}</div>
 {% endblock %}

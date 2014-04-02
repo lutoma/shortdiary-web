@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {%block content %}
-	<h2>This leaderboard is so new, we're still playing with the bubble wrap.</h2>
-	<p>The data for the leaderboard is being generated as you read this. Try reloading in a few seconds and everything should be ready!</p>
+	<h2>{% trans "This leaderboard is so new, we're still playing with the bubble wrap." %}</h2>
+	<p>{% trans "The data for the leaderboard is being generated as you read this. Try reloading in a few seconds and everything should be ready!" %}</p>
 {% endblock %}

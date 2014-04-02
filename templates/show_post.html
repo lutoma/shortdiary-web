@@ -53,31 +53,31 @@
 {%block content %}
 	<aside>
 
-		<div class='label first'><i class='icon-calendar'></i>Date</div>
+		<div class='label first'><i class='icon-calendar'></i>{% trans "Date" %}</div>
 		<time pubdate datetime="{{ post.date|date:"Y-m-d" }}">{{ post.date }}</time>
 
 		{% if user.is_authenticated and user == post.author %}
-			<div class='label first'><i class='icon-thumbs-up'></i>Mood</div>
+			<div class='label first'><i class='icon-thumbs-up'></i>{% trans "Mood" %}</div>
 			{{ post.mood }} / 10
 		{% endif %}
 
 		{% if user.is_authenticated and user == post.author %}
-			<div class='label first'><i class='icon-shield'></i>Privacy</div>
-			This post is {% if post.public %}public{% else %}private{% endif %}.
+			<div class='label first'><i class='icon-shield'></i>{% trans "Privacy" %}</div>
+			{% trans "This post is" %} {% if post.public %}{% trans "public" %}{% else %}{% trans "private" %}{% endif %}.
 		{% endif %}
 
-		<div class='label first'><i class='icon-flag'></i>Language</div>
+		<div class='label first'><i class='icon-flag'></i>{% trans "Language" %}</div>
 		{{ language }}
 
-		<div class='label first'><i class='icon-upload'></i>Created</div>
+		<div class='label first'><i class='icon-upload'></i>{% trans "Created" %}</div>
 		{{ post.created_at }}
 
-		<div class='label first'><i class='icon-link'></i>Link</div>
-		<a href='{% url "diary.views.show_post" post.id %}'>Permalink</a>
+		<div class='label first'><i class='icon-link'></i>{% trans "Link" %}</div>
+		<a href='{% url "diary.views.show_post" post.id %}'>{% trans "Permalink" %}</a>
 
 		{% if post.location_lat and post.location_lon and post.location_verbose %}
-			<div class='label'><i class='icon-location-arrow'></i>Location: {{ post.location_verbose }}</div>
-			<div id="map-canvas"><i class='icon-spinner icon-spin'></i> Loading map…</div>
+			<div class='label'><i class='icon-location-arrow'></i>{% trans "Location: {{ post.location_verbose }}</div>
+			<div id="map-canvas"><i class='icon-spinner icon-spin'></i> {% trans "Loading map…" %}</div>
 		{% endif %}
 	</aside>
 	
