@@ -44,6 +44,7 @@ LANGUAGES = (
     ('en', 'English'),
     ('de', 'Deutsch'),
     ('sv', 'Svenska'),
+    ('eo', 'Esperanto'),
 )
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
