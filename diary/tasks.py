@@ -45,7 +45,7 @@ def update_leaderboard():
 	posts_leaders = filter(lambda t: t.post_set.all().count() > 1, posts_leaders)
 
 	char_leaders = sorted(diary.models.DiaryUser.objects.all(), key = lambda t: t.get_post_characters(), reverse = True)[:10]
-	char_leaders = filter(lambda t: t.get_post_characters() > 1, posts_leaders)
+	char_leaders = filter(lambda t: t.get_post_characters() > 1, char_leaders)
 
 	avg_post_length_leaders = filter(lambda t: t.post_set.all().count() > 20, diary.models.DiaryUser.objects.all())
 	avg_post_length_leaders = sorted(avg_post_length_leaders,
