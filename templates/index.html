@@ -10,27 +10,27 @@
 
 {%block content %}
 	{% if user.is_authenticated and not user.mail_verified %}
-		<p><b>Your email address is unverified</b>. Therefore, we won't be able to send you any mails, <i>including</i> your diary mails. Please check your inbox for the verification link.</p>
+		<p>{% trans "<b>Your email address is unverified</b>. Therefore, we won't be able to send you any mails, <i>including</i> your diary mails. Please check your inbox for the verification link." %}</p>
 	{% endif %}
 
-	<h2>Your activity</h2>
+	<h2>{% trans 'Your activity' %}</h2>
 	<div id='activity-calendar' class='border'>
 		<div class='activity-infobox'>
 			<span class='factoid'>{% if user.get_streak %}{{ user.get_streak|intcomma }}{% else %}0{% endif %}</span>
 
-			day posting streak
+			{% trans 'day posting streak' %}
 		</div>
 
 		<div class='activity-infobox'>
 			<span class='factoid'>{{ user.get_posts|length|intcomma }}</span>
 
-			total posts
+			{% trans 'total posts' %}
 		</div>
 
 		<div class='activity-infobox last'>
 			<span class='factoid'>{{ user.get_post_characters|intcomma }}</span>
 
-			total characters in posts
+			{% trans 'total characters in posts' %}
 		</div>
 
 		<hr class='clear'>
@@ -68,7 +68,7 @@
 									</tr>
 									<tr>
 										<td>
-											<a href='{% url "diary.views.show_post" post.id %}'><small style='font-size: .8em; font-weight: 300;'>Posted {{ post.created_at|naturaltime }}</small></a>
+											<a href='{% url "diary.views.show_post" post.id %}'><small style='font-size: .8em; font-weight: 300;'>{% trans 'Posted' context 'In front of post creation date' %} {{ post.created_at|naturaltime }}</small></a>
 										</td>
 									</tr>
 								</tbody>
@@ -83,5 +83,5 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<p><small>(You can view posts from the last 7 days and edit posts from the last 3 days).</small></p>
+	<p><small>{% trans '(You can view posts from the last 7 days and edit posts from the last 3 days).' %}</small></p>
 {% endblock %}
