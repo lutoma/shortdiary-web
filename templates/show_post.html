@@ -76,7 +76,7 @@
 		<a href='{% url "diary.views.show_post" post.id %}'>{% trans "Permalink" %}</a>
 
 		{% if post.location_lat and post.location_lon and post.location_verbose %}
-			<div class='label'><i class='icon-location-arrow'></i>{% trans "Location: {{ post.location_verbose }}</div>
+			<div class='label'><i class='icon-location-arrow'></i>{% trans "Location" %}: {{ post.location_verbose }}</div>
 			<div id="map-canvas"><i class='icon-spinner icon-spin'></i> {% trans "Loading map…" %}</div>
 		{% endif %}
 	</aside>
