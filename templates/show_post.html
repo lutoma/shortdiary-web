@@ -4,7 +4,7 @@
 {% load remove_newlines %}
 
 {% block headeradd %}
-	<meta name="description" content="{{ post.text|remove_newlines|truncatechars:200 }}" />
+	<meta name="description" content="{{ post.text|remove_newlines|truncatechars:200|escapejs }}" />
 	<meta property="og:title" content="Post #{{ post.id }} from {{ post.date }}">
 
 	{% if post.image %}
@@ -18,7 +18,7 @@
 	{% endif %}
 
 	<meta name="twitter:title" content="Post #{{ post.id }} from {{ post.date }}" />
-	<meta name="twitter:description" content="{{ post.text|remove_newlines|truncatechars:200 }}" />
+	<meta name="twitter:description" content="{{ post.text|remove_newlines|truncatechars:200|escapejs }}" />
 
 	{% if post.location_lat and post.location_lon and post.location_verbose %}
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true"></script>
