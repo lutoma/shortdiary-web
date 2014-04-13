@@ -294,10 +294,15 @@ def leaderboard(request):
 	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))
 
 def explore(request):
+	post_filters = {'public': True}
+
+	if 'lang' in request.GET:
+		post_filters['natural_language'] = request.GET.get('lang', '')
+
 	try:
-		post = Post.objects.filter(public = True).order_by('?')[:1].get()
+		post = Post.objects.filter(**post_filters).order_by('?')[:1].get()
 	except Post.DoesNotExist:
-		post = None
+		return render_to_response('explore_nosuchpost.html', context_instance=RequestContext(request))
 
 	verbose_language = _('Unknown')
 	if post.natural_language:
