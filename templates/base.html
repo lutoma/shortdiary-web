@@ -66,7 +66,7 @@
 							<li {% if request.path == '/posts/new/' %}class='active'{% endif %}><a href="/posts/new/">{% trans 'New post' %}</a></li>
 							<li {% if request.path == '/explore/' %}class='active'{% endif %}><a href="/explore/">{% trans 'Explore' %}</a></li>
 							<li {% if request.path == '/stats/' %}class='active'{% endif %}><a href="/stats/">{% trans 'Statistics' %}</a></li>
-							<li {% if request.path == '/invite/' %}class='active'{% endif %}><a href="/invite/">{% trans 'Invite someone' %}</a></li>
+							<li {% if request.path == '/stats/leaderboard/' %}class='active'{% endif %}><a href="/stats/leaderboard/">{% trans 'Leaderboard' %}</a></li>
 						{% else %}
 							<li {% if request.path == '/accounts/login/' %}class='active'{% endif %}><a href="/accounts/login/">{% trans 'Log in' %}</a></li>
 							<li {% if request.path == '/accounts/signup/' %}class='active'{% endif %}><a href="/accounts/signup/">{% trans 'Sign up' %}</a></li>
