@@ -123,7 +123,7 @@
 			<h2>{% trans "Popular locations" %}</h2>
 			<table class="border alternate">
 				<tbody>
-					{% for location popular_locations %}
+					{% for location in popular_locations %}
 							<tr>
 								<td style='width: 25px;'>
 									#{{ forloop.counter }}
