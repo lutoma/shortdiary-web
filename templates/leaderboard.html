@@ -118,6 +118,29 @@
 			</table>
 		</div>
 	</div>
+	<div style="width: 50%; padding: 0; margin: 0; float: right;">
+		<div style='padding-left: 20px'>
+			<h2>{% trans "Popular locations" %}</h2>
+			<table class="border alternate">
+				<tbody>
+					{% for location popular_locations %}
+							<tr>
+								<td style='width: 25px;'>
+									#{{ forloop.counter }}
+								</td>
+								<td>
+									{{ location.location_verbose }}
+								</td>
+								<td style='width: 170px;'>
+									{{ location.count }} {% trans "posts" %}
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
 	<br class='clear' />
 
 	<p><small>{% trans "This page is regenerated every 5 minutes. Last update " %} {{ last_update|naturaltime }}.</small></p>

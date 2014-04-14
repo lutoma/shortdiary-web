@@ -56,12 +56,18 @@ def update_leaderboard():
 	popular_languages = sorted(popular_languages, key = lambda t: t['count'], reverse = True)[:10]
 	popular_languages = map(lambda l: dict(l.items() + [('name', Locale(l['natural_language']).get_display_name('en_US'))]), popular_languages)
 
+	popular_locations = diary.models.Post.objects.filter(location_verbose__isnull = False)
+	popular_locations = popular_locations.values('location_verbose').annotate(count=Count('location_verbose'))
+	popular_locations = filter(lambda t: len(t['location_verbose']) > 0, popular_locations)
+	popular_locations = sorted(popular_locations, key = lambda t: t['count'], reverse = True)[:10]
+
 	cache.set_many({
 		'leaderboard_streak_leaders': streak_leaders,
 		'leaderboard_posts_leaders': posts_leaders,
 		'leaderboard_char_leaders': char_leaders,
 		'leaderboard_avg_post_length_leaders': avg_post_length_leaders,
 		'leaderboard_popular_languages': popular_languages,
+		'leaderboard_popular_locations': popular_locations,
 		'leaderboard_last_update': datetime.datetime.now(),
 	})
 
