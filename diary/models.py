@@ -10,6 +10,7 @@ from email_extras.utils import send_mail_template
 from django.db.models import Avg
 from django.core.cache import cache
 from django.dispatch import receiver
+from collections import Counter
 import diary.tasks as tasks
 import hashlib, base64
 import datetime
@@ -80,6 +81,17 @@ class DiaryUser(AbstractUser):
 			return 0
 
 		return self.get_post_characters() / own_posts
+
+	def get_mention_toplist(self):
+		'''
+		Returns the most frequently mentioned nicknames of this user
+		'''
+
+		names = map(lambda post: post.get_mentions(), self.get_posts())
+		names = reduce(lambda names, name: names + name, names)
+		names = map(lambda name: name[1:].lower(), names)
+		return Counter(names).most_common()
+
 
 class Post(models.Model):
 	"""
