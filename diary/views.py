@@ -259,7 +259,7 @@ def stats(request):
 		'title': 'Stats',
 		'posts': user_posts,
 		'top_locations': top_locations,
-		'top_mentions': request.user.get_mention_toplist(),
+		'top_mentions': request.user.get_mention_toplist()[:10],
 	}
 	return render_to_response('stats.html', context_instance=RequestContext(request, context))
 
