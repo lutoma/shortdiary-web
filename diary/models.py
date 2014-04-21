@@ -178,7 +178,7 @@ class Post(models.Model):
 		The public version of this post's text (i.e. with all names replaced)
 		"""
 
-		return re.sub(r'(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9]+)', '***', self.text)
+		return re.sub(r'(?<= )@[^ ]+', '***', self.text)
 
 	def uses_pgp(self):
 		"""
