@@ -86,6 +86,8 @@ class Post(models.Model):
 	A diary post
 	"""
 
+	MENTION_REGEX = re.compile(r'(?<= )@[^ ]+')
+
 	author = models.ForeignKey(DiaryUser, verbose_name = _('author'))
 	date = models.DateField(verbose_name = ('date'))
 	text = models.TextField(max_length = 350, verbose_name = _('text'))
@@ -173,12 +175,19 @@ class Post(models.Model):
 		#if self.image:
 		#	message.attach_file(os.path.split(self.image.path))
 
+	def get_mentions(self):
+		'''
+		Get list of people mentioned in this post
+		'''
+
+		return self.MENTION_REGEX.findall(self.text)
+
 	def get_public_text(self):
 		"""
 		The public version of this post's text (i.e. with all names replaced)
 		"""
 
-		return re.sub(r'(?<= )@[^ ]+', '***', self.text)
+		return self.MENTION_REGEX.sub('***', self.text)
 
 	def uses_pgp(self):
 		"""
