@@ -86,7 +86,7 @@ class Post(models.Model):
 	A diary post
 	"""
 
-	MENTION_REGEX = re.compile(r'(?<= )@[^ ]+')
+	MENTION_REGEX = re.compile(r'(?<= )@[^ \r\n\.\?\!:;…‽⸮"«“]+')
 
 	author = models.ForeignKey(DiaryUser, verbose_name = _('author'))
 	date = models.DateField(verbose_name = ('date'))
