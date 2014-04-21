@@ -19,7 +19,7 @@ pytz>dev
 django-gravatar2
 
 # HTML minifying
-#django-htmlmin
+django-htmlmin
 
 # AJAX & API
 djangorestframework

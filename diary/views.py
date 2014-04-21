@@ -270,6 +270,7 @@ def leaderboard(request):
 			'leaderboard_avg_post_length_leaders',
 			'leaderboard_last_update',
 			'leaderboard_popular_languages',
+			'leaderboard_popular_locations',
 	])
 
 	if(len(leaders) < 5):
@@ -288,6 +289,7 @@ def leaderboard(request):
 		'chars_leaders': leaders['leaderboard_char_leaders'],
 		'avg_post_length_leaders': leaders['leaderboard_avg_post_length_leaders'],
 		'popular_languages': leaders['leaderboard_popular_languages'],
+		'popular_locations': leaders['leaderboard_popular_locations'],
 		'last_update': leaders['leaderboard_last_update'],
 	}
 
