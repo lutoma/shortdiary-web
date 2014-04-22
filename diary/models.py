@@ -199,7 +199,7 @@ class Post(models.Model):
 		The public version of this post's text (i.e. with all names replaced)
 		"""
 
-		return self.MENTION_REGEX.sub(u'***', self.text)
+		return self.MENTION_REGEX.sub(u'███', self.text)
 
 	def uses_pgp(self):
 		"""
