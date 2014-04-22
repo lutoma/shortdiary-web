@@ -98,7 +98,7 @@ class Post(models.Model):
 	A diary post
 	"""
 
-	MENTION_REGEX = re.compile(r'(?<= )@[^ \r\n\.\?\!:;…‽⸮"«»“,\']+')
+	MENTION_REGEX = re.compile(r'@\w+', re.UNICODE)
 
 	author = models.ForeignKey(DiaryUser, verbose_name = _('author'))
 	date = models.DateField(verbose_name = ('date'))
@@ -199,7 +199,7 @@ class Post(models.Model):
 		The public version of this post's text (i.e. with all names replaced)
 		"""
 
-		return self.MENTION_REGEX.sub('***', self.text)
+		return self.MENTION_REGEX.sub(u'***', self.text)
 
 	def uses_pgp(self):
 		"""
