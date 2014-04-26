@@ -13,8 +13,9 @@ seconds: https://shortdiary.me/posts/new/
 
 By the way – Since you visited us last, quite a lot has changed:
 
-  * Per post privacy – Instead of having to set your whole account to
-    private or public, you can now do that on a per-post basis!
+  * Individual privacy settings for each post – Instead of having to set your
+    whole account to private or public, you can now do that on a per-post
+    basis!
 
   * Post locations – You can now add locations to your posts and get
     statistics based on them.
