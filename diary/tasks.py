@@ -149,3 +149,19 @@ def guess_post_language(post):
 	# This update_fields part here is crucial since this allows us to filter
 	# in the event to avoid recursion, so don't remove it!
 	post.save(update_fields=['natural_language'])
+
+@task
+def send_inactivity_retention_mail(user):
+	"""
+	Sends out a 'we haven't seen you in a while' mail
+	"""
+
+	print('Sending haventseenyou mail to user {}'.format(user.username))
+
+	send_mail_template(
+		_('Hi there, haven\'t seen you in a while!').format(apnumber(user.get_streak()), user),
+		'haventseenyou',
+		'Shortdiary <yourfriends@shortdiary.me>',
+		['{0} <{1}>'.format(user.username, user.email)],
+		context = {'user': user}
+	)
