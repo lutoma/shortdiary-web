@@ -167,15 +167,20 @@ def send_inactivity_retention_mail(user):
 		context = {'user': user}
 	)
 
+def get_users_for_timeframe(**kwargs):
+	filter_time = datetime.datetime.now() - datetime.timedelta(**kwargs)
+	users = diary.models.DiaryUser.objects.filter(last_seen_at__gte = filter_time)
+	return '\n'.join(map(lambda u: u.username, users))
+
 @periodic_task(run_every = crontab(hour="0", minute="0", day_of_week="*"))
 def send_active_users_overview():
 	'''
 	Sends simple stats of current active users to managers
 	'''
 
-	active_24h = '\n'.join(map(lambda u: u.username, diary.models.DiaryUser.objects.filter(last_seen_at__gte = datetime.now() - timedelta(hours = 24))))
-	active_7d = '\n'.join(map(lambda u: u.username, diary.models.DiaryUser.objects.filter(last_seen_at__gte = datetime.now() - timedelta(days = 7))))
-	active_30d = '\n'.join(map(lambda u: u.username, diary.models.DiaryUser.objects.filter(last_seen_at__gte = datetime.now() - timedelta(days = 30))))
+	active_24h = get_users_for_timeframe(hours = 24)
+	active_7d = get_users_for_timeframe(days = 7)
+	active_30d = get_users_for_timeframe(days = 30)
 
 
 	message = '''
