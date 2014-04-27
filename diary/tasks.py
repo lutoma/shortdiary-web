@@ -9,6 +9,7 @@ import diary.models
 from django.template.loader import get_template, Context
 from django.conf import settings
 from django.core.cache import cache
+from django.core.mail import mail_managers
 from email_extras.utils import send_mail_template
 from django.contrib.humanize.templatetags.humanize import apnumber
 from django.db.models import Count
@@ -165,3 +166,32 @@ def send_inactivity_retention_mail(user):
 		['{0} <{1}>'.format(user.username, user.email)],
 		context = {'user': user}
 	)
+
+@periodic_task(run_every = crontab(hour="0", minute="0", day_of_week="*"))
+def send_active_users_overview():
+	'''
+	Sends simple stats of current active users to managers
+	'''
+
+	active_24h = '\n'.join(map(lambda u: u.username, diary.models.DiaryUser.objects.filter(last_seen_at__gte = datetime.now() - timedelta(hours = 24))))
+	active_7d = '\n'.join(map(lambda u: u.username, diary.models.DiaryUser.objects.filter(last_seen_at__gte = datetime.now() - timedelta(days = 7))))
+	active_30d = '\n'.join(map(lambda u: u.username, diary.models.DiaryUser.objects.filter(last_seen_at__gte = datetime.now() - timedelta(days = 30))))
+
+
+	message = '''
+	Current active shortdiary users:
+
+	Last 24 hours:
+
+	{}
+
+	Last 7 days:
+
+	{}
+
+	Last 30 days:
+
+	{}
+	'''.format(active_24h, active_7d, active_30d)
+
+	mail_managers('Current active users statistics', message)
