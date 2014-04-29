@@ -13,7 +13,7 @@ from django.dispatch import receiver
 from collections import Counter
 import diary.tasks as tasks
 import hashlib, base64
-from babel import Locale
+import babel
 import datetime
 import gnupg
 import re
@@ -215,7 +215,7 @@ class Post(models.Model):
 
 		if self.natural_language:
 			try:
-				verbose_language = Locale(self.natural_language).get_display_name(locale)
+				verbose_language = babel.Locale(self.natural_language).get_display_name(locale)
 			except babel.UnknownLocaleError:
 				pass
 		elif self.uses_pgp():
