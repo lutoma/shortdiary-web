@@ -15,7 +15,6 @@ from django.contrib.humanize.templatetags.humanize import apnumber
 from django.db.models import Count
 import hashlib, base64
 import guess_language
-from babel import Locale
 
 def process_mails(searched_date):
 	print('Sending mails for {0}…'.format(searched_date))
@@ -53,12 +52,12 @@ def update_leaderboard():
 		key = lambda t: t.get_average_post_length(), reverse = True)[:10]
 
 	popular_languages = diary.models.Post.objects.filter(natural_language__isnull = False)
-	popular_languages = popular_languages.values('natural_language').annotate(count=Count('natural_language'))
-	popular_languages = sorted(popular_languages, key = lambda t: t['count'], reverse = True)[:10]
-	popular_languages = map(lambda l: dict(l.items() + [('name', Locale(l['natural_language']).get_display_name('en_US'))]), popular_languages)
+	popular_languages = popular_languages.annotate(count = Count('natural_language'))
+	popular_languages = sorted(popular_languages, key = lambda t: t.count, reverse = True)[:10]
+	popular_languages = map(lambda l: {'count': l.count, 'name': l.get_language_name()}, popular_languages)
 
 	popular_locations = diary.models.Post.objects.filter(location_verbose__isnull = False)
-	popular_locations = popular_locations.values('location_verbose').annotate(count=Count('location_verbose'))
+	popular_locations = popular_locations.values('location_verbose').annotate(count = Count('location_verbose'))
 	popular_locations = filter(lambda t: len(t['location_verbose']) > 0, popular_locations)
 	popular_locations = sorted(popular_locations, key = lambda t: t['count'], reverse = True)[:10]
 
