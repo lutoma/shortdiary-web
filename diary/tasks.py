@@ -9,6 +9,7 @@ import diary.models
 from django.template.loader import get_template, Context
 from django.conf import settings
 from django.core.cache import cache
+from django.core.mail import mail_managers
 from email_extras.utils import send_mail_template
 from django.contrib.humanize.templatetags.humanize import apnumber
 from django.db.models import Count
@@ -148,3 +149,53 @@ def guess_post_language(post):
 	# This update_fields part here is crucial since this allows us to filter
 	# in the event to avoid recursion, so don't remove it!
 	post.save(update_fields=['natural_language'])
+
+@task
+def send_inactivity_retention_mail(user):
+	"""
+	Sends out a 'we haven't seen you in a while' mail
+	"""
+
+	print('Sending haventseenyou mail to user {}'.format(user.username))
+
+	send_mail_template(
+		_('Hi there, haven\'t seen you in a while!').format(apnumber(user.get_streak()), user),
+		'haventseenyou',
+		'Shortdiary <yourfriends@shortdiary.me>',
+		['{0} <{1}>'.format(user.username, user.email)],
+		context = {'user': user}
+	)
+
+def get_users_for_timeframe(**kwargs):
+	filter_time = datetime.datetime.now() - datetime.timedelta(**kwargs)
+	users = diary.models.DiaryUser.objects.filter(last_seen_at__gte = filter_time)
+	return '\n'.join(map(lambda u: u.username, users))
+
+@periodic_task(run_every = crontab(hour="0", minute="0", day_of_week="*"))
+def send_active_users_overview():
+	'''
+	Sends simple stats of current active users to managers
+	'''
+
+	active_24h = get_users_for_timeframe(hours = 24)
+	active_7d = get_users_for_timeframe(days = 7)
+	active_30d = get_users_for_timeframe(days = 30)
+
+
+	message = '''
+	Current active shortdiary users:
+
+	Last 24 hours:
+
+	{}
+
+	Last 7 days:
+
+	{}
+
+	Last 30 days:
+
+	{}
+	'''.format(active_24h, active_7d, active_30d)
+
+	mail_managers('Current active users statistics', message)

@@ -19,7 +19,7 @@ api_patterns= format_suffix_patterns(patterns('',
 	url(r'^posts/$', PostList.as_view(), name="api-post-list"),
  	url(r'^posts/(?P<pk>\d+)/$', PostDetail.as_view(), name='api-post-detail'),
  	url(r'^posts/year_ago/$', PostYearAgo.as_view(), name='api-post-yearago'),
- 	url(r'^public/$', PublicPostDetail.as_view(), name='api-public-post'),
+ 	url(r'^posts/random_public/$', PublicPostDetail.as_view(), name='api-public-post'),
 	url(r'^profile$', ProfileDetail.as_view(), name='api-profile-detail'),
 ), allowed=["json", "html"])
 
