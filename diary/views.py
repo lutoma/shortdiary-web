@@ -20,7 +20,6 @@ from django.conf import settings
 import diary.tasks as tasks
 from django.db.models import Q, Count
 from django.utils.translation import get_language_from_request
-from babel import Locale
 
 def index(request):
 	try:
@@ -134,16 +133,10 @@ def show_post(request, post_id):
 		
 		return render_to_response('not_public.html', context_instance=RequestContext(request, context))
 
-	verbose_language = _('Unknown')
-	if post.natural_language:
-		verbose_language = Locale(post.natural_language).get_display_name(get_language_from_request(request))
-	elif post.uses_pgp():
-		verbose_language = _('PGP encrypted')
-
 	context = {
 		'post': post,
 		'title': _('Post #{} from {}').format(post.id, post.date),
-		'language': verbose_language
+		'language': post.get_language_name(locale = get_language_from_request(request))
 	}
 
 	if post.author == request.user:
@@ -307,15 +300,9 @@ def explore(request):
 	except Post.DoesNotExist:
 		return render_to_response('explore_nosuchpost.html', context_instance=RequestContext(request))
 
-	verbose_language = _('Unknown')
-	if post.natural_language:
-		verbose_language = Locale(post.natural_language).get_display_name(get_language_from_request(request))
-	elif post.uses_pgp():
-		verbose_language = _('PGP encrypted')
-
 	context = {
 		'title': 'Explore',
 		'post': post,
-		'language': verbose_language,
+		'language': post.get_language_name(locale = get_language_from_request(request)),
 	}
 	return render_to_response('show_post.html', context_instance=RequestContext(request, context))

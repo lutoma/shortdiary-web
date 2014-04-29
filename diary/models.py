@@ -13,6 +13,7 @@ from django.dispatch import receiver
 from collections import Counter
 import diary.tasks as tasks
 import hashlib, base64
+from babel import Locale
 import datetime
 import gnupg
 import re
@@ -208,6 +209,19 @@ class Post(models.Model):
 		"""
 
 		return '-BEGIN PGP MESSAGE-' in self.text
+
+	def get_language_name(self, locale = 'en_US'):
+		verbose_language = _('Unknown')
+
+		if self.natural_language:
+			try:
+				verbose_language = Locale(self.natural_language).get_display_name(locale)
+			except babel.UnknownLocaleError:
+				pass
+		elif self.uses_pgp():
+			verbose_language = _('PGP encrypted')
+
+		return verbose_language
 
 @receiver(post_save, sender=Post)
 @receiver(post_delete, sender=Post)
