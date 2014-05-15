@@ -183,7 +183,7 @@
 									{{ location.location_verbose }}
 								</td>
 								<td style='width: 170px;'>
-									{{ location.mood_avg }} {% trans "avg. mood" %}
+									{{ location.mood_avg|floatformat:2 }} {% trans "avg. mood" %}
 								</td>
 							</tr>
 					{% endfor %}
