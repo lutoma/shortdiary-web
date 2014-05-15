@@ -18,7 +18,7 @@ from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from django.conf import settings
 import diary.tasks as tasks
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Avg
 from django.utils.translation import get_language_from_request
 
 def index(request):
@@ -248,11 +248,14 @@ def stats(request):
 
 	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:10]
 
+	top_mood_locations = request.user.get_posts().filter(~Q(location_verbose = '')).annotate(mood_avg = Avg('mood')).values('location_verbose', 'mood_avg').annotate(location_count=Count('location_verbose')).filter(location_count__gte = 3).order_by('-mood_avg').values('location_verbose', 'mood_avg')[:10]
+
 	context = {
 		'title': 'Stats',
 		'posts': user_posts,
 		'top_locations': top_locations,
 		'top_mentions': request.user.get_mention_toplist()[:10],
+		'top_mood_locations': top_mood_locations,
 	}
 	return render_to_response('stats.html', context_instance=RequestContext(request, context))
 
