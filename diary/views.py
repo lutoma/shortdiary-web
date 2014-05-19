@@ -310,6 +310,7 @@ def explore(request):
 	}
 	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
 
+@login_required
 def search(request):
 	query = request.GET.get('q', '')
 	posts = request.user.get_posts().filter(text__icontains = query)
