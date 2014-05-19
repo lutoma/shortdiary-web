@@ -155,7 +155,7 @@
 									#{{ forloop.counter }}
 								</td>
 								<td>
-									{{ name.0 }}
+									<a href='{% url 'diary.views.search' %}?q=@{{ name.0|urlencode }}'>{{ name.0 }}</a>
 								</td>
 								<td style='width: 170px;'>
 									{{ name.1 }} {% trans "mentions" %}
