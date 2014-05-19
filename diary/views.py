@@ -312,7 +312,8 @@ def explore(request):
 
 def search(request):
 	query = request.GET.get('q', '')
-	posts = request.user.get_posts().filter(text__contains = query)
+	posts = request.user.get_posts().filter(text__icontains = query)
+	posts.order_by('-date')
 
 	context = {
 		'title': 'Search',
