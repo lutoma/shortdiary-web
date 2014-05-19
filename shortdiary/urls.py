@@ -59,6 +59,8 @@ urlpatterns += patterns('',
 
 	url(r'^explore/$', 'diary.views.explore'),
 
+	url(r'^search/$', 'diary.views.search'),
+
 	url(r'^email/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', 'diary.views.mail_verify'),
 
 	url(r'^/?$', 'diary.views.index'),

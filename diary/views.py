@@ -306,3 +306,13 @@ def explore(request):
 		'language': post.get_language_name(locale = get_language_from_request(request)),
 	}
 	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
+
+def search(request):
+	query = request.GET.get('q', '')
+	posts = request.user.get_posts().filter(text__contains = query)
+
+	context = {
+		'title': 'Search',
+		'posts': posts,
+	}
+	return render_to_response('search_results.html', context_instance=RequestContext(request, context))
