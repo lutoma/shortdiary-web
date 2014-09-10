@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load i18n %} 
+{% load l10n %} 
+{% load humanize %}
+{% load staticfiles %}
+
+{% block headeradd %}
+	<script src='{% static "js/index.js" %}'></script>
+	<script src='{% static "js/handlebars-v1.3.0.js" %}'></script>
+	<script src="{% static "js/timeline.js" %}"></script>
+
+	<link href="{% static "css/timeline.css" %}" rel="stylesheet" />
+{% endblock %}
+
+{%block content %}
+	<div id='timeline-stage'>
+		<div style='text-align: center; margin-top: 100px'>
+			<i style='font-size: 40px; ' class='icon-spinner icon-spin'></i>
+			<h1 style='font-size: 35px;'>Loading, please stand by…</h1>
+		</div>
+	</div>
+
+	<script id="timeline-main" type="text/x-handlebars-template">
+		<aside id='timeline-aside'>
+			<hr />
+
+			{% if user.get_streak %}{{ user.get_streak|intcomma }}{% else %}0{% endif %}
+
+				day posting streak
+
+			<hr />
+
+			{{ user.get_posts|length|intcomma }}
+
+				total posts
+
+			<hr />
+
+			{{ user.get_post_characters|intcomma }}
+
+				total characters in posts
+
+			<hr />
+			<ul id='timeline-datepicker'>
+				{% verbatim %}
+					{{#each timegroups}}
+						<li {{#if @first}}class='active'{{/if}}><a href='#' data-scrollto='{{@key}}'>{{@key}}</a></li>
+					{{/each}}
+				{% endverbatim %}
+			</ul>
+		</aside>
+
+		{% verbatim %}
+			{{#each timegroups}}
+				<h2 id='timegroup-{{@key}}'>{{@key}}</h2>
+				{{#each this}}
+					<!--<h3 id='timegroup-m-{{this.id}}'>{{@key}}</h3>-->
+					<div class='timeline'>
+						{{#each this}}
+							<div class='timeline-box'>
+								<div class='timeline-details'>
+									Posted  {{ this.date }} from {{ this.location_verbose }}
+								</div>
+								
+								<p>{{ this.text }}</p>
+							</div>
+						{{/each}}
+					</div>
+				{{/each}}
+			{{/each}}
+		{% endverbatim %}
+	</script>
+{% endblock %}

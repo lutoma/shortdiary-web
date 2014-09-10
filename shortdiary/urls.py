@@ -64,6 +64,7 @@ urlpatterns += patterns('',
 
 	url(r'^email/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', 'diary.views.mail_verify'),
 
+	url(r'^db2/$', TemplateView.as_view(template_name = 'db2.html'), name = 'db2'),
 	url(r'^/?$', 'diary.views.index'),
 
 	url(r'^api/v1/', include(api_patterns)),
