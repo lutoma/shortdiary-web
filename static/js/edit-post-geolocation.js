@@ -28,7 +28,7 @@ function location_callback(position) {
 			if(value['types'][0] != 'locality')
 				return;
 
-			$('#post-location-info').html('Location: ' + value['formatted_address']);
+			$('#post-location-info').html(t_location + ': ' + value['formatted_address']);
 			$('input[name=location_verbose]').val(value['formatted_address'])
 		});
 	});

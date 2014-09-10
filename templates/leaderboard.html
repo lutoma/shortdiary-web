@@ -8,7 +8,7 @@
 {%block content %}
 	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
 		<div style='padding-right: 20px'>
-			<h2>Number of posts</h2>
+			<h2>{% trans "Number of posts" %}</h2>
 			<table class="border alternate">
 				<tbody>
 					{% for user in posts_leaders %}
@@ -20,7 +20,7 @@
 									{{ user.username }}
 								</td>
 								<td style='width: 170px;'>
-									{{ user.post_set.all|length }} posts
+									{{ user.post_set.all|length }} {% trans "posts" %}
 								</td>
 							</tr>
 					{% endfor %}
@@ -30,7 +30,7 @@
 	</div>
 	<div style="width: 50%; padding: 0; margin: 0; float: right;">
 		<div style='padding-left: 20px'>
-			<h2>Longest streak</h2>
+			<h2>{% trans "Longest streak" %}</h2>
 			<table class="border alternate">
 				<tbody>
 					{% for user in streak_leaders %}
@@ -42,7 +42,7 @@
 									{{ user.username }}
 								</td>
 								<td style='width: 170px;'>
-									{{ user.get_streak }} days
+									{{ user.get_streak }} {% trans "days" %}
 								</td>
 							</tr>
 					{% endfor %}
@@ -53,7 +53,7 @@
 	<br class='clear' />
 	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
 		<div style='padding-right: 20px'>
-			<h2>Most characters</h2>
+			<h2>{% trans "Most characters" %}</h2>
 			<table class="border alternate">
 				<tbody>
 					{% for user in chars_leaders %}
@@ -65,7 +65,7 @@
 									{{ user.username }}
 								</td>
 								<td style='width: 170px;'>
-									{{ user.get_post_characters|intcomma }} characters
+									{{ user.get_post_characters|intcomma }} {% trans "characters" %}
 								</td>
 							</tr>
 					{% endfor %}
@@ -75,7 +75,7 @@
 	</div>
 	<div style="width: 50%; padding: 0; margin: 0; float: right;">
 		<div style='padding-left: 20px'>
-			<h2>Average post length</h2>
+			<h2>{% trans "Average post length" %}</h2>
 			<table class="border alternate">
 				<tbody>
 					{% for user in avg_post_length_leaders %}
@@ -87,7 +87,7 @@
 									{{ user.username }}
 								</td>
 								<td style='width: 170px;'>
-									{{ user.get_average_post_length }} characters
+									{{ user.get_average_post_length }} {% trans "characters" %}
 								</td>
 							</tr>
 					{% endfor %}
@@ -96,6 +96,52 @@
 		</div>
 	</div>
 	<br class='clear' />
+	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
+		<div style='padding-right: 20px'>
+			<h2>{% trans "Popular languages" %}</h2>
+			<table class="border alternate">
+				<tbody>
+					{% for language in popular_languages %}
+							<tr>
+								<td style='width: 25px;'>
+									#{{ forloop.counter }}
+								</td>
+								<td>
+									{{ language.name }}
+								</td>
+								<td style='width: 170px;'>
+									{{ language.count }} {% trans "posts" %}
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div style="width: 50%; padding: 0; margin: 0; float: right;">
+		<div style='padding-left: 20px'>
+			<h2>{% trans "Popular locations" %}</h2>
+			<table class="border alternate">
+				<tbody>
+					{% for location in popular_locations %}
+							<tr>
+								<td style='width: 25px;'>
+									#{{ forloop.counter }}
+								</td>
+								<td>
+									{{ location.location_verbose }}
+								</td>
+								<td style='width: 170px;'>
+									{{ location.count }} {% trans "posts" %}
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 
-	<p><small>This page is regenerated every 5 minutes. Last update {{ last_update|naturaltime }}.</small></p>
+	<br class='clear' />
+
+	<p><small>{% trans "This page is regenerated every 5 minutes. Last update " %} {{ last_update|naturaltime }}.</small></p>
 {% endblock %}

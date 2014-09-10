@@ -4,11 +4,7 @@
 
 {%block content %}
 	<h2>{% trans 'Hosting &amp; Data security' %}</h2>
-	<p>{% blocktrans %}Shortdiary is hosted at <a href='https://hetzner.de/'>Hetzner</a> in Germany on infrastructure provided by the <a href='https://ohai.su/'>ohai.su</a> project, a non-profit that aims to improve the web by providing open services. Your data never leaves the European Union (Unless, of course, you access shortdiary from outside the EU).{% endblocktrans %}</p>
-
 	<p>{% blocktrans %}All communication betweeten you and us is encrypted, if possible. All web pages under shortdiary.me automatically redirect to their SSL counterpart. We also use <a href='https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security'>HTTP Strict Transport Security (HSTS)</a> to make sure your browser always uses SSL when browsing shortdiary.me, so that even if somebody overtakes your local network, they won't be able to spoof shortdiary. <!--In Google Chrome, shortdiary.me is included in a hard-coded list of domains that are only to be accessed using SSL.-->All emails from us are sent using TLS encryption if your server supports it (Google Mail and most other large providers do).{% endblocktrans %}</p>
-
-	<p>{% blocktrans %}Access to the shortdiary servers is limited to two persons: Lukas himself and <a href='https://twitter.com/prauscher'>Patrick Rauscher</a>, who is part of the ohai.su team.{% endblocktrans %}</p>
 
 	<h2>{% trans 'Contact' %}</h2>
 	<p>

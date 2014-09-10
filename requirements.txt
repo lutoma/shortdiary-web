@@ -19,7 +19,7 @@ pytz>dev
 django-gravatar2
 
 # HTML minifying
-#django-htmlmin
+django-htmlmin
 
 # AJAX & API
 djangorestframework
@@ -43,3 +43,7 @@ django-email-extras
 
 # API authentication
 django-oauth2-provider
+
+# Language detection
+guess-language
+babel

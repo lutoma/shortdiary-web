@@ -10,8 +10,10 @@ from email_extras.utils import send_mail_template
 from django.db.models import Avg
 from django.core.cache import cache
 from django.dispatch import receiver
+from collections import Counter
 import diary.tasks as tasks
 import hashlib, base64
+import babel
 import datetime
 import gnupg
 import re
@@ -81,10 +83,23 @@ class DiaryUser(AbstractUser):
 
 		return self.get_post_characters() / own_posts
 
+	def get_mention_toplist(self):
+		'''
+		Returns the most frequently mentioned nicknames of this user
+		'''
+
+		names = map(lambda post: post.get_mentions(), self.get_posts())
+		names = reduce(lambda names, name: names + name, names)
+		names = map(lambda name: name[1:].lower(), names)
+		return Counter(names).most_common()
+
+
 class Post(models.Model):
 	"""
 	A diary post
 	"""
+
+	MENTION_REGEX = re.compile(r'@\w+', re.UNICODE)
 
 	author = models.ForeignKey(DiaryUser, verbose_name = _('author'))
 	date = models.DateField(verbose_name = ('date'))
@@ -102,6 +117,8 @@ class Post(models.Model):
 	location_lat = models.DecimalField(max_digits=16, decimal_places=12, blank = True, null = True, verbose_name = _('Location latitude'))
 	location_lon = models.DecimalField(max_digits=16, decimal_places=12, blank = True, null = True, verbose_name = _('Location longitude'))
 	location_verbose = models.CharField(max_length = 400, blank = True, verbose_name = _('Location name'))
+
+	natural_language = models.CharField(max_length = 5, blank = True, null = True, verbose_name = _('Natural language'))
 
 	__unicode__ = lambda self: _('{0} at {1}').format(self.author, self.date)
 
@@ -171,14 +188,47 @@ class Post(models.Model):
 		#if self.image:
 		#	message.attach_file(os.path.split(self.image.path))
 
+	def get_mentions(self):
+		'''
+		Get list of people mentioned in this post
+		'''
+
+		return self.MENTION_REGEX.findall(self.text)
+
 	def get_public_text(self):
 		"""
 		The public version of this post's text (i.e. with all names replaced)
 		"""
 
-		return re.sub(r'(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9]+)', '***', self.text)
+		return self.MENTION_REGEX.sub(u'███', self.text)
+
+	def uses_pgp(self):
+		"""
+		If this post makes use of PGP encryption (Used to exclude it from
+		language statistics and such)
+		"""
+
+		return '-BEGIN PGP MESSAGE-' in self.text
+
+	def get_language_name(self, locale = 'en_US'):
+		verbose_language = _('Unknown')
+
+		if self.natural_language:
+			try:
+				verbose_language = babel.Locale(self.natural_language).get_display_name(locale)
+			except babel.UnknownLocaleError:
+				pass
+		elif self.uses_pgp():
+			verbose_language = _('PGP encrypted')
+
+		return verbose_language
 
 @receiver(post_save, sender=Post)
 @receiver(post_delete, sender=Post)
-def update_streak_signal(sender, instance, **kwargs):
+def update_post_signal(sender, instance, **kwargs):
 	tasks.async_update_streak.delay(instance.author)
+
+	# Only run the post language guesser if other fields than the natural
+	# language were updated. Otherwise, this would result in recursion.
+	if not ('update_fields' in kwargs and kwargs['update_fields'] == frozenset(['natural_language'])):
+		tasks.guess_post_language.delay(instance)

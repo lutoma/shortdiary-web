@@ -18,7 +18,8 @@ from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from django.conf import settings
 import diary.tasks as tasks
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Avg
+from django.utils.translation import get_language_from_request
 
 def index(request):
 	try:
@@ -135,6 +136,7 @@ def show_post(request, post_id):
 	context = {
 		'post': post,
 		'title': _('Post #{} from {}').format(post.id, post.date),
+		'language': post.get_language_name(locale = get_language_from_request(request))
 	}
 
 	if post.author == request.user:
@@ -246,10 +248,14 @@ def stats(request):
 
 	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:10]
 
+	top_mood_locations = request.user.get_posts().filter(~Q(location_verbose = '')).annotate(mood_avg = Avg('mood')).values('location_verbose', 'mood_avg').annotate(location_count=Count('location_verbose')).filter(location_count__gte = 3).order_by('-mood_avg').values('location_verbose', 'mood_avg')[:10]
+
 	context = {
 		'title': 'Stats',
 		'posts': user_posts,
 		'top_locations': top_locations,
+		'top_mentions': request.user.get_mention_toplist()[:10],
+		'top_mood_locations': top_mood_locations,
 	}
 	return render_to_response('stats.html', context_instance=RequestContext(request, context))
 
@@ -260,6 +266,8 @@ def leaderboard(request):
 			'leaderboard_char_leaders',
 			'leaderboard_avg_post_length_leaders',
 			'leaderboard_last_update',
+			'leaderboard_popular_languages',
+			'leaderboard_popular_locations',
 	])
 
 	if(len(leaders) < 5):
@@ -277,19 +285,39 @@ def leaderboard(request):
 		'posts_leaders': leaders['leaderboard_posts_leaders'],
 		'chars_leaders': leaders['leaderboard_char_leaders'],
 		'avg_post_length_leaders': leaders['leaderboard_avg_post_length_leaders'],
+		'popular_languages': leaders['leaderboard_popular_languages'],
+		'popular_locations': leaders['leaderboard_popular_locations'],
 		'last_update': leaders['leaderboard_last_update'],
 	}
 
 	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))
 
 def explore(request):
+	post_filters = {'public': True}
+
+	if 'lang' in request.GET:
+		post_filters['natural_language'] = request.GET.get('lang', '')
+
 	try:
-		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
+		post = Post.objects.filter(**post_filters).order_by('?')[:1].get()
 	except Post.DoesNotExist:
-		randompost = None
+		return render_to_response('explore_nosuchpost.html', context_instance=RequestContext(request))
 
 	context = {
 		'title': 'Explore',
-		'post': randompost,
+		'post': post,
+		'language': post.get_language_name(locale = get_language_from_request(request)),
 	}
-	return render_to_response('explore.html', context_instance=RequestContext(request, context))
+	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
+
+@login_required
+def search(request):
+	query = request.GET.get('q', '')
+	posts = request.user.get_posts().filter(text__icontains = query)
+	posts.order_by('-date')
+
+	context = {
+		'title': 'Search',
+		'posts': posts,
+	}
+	return render_to_response('search_results.html', context_instance=RequestContext(request, context))

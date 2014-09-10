@@ -1,0 +1,43 @@
+Hi {{ user.username }}!
+
+Back a while ago, you were using shortdiary. However, we noticed you
+haven't added any entries lately :(.
+
+Hopefully you have at least kept some other form of diary since then! If
+not, here's a bunch of reasons to remind you why you should, shortdiary or not!
+
+http://www.lifehack.org/articles/lifehack/journal-writing-5-smart-reasons-why-you-should-start-doing-today.html
+
+So, why not create a diary entry right now? It's going to take only five
+seconds: https://shortdiary.me/posts/new/
+
+By the way – Since you visited us last, quite a lot has changed:
+
+  * Individual privacy settings for each post – Instead of having to set your
+    whole account to private or public, you can now do that on a per-post
+    basis!
+
+  * Post locations – You can now add locations to your posts and get
+    statistics based on them.
+
+  * Mentioning people – You can now @mention people in your posts, whose
+    names will be hidden if the post is public. You also get a list of
+    who you mention the most!
+
+  * Streaks – See how long you are able to post continually in a row.
+    The current record is 251 days, so get postin'!
+
+  * Leaderboard & global statistics – Stats only on yourself are boring.
+    That's why shortdiary now has global stats, including most popular
+    cities and more.
+
+We're also always super curious about your feedback. Just hit the reply
+button in your mail client to send an email to a human!
+
+Kindly yours,
+    the friendly shortdiary robot
+
+-- 
+You received this mail because you signed up on shortdiary. If you don't
+wish to receive these emails anymore, log in to your shortdiary account
+<https://shortdiary.me/accounts/login> and change your email preferences.

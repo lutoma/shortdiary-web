@@ -1,10 +1,11 @@
 body {
-	font-family: Exo, 'Exo', sans-serif;
+	font-family: 'Exo 2', 'Exo', sans-serif;
 	color: #313131;
 	background: #ffffff;
 	margin: 0;
 	padding: 0;
 	font-size: 18px;
+	font-weight: 400;
 	line-height: 1.7;
 	min-width: 980px;
 }

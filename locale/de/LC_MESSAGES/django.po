@@ -7,15 +7,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: shortdiary 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-11 13:16-0800\n"
+"POT-Creation-Date: 2014-04-02 15:05+0200\n"
 "PO-Revision-Date: 2013-02-11 22:39+0100\n"
 "Last-Translator: Lukas Martini <hello@lutoma.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.4\n"
+
+#: api/serializers.py:48
+msgid "Invalid date. You can't go that far back."
+msgstr ""
+
+#: api/serializers.py:51
+msgid "Invalid date. There already is a post for this date"
+msgstr ""
+
+#: api/views.py:86 api/views.py:93
+msgid "This entry is too old and can't be edited"
+msgstr ""
+
+#: api/views.py:100
+msgid "This entry is to old and can't be edited"
+msgstr ""
 
 #: diary/admin.py:15
 msgid "Privacy section. Only open if absolutely needed (Mood, Text, Image)"
@@ -23,133 +40,146 @@ msgstr ""
 "Privatsphärebereich. Nur öffnen wenn unbedingt notwendig (Stimmung, Text, "
 "Bild)"
 
-#: diary/models.py:18
-msgid "public"
-msgstr "öffentlich"
-
-#: diary/models.py:19
+#: diary/models.py:24
 msgid "invited by"
-msgstr "eingeladen durch"
+msgstr "eingeladen von"
 
-#: diary/models.py:20
+#: diary/models.py:25
 msgid "invites left"
-msgstr "Invites übrig"
+msgstr "Einladungen übrig"
 
-#: diary/models.py:21
+#: diary/models.py:26
 msgid "last seen at"
 msgstr "Zuletzt gesehen am"
 
-#: diary/models.py:22
+#: diary/models.py:27
 msgid "email verified?"
 msgstr "E-Mail verifiziert?"
 
-#: diary/models.py:23
+#: diary/models.py:28
 msgid "language"
 msgstr "Sprache"
 
-#: diary/models.py:28
-msgid "user profile"
-msgstr "Benutzerprofil"
-
 #: diary/models.py:29
-msgid "user profiles"
-msgstr "Benutzerprofile"
+msgid "Post location enabled"
+msgstr ""
 
 #: diary/models.py:36
+#, python-brace-format
 msgid "Please verify your email address on shortdiary, {0}"
 msgstr "Bitte verifiziere deine E-Mail Adresse auf shortdiary, {0}"
 
-#: diary/models.py:54
+#: diary/models.py:89
 msgid "author"
 msgstr "Autor"
 
-#: diary/models.py:56
+#: diary/models.py:91
 msgid "text"
 msgstr "Text"
 
-#: diary/models.py:57
+#: diary/models.py:92
 msgid "mood"
 msgstr "Stimmung"
 
-#: diary/models.py:58
+#: diary/models.py:93
 msgid "image"
 msgstr "Bild"
 
-#: diary/models.py:60
+#: diary/models.py:94 templates/show_post.html:66
+msgid "public"
+msgstr "öffentlich"
+
+#: diary/models.py:95
+msgid "part of"
+msgstr "Teil von"
+
+#: diary/models.py:97
 msgid "created at"
 msgstr "Angelegt am"
 
-#: diary/models.py:61
+#: diary/models.py:98
 msgid "last changed at"
 msgstr "Zuletzt geändert am"
 
-#: diary/models.py:63
+#: diary/models.py:100
 msgid "mail sent?"
 msgstr "Mail gesendet?"
 
-#: diary/models.py:65
+#: diary/models.py:102
 msgid "Location latitude"
 msgstr ""
 
-#: diary/models.py:66
+#: diary/models.py:103
 msgid "Location longitude"
 msgstr ""
 
-#: diary/models.py:67
+#: diary/models.py:104
 msgid "Location name"
 msgstr ""
 
-#: diary/models.py:69
+#: diary/models.py:106
+msgid "Natural language"
+msgstr "Sprache"
+
+#: diary/models.py:108
+#, python-brace-format
 msgid "{0} at {1}"
 msgstr "{0} am {1}"
 
-#: diary/models.py:72 templates/show_post.html:10
+#: diary/models.py:111
 msgid "post"
 msgstr "Eintrag"
 
-#: diary/models.py:73
+#: diary/models.py:112 templates/leaderboard.html:23
+#: templates/leaderboard.html.py:113
 msgid "posts"
 msgstr "Einträge"
 
-#: diary/tasks.py:34
-msgid "Your shortdiary post from {0}"
-msgstr "Dein shortdiary-Eintrag vom {0}"
+#: diary/models.py:163
+#, python-brace-format
+msgid "A chunk of your past - Here's what you did last year ({0})!"
+msgstr ""
+"Ein Teil deiner Vergangenheit – Das hier hast du letztes Jahr getan ({0})!"
 
-#: diary/views.py:21
-msgid "Terms of service"
-msgstr "Nutzungsbedingungen"
+#: diary/tasks.py:114
+#, python-brace-format
+msgid "Don't loose your {0} day streak, {1}!"
+msgstr ""
 
-#: diary/views.py:26
-msgid "About shortdiary"
-msgstr "Über shortdiary"
-
-#: diary/views.py:37
-msgid "Welcome to shortdiary"
-msgstr "Willkommen bei shortdiary"
-
-#: diary/views.py:90
+#: diary/views.py:81
 msgid "Edit post"
-msgstr "EPost bearbeiten"
+msgstr "Post bearbeiten"
 
-#: diary/views.py:90 diary/views.py:103 templates/base.html:44
+#: diary/views.py:81 diary/views.py:94 templates/base.html:66
 msgid "New post"
 msgstr "Neuer Eintrag"
 
-#: diary/views.py:134
+#: diary/views.py:132
+msgid "Sorry! :("
+msgstr "Sorry! :("
+
+#: diary/views.py:137 diary/views.py:302
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: diary/views.py:141 diary/views.py:306
+msgid "PGP encrypted"
+msgstr "PGP-Verschlüsselt"
+
+#: diary/views.py:145
+msgid "Post #{} from {}"
+msgstr "Eintrag vom {0}"
+
+#: diary/views.py:150
 msgid "Your post #{}"
 msgstr "Dein Post #{}"
 
-#: diary/views.py:151 diary/views.py:160 diary/views.py:170
-#: templates/base.html:48
+#: diary/views.py:162 diary/views.py:171 templates/base.html:72
 msgid "Sign up"
 msgstr "Registrieren"
 
-#: diary/views.py:202 diary/views.py:218
-msgid "Login"
-msgstr "Anmelden"
-
-#: diary/views.py:242 diary/views.py:252 diary/views.py:271
-#: templates/base.html:59
+#: diary/views.py:201 diary/views.py:211 diary/views.py:227
+#: templates/base.html:78
 msgid "Account settings"
 msgstr "Accounteinstellungen"
 
@@ -181,52 +211,15 @@ msgstr "Inviterequest"
 msgid "invite requests"
 msgstr "Inviterequests"
 
-#: inviteman/views.py:62
+#: inviteman/views.py:59
 msgid "You've been invited to join shortdiary by {}"
 msgstr "{} hat dich zu shortdiary eingeladen"
 
 #: templates/about.html:6
-msgid "The team"
-msgstr "Das Team"
-
-#: templates/about.html:11
-msgid ""
-"Stephan is probably best described as strategist or concept developer. He's "
-"the guy who comes up with all the ideas. He does the conception of the "
-"service and originally thought up the idea that led to shortdiary. You'll "
-"probably see him fiddling some roadmap or pondering of a great new feature."
-msgstr ""
-
-#: templates/about.html:13
-msgid ""
-"You can follow Stephan on <a href='https://twitter.com/herrurbach'>twitter</"
-"a> or visit his <a href='http://stephanurbach.de/'>homepage</a>"
-msgstr ""
-"Du kannst Stephan auf <a href='https://twitter.com/herrurbach'>Twitter</a> "
-"folgen oder seine <a href='http://stephanurbach.de/'>Homepage</a> besuchen"
-
-#: templates/about.html:19
-msgid ""
-"Lukas is responsible for the technical side of shortdiary. He wrote all of "
-"the code and takes care of our servers. The design is also his fault. You'll "
-"probably see him thinking about some tricky code issue or sitting between "
-"piles of hard drives."
-msgstr ""
-
-#: templates/about.html:21
-msgid ""
-"You can follow Lukas on <a href='https://twitter.com/lutoma'>twitter</a> or "
-"<a href='https://github.com/lutoma'>github</a> and visit his <a "
-"href='https://lutoma.org'>homepage</a>. Or you could <a href='https://"
-"facebook.com/lutoma'>subscribe to his posts on Facebook</a>, if that's more "
-"of your thing."
-msgstr ""
-
-#: templates/about.html:26
 msgid "Hosting &amp; Data security"
 msgstr "Hosting & Datensicherheit"
 
-#: templates/about.html:27
+#: templates/about.html:7
 msgid ""
 "Shortdiary is hosted at <a href='https://hetzner.de/'>Hetzner</a> in Germany "
 "on infrastructure provided by the <a href='https://ohai.su/'>ohai.su</a> "
@@ -235,7 +228,7 @@ msgid ""
 "access shortdiary from outside the EU)."
 msgstr ""
 
-#: templates/about.html:29
+#: templates/about.html:9
 msgid ""
 "All communication betweeten you and us is encrypted, if possible. All web "
 "pages under shortdiary.me automatically redirect to their SSL counterpart. "
@@ -249,25 +242,18 @@ msgid ""
 "most other large providers do)."
 msgstr ""
 
-#: templates/about.html:31
+#: templates/about.html:11
 msgid ""
 "Access to the shortdiary servers is limited to two persons: Lukas himself "
 "and <a href='https://twitter.com/prauscher'>Patrick Rauscher</a>, who is "
 "part of the ohai.su team."
 msgstr ""
 
-#: templates/about.html:33
-msgid ""
-"Oh, and by the way: If you want to review the source code, feel free to! "
-"It's <a href='https://github.com/shortdiary/shortdiary'>open and on GitHub</"
-"a>."
-msgstr ""
-
-#: templates/about.html:36
+#: templates/about.html:13
 msgid "Contact"
 msgstr "Kontakt"
 
-#: templates/about.html:38
+#: templates/about.html:15
 msgid ""
 "In case you have questions or complaints, you can always contact us via "
 "email:"
@@ -275,29 +261,21 @@ msgstr ""
 "Falls du Fragen oder Beschwerden hast, kannst du uns jederzeit via E-mail "
 "kontaktieren:"
 
-#: templates/about.html:41
-msgid ""
-"(Please don't send bug reports via email, but instead <a href='https://"
-"github.com/shortdiary/shortdiary/issues/new'>post them</a> in the <a "
-"href='https://github.com/shortdiary/shortdiary/issues'>GitHub repository</"
-"a>. Thanks!)"
-msgstr ""
-
-#: templates/about.html:43
+#: templates/about.html:19 templates/frontpage.html:42
 msgid "Imprint"
 msgstr "Impressum"
 
-#: templates/about.html:44
+#: templates/about.html:20
 msgid ""
 "(This is only relevant for german law, which requires every website to "
 "provide name and address of the responsible person)."
 msgstr " "
 
-#: templates/about.html:51
+#: templates/about.html:27
 msgid "Germany"
 msgstr "Deutschland"
 
-#: templates/account_settings.html:6 templates/edit_post.html:42
+#: templates/account_settings.html:6 templates/edit_post.html:74
 #: templates/invite.html:16 templates/sign_up.html:6
 msgid "There were some errors :(. Please correct them and try again."
 msgstr ""
@@ -308,81 +286,108 @@ msgstr ""
 msgid "Your changes have been saved!"
 msgstr "Deine Änderungen wurden gespeichert!"
 
-#: templates/account_settings.html:13
-msgid ""
-"You can change most of your account settings here <small>(Hint: You can "
-"change your avatar at <a href=\"https://gravatar.com/\">gravatar.com</a>)</"
-"small>."
-msgstr ""
+#: templates/account_settings.html:20
+msgid "Email address"
+msgstr "E-Mail-Adresse"
 
-#: templates/account_settings.html:19
-msgid "Status"
-msgstr "Status"
+#: templates/account_settings.html:24
+msgid "Add location to posts"
+msgstr "Ort zu Einträgen hinzufügen"
 
-#: templates/account_settings.html:21
-msgid "Verified"
-msgstr "Verifiziert"
-
-#: templates/account_settings.html:23
-msgid "Unverified"
-msgstr "Unverifiziert"
-
-#: templates/account_settings.html:26
+#: templates/account_settings.html:31
 msgid ""
 "<strong>Caution:</strong> If you change your email address, you won't "
 "receive any mails until you've verified the new address, so be sure to do "
 "that quickly!"
 msgstr ""
+"<strong>Vorsicht:</strong> Falls du deine E-Mail-Adresse änderst, wirst du "
+"keinerlei Mails mehr bekommen bis du deine neue Adresse verifiziert hast, "
+"also beeile dich damit!"
 
-#: templates/account_settings.html:30
-msgid "New password (or leave empty)"
-msgstr "Neues Passwort (Oder leer lassen)"
+#: templates/account_settings.html:32
+msgid "Current status"
+msgstr "Aktueller Status"
 
-#: templates/account_settings.html:33
-msgid "Public account?"
-msgstr "Öffentlicher Account?"
+#: templates/account_settings.html:34
+msgid "Verified"
+msgstr "Verifiziert"
 
-#: templates/account_settings.html:37 templates/sign_up.html:26
+#: templates/account_settings.html:36
+msgid "Unverified"
+msgstr "Unverifiziert"
+
+#: templates/account_settings.html:40
+#: templates/registration/password_change_form.html:24
+#: templates/registration/password_reset_confirm.html:15
+msgid "Change my password"
+msgstr "Mein Passwort ändern"
+
+#: templates/account_settings.html:43
 msgid "submit"
 msgstr "Abschicken"
 
-#: templates/base.html:45
-msgid "Invite someone"
-msgstr "Lade jemanden ein"
+#: templates/base.html:65
+msgid "Home"
+msgstr "Home"
 
-#: templates/base.html:47 templates/login.html:15
+#: templates/base.html:67
+msgid "Explore"
+msgstr "Erkunden"
+
+#: templates/base.html:68
+msgid "Statistics"
+msgstr "Statistiken"
+
+#: templates/base.html:69
+msgid "Invite someone"
+msgstr "Jemanden einladen"
+
+#: templates/base.html:71 templates/login.html:18
 msgid "Log in"
 msgstr "Einloggen"
 
-#: templates/base.html:51
-msgid "Blog"
-msgstr "Blog"
-
-#: templates/base.html:60
+#: templates/base.html:79
 msgid "Sign out"
 msgstr "Abmelden"
 
-#: templates/base.html:73
+#: templates/base.html:92
 msgid "No content to show :("
 msgstr "Nichts anzuzeigen :("
 
-#: templates/base.html:78
+#: templates/base.html:98 templates/frontpage.html:42
 msgid "TOS"
 msgstr "Nutzungsbedingungen"
 
-#: templates/base.html:78
-msgid "About, Security &amp; Imprint"
-msgstr ""
+#: templates/base.html:98
+msgid "Security &amp; Imprint"
+msgstr "Sicherheit &amp; Impressum"
 
-#: templates/base.html:78
-msgid "Report bug"
-msgstr "Fehler melden"
-
-#: templates/base.html:81
+#: templates/base.html:101
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/edit_post.html:35
+#: templates/edit_post.html:14 templates/edit_post.html.py:102
+msgid "Location"
+msgstr "Ort"
+
+#: templates/edit_post.html:15 templates/edit_post.html.py:111
+msgid "sentences"
+msgstr "Sätze"
+
+#: templates/edit_post.html:16 templates/edit_post.html.py:111
+msgid "words"
+msgstr "Wörter"
+
+#: templates/edit_post.html:17 templates/edit_post.html.py:111
+#: templates/leaderboard.html:68 templates/leaderboard.html.py:90
+msgid "characters"
+msgstr "Buchstaben"
+
+#: templates/edit_post.html:18
+msgid "Wow, what an eventful day!"
+msgstr "Wow, was für ein aufregender Tag!"
+
+#: templates/edit_post.html:67
 msgid ""
 "You've already written posts for today and yesterday. Good work! "
 "Unfortunately, this also means you can't write any more new posts today :(. "
@@ -392,54 +397,100 @@ msgstr ""
 "heißt das auch, dass du heute keine weiteren Einträge anlegen kannst :(. "
 "Versuch es morgen noch einmal!"
 
-#: templates/edit_post.html:53
+#: templates/edit_post.html:85 templates/show_post.html:56
+msgid "Date"
+msgstr "Datum"
+
+#: templates/edit_post.html:88
 msgid "yesterday"
 msgstr "Gestern"
 
-#: templates/edit_post.html:54
+#: templates/edit_post.html:89
 msgid "today"
 msgstr "Heute"
 
-#: templates/edit_post.html:72
-msgid "Enter your text here (Max. 350 chars)"
-msgstr "Gib hier deinen Text ein (Max. 350 Zeichen)"
+#: templates/edit_post.html:98 templates/show_post.html:60
+msgid "Mood"
+msgstr "Stimmung"
 
-#: templates/edit_post.html:87
-#, fuzzy
-msgid "Submit"
-msgstr "Abschicken"
-
-#: templates/frontpage.html:14
+#: templates/edit_post.html:107
 msgid ""
-"shortdiary lets you revisit your past, think of all the great things you "
-"have done and all those still on your to do list."
+"<em>Hint</em>: If you prefix a name with an at sign like this: @Joe, it will "
+"be hidden in public posts."
 msgstr ""
-"Shortdiary lässt dich deine Vergangenheit Revue passieren, dich über all die "
-"tollen Dinge nachdenken die du getan hast und all die, die du noch machen "
-"willst."
+"<em>Tipp</em>: Wenn du ein At-Zeichen vor einen Namen setzt (Wie hier: @Joe) "
+"wird dieser in öffentlichen Posts versteckt."
 
-#: templates/frontpage.html:32 templates/index.html:66
-msgid "Random public post"
-msgstr "Zufälliger öffentlicher Eintrag"
+#: templates/edit_post.html:113
+msgctxt "In front of part of input field on new post page"
+msgid "This is part of "
+msgstr "Teil von"
 
-#: templates/index.html:12
-msgid "Welcome back, "
-msgstr "Willkommen zurück, "
+#: templates/edit_post.html:113
+msgid ""
+"e.g. Trip to San Francisco, Comic Con, Weekend with Tom, Mountain Expedition"
+msgstr ""
+"z.B. Ausflug nach San Francisco, Comic Con, Wochenende mit Tom, "
+"Bergexpedition"
 
-#: templates/index.html:25
+#: templates/edit_post.html:118
+msgid "<strong>Click</strong> to upload image"
+msgstr "<strong>Klicken</strong> um ein Bild hochzuladen"
+
+#: templates/edit_post.html:135
+msgid "Save as private post"
+msgstr "Als privaten Post speichern"
+
+#: templates/edit_post.html:139
+msgid "Save as public post"
+msgstr "Als öffentlichen Eintrag speichern"
+
+#: templates/index.html:13
+msgid ""
+"<b>Your email address is unverified</b>. Therefore, we won't be able to send "
+"you any mails, <i>including</i> your diary mails. Please check your inbox "
+"for the verification link."
+msgstr ""
+"<b>Deine E-Mail-Adresse ist nicht verifiziert</b>. Darum werden wir dir "
+"keine E-Mails senden können, <i>inklusive</i> deiner Tagebucheinträge. Bitte "
+"überprüfe dein Mailpostfach für den Verifikationslink."
+
+#: templates/index.html:16
+msgid "Your activity"
+msgstr "Deine Aktivität"
+
+#: templates/index.html:21
+msgid "day posting streak"
+msgstr "Tage Streak"
+
+#: templates/index.html:27
+msgid "total posts"
+msgstr "Einträge insgesamt"
+
+#: templates/index.html:33
+msgid "total characters in posts"
+msgstr "Buchstaben in Einträgen"
+
+#: templates/index.html:48
 msgid "Recent posts"
-msgstr "Kürzliche Einträge"
+msgstr "Letzte Einträge"
 
-#: templates/index.html:26
+#: templates/index.html:49
 msgid "Add post"
-msgstr "Eintrag hinzufügen"
+msgstr "Neuer Eintrag"
 
-#: templates/index.html:59
-#, fuzzy
-msgid "No posts to show – Try <a href=\"/posts/new/\">adding a new post</a>!"
+#: templates/index.html:71
+msgctxt "In front of post creation date"
+msgid "Posted"
+msgstr "Angelegt"
+
+#: templates/index.html:86
+msgid ""
+"(You can view posts from the last 7 days and edit posts from the last 3 "
+"days)."
 msgstr ""
-"Keine Einträge anzuzeigen – Lege <a href=\"/post/new/\">deinen ersten "
-"Eintrag an</a>!"
+"(Du kannst Einträge aus den letzten 7 Tagen sehen und Einträge der letzten 3 "
+"Tage bearbeiten)."
 
 #: templates/invite.html:6
 msgid ""
@@ -462,55 +513,114 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/login.html:6
+#: templates/leaderboard.html:11
+msgid "Number of posts"
+msgstr "Anzahl Einträge"
+
+#: templates/leaderboard.html:33
+msgid "Longest streak"
+msgstr "Längster Streak"
+
+#: templates/leaderboard.html:45
+msgid "days"
+msgstr "Tage"
+
+#: templates/leaderboard.html:56
+msgid "Most characters"
+msgstr "Meiste Buchstaben"
+
+#: templates/leaderboard.html:78
+msgid "Average post length"
+msgstr "Durchschnittliche Eintragslänge"
+
+#: templates/leaderboard.html:101
+msgid "Popular languages"
+msgstr "Beliebte Sprachen"
+
+#: templates/leaderboard.html:123
+msgid "This page is regenerated every 5 minutes. Last update "
+msgstr "Diese Seite wird alle 5 Minuten neugeneriert. Letzte Aktualisierung "
+
+#: templates/leaderboard_wait.html:4
+msgid "This leaderboard is so new, we're still playing with the bubble wrap."
+msgstr "Diese Rangliste ist so neu, wir spielen noch mit der Verpackung."
+
+#: templates/leaderboard_wait.html:5
+msgid ""
+"The data for the leaderboard is being generated as you read this. Try "
+"reloading in a few seconds and everything should be ready!"
+msgstr "Die Daten für die Rangliste werden in diesem Moment generiert. Versuche, die Seite in ein paar Sekunden neuzuladen und alles sollte bereit sein!"
+
+#: templates/login.html:9
 msgid "Your username and password didn't match. Please try again."
 msgstr ""
 "Dein Benutzername und Passwort haben nicht gepasst. Bitte versuche es noch "
 "einmal."
 
-#: templates/login.html:12
-msgid "Username"
-msgstr "Benutzername"
+#: templates/show_post.html:65
+msgid "Privacy"
+msgstr "Öffentlichkeit"
 
-#: templates/login.html:13
-msgid "Password"
-msgstr "Passwort"
+#: templates/show_post.html:66
+msgid "This post is"
+msgstr "Dieser Eintrag ist "
 
-#: templates/show_post.html:7
-msgid "Mood"
-msgstr "Stimmung"
+#: templates/show_post.html:66
+msgid "private"
+msgstr "privat"
 
-#: templates/show_post.html:8
-msgid "Post date"
-msgstr "Postdatum"
+#: templates/show_post.html:69
+msgid "Language"
+msgstr "Sprache"
 
-#: templates/show_post.html:9
-msgid "Created at"
+#: templates/show_post.html:72
+msgid "Created"
 msgstr "Angelegt am"
 
-#: templates/show_post.html:10
-msgid "This is your "
-msgstr ""
+#: templates/show_post.html:75
+msgid "Link"
+msgstr "Link"
 
-#: templates/show_post.html:11
-msgid "The email for this post has "
-msgstr ""
+#: templates/show_post.html:76
+msgid "Permalink"
+msgstr "Permalink"
 
-#: templates/show_post.html:11
-msgid "not yet"
-msgstr "noch nicht"
+#: templates/show_post.html:80
+msgid "Loading map…"
+msgstr "Lade Karte…"
 
-#: templates/show_post.html:11
-msgid " been sent"
-msgstr "abgesendet worden"
-
-#: templates/show_post.html:20
+#: templates/show_post.html:95
 msgid "Edit"
 msgstr "Bearbeiten"
 
 #: templates/sign_up.html:24
-msgid "The invite you entered is invalid. Please try again. "
-msgstr "Der von dir eingegebene Invite ist ungültig. Versuche es noch einmal."
+msgid "Make it so!"
+msgstr ""
+
+#: templates/stats.html:114
+msgid "Leaderboard"
+msgstr "Rangliste"
+
+#: templates/stats.html:119
+msgid "Your most popular locations"
+msgstr "Deine beliebtesten Orte"
+
+#: templates/stats.html:142
+msgid "Locations"
+msgstr "Orte"
+
+#: templates/stats.html:144 templates/stats.html.py:152
+#: templates/stats.html:155
+msgid "Loading, please wait…"
+msgstr "Lade, bitte warten…"
+
+#: templates/stats.html:151
+msgid "Post length over time"
+msgstr "Eintragslänge über Zeit"
+
+#: templates/stats.html:154
+msgid "Mood over time"
+msgstr "Stimmung über Zeit"
 
 #: templates/tos.html:7
 msgid ""
@@ -524,7 +634,7 @@ msgid ""
 "Einträge sind erst einmal NICHT public, wir zeigen keine Namen an und die "
 "Einträge sind nicht durchsuchbar. Wenn wir APIs hinzufügen, sind sie erst "
 "einmal für dich deaktiviert. Um für deinen Account Öffentlichkeit her zu "
-"stllen, musst du immer selbst aktiv werden.\n"
+"stellen, musst du immer selbst aktiv werden.\n"
 "\t\t\t\t<li>Wir schicken dir Emails – weil das Sinn dieses Dienstes ist. "
 "Deswegen musst du deine Emailadresse auch bestätigen.</li>\n"
 "\t\t\t\t<li>Wir löschen Einträge und/oder Bilder – nämlich dann, wenn wir "
@@ -564,7 +674,7 @@ msgstr ""
 msgid ""
 "To sign up, point your browser to\n"
 "\n"
-"https://shortdiary.me/signup/\n"
+"https://shortdiary.me/accounts/signup/\n"
 "\n"
 "and enter the following invite code:\n"
 "\n"
@@ -577,39 +687,6 @@ msgid ""
 "You received this mail from us because %(user.username)s invited you. You "
 "will not receive any further mails from us unless you sign up"
 msgstr ""
-
-#: templates/mails/post.txt:1
-#, python-format
-msgid ""
-"Hey %(user)s,\n"
-"\n"
-"this is your shortdiary post from %(date)s. Back then, your mood was "
-"%(mood)s."
-msgstr ""
-"Hey %(user)s,\n"
-"\n"
-"das hier ist dein shortdiary-Eintrag vom %(date)s. Damals war deine Stimmnug "
-"\"%(mood)s\"."
-
-#: templates/mails/post.txt:5
-#, python-format
-msgid ""
-"You added an image to your post! You can find it here: http:%(host)s"
-"%(image)s (We also attached it to this email)."
-msgstr ""
-"Du hast ein Bild zu diesem Eintrag hinzugefügt. Du kannst es hier finden: "
-"http:%(host)s%(image)s (Wir haben es ausserdem an diese Mail angehängt)."
-
-#: templates/mails/post.txt:12
-msgid ""
-"You received this mail because you signed up on shortdiary. If you don't "
-"wish to receive these emails anymore, log in to your shortdiary account "
-"under https://shortdiary.me/accounts/login and change your email preferences."
-msgstr ""
-"Du hast diese Mail bekommen, weil du dich bei shortdiary angemeldet hast. "
-"Falls du keine dieser Mails mehr bekommen möchtest, logge dich unter https://"
-"shortdiary.me/accounts/login in deinen shortdiary-Account ein und ändere "
-"deine Mail-Einstellungen."
 
 #: templates/mails/verification.txt:1
 #, python-format
@@ -633,17 +710,202 @@ msgstr ""
 "shortdiary.me/accounts/login in deinen shortdiary-Account ein und ändere "
 "deine Mail-Einstellungen."
 
-#~ msgid "Post from {0}"
-#~ msgstr "Eintrag vom {0}"
+#: templates/registration/password_change_done.html:5
+msgid "Your password was changed."
+msgstr ""
+
+#: templates/registration/password_change_form.html:8
+msgid "Please correct the error below."
+msgstr ""
+
+#: templates/registration/password_change_form.html:8
+msgid "Please correct the errors below."
+msgstr ""
+
+#: templates/registration/password_change_form.html:13
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: templates/registration/password_change_form.html:16
+msgid "Old password"
+msgstr "Altes Passwort"
+
+#: templates/registration/password_change_form.html:19
+msgid "New password"
+msgstr "Neues Passwort"
+
+#: templates/registration/password_change_form.html:22
+msgid "Password (again)"
+msgstr "Passwort (Wiederholung)"
+
+#: templates/registration/password_reset_complete.html:5
+msgid "Your password has been reset. You can go ahead and log in now."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:6
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:10
+msgid "New password:"
+msgstr "Neues Passwort:"
+
+#: templates/registration/password_reset_confirm.html:13
+msgid "Confirm password:"
+msgstr "Neues Passwort (Wiederholung):"
+
+#: templates/registration/password_reset_confirm.html:20
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:5
+msgid ""
+"We've emailed you instructions for setting your password. You should be "
+"receiving them shortly."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:6
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+
+#: templates/registration/password_reset_form.html:5
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll email "
+"instructions for setting a new one."
+msgstr ""
+
+#: templates/registration/password_reset_form.html:9
+msgid "Email address:"
+msgstr ""
+
+#: templates/registration/password_reset_form.html:9
+msgid "Reset my password"
+msgstr ""
+
+#, fuzzy
+#~ msgid "No posts to show – Try <a href=\"{%% url "
+#~ msgstr ""
+#~ "Keine Einträge anzuzeigen – Lege <a href=\"/post/new/\">deinen ersten "
+#~ "Eintrag an</a>!"
+
+#~ msgid "user profile"
+#~ msgstr "Benutzerprofil"
+
+#~ msgid "user profiles"
+#~ msgstr "Benutzerprofile"
+
+#~ msgid "Your shortdiary post from {0}"
+#~ msgstr "Dein shortdiary-Eintrag vom {0}"
+
+#~ msgid "Terms of service"
+#~ msgstr "Nutzungsbedingungen"
+
+#~ msgid "About shortdiary"
+#~ msgstr "Über shortdiary"
+
+#~ msgid "Welcome to shortdiary"
+#~ msgstr "Willkommen bei shortdiary"
+
+#~ msgid "Login"
+#~ msgstr "Anmelden"
+
+#~ msgid "The team"
+#~ msgstr "Das Team"
+
+#~ msgid ""
+#~ "You can follow Stephan on <a href='https://twitter.com/"
+#~ "herrurbach'>twitter</a> or visit his <a href='http://stephanurbach."
+#~ "de/'>homepage</a>"
+#~ msgstr ""
+#~ "Du kannst Stephan auf <a href='https://twitter.com/herrurbach'>Twitter</"
+#~ "a> folgen oder seine <a href='http://stephanurbach.de/'>Homepage</a> "
+#~ "besuchen"
+
+#~ msgid "New password (or leave empty)"
+#~ msgstr "Neues Passwort (Oder leer lassen)"
+
+#~ msgid "Public account?"
+#~ msgstr "Öffentlicher Account?"
+
+#~ msgid "Blog"
+#~ msgstr "Blog"
+
+#~ msgid "Report bug"
+#~ msgstr "Fehler melden"
+
+#~ msgid "Enter your text here (Max. 350 chars)"
+#~ msgstr "Gib hier deinen Text ein (Max. 350 Zeichen)"
+
+#, fuzzy
+#~ msgid "Submit"
+#~ msgstr "Abschicken"
+
+#~ msgid ""
+#~ "shortdiary lets you revisit your past, think of all the great things you "
+#~ "have done and all those still on your to do list."
+#~ msgstr ""
+#~ "Shortdiary lässt dich deine Vergangenheit Revue passieren, dich über all "
+#~ "die tollen Dinge nachdenken die du getan hast und all die, die du noch "
+#~ "machen willst."
+
+#~ msgid "Welcome back, "
+#~ msgstr "Willkommen zurück, "
+
+#~ msgid "Username"
+#~ msgstr "Benutzername"
+
+#~ msgid "not yet"
+#~ msgstr "noch nicht"
+
+#~ msgid " been sent"
+#~ msgstr "abgesendet worden"
+
+#~ msgid "The invite you entered is invalid. Please try again. "
+#~ msgstr ""
+#~ "Der von dir eingegebene Invite ist ungültig. Versuche es noch einmal."
+
+#~ msgid ""
+#~ "Hey %(user)s,\n"
+#~ "\n"
+#~ "this is your shortdiary post from %(date)s. Back then, your mood was "
+#~ "%(mood)s."
+#~ msgstr ""
+#~ "Hey %(user)s,\n"
+#~ "\n"
+#~ "das hier ist dein shortdiary-Eintrag vom %(date)s. Damals war deine "
+#~ "Stimmnug \"%(mood)s\"."
+
+#~ msgid ""
+#~ "You added an image to your post! You can find it here: http:%(host)s"
+#~ "%(image)s (We also attached it to this email)."
+#~ msgstr ""
+#~ "Du hast ein Bild zu diesem Eintrag hinzugefügt. Du kannst es hier finden: "
+#~ "http:%(host)s%(image)s (Wir haben es ausserdem an diese Mail angehängt)."
+
+#~ msgid ""
+#~ "You received this mail because you signed up on shortdiary. If you don't "
+#~ "wish to receive these emails anymore, log in to your shortdiary account "
+#~ "under https://shortdiary.me/accounts/login and change your email "
+#~ "preferences."
+#~ msgstr ""
+#~ "Du hast diese Mail bekommen, weil du dich bei shortdiary angemeldet hast. "
+#~ "Falls du keine dieser Mails mehr bekommen möchtest, logge dich unter "
+#~ "https://shortdiary.me/accounts/login in deinen shortdiary-Account ein und "
+#~ "ändere deine Mail-Einstellungen."
 
 #~ msgid "Log out"
 #~ msgstr "Abmelden"
 
 #~ msgid "Sign me up!"
 #~ msgstr "Ich will mich registrieren!"
-
-#~ msgid "Home"
-#~ msgstr "Home"
 
 #~ msgid "Ohai. <a href=\"/accounts/login\">This way</a>."
 #~ msgstr "Ohai. <a href=\"/accounts/login\">Hier entlang</a>."

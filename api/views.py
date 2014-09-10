@@ -7,6 +7,7 @@ import datetime
 from rest_framework import status, mixins
 from django.utils.translation import ugettext_lazy as _
 from collections import OrderedDict
+from rest_framework.permissions import AllowAny
 
 
 class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
@@ -144,6 +145,9 @@ class PublicPostDetail(APIView):
 	"""
 	get a random public post
 	"""
+
+	permission_classes = (AllowAny,)
+
 	def get(self, request, format=None):
 		try:
 			randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
