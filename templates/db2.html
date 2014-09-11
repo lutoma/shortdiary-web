@@ -16,7 +16,7 @@
 	<div id='timeline-stage'>
 		<div style='text-align: center; margin-top: 100px'>
 			<i style='font-size: 40px; ' class='icon-spinner icon-spin'></i>
-			<h1 style='font-size: 35px;'>Loading, please stand by…</h1>
+			<h1 style='font-size: 35px;'>{% trans 'Loading, please stand by...' %}</h1>
 		</div>
 	</div>
 
@@ -44,7 +44,7 @@
 			<ul id='timeline-datepicker'>
 				{% verbatim %}
 					{{#each timegroups}}
-						<li {{#if @first}}class='active'{{/if}}><a href='#' data-scrollto='{{@key}}'>{{@key}}</a></li>
+						<li {{#if @first}}class='active'{{/if}}><a href='#' data-scrollto='{{this.year}}'>{{this.year}}</a></li>
 					{{/each}}
 				{% endverbatim %}
 			</ul>
@@ -52,11 +52,11 @@
 
 		{% verbatim %}
 			{{#each timegroups}}
-				<h2 id='timegroup-{{@key}}'>{{@key}}</h2>
-				{{#each this}}
-					<!--<h3 id='timegroup-m-{{this.id}}'>{{@key}}</h3>-->
+				<h1 class='timeline-year' id='timegroup-{{this.year}}'>{{ this.year }}</h1>
+				{{#each this.posts}}
+					<h2 class='timeline-month' id='timegroup-m-{{this.year}}-{{this.month}}'>{{ this.month_name }} <span>{{ this.year }}</span></h2>
 					<div class='timeline'>
-						{{#each this}}
+						{{#each this.posts}}
 							<div class='timeline-box'>
 								<div class='timeline-details'>
 									Posted  {{ this.date }} from {{ this.location_verbose }}

@@ -33,6 +33,19 @@
 	width: 650px;
 }
 
+.timeline-year {
+	margin: 0;
+}
+
+.timeline-month {
+	margin-top: .1em;
+	margin-bottom: 1.5em;
+}
+
+.timeline-month > span {
+	font-weight: 200;
+}
+
 .timeline::before {
 	content: "";
 	position: absolute;
