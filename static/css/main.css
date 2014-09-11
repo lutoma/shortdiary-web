@@ -23,15 +23,33 @@ a:hover {
 	text-decoration: underline;
 }
 
-h1, h2, h3, h4, h5, h6 {
-	font-weight: 200;
+h1, h2, h3 {
+	font-size: 1.2em;
+	color: #515151;
+	font-weight: 400;
 	margin: 0;
 	margin-bottom: .6em;
 	margin-top: 1.4em;
 }
 
 h1 {
-	font-size: 3em;
+	font-size: 2em;
+	font-weight: 700;
+}
+
+h2 {
+	font-weight: 600;
+	font-size: 1.4em;
+}
+
+h3 {
+	font-size: 1.2em;
+	font-weight: 200;
+	text-transform: uppercase;
+}
+
+h4, h5, h6 { /* Nope */
+	display: none;
 }
 
 .buttonpane {

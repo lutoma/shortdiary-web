@@ -122,7 +122,7 @@
 
 		<div style='width: 50%; float: left; padding: 0; margin: 0; min-height: 400px;'>
 			<div style='padding-right: 20px'>
-				<h2>{% trans "Your most popular locations" %}</h2>
+				<h3>{% trans "Your most popular locations" %}</h3>
 				<table class="border alternate">
 					<tbody>
 						{% for location in top_locations %}
@@ -146,7 +146,7 @@
 
 	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
 		<div style='padding-right: 20px'>
-			<h2>{% trans "Most frequently mentioned" %}</h2>
+			<h3>{% trans "Most frequently mentioned" %}</h3>
 			<table class="border alternate">
 				<tbody>
 					{% for name in top_mentions %}
@@ -171,7 +171,7 @@
 
 	<div style='width: 50%; float: left; padding: 0; margin: 0; min-height: 400px;'>
 		<div style='padding-right: 20px'>
-			<h2>{% trans "Top locations by mood" %}</h2>
+			<h3>{% trans "Top locations by mood" %}</h3>
 			<table class="border alternate">
 				<tbody>
 					{% for location in top_mood_locations %}
@@ -194,9 +194,10 @@
 
 	<br class='clear' />
 
-	<h2>{% trans "Post length over time" %}</h2>
+	<h2>Over time</h2>
+	<h3>{% trans "Post length over time" %}</h3>
 	<div id='post-length-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> {% trans "Loading, please wait…" %}</div>
 
-	<h2>{% trans "Mood over time" %}</h2>
+	<h3>{% trans "Mood over time" %}</h3>
 	<div id='post-mood-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> {% trans "Loading, please wait…" %}</div>
 {% endblock %}
