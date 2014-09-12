@@ -1,8 +1,8 @@
 'use strict';
 
-function render(posts) {
-	console.log(posts)
+var current_year = null;
 
+function render(posts) {
 	// TODO Localization
 	// FIXME Why is this an object?
 	var month_names = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June",
@@ -26,8 +26,8 @@ function render(posts) {
 	});
 
 	posts = _.sortBy(posts, function(year) { return -year.year; });
+	current_year = posts[0].year;
 
-	console.log(posts)
 
 	var template = Handlebars.compile($("#timeline-main").html());
 	var html = template({timegroups: posts});
@@ -39,6 +39,26 @@ function render(posts) {
 	});
 
 	$('#timeline-datepicker').scrollToFixed({marginTop: $('#top-block').outerHeight(true) + 20});
+
+	// Update sidebar year indicator with current scroll position
+	$('.timegroup').waypoint(function(direction) {
+		var year = _.find(posts, function (year_arr) {
+			// In most cases, a leftover of the old year will still be visible.
+			// This would result in the old year again being selected as the
+			// current one. This prevents this behaviour.
+			if(year_arr.year === current_year && direction === 'down') {
+				return false;
+			}
+
+			return $('#timegroup-' + year_arr.year).isOnScreen();
+		});
+		
+		if (!year) return;
+
+		$('#timeline-datepicker > li.active').removeClass('active');
+		$('#timeline-datepicker > li[data-year=' + year.year + ']').addClass('active');
+		current_year = year.year;
+	}, { offset: '60%' });
 }
 
 $(window).ready(function() {

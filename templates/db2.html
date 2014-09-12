@@ -7,6 +7,8 @@
 {% block headeradd %}
 	<script src='{% static "js/index.js" %}'></script>
 	<script src='{% static "js/handlebars-v1.3.0.js" %}'></script>
+	<script src='{% static "js/waypoints.min.js" %}'></script>
+	<script src='{% static "js/isonscreen.js" %}'></script>
 	<script src="{% static "js/timeline.js" %}"></script>
 
 	<link href="{% static "css/timeline.css" %}" rel="stylesheet" />
@@ -44,7 +46,7 @@
 			<ul id='timeline-datepicker'>
 				{% verbatim %}
 					{{#each timegroups}}
-						<li {{#if @first}}class='active'{{/if}}><a href='#' data-scrollto='{{this.year}}'>{{this.year}}</a></li>
+						<li {{#if @first}}class='active'{{/if}} data-year='{{this.year}}'><a href='#' data-scrollto='{{this.year}}'>{{this.year}}</a></li>
 					{{/each}}
 				{% endverbatim %}
 			</ul>
@@ -52,21 +54,27 @@
 
 		{% verbatim %}
 			{{#each timegroups}}
-				<h1 class='timeline-year' id='timegroup-{{this.year}}'>{{ this.year }}</h1>
-				{{#each this.posts}}
-					<h2 class='timeline-month' id='timegroup-m-{{this.year}}-{{this.month}}'>{{ this.month_name }} <span>{{ this.year }}</span></h2>
-					<div class='timeline'>
-						{{#each this.posts}}
-							<div class='timeline-box'>
-								<div class='timeline-details'>
-									Posted  {{ this.date }} from {{ this.location_verbose }}
+				<div class='timegroup' id='timegroup-{{this.year}}' data-year='{{this.year}}'>
+					<h1 class='timeline-year'>{{ this.year }}</h1>
+					{{#each this.posts}}
+						<h2 class='timeline-month' id='timegroup-m-{{this.year}}-{{this.month}}'>{{ this.month_name }} <span>{{ this.year }}</span></h2>
+						<div class='timeline'>
+							{{#each this.posts}}
+								<div class='timeline-box'>
+									<div class='timeline-details'>
+										<a href='/posts/{{ this.id }}'>{{ this.date }}</a> <i class="icon-location-arrow"></i> <a href=''>{{ this.location_verbose }}</a>
+
+										<span style='float: right;'>
+											<a href='/posts/{{ this.id }}/edit/'><i class="icon-pencil"></i></a>
+										</span>
+									</div>
+									
+									<p>{{ this.text }}</p>
 								</div>
-								
-								<p>{{ this.text }}</p>
-							</div>
-						{{/each}}
-					</div>
-				{{/each}}
+							{{/each}}
+						</div>
+					{{/each}}
+				</div>
 			{{/each}}
 		{% endverbatim %}
 	</script>
