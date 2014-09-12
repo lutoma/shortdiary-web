@@ -24,32 +24,39 @@
 
 	<script id="timeline-main" type="text/x-handlebars-template">
 		<aside id='timeline-aside'>
-			<hr />
+			<h2 id='greeting'>Hi {{ request.user }}!</h2>
+			<p id='greeting-2'>Here's how you're doing:</p>
 
-			{% if user.get_streak %}{{ user.get_streak|intcomma }}{% else %}0{% endif %}
 
-				day posting streak
-
-			<hr />
-
-			{{ user.get_posts|length|intcomma }}
-
-				total posts
+			<h3>
+				<span class='metric'>{% if user.get_streak %}{{ user.get_streak|intcomma }}{% else %}0{% endif %}</span>
+				day streak</h3>
 
 			<hr />
 
-			{{ user.get_post_characters|intcomma }}
-
-				total characters in posts
+			<h3>
+				<span class='metric'>{{ user.get_posts|length|intcomma }}</span>
+				total posts</h3>
 
 			<hr />
-			<ul id='timeline-datepicker'>
-				{% verbatim %}
-					{{#each timegroups}}
-						<li {{#if @first}}class='active'{{/if}} data-year='{{this.year}}'><a href='#' data-scrollto='{{this.year}}'>{{this.year}}</a></li>
-					{{/each}}
-				{% endverbatim %}
-			</ul>
+
+			<h3>
+				<span class='metric'>{{ user.get_post_characters|intcomma }}</span>
+				total characters</h3>
+
+			<hr />
+
+			<div class='aside-keepvisible'>
+				<input id='timeline-search' type='text' placeholder='Search' />
+
+				<ul id='timeline-datepicker'>
+					{% verbatim %}
+						{{#each timegroups}}
+							<li {{#if @first}}class='active'{{/if}} data-year='{{this.year}}'><a href='#' data-scrollto='{{this.year}}'>{{this.year}}</a></li>
+						{{/each}}
+					{% endverbatim %}
+				</ul>
+			</div>
 		</aside>
 
 		{% verbatim %}
@@ -64,12 +71,14 @@
 									<div class='timeline-details'>
 										<a href='/posts/{{ this.id }}'>{{ this.date }}</a> <i class="icon-location-arrow"></i> <a href=''>{{ this.location_verbose }}</a>
 
-										<span style='float: right;'>
-											<a href='/posts/{{ this.id }}/edit/'><i class="icon-pencil"></i></a>
-										</span>
+										{{#if this.editable}}
+											<span style='float: right;'>
+												<a href='/posts/{{ this.id }}/edit/'><i class="icon-pencil"></i></a>
+											</span>
+										{{/if}}
 									</div>
 									
-									<p>{{ this.text }}</p>
+									<p>{{{ this.text }}}</p>
 								</div>
 							{{/each}}
 						</div>

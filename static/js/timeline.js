@@ -8,9 +8,18 @@ function render(posts) {
 	var month_names = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June",
 		7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"};
 
+	var day = 1000 * 60 * 60 * 24;
+
 	// Reformat and sort posts (objects are unsorted, so convert to arrays)
 	posts = _.map(posts, function (year_posts, year) {
 		year_posts = _.map(year_posts, function (month_posts, month) {
+			month_posts = _.map(month_posts, function (post) {
+				// FIXME Code/logic duplication
+				post['editable'] = (new Date() - new Date(post['date'])) <= day * 3;
+				post['text'] = post['text'].replace(/\n/g, '<br />');
+				return post;
+			});
+
 			return {
 				'year': year,
 				'month': month, 
@@ -27,7 +36,7 @@ function render(posts) {
 
 	posts = _.sortBy(posts, function(year) { return -year.year; });
 	current_year = posts[0].year;
-
+		console.log(posts)
 
 	var template = Handlebars.compile($("#timeline-main").html());
 	var html = template({timegroups: posts});
@@ -38,7 +47,7 @@ function render(posts) {
 		$('#timegroup-' + scroll_to).ScrollTo();
 	});
 
-	$('#timeline-datepicker').scrollToFixed({marginTop: $('#top-block').outerHeight(true) + 20});
+	$('.aside-keepvisible').scrollToFixed({marginTop: $('#top-block').outerHeight(true) - 20});
 
 	// Update sidebar year indicator with current scroll position
 	$('.timegroup').waypoint(function(direction) {
