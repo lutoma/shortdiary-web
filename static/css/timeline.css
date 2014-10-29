@@ -1,0 +1,108 @@
+#timeline-aside {
+	right: 0;
+	float: right;
+	padding: 0;
+	width: 260px;
+	min-height: 0;
+	border-left: none;
+	padding-left: 0;
+	margin-left: 0;
+	background: none
+}
+
+#greeting {
+	margin: 0;
+}
+
+#greeting-2 {
+	margin: 0;
+	margin-bottom: 20px;
+}
+
+#timeline-aside h3 {
+	width: 100%;
+	display: inline-block;
+	margin: 0;
+}
+
+#timeline-aside h3 .metric {
+	display: inline-block;
+	font-weight: 400;
+	min-width: 40px;
+	text-align: right;
+}
+
+#timeline-search {
+	margin-top: 40px;
+}
+
+#timeline-datepicker {
+	margin: 0;
+	padding: 0;
+	margin-top: 50px;
+}
+
+#timeline-datepicker li {
+	list-style-type: none;
+	padding-left: 8px;
+	border-left: 4px solid #dedede;
+	margin-bottom: 2px;
+	font-size: .8em;
+	padding: 1px 8px;
+}
+
+#timeline-datepicker li.active {
+	border-left: 4px solid #7e7e7e;
+	font-weight: 600;
+}
+
+.timeline {
+	position: relative;
+	width: 650px;
+}
+
+.timeline-year {
+	margin: 0;
+}
+
+.timeline-month {
+	margin-top: .1em;
+	margin-bottom: 1.5em;
+}
+
+.timeline-month > span {
+	font-weight: 200;
+}
+
+.timeline::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 23px;
+	width: 2px;
+	background: #f3f3f3;
+	height: 100%;
+	z-index: -1;
+}
+
+.timeline-box {
+	margin-bottom: 50px;
+	border: #c3c3c3 solid 1px;
+	border-radius: 2px;
+	background: #fff;
+}
+
+.timeline-box > p {
+	padding: 10px 15px;
+	margin: 0;
+}
+
+.timeline-details {
+	border-bottom: 1px solid #d9d9d9;
+	background: #fafafa;
+	padding: 7px 15px;
+	font-size: 0.8em;
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+}

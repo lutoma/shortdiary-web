@@ -63,26 +63,102 @@
 	});
 
 	</script>
+
+	{% if user.geolocation_enabled %}
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var map_options = {
+					zoom: 1,
+					center: new google.maps.LatLng(0, 0),
+					mapTypeId: google.maps.MapTypeId.ROADMAP,
+					streetViewControl: true,
+					mapTypeControl: true
+				}
+
+				map = new google.maps.Map($("#map-canvas").get(0), map_options);
+				var bounds = new google.maps.LatLngBounds();
+				
+				// Enforce minimum zoom level of 12
+				// Has to be done using a callback since the map rendering is asynchronous
+				google.maps.event.addListenerOnce(map, 'zoom_changed', function() {
+					google.maps.event.addListener(map, 'bounds_changed', function(event) {
+						if (this.getZoom() > 12 && this.initialZoom == true) {
+							this.setZoom(12);
+							this.initialZoom = false;
+						}
+					});
+				});
+
+				{% for post in posts %}
+					{% if post.location_lat and post.location_lon %}
+						
+						var marker = new google.maps.Marker({
+							position: new google.maps.LatLng({{ post.location_lat}}, {{ post.location_lon }}),
+							map: map,
+							animation: google.maps.Animation.DROP
+						});
+
+						bounds.extend(marker.position);
+					{% endif %}				
+				{% endfor %}
+
+				map.initialZoom = true;
+				map.fitBounds(bounds);
+			});
+		</script>
+	{% endif %}
 {% endblock %}
 
 {%block content %}
-	<p><a href='{%url "diary.views.leaderboard" %}'>Leaderboard</a></p>
+	{% if user.geolocation_enabled %}
+		<div style="width: 100%; padding: 0; margin: 0; min-height: 400px;">
+			<div style='padding-right: 20px'>
+				<h2>{% trans "Locations" %}</h2>
+
+				<div id='map-canvas' style='height: 350px;'><i class='icon-spinner icon-spin'></i> {% trans "Loading, please wait…" %}</div>
+			</div>
+		</div>
+
+		<div style='width: 50%; float: left; padding: 0; margin: 0; min-height: 400px;'>
+			<div style='padding-right: 20px'>
+				<h3>{% trans "Your most popular locations" %}</h3>
+				<table class="border alternate">
+					<tbody>
+						{% for location in top_locations %}
+								<tr>
+									<td style='width: 25px;'>
+										#{{ forloop.counter }}
+									</td>
+									<td>
+										{{ location.location_verbose }}
+									</td>
+									<td style='width: 170px;'>
+										{{ location.location_count }} {% trans "posts" %}
+									</td>
+								</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	{% endif %}
 
 	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
 		<div style='padding-right: 20px'>
-			<h2>Your most popular locations</h2>
+			<h3>{% trans "Most frequently mentioned" %}</h3>
 			<table class="border alternate">
 				<tbody>
-					{% for location in top_locations %}
+					{% for name in top_mentions %}
 							<tr>
 								<td style='width: 25px;'>
 									#{{ forloop.counter }}
 								</td>
 								<td>
-									{{ location.location_verbose }}
+									<a href='{% url 'diary.views.search' %}?q=@{{ name.0|urlencode }}'>{{ name.0 }}</a>
 								</td>
 								<td style='width: 170px;'>
-									{{ location.location_count }} posts
+									{{ name.1 }} {% trans "mentions" %}
 								</td>
 							</tr>
 					{% endfor %}
@@ -93,9 +169,35 @@
 
 	<br class='clear' />
 
-	<h2>Post length over time</h2>
-	<div id='post-length-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> Loading, please wait…</div>
+	<div style='width: 50%; float: left; padding: 0; margin: 0; min-height: 400px;'>
+		<div style='padding-right: 20px'>
+			<h3>{% trans "Top locations by mood" %}</h3>
+			<table class="border alternate">
+				<tbody>
+					{% for location in top_mood_locations %}
+							<tr>
+								<td style='width: 25px;'>
+									#{{ forloop.counter }}
+								</td>
+								<td>
+									{{ location.location_verbose }}
+								</td>
+								<td style='width: 170px;'>
+									{{ location.mood_avg|floatformat:2 }} {% trans "avg. mood" %}
+								</td>
+							</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 
-	<h2>Mood over time</h2>
-	<div id='post-mood-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> Loading, please wait…</div>
+	<br class='clear' />
+
+	<h2>Over time</h2>
+	<h3>{% trans "Post length over time" %}</h3>
+	<div id='post-length-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> {% trans "Loading, please wait…" %}</div>
+
+	<h3>{% trans "Mood over time" %}</h3>
+	<div id='post-mood-placeholder' style='height: 200px'><i class='icon-spinner icon-spin'></i> {% trans "Loading, please wait…" %}</div>
 {% endblock %}

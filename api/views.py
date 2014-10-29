@@ -1,11 +1,13 @@
 from diary.models import Post, DiaryUser
 from rest_framework.views import APIView
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, GenericAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, ListAPIView, GenericAPIView
 from api.serializers import PostSerializer, PostCreateSerializer, PublicPostSerializer, ProfileSerializer
 from rest_framework.response import Response
 import datetime
 from rest_framework import status, mixins
 from django.utils.translation import ugettext_lazy as _
+from collections import OrderedDict
+from rest_framework.permissions import AllowAny
 
 
 class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
@@ -43,13 +45,11 @@ class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
 
 class PostList(ListCreateAPIView):
 	"""
-	List your recent posts
+	List your posts
 	"""
 	serializer_class=PostSerializer
 	def get(self, request, format=None):
-		today = datetime.date.today()
-		weekago = today - datetime.timedelta(days=7)
-		posts = Post.objects.filter(author=request.user, date__gte=weekago).order_by("-date")
+		posts = Post.objects.filter(author=request.user).order_by("-date")
 		serializer = PostSerializer(posts, many=True)
 		return Response(serializer.data)
 
@@ -69,6 +69,29 @@ class PostList(ListCreateAPIView):
 
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class PostTimeline(ListAPIView):
+	"""
+	List of your posts grouped by year and month
+	"""
+	serializer_class=PostSerializer
+	def get(self, request, format=None):
+		posts = Post.objects.filter(author=request.user).order_by("-date")
+		sorted_posts = OrderedDict()
+
+		for year_obj in posts.dates('date','year', order='DESC'):
+			year_posts = posts.filter(date__year = year_obj.year)
+			sorted_year_posts = OrderedDict()
+
+			for month_obj in year_posts.dates('date','month', order='DESC'):
+				month_posts = year_posts.filter(date__month = month_obj.month)
+				sorted_year_posts[month_obj.month] = map(lambda post: PostSerializer(post).data, month_posts)
+
+			sorted_posts[year_obj.year] = sorted_year_posts
+		
+		return Response(sorted_posts)
+
+
 class PostDetail(RetrieveUpdateDestroyAPIView):
 	"""
 	Show a single post
@@ -77,10 +100,7 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
 	serializer_class = PostSerializer
 
 	def get(self, request, *args, **kwargs):
-		today = datetime.date.today()
 		object = Post.objects.get(pk=kwargs["pk"])
-		if (today - object.date).days > 3:
-			return Response({"Error":_("This entry is too old to be viewed.")}, status=status.HTTP_400_BAD_REQUEST)
 		return super(PostDetail, self).get(request, *args, **kwargs)
 
 
@@ -125,9 +145,12 @@ class PublicPostDetail(APIView):
 	"""
 	get a random public post
 	"""
+
+	permission_classes = (AllowAny,)
+
 	def get(self, request, format=None):
 		try:
-			randompost = Post.objects.filter(author__userprofile__public = True).order_by('?')[:1].get()
+			randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
 			serializer = PublicPostSerializer(randompost)
 			return Response(serializer.data)
 		except Post.DoesNotExist:

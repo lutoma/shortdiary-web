@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
-from api.views import PostList, PostDetail, PublicPostDetail, ProfileDetail, PostYearAgo
+from api.views import PostList, PostTimeline, PostDetail, PublicPostDetail, ProfileDetail, PostYearAgo
 from django.views.generic import TemplateView
 admin.autodiscover()
 
@@ -17,10 +17,11 @@ else:
 
 api_patterns= format_suffix_patterns(patterns('',
 	url(r'^posts/$', PostList.as_view(), name="api-post-list"),
+ 	url(r'^posts/timeline/$', PostTimeline.as_view(), name='api-post-timeline'),
  	url(r'^posts/(?P<pk>\d+)/$', PostDetail.as_view(), name='api-post-detail'),
  	url(r'^posts/year_ago/$', PostYearAgo.as_view(), name='api-post-yearago'),
- 	url(r'^public/$', PublicPostDetail.as_view(), name='api-public-post'),
-	url(r'^profile$', ProfileDetail.as_view(), name='api-profile-detail'),
+ 	url(r'^posts/random_public/$', PublicPostDetail.as_view(), name='api-public-post'),
+	url(r'^profile/$', ProfileDetail.as_view(), name='api-profile-detail'),
 ), allowed=["json", "html"])
 
 urlpatterns += patterns('',
@@ -61,13 +62,17 @@ urlpatterns += patterns('',
 	url(r'^stats/$', 'diary.views.stats'),
 	url(r'^stats/leaderboard/$', 'diary.views.leaderboard'),
 
+	url(r'^explore/$', 'diary.views.explore'),
+
+	url(r'^search/$', 'diary.views.search'),
 
 	url(r'^email/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', 'diary.views.mail_verify'),
 
+	url(r'^db2/$', TemplateView.as_view(template_name = 'db2.html'), name = 'db2'),
 	url(r'^/?$', 'diary.views.index'),
 
-	url(r'^api/', include(api_patterns)),
-	url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
+	url(r'^api/v1/', include(api_patterns)),
+	url(r'^api/v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
 )
 
 

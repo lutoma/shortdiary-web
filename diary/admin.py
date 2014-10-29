@@ -10,7 +10,7 @@ class PostAdmin(admin.ModelAdmin):
 	# user data.
 
 	fieldsets = [
-		(None, {'fields': ['author', 'date', 'sent', 'public']}),
+		(None, {'fields': ['author', 'date', 'sent', 'public', 'natural_language']}),
 		(
 			_('Privacy section. Only open if absolutely needed (Mood, Text, Image)'),
 			{'fields': [
@@ -25,8 +25,8 @@ class PostAdmin(admin.ModelAdmin):
 		),
 	]
 
-	list_display = ['author', 'date', 'public', 'sent', 'is_editable']
-	list_filter = ['sent', 'created_at']
+	list_display = ['author', 'date', 'public', 'natural_language', 'sent', 'is_editable']
+	list_filter = ['sent', 'created_at', 'public', 'natural_language']
 	date_hierarchy = 'date'
 
 class UserAdmin(admin.ModelAdmin):

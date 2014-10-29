@@ -3,10 +3,7 @@ function show_chars() {
 	var words = $(this).val().split(' ').length - 1;
 	var sentences = $(this).val().split(/[\.\?\!:;…‽⸮"«“]+/).length - 1;
 
-	if(chars > 350)
-		$('#new-post-char-counter').html('Wow, what an eventful day! – ' + sentences + ' sentences, ' + words + ' words, ' + chars + ' characters');
-	else
-		$('#new-post-char-counter').html(sentences + ' sentences, ' + words + ' words, ' + chars + ' characters');
+	$('#new-post-char-counter').html((chars > 350 ? (t_eventful + ' – ') : '') + sentences + ' ' + t_sentences + ', ' + words + ' ' + t_words + ', ' + chars + ' ' + t_characters);
 }
 
 function image_field_change(input) {

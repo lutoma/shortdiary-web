@@ -20,9 +20,6 @@
 		<input type='password' name='password' maxlength='100' placeholder='password' value="{% if form.password.value %}{{ form.password.value }}{% endif %}" />
 		{{ form.password.errors }}
 
-		<input type='text' name='invite_code' maxlength='100' placeholder='invite code' />
-		{% if noinvite %}{% trans 'The invite you entered is invalid. Please try again. ' %}{% endif %}
-
 		<button type='submit' style='height: 35px;'>
 			<i class='icon-bolt'></i> {% trans "Make it so!" %}
 		</button>

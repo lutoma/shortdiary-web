@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load i18n %} 
+{% load l10n %} 
+{% load humanize %}
+{% load staticfiles %}
+
+{% block headeradd %}
+	<script src='{% static "js/index.js" %}'></script>
+	<script src='{% static "js/handlebars-v1.3.0.js" %}'></script>
+	<script src='{% static "js/waypoints.min.js" %}'></script>
+	<script src='{% static "js/isonscreen.js" %}'></script>
+	<script src="{% static "js/timeline.js" %}"></script>
+
+	<link href="{% static "css/timeline.css" %}" rel="stylesheet" />
+{% endblock %}
+
+{%block content %}
+	<div id='timeline-stage'>
+		<div style='text-align: center; margin-top: 100px'>
+			<i style='font-size: 40px; ' class='icon-spinner icon-spin'></i>
+			<h1 style='font-size: 35px;'>{% trans 'Loading, please stand by...' %}</h1>
+		</div>
+	</div>
+
+	<script id="timeline-main" type="text/x-handlebars-template">
+		<aside id='timeline-aside'>
+			<h2 id='greeting'>Hi {{ request.user }}!</h2>
+			<p id='greeting-2'>Here's how you're doing:</p>
+
+
+			<h3>
+				<span class='metric'>{% if user.get_streak %}{{ user.get_streak|intcomma }}{% else %}0{% endif %}</span>
+				day streak</h3>
+
+			<hr />
+
+			<h3>
+				<span class='metric'>{{ user.get_posts|length|intcomma }}</span>
+				total posts</h3>
+
+			<hr />
+
+			<h3>
+				<span class='metric'>{{ user.get_post_characters|intcomma }}</span>
+				total chars</h3>
+
+			<hr />
+
+			<div class='aside-keepvisible'>
+				<input id='timeline-search' type='text' placeholder='Search' />
+
+				<ul id='timeline-datepicker'>
+					{% verbatim %}
+						{{#each timegroups}}
+							<li {{#if @first}}class='active'{{/if}} data-year='{{this.year}}'><a href='#' data-scrollto='{{this.year}}'>{{this.year}}</a></li>
+						{{/each}}
+					{% endverbatim %}
+				</ul>
+			</div>
+		</aside>
+
+		{% verbatim %}
+			{{#each timegroups}}
+				<div class='timegroup' id='timegroup-{{this.year}}' data-year='{{this.year}}'>
+					<h1 class='timeline-year'>{{ this.year }}</h1>
+					{{#each this.posts}}
+						<h2 class='timeline-month' id='timegroup-m-{{this.year}}-{{this.month}}'>{{ this.month_name }} <span>{{ this.year }}</span></h2>
+						<div class='timeline'>
+							{{#each this.posts}}
+								<div class='timeline-box'>
+									<div class='timeline-details'>
+										<a href='/posts/{{ this.id }}'>{{ this.date }}</a> <i class="icon-location-arrow"></i> <a href=''>{{ this.location_verbose }}</a>
+
+										{{#if this.editable}}
+											<span style='float: right;'>
+												<a href='/posts/{{ this.id }}/edit/'><i class="icon-pencil"></i></a>
+											</span>
+										{{/if}}
+									</div>
+									
+									<p>{{{ this.text }}}</p>
+								</div>
+							{{/each}}
+						</div>
+					{{/each}}
+				</div>
+			{{/each}}
+		{% endverbatim %}
+	</script>
+{% endblock %}

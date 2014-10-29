@@ -19,7 +19,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.cache import cache
 import diary.tasks as tasks
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Avg
+from django.utils.translation import get_language_from_request
 import stripe
 
 def index(request):
@@ -138,6 +139,7 @@ def show_post(request, post_id):
 	context = {
 		'post': post,
 		'title': _('Post #{} from {}').format(post.id, post.date),
+		'language': post.get_language_name(locale = get_language_from_request(request))
 	}
 
 	if post.author == request.user:
@@ -167,24 +169,10 @@ def sign_up(request):
 		}
 		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
 
-	# Check invite code
-	try:
-		invite = Invite.objects.get(code = request.POST.get('invite_code', None))
-	except Invite.DoesNotExist:
-		context = {
-			'title': _('Sign up'),
-			'form': form,
-			'noinvite': True,
-		}
-		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
-
 	# Fixme
 	user = form.save()
 	user.set_password(request.POST.get('password', None))
-	user.invited_by = invite.generated_by
 	user.save()
-
-	invite.delete()
 
 	user.send_verification_mail()
 
@@ -256,18 +244,21 @@ def delete_post(request, post_id):
 
 @login_required
 def stats(request):
-	try:
-		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
-	except Post.DoesNotExist:
-		randompost = None
+	user_posts = Post.objects.filter(author = request.user).order_by('date')
+
+	if user_posts.count() < 1:
+		return render_to_response('stats_noposts.html', context_instance=RequestContext(request))
 
 	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:10]
 
+	top_mood_locations = request.user.get_posts().filter(~Q(location_verbose = '')).annotate(mood_avg = Avg('mood')).values('location_verbose', 'mood_avg').annotate(location_count=Count('location_verbose')).filter(location_count__gte = 3).order_by('-mood_avg').values('location_verbose', 'mood_avg')[:10]
+
 	context = {
 		'title': 'Stats',
-		'randompost': randompost,
-		'posts': Post.objects.filter(author = request.user).order_by('date'),
+		'posts': user_posts,
 		'top_locations': top_locations,
+		'top_mentions': request.user.get_mention_toplist()[:10],
+		'top_mood_locations': top_mood_locations,
 	}
 	return render_to_response('stats.html', context_instance=RequestContext(request, context))
 
@@ -278,6 +269,8 @@ def leaderboard(request):
 			'leaderboard_char_leaders',
 			'leaderboard_avg_post_length_leaders',
 			'leaderboard_last_update',
+			'leaderboard_popular_languages',
+			'leaderboard_popular_locations',
 	])
 
 	if(len(leaders) < 5):
@@ -287,7 +280,7 @@ def leaderboard(request):
 		else:
 			tasks.update_leaderboard.delay()
 
-		return render_to_response('leaderboard_wait.html')
+		return render_to_response('leaderboard_wait.html', context_instance=RequestContext(request))
 
 	context = {
 		'title': 'Leaderboard',
@@ -295,11 +288,14 @@ def leaderboard(request):
 		'posts_leaders': leaders['leaderboard_posts_leaders'],
 		'chars_leaders': leaders['leaderboard_char_leaders'],
 		'avg_post_length_leaders': leaders['leaderboard_avg_post_length_leaders'],
+		'popular_languages': leaders['leaderboard_popular_languages'],
+		'popular_locations': leaders['leaderboard_popular_locations'],
 		'last_update': leaders['leaderboard_last_update'],
 	}
 
 	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))
 
+<<<<<<< HEAD
 @login_required
 @require_POST
 @csrf_exempt
@@ -333,3 +329,34 @@ def pay_stripe_handle(request):
 	).save()
 
 	return HttpResponseRedirect('/pay/success/')
+=======
+def explore(request):
+	post_filters = {'public': True}
+
+	if 'lang' in request.GET:
+		post_filters['natural_language'] = request.GET.get('lang', '')
+
+	try:
+		post = Post.objects.filter(**post_filters).order_by('?')[:1].get()
+	except Post.DoesNotExist:
+		return render_to_response('explore_nosuchpost.html', context_instance=RequestContext(request))
+
+	context = {
+		'title': 'Explore',
+		'post': post,
+		'language': post.get_language_name(locale = get_language_from_request(request)),
+	}
+	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
+
+@login_required
+def search(request):
+	query = request.GET.get('q', '')
+	posts = request.user.get_posts().filter(text__icontains = query)
+	posts.order_by('-date')
+
+	context = {
+		'title': 'Search',
+		'posts': posts,
+	}
+	return render_to_response('search_results.html', context_instance=RequestContext(request, context))
+>>>>>>> master

@@ -8,7 +8,15 @@
 	<script src='{% static "js/html5slider.js" %}'></script>
 
 	{% if user.geolocation_enabled %}
-		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true&amp;language=en"></script>
+
+		<script>
+			var t_location = "{% trans 'Location' %}";
+			var t_sentences = "{% trans 'sentences' %}";
+			var t_words = "{% trans 'words' %}";
+			var t_characters = "{% trans 'characters' %}";
+			var t_eventful = "{% trans 'Wow, what an eventful day!' %}";
+		</script>
 		<script src='{% static "js/edit-post-geolocation.js" %}'></script>
 	{% endif %}
 
@@ -45,7 +53,7 @@
 		}
 
 		#title-light {
-			font-weight: 100;
+			font-weight: 200;
 		}
 	</style>
 {% endblock %}
@@ -74,7 +82,7 @@
 			<input type='hidden' name='location_verbose' value='' />
 
 			<aside id='edit-post-aside'>
-				<div class='label first'><i class='icon-calendar'></i> Date</div>
+				<div class='label first'><i class='icon-calendar'></i> {% trans 'Date' %}</div>
 				{% if not edit_post %}
 					<select name='date'>
 						<option value='{{ post_days.0|date:"Y-m-d" }}' {% ifequal form.date.value post_days.0|date:"Y-m-d" %}selected {% endifequal %}{% if existing_posts.0 %}disabled{% endif %}>{%trans "yesterday" %} ({{ post_days.0 }})</option>
@@ -87,24 +95,27 @@
 					<input type='hidden' name='date' value='{{ edit_post.date|date:"Y-m-d" }}' />
 				{% endif %}
 
-				<div class='label'><i class='icon-thumbs-up'></i> Mood: <span id='mood-slider-value'>{% if edit_post.mood %}{{ edit_post.mood }}{% else %}6{% endif %}</span> / 10</div>
+				<div class='label'><i class='icon-thumbs-up'></i> {% trans 'Mood' %}: <span id='mood-slider-value'>{% if edit_post.mood %}{{ edit_post.mood }}{% else %}6{% endif %}</span> / 10</div>
 				<input id="mood" name="mood" type="range" min="1" max="10" step="1" value="{% if edit_post.mood %}{{ edit_post.mood }}{% else %}6{% endif %}" onchange="$('#mood-slider-value').html(this.value)" style='display: inline-block;' />
 
 				{% if user.geolocation_enabled %}
-					<div class='label'><i class='icon-location-arrow'></i><span id='post-location-info'>Location</span></div>
+					<div class='label'><i class='icon-location-arrow'></i><span id='post-location-info'>{% trans 'Location' %}</span></div>
 					<div id="map-canvas"><span style='font-weight: 200; font-size: 0.9em;'>We're requesting your location to add it to the post. You can disable this in your settings.</span></div>
 				{% endif %}
 			</aside>
 
-			<textarea id="text-input" name='text' placeholder="To be or not to be, that is the question: Whether 'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles, and by opposing, end them? To die: to sleep; no more; and by a sleep to say we end the heart-ache and the thousand natural shocks that flesh is heir to, ’tis a consummation devoutly to be wish’d. To die, to sleep; to sleep: perchance to dream: ay, there’s the rub;" required>{% if form.text.value %}{{ form.text.value }}{% endif %}{{ edit_post.text }}</textarea>
-			<small id="new-post-char-counter">0 sentences, 0 words, 0 characters</small>
+			<p><small style='margin-top: 5px;'>{% trans '<em>Hint</em>: If you prefix a name with an at sign like this: @Joe, it will be hidden in public posts.' %}</small></p>
 
-			This is part of <input type='text' name='part_of' placeholder="e.g. Trip to San Francisco, Comic Con, Weekend with Tom, Mountain Expedition" style='width: 622px' />
+			<textarea id="text-input" name='text' placeholder="To be or not to be, that is the question: Whether 'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles, and by opposing, end them? To die: to sleep; no more; and by a sleep to say we end the heart-ache and the thousand natural shocks that flesh is heir to, ’tis a consummation devoutly to be wish’d. To die, to sleep; to sleep: perchance to dream: ay, there’s the rub;" required>{% if form.text.value %}{{ form.text.value }}{% endif %}{{ edit_post.text }}</textarea>
+			
+			<small id="new-post-char-counter">0 {% trans 'sentences' %}, 0 {% trans 'words' %}, 0 {% trans 'characters' %}</small>
+
+			<p>{% trans 'This is part of ' context 'In front of part of input field on new post page' %}<input type='text' name='part_of' placeholder="{% trans 'e.g. Trip to San Francisco, Comic Con, Weekend with Tom, Mountain Expedition' %}" style='width: 622px' /></p>
 			
 			{% if not edit_post %}
 				<input id='image-upload-input' type='file' name='image' onchange="image_field_change(this);" style='display: none;' />
 				<div id='image-upload'>
-						<p id='image-upload-info'><strong>Click</strong> to upload image</p>
+						<p id='image-upload-info'>{% trans '<strong>Click</strong> to upload image' %}</p>
 						<!--<p id='image-upload-info-small'>(or click)</p>-->
 					
 				</div>

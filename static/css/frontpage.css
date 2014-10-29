@@ -1,65 +1,55 @@
 body {
-	background: url(../img/frontpage-bg-jumbotron.jpg) #F7F5FA no-repeat;
-	background-size: 100% 600px;
+	background: url(../img/frontpagebg.jpg) #ffffff no-repeat;
+	background-size: cover;
 }
 
 #jumbotron {
-	height: 550px;
 	text-align: center;
+	z-index: 50;
 }
 
 #title {
 	margin-top: 60px;
 	text-align: center;
-	font-size: 2.7em;
-	font-weight: 200;
+	font-size: 135px;
+	font-weight: 700;
+	color: #fff;
+	line-height: 1.2;
+	text-shadow: 0 -1px 1px #888, 0 1px 1px #FFFFFF;
 }
 
 
 #front-mainsignup {
 	display: block;
-	margin-top: 100px;
-	margin-bottom: 70px;
+	margin-top: 70px;
 	text-align: center;
 }
 
-#front-mainsignup input, #front-mainsignup button {
-	display: inline-block;
-	height: 35px;
-}
-
-#front-mainsignup input {
-	font-family: inherit;
-	border: none;
-	margin-right: 10px;
-	width: 350px;
-	background: rgba(238, 238, 238, 0.8);
-	border-radius: 3px;
-	border: 1px solid #888;
-	color: #242424;
-	font-weight: 700;
+#front-mainsignup a {
+	color: white;
+	text-shadow: 0 1px 1px rgba(0,0,0,.25);
+	font-weight: bold;
 	font-size: 20px;
-	padding-left: 10px;
+	display: inline-block;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.5);
+	box-shadow: 0 1px 1px rgba(0,0,0,.5);
+	background-color: #8dcc35;
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#8dcc35),to(#47a204));
+	background-image: -webkit-linear-gradient(top,#8dcc35,#47a204);
+	background-image: -moz-linear-gradient(top,#8dcc35,#47a204);
+	background-image: -o-linear-gradient(top,#8dcc35,#47a204);
+	background-image: linear-gradient(to bottom,#8dcc35,#47a204);
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	padding: 15px 37px;
+	border: none;
+	cursor: pointer;
+	font-family: inherit;
+	text-decoration: none;
 }
 
-#front-mainsignup input::-webkit-input-placeholder {
-    color:    #777;
-}
-#front-mainsignup input:-moz-placeholder {
-    color:    #777;
-}
-#front-mainsignup input::-moz-placeholder {
-    color:    #777;
-}
-#front-mainsignup input:-ms-input-placeholder {
-    color:    #777;
-}
-
-#front-mainsignup button {
-	height: 41px;
-	width: 150px;
-	font-size: 18px;
-	font-weight: 700;
+#front-mainsignup a::after {
+	content: ' ›';
 }
 
 #front-mainsignup i {
@@ -68,6 +58,24 @@ body {
 	margin-left: 6px;
 }
 
-#front-randompost {
-	margin-top: 20px;
+#frontpage-bg {
+	position: fixed; right: 0; bottom: 0;
+	min-width: 100%; min-height: 100%;
+	width: auto; height: auto; z-index: -100;
+	background: url(../img/frontpagebg.jpg) no-repeat;
+	background-size: cover;
+	z-index: -1;
+}
+
+#footer {
+	border-top: 0;
+	margin: 0;
+	position: absolute;
+	left: 10px;
+	bottom: 5px;
+	z-index: 50;
+}
+
+#footer, #footer a {
+	color: #ddd;
 }
