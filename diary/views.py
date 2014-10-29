@@ -330,7 +330,7 @@ def search(request):
 @require_POST
 @csrf_exempt
 def pay_stripe_handle(request):
-	stripe.api_key = getattr(settings, 'STRIPE_PRIVATE_KEY', None)
+	stripe.api_key = getattr(settings, 'STRIPE_SECRET_KEY', None)
 
 	if not stripe.api_key:
 		return HttpResponse('Not configured for Stripe.')
