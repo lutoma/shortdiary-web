@@ -4,14 +4,11 @@
 {% load settings_value %}
 
 {%block content %}
-<h2>Sorry, but your free trial is over :(</h2>
+<h2>VIP</h2>
 
-<p>We both knew it would come to this. Your free trial is over and now we're greedily asking you for your precious, hard-earned money. Who do these diary people think they are anyways! Just asking for people's money like that!</p>
-<p>Obviously, it isn't as simple as this. Running and developing shortdiary costs a lot of money. And making sure your data stays private does, too. Blah blah blah.</p>
+<p>Get VIP because you'll be more awesome and we'll love you and stuff. Also, in the future, you'll get access to some extra features that are still in the works.</p>
 
-<h2>Simple & fair pricing</h2>
-
-<p>Our pricing is both fair and simple: 1€ per month, that's it. And you can cancel anytime, just by clicking a button!<br />No shady adhesion contracts.</p>
+<h3>Pay with Credit Card</h3>
 
 <form action="/pay/stripe/" method="POST">
   <script
@@ -19,7 +16,7 @@
     data-key="{% settings_value 'STRIPE_PUBLIC_KEY' %}"
     data-name="Shortdiary"
     data-description="VIP subscription"
-    data-amount="200"
+    data-amount="350"
     data-currency="EUR"
     data-email="{{ user.email }}"
     data-label="Pay with Credit Card"
@@ -27,8 +24,35 @@
   </script>
 </form>
 
-<p>Haven't tested just everything yet? We've got you covered.</p>
-<p><button>Give me more free trial</button></p>
+<h3> Pay via bank transfer</h3>
 
+<p>Please set up a monthly recurring bank transfer with the following details:</p>
+
+<table>
+    <tr>
+        <td style='width: 150px;'>Account holder</td>
+        <td>fnordcordia GbR</td>
+    </tr>
+    <tr>
+        <td>IBAN</td>
+        <td>
+            <span style="margin-right:.4ex;">DE02</span><span style="margin-right:.4ex;">4306</span><span style="margin-right:.4ex;">0967</span><span style="margin-right:.4ex;">6033</span><span style="margin-right:.4ex;">4002</span><span style="margin-right:.4ex;">00</span>
+        </td>
+    </tr>
+    <tr>
+        <td>BIC</td>
+        <td>GENODEM1GLS</td>
+    </tr>
+    <tr>
+        <td>Amount</td>
+        <td>€ 3.50</td>
+    </tr>
+    <tr>
+        <td>Reference</td>
+        <td>shortdiary vip {{ user.id }}</td>
+    </tr>
+</table>
+
+<p>Alternatively, you can also transfer multiples of 3.50€, in which case we will credit your account with the corresponding amount of months of VIP.</p>
 {% endblock %}
 

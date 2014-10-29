@@ -44,7 +44,6 @@ def index(request):
 	return render_to_response('index.html', context_instance=RequestContext(request, context))
 
 @login_required
-@user_passes_test(lambda u: u.has_paid(), login_url = '/pay/')
 def edit_post(request, post_id = None):
 	"""
 	Edit or add post.
@@ -295,6 +294,7 @@ def leaderboard(request):
 
 	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))
 
+#@user_passes_test(lambda u: u.has_paid(), login_url = '/pay/')
 def explore(request):
 	post_filters = {'public': True}
 
@@ -338,24 +338,23 @@ def pay_stripe_handle(request):
 	token = request.POST['stripeToken']
 
 	try:
-		charge = stripe.Charge.create(
-			amount = 200,
-			currency = "eur",
+		customer = stripe.Customer.create(
 			card = token,
-			description='Subscription {}'.format(request.user.email)
+			plan = 'shortdiary-vip',
+			email = request.user.email
 		)
 	except stripe.CardError, e:
 		return HttpResponse('Card declined.')
 
 	Payment(
 		user = request.user,
-		gateway = 'stripe',
-		gateway_identifier = request.POST['stripeToken'],
-		amount = 500,
+		gateway = 'stripe-recurring',
+		gateway_identifier = customer.id,
+		amount = 350,
 		currency = 'EUR',
 		valid_from = datetime.datetime.now(),
 		valid_until = datetime.datetime.now() + datetime.timedelta(6*30),
-		recurring = False,
+		recurring = True,
 	).save()
 
 	return HttpResponseRedirect('/pay/success/')
