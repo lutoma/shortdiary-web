@@ -295,7 +295,37 @@ def leaderboard(request):
 
 	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))
 
-<<<<<<< HEAD
+def explore(request):
+	post_filters = {'public': True}
+
+	if 'lang' in request.GET:
+		post_filters['natural_language'] = request.GET.get('lang', '')
+
+	try:
+		post = Post.objects.filter(**post_filters).order_by('?')[:1].get()
+	except Post.DoesNotExist:
+		return render_to_response('explore_nosuchpost.html', context_instance=RequestContext(request))
+
+	context = {
+		'title': 'Explore',
+		'post': post,
+		'language': post.get_language_name(locale = get_language_from_request(request)),
+	}
+	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
+
+@login_required
+def search(request):
+	query = request.GET.get('q', '')
+	posts = request.user.get_posts().filter(text__icontains = query)
+	posts.order_by('-date')
+
+	context = {
+		'title': 'Search',
+		'posts': posts,
+	}
+	return render_to_response('search_results.html', context_instance=RequestContext(request, context))
+
+
 @login_required
 @require_POST
 @csrf_exempt
@@ -329,34 +359,3 @@ def pay_stripe_handle(request):
 	).save()
 
 	return HttpResponseRedirect('/pay/success/')
-=======
-def explore(request):
-	post_filters = {'public': True}
-
-	if 'lang' in request.GET:
-		post_filters['natural_language'] = request.GET.get('lang', '')
-
-	try:
-		post = Post.objects.filter(**post_filters).order_by('?')[:1].get()
-	except Post.DoesNotExist:
-		return render_to_response('explore_nosuchpost.html', context_instance=RequestContext(request))
-
-	context = {
-		'title': 'Explore',
-		'post': post,
-		'language': post.get_language_name(locale = get_language_from_request(request)),
-	}
-	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
-
-@login_required
-def search(request):
-	query = request.GET.get('q', '')
-	posts = request.user.get_posts().filter(text__icontains = query)
-	posts.order_by('-date')
-
-	context = {
-		'title': 'Search',
-		'posts': posts,
-	}
-	return render_to_response('search_results.html', context_instance=RequestContext(request, context))
->>>>>>> master
