@@ -238,9 +238,6 @@ def update_post_signal(sender, instance, **kwargs):
 	if not ('update_fields' in kwargs and kwargs['update_fields'] == frozenset(['natural_language'])):
 		tasks.guess_post_language.delay(instance)
 
-post_save.connect(update_streak_signal, sender=Post, dispatch_uid="update_streak_signal")
-post_delete.connect(update_streak_signal, sender=Post, dispatch_uid="update_streak_signal")
-
 
 class Payment(models.Model):
 	user = models.ForeignKey(DiaryUser, verbose_name = _('paying user'))
