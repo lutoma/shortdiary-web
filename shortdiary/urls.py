@@ -44,9 +44,6 @@ urlpatterns += patterns('',
 	url(r'^accounts/password/change/$', 'django.contrib.auth.views.password_change', name='password_change'),
 	url(r'^accounts/password/change/done/$', 'django.contrib.auth.views.password_change_done', name='password_change_done'),
 
-	url(r'^invite/$', 'inviteman.views.invite'),
-	url(r'^invite/request/$', 'inviteman.views.invite_request'),
-
 	url(r'^tos/$', TemplateView.as_view(template_name = 'tos.html'), name = 'tos'),
 	url(r'^about/$', TemplateView.as_view(template_name = 'about.html'), name = 'about'),
 

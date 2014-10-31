@@ -10,7 +10,6 @@ from django.views.decorators.http import require_http_methods, require_POST
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from inviteman.models import Invite
 import django.contrib.auth
 from diary.models import Post, DiaryUser, Payment
 from diary.forms import PostForm, SignUpForm, LoginForm, AccountSettingsForm

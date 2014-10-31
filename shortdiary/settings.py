@@ -150,7 +150,6 @@ INSTALLED_APPS = (
 	'rest_framework',
 	'email_extras',
 	'diary',
-	'inviteman',
 	'provider',
 	'provider.oauth2',
 )
