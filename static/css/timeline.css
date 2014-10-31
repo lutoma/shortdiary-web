@@ -91,6 +91,7 @@
 	border: #c3c3c3 solid 1px;
 	border-radius: 2px;
 	background: #fff;
+	word-wrap: break-word;
 }
 
 .timeline-box > p {
