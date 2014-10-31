@@ -45,6 +45,7 @@ urlpatterns += patterns('',
 	url(r'^accounts/password/change/done/$', 'django.contrib.auth.views.password_change_done', name='password_change_done'),
 
 	url(r'^tos/$', TemplateView.as_view(template_name = 'tos.html'), name = 'tos'),
+	url(r'^privacy/$', TemplateView.as_view(template_name = 'privacy.html'), name = 'privacy'),
 	url(r'^about/$', TemplateView.as_view(template_name = 'about.html'), name = 'about'),
 
 	url(r'^pay/$', TemplateView.as_view(template_name = 'pay.html'), name = 'pay'),
