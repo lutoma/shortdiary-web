@@ -22,7 +22,7 @@ django-gravatar2
 django-htmlmin
 
 # AJAX & API
-djangorestframework
+djangorestframework==2.3.12
 
 # Authentication
 #python-openid
