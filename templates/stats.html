@@ -111,6 +111,36 @@
 {% endblock %}
 
 {%block content %}
+	<div id='activity-calendar' class='border'>
+		<div class='activity-infobox'>
+			<span class='factoid'>{% if user.get_streak %}{{ user.get_streak|intcomma }}{% else %}0{% endif %}</span>
+
+			{% trans 'day posting streak' %}
+		</div>
+
+		<div class='activity-infobox'>
+			<span class='factoid'>{{ user.get_posts|length|intcomma }}</span>
+
+			{% trans 'total posts' %}
+		</div>
+
+		<div class='activity-infobox last'>
+			<span class='factoid'>{{ user.get_post_characters|intcomma }}</span>
+
+			{% trans 'total characters in posts' %}
+		</div>
+
+		<hr class='clear'>
+
+		{% for day in user.get_year_history %}
+			<div class='activity-calendar-day' style="background-color: {% if day %}{{ day.get_activity_color }}{% else %}#eee{% endif %}">
+				&nbsp;
+			</div>
+		{% endfor %}
+
+		<br class='clear' />
+	</div>
+
 	{% if user.geolocation_enabled %}
 		<div style="width: 100%; padding: 0; margin: 0; min-height: 400px;">
 			<div style='padding-right: 20px'>
