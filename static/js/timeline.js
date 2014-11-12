@@ -5,7 +5,7 @@ var last_filter = null;
 
 function handle_filter(event) {
 	var posts = event.data;
-	var search_string = $(this).val();
+	var search_string = $(this).val().toLowerCase();
 
 	// Check if anything has changed
 	if (last_filter === search_string) {
