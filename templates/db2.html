@@ -47,7 +47,7 @@
 			<hr />
 
 			<div class='aside-keepvisible'>
-				<input id='timeline-search' type='text' placeholder='Search' />
+				<input id='timeline-filter' type='text' placeholder='Filter posts' />
 
 				<ul id='timeline-datepicker'>
 					{% verbatim %}
@@ -67,7 +67,7 @@
 						<h2 class='timeline-month' id='timegroup-m-{{this.year}}-{{this.month}}'>{{ this.month_name }} <span>{{ this.year }}</span></h2>
 						<div class='timeline'>
 							{{#each this.posts}}
-								<div class='timeline-box'>
+								<div class='timeline-box' data-post-id='{{ this.id }}'>
 									<div class='timeline-details'>
 										<a href='/posts/{{ this.id }}'>{{ this.date }}</a> <i class="icon-location-arrow"></i> <a href=''>{{ this.location_verbose }}</a>
 

@@ -1,8 +1,90 @@
 'use strict';
 
 var current_year = null;
+var last_filter = null;
+
+function handle_filter(event) {
+	var posts = event.data;
+	var search_string = $(this).val();
+
+	// Check if anything has changed
+	if (last_filter === search_string) {
+		return;
+	}
+
+	// Clone posts element so we don't delete entries from the original one
+	posts = jQuery.extend(true, {}, posts);
+
+
+	// Heavy filtering. Each layer first calls the filter for the next lower
+	// layer, then only returns true for an element if there actually are any
+	// contained elements left.
+	//
+	// Before, this just used to filter and then rerender, but that causes
+	// problems with event handlers and loses input field focus, so just filter
+	// and hide on the fly.
+	posts = _.filter(posts, function(year) {
+		year.posts = _.filter(year.posts, function(month) {
+			month.posts = _.filter(month.posts, function(post) {
+				var match = (post.text.toLowerCase().indexOf(search_string) >= 0);
+				$('.timeline-box[data-post-id="' + post.id + '"]').toggle(match);
+				return match;
+			})
+
+			var match = (month.posts.length > 0);
+			$('#timegroup-m-' + month.year + '-' + month.month).toggle(match);
+			return (match);
+		});
+
+		var match = (year.posts.length > 0);
+		$('#timegroup-' + year.year).toggle(match);
+		return (match);
+	});
+
+	last_filter = search_string;
+}
+
+function setup_handlers(posts) {
+	// Update sidebar year indicator with current scroll position
+	$('.timegroup').waypoint(function(direction) {
+		var year = _.find(posts, function (year_arr) {
+			// In most cases, a leftover of the old year will still be visible.
+			// This would result in the old year again being selected as the
+			// current one. This prevents this behaviour.
+			if(year_arr.year === current_year && direction === 'down') {
+				return false;
+			}
+
+			return $('#timegroup-' + year_arr.year).isOnScreen();
+		});
+		
+		if (!year) return;
+
+		$('#timeline-datepicker > li.active').removeClass('active');
+		$('#timeline-datepicker > li[data-year=' + year.year + ']').addClass('active');
+		current_year = year.year;
+	}, { offset: '60%' });
+
+	// Monitor changes to the filter input and rerender on change
+	$('#timeline-filter').on('keyup input blur', posts, handle_filter);
+}
 
 function render(posts) {
+	var template = Handlebars.compile($("#timeline-main").html());
+	var html = template({timegroups: posts});
+	$('#timeline-stage').html(html);
+
+	$('#timeline-datepicker li a').click(function (event) {
+		var scroll_to = $(event.toElement).data('scrollto');
+		$('#timegroup-' + scroll_to).ScrollTo();
+	});
+
+	$('.aside-keepvisible').scrollToFixed({marginTop: $('#top-block').outerHeight(true) - 20});
+
+	setup_handlers(posts);
+}
+
+function reformat_data(posts) {
 	// TODO Localization
 	// FIXME Why is this an object?
 	var month_names = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June",
@@ -29,49 +111,16 @@ function render(posts) {
 		});
 
 		year_posts = _.sortBy(year_posts, function(month) { return -month.month; });
-		console.log('sorted posts: ', year_posts)
-
 		return {'year': year, 'posts': year_posts};
 	});
 
 	posts = _.sortBy(posts, function(year) { return -year.year; });
 	current_year = posts[0].year;
-		console.log(posts)
-
-	var template = Handlebars.compile($("#timeline-main").html());
-	var html = template({timegroups: posts});
-	$('#timeline-stage').html(html);
-
-	$('#timeline-datepicker li a').click(function (event) {
-		var scroll_to = $(event.toElement).data('scrollto');
-		$('#timegroup-' + scroll_to).ScrollTo();
-	});
-
-	$('.aside-keepvisible').scrollToFixed({marginTop: $('#top-block').outerHeight(true) - 20});
-
-	// Update sidebar year indicator with current scroll position
-	$('.timegroup').waypoint(function(direction) {
-		var year = _.find(posts, function (year_arr) {
-			// In most cases, a leftover of the old year will still be visible.
-			// This would result in the old year again being selected as the
-			// current one. This prevents this behaviour.
-			if(year_arr.year === current_year && direction === 'down') {
-				return false;
-			}
-
-			return $('#timegroup-' + year_arr.year).isOnScreen();
-		});
-		
-		if (!year) return;
-
-		$('#timeline-datepicker > li.active').removeClass('active');
-		$('#timeline-datepicker > li[data-year=' + year.year + ']').addClass('active');
-		current_year = year.year;
-	}, { offset: '60%' });
+	render(posts);
 }
 
 $(window).ready(function() {
 	Handlebars.registerPartial("timeline-boxlist", $("#timeline-boxlist-partial").html());
 
-	$.get('/api/v1/posts/timeline/?format=json', render);
+	$.get('/api/v1/posts/timeline/?format=json', reformat_data);
 });
