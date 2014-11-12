@@ -61,6 +61,11 @@
 		</aside>
 
 		{% verbatim %}
+			<div id='timeline-filter-notposts'>
+				<h1>Looks like it's just us here</h1>
+				<h2>I couldn't find any posts containing <span>...</span></h2>
+			</div>
+
 			{{#each timegroups}}
 				<div class='timegroup' id='timegroup-{{this.year}}' data-year='{{this.year}}'>
 					<h1 class='timeline-year'>{{ this.year }}</h1>

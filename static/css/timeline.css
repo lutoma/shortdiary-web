@@ -56,6 +56,14 @@
 	font-weight: 600;
 }
 
+#timeline-filter-notposts {
+	display: none;
+}
+
+#timeline-filter-notposts > h2 > span {
+	font-weight: 200;
+}
+
 .timeline {
 	position: relative;
 	width: 650px;

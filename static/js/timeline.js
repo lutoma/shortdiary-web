@@ -44,6 +44,10 @@ function handle_filter(event) {
 	// Rerender datepicker
 	render_datepicker(posts);
 
+	// Show/hide 'no posts' message if necessary
+	$('#timeline-filter-notposts > h2 > span').html($(this).val());
+	$('#timeline-filter-notposts').toggle(posts.length < 1);
+
 	last_filter = search_string;
 }
 
