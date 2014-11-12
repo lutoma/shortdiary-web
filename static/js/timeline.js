@@ -100,6 +100,13 @@ function render(posts) {
 }
 
 function reformat_data(posts) {
+	if (_.isEmpty(posts)) {
+		var template = Handlebars.compile($("#timeline-noposts").html());
+		$('#timeline-stage').html(template());
+
+		return false;
+	}
+
 	// TODO Localization
 	// FIXME Why is this an object?
 	var month_names = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June",
