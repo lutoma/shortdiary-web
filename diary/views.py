@@ -23,17 +23,20 @@ from django.utils.translation import get_language_from_request
 import stripe
 
 def index(request):
+	context = {'title': None}
+
+	if not request.user.is_authenticated():
+		return render_to_response('frontpage.html', context_instance=RequestContext(request, context))
+
+	return render_to_response('db2.html', context_instance=RequestContext(request, context))
+
+
+@login_required
+def dashboard_old(request):
 	try:
 		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
 	except Post.DoesNotExist:
 		randompost = None
-
-	if not request.user.is_authenticated():
-		context = {
-			'title': None,
-			'post': randompost,
-		}
-		return render_to_response('frontpage.html', context_instance=RequestContext(request, context))
 
 	context = {
 		'title': None,
