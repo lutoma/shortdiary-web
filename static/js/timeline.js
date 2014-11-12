@@ -41,6 +41,9 @@ function handle_filter(event) {
 		return (match);
 	});
 
+	// Rerender datepicker
+	render_datepicker(posts);
+
 	last_filter = search_string;
 }
 
@@ -69,15 +72,23 @@ function setup_handlers(posts) {
 	$('#timeline-filter').on('keyup input blur', posts, handle_filter);
 }
 
-function render(posts) {
-	var template = Handlebars.compile($("#timeline-main").html());
+function render_datepicker(posts) {
+	var template = Handlebars.compile($("#timeline-datepicker-template").html());
 	var html = template({timegroups: posts});
-	$('#timeline-stage').html(html);
+	$('#timeline-datepicker').html(html);
 
 	$('#timeline-datepicker li a').click(function (event) {
 		var scroll_to = $(event.toElement).data('scrollto');
 		$('#timegroup-' + scroll_to).ScrollTo();
 	});
+}
+
+function render(posts) {
+	var template = Handlebars.compile($("#timeline-main").html());
+	var html = template({timegroups: posts});
+	$('#timeline-stage').html(html);
+
+	render_datepicker(posts);
 
 	$('.aside-keepvisible').scrollToFixed({marginTop: $('#top-block').outerHeight(true) - 20});
 

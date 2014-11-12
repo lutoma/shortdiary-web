@@ -50,11 +50,10 @@
 				<input id='timeline-filter' type='text' placeholder='Filter posts' />
 
 				<ul id='timeline-datepicker'>
-					{% verbatim %}
-						{{#each timegroups}}
-							<li {{#if @first}}class='active'{{/if}} data-year='{{this.year}}'><a href='#' data-scrollto='{{this.year}}'>{{this.year}}</a></li>
-						{{/each}}
-					{% endverbatim %}
+					{% comment %}<!--
+						Timeline datepicker template gets inserted here.
+						(See template below).
+					-->{% endcomment %}
 				</ul>
 			</div>
 		</aside>
@@ -84,6 +83,14 @@
 						</div>
 					{{/each}}
 				</div>
+			{{/each}}
+		{% endverbatim %}
+	</script>
+
+	<script id="timeline-datepicker-template" type="text/x-handlebars-template">
+		{% verbatim %}
+			{{#each timegroups}}
+				<li {{#if @first}}class='active'{{/if}} data-year='{{this.year}}'><a href='#' data-scrollto='{{this.year}}'>{{this.year}}</a></li>
 			{{/each}}
 		{% endverbatim %}
 	</script>
