@@ -41,6 +41,9 @@ function handle_drop(e) {
 }
 
 $(document).ready(function() {
+	mixpanel.track('New post load');
+	mixpanel.track_forms("#newpost-form", "Created Post");
+
 	$('#text-input').keyup(show_chars);
 	$('#text-input').change(show_chars);
 

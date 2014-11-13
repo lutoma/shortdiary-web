@@ -74,7 +74,7 @@
 			<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
 		{% endif %}
 		
-		<form action='' method='POST' enctype='multipart/form-data'>
+		<form action='' method='POST' enctype='multipart/form-data' {% if not edit_post %} id='newpost-form' {% endif %}>
 			{% csrf_token %}
 
 			<input type='hidden' name='location_lat' value='' />

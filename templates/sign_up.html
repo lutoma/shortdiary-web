@@ -2,6 +2,11 @@
 {% load i18n %}
 
 {%block content %}
+	<script>
+		mixpanel.track("Signup load");
+		mixpanel.track_forms("#register", "Created Account");
+	</script>
+
 	{% if form.errors %}
 		<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
 	{% endif %}
@@ -9,7 +14,7 @@
 	<p style="font-size: 1.3em; font-weight: 300; margin: 0;">Welcome aboard!</p>
 	<p style="font-size: 1.3em; font-weight: 200; margin: 0; margin-bottom: 25px;">This will be awesome. Just fill out this fancy form and we're good to go!</p>
 
-	<form action='' method='POST' enctype='multipart/form-data'>
+	<form action='' method='POST' enctype='multipart/form-data' id='register'>
 		{% csrf_token %}
 		<input type='text' name='username' maxlength='100' placeholder='username'  value="{% if form.username.value %}{{ form.username.value }}{% endif %}" />
 		{{ form.username.errors }}
