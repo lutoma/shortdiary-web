@@ -84,6 +84,15 @@
 						{% if user.is_authenticated %}
 							<li><a href="{% url 'diary.views.account_settings' %}" title="{% trans 'Account settings' %}"><i class="icon-wrench"></i></a></li>
 							<li><a href="{% url 'django.contrib.auth.views.logout' %}" title="{% trans 'Sign out' %}"><i class="icon-signout"></i></a></li>
+						{% else %}
+							<div id='nav-login'>
+								<form action='/accounts/login/' method='POST' enctype='multipart/form-data' id='register'>
+									{% csrf_token %}
+									<input type='text' name='username' placeholder='Username' />
+									<input type='password' name='password' placeholder='Password' />
+									<input type='submit' value='Log in' style='display: none;' />
+								</form>
+							</div>
 						{% endif %}
 					</ul>
 				</nav>

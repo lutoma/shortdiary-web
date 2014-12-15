@@ -13,6 +13,7 @@
 	<meta name="twitter:description" content="Remember what you did one year ago. Revisit your past, relive great moments. shortdiary sends you diary entries from your past." />
 
 	<link href='{% static "css/frontpage.css" %}' rel="stylesheet" />
+	<script src='{% static "js/frontpage.js" %}'></script>
 {% endblock %}
 
 {% block maintitle %}
@@ -22,6 +23,16 @@
 <!--		<h1 id='title'>Remember what you did one year ago. Revisit your past, relive great moments.</h1>-->
 
 		<div id="front-mainsignup">
+			<div class='form'>
+				<form action='/accounts/signup/' method='POST' enctype='multipart/form-data' id='register'>
+					{% csrf_token %}
+					<input type='text' placeholder='Username' name='username' />
+					<input type='text' placeholder='Email' name='email' />
+					<input type='password' placeholder='Password' name='password' />
+					<input type='submit' value='Sign up for free.' />
+				</form>
+			</div>
+
 			<a href='{% url "diary.views.sign_up" %}'>Sign up for free.</a>
 		</div>
 	</div>

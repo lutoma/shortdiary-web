@@ -25,7 +25,24 @@ body {
 	text-align: center;
 }
 
-#front-mainsignup a {
+#front-mainsignup .form {
+	display: none;
+	width: 1px;
+	height: 90px;
+	overflow: hidden;
+	padding: 0;
+}
+
+#front-mainsignup .form input {
+	display: inline-block;
+	width: 150px;
+	height: 40px;
+	font-size: 1.3em;
+	padding: 0.2em 0.3em;
+	margin-right: 0.3em;
+}
+
+#front-mainsignup a, #front-mainsignup .form input[type=submit] {
 	color: white;
 	text-shadow: 0 1px 1px rgba(0,0,0,.25);
 	font-weight: bold;
@@ -41,7 +58,7 @@ body {
 	background-image: linear-gradient(to bottom,#8dcc35,#47a204);
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
-	padding: 15px 37px;
+
 	border: none;
 	cursor: pointer;
 	font-family: inherit;
@@ -50,6 +67,15 @@ body {
 
 #front-mainsignup a::after {
 	content: ' ›';
+}
+
+#front-mainsignup a {
+	padding: 15px 37px;
+}
+
+#front-mainsignup .form input[type=submit] {
+	width: 10em;
+	height: 51px;
 }
 
 #front-mainsignup i {

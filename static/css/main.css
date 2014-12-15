@@ -339,6 +339,43 @@ aside > .first {
 	margin-top: 0;
 }
 
+#nav-login {
+	margin-left: 10px;
+}
+
+#nav-login input {
+	display: inline-block;
+	margin-right: 10px;
+	margin-top: 7px;
+	background-color: rgba(0, 0, 0, .15);
+	border: none;
+	color: rgba(255, 255, 255, 0.81);
+	padding: .3em .7em;
+}
+
+#nav-login input[type=text], #nav-login input[type=password] {
+	width: 150px;
+	box-shadow: inset 1px 0px 6px -1px rgba(0, 0, 0, .2),5px 5px 100px 7px rgba(0, 0, 0, .2);
+}
+
+#nav-login input[type=submit] {
+	background: rgba(0,0,0,0);
+	border: 1px solid rgba(0, 0, 0, .15);
+}
+
+#nav-login input::-webkit-input-placeholder {
+    color: rgba(140, 140, 140, .8);
+}
+#nav-login input:-moz-placeholder {
+    color: red;
+}
+#nav-login input::-moz-placeholder {
+    color: red;
+}
+#nav-login input:-ms-input-placeholder {
+    color: red;
+}
+
 /* –––––––––––––––––––– */
 /*        Footer        */
 /* –––––––––––––––––––– */
