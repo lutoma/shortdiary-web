@@ -29,6 +29,7 @@
 		<aside id='timeline-aside'>
 			{% gravatar user.email 45 %}
 			<h2 id='greeting'>Hi {{ request.user }}!</h2>
+			{% if user.has_paid %}<span class='vip-badge'>VIP</span>{% endif %}
 			<p id='greeting-2'>Here's how you're doing:</p>
 
 

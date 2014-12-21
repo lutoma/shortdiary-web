@@ -12,6 +12,7 @@
 
 #greeting {
 	margin: 0;
+	display: inline-block;
 }
 
 #greeting-2 {
@@ -23,6 +24,18 @@
 	float: right;
 	border-radius: 150px;
 	margin-top: 8px;
+}
+
+.vip-badge {
+	display: inline-block;
+	background: #036564;
+	margin: 0;
+	margin-left: 5px;
+	font-weight: bold;
+	font-size: .8em;
+	color: white;
+	padding: 0 5px;
+	border-radius: 15px;
 }
 
 #timeline-aside h3 {
