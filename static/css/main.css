@@ -477,3 +477,9 @@ aside > .first {
 	width: 619px;
 	height: 260px;
 }
+
+/* VIP site */
+
+.stripe-button-el {
+	height: 30px;
+}

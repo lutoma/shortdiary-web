@@ -48,7 +48,7 @@ urlpatterns += patterns('',
 	url(r'^privacy/$', TemplateView.as_view(template_name = 'privacy.html'), name = 'privacy'),
 	url(r'^about/$', TemplateView.as_view(template_name = 'about.html'), name = 'about'),
 
-	url(r'^pay/$', TemplateView.as_view(template_name = 'pay.html'), name = 'pay'),
+	url(r'^vip/$', TemplateView.as_view(template_name = 'pay.html'), name = 'pay'),
 	url(r'^pay/success/$', TemplateView.as_view(template_name = 'pay_success.html'), name = 'pay'),
 	url(r'^pay/stripe/$', 'diary.views.pay_stripe_handle'),
 
