@@ -3,6 +3,7 @@
 {% load l10n %} 
 {% load humanize %}
 {% load staticfiles %}
+{% load gravatar %}
 
 {% block headeradd %}
 	<script src='{% static "js/index.js" %}'></script>
@@ -26,6 +27,7 @@
 
 	<script id="timeline-main" type="text/x-handlebars-template">
 		<aside id='timeline-aside'>
+			{% gravatar user.email 45 %}
 			<h2 id='greeting'>Hi {{ request.user }}!</h2>
 			<p id='greeting-2'>Here's how you're doing:</p>
 

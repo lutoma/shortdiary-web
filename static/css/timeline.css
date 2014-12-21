@@ -19,6 +19,12 @@
 	margin-bottom: 20px;
 }
 
+.gravatar {
+	float: right;
+	border-radius: 150px;
+	margin-top: 8px;
+}
+
 #timeline-aside h3 {
 	width: 100%;
 	display: inline-block;
