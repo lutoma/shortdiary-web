@@ -78,6 +78,12 @@
 							{{#each this.posts}}
 								<div class='timeline-box' data-post-id='{{ this.id }}'>
 									<div class='timeline-details'>
+										{{#if this.public }}
+											<i class="icon-unlock timeline-privacy-icon"></i>
+										{{else}}
+											<i class="icon-lock timeline-privacy-icon"></i>
+										{{/if}}
+
 										<a href='/posts/{{ this.id }}'>{{ this.date }}</a> <i class="icon-location-arrow"></i> <a href=''>{{ this.location_verbose }}</a>
 
 										{{#if this.editable}}
