@@ -220,6 +220,14 @@ div[role=main] {
 	clear: both;
 }
 
+.clearfix:after {
+    content: ".";
+    clear: both;
+    display: block;
+    visibility: hidden;
+    height: 0px;
+}
+
 aside {
 	float: right;
 	

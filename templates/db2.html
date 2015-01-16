@@ -76,7 +76,7 @@
 						<h2 class='timeline-month' id='timegroup-m-{{this.year}}-{{this.month}}'>{{ this.month_name }} <span>{{ this.year }}</span></h2>
 						<div class='timeline'>
 							{{#each this.posts}}
-								<div class='timeline-box' data-post-id='{{ this.id }}'>
+								<div class='timeline-box clearfix' data-post-id='{{ this.id }}'>
 									<div class='timeline-details'>
 										{{#if this.public }}
 											<i class="icon-unlock timeline-privacy-icon"></i>
@@ -93,6 +93,12 @@
 										{{/if}}
 									</div>
 									
+									{{# if this.image }}
+										<a href='/asset/{{{ this.image }}}' target='_blank'>
+											<img class='timeline-post-image' src='/asset/{{{ this.image }}}' />
+										</a>
+									{{/if}}
+
 									<p>{{{ this.text }}}</p>
 								</div>
 							{{/each}}
