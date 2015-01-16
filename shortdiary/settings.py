@@ -95,16 +95,16 @@ if not DEBUG:
 
 MIDDLEWARE_CLASSES = (
 	'django.middleware.gzip.GZipMiddleware',
+#	'htmlmin.middleware.HtmlMinifyMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.locale.LocaleMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
-	'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'diary.middleware.TrackLastActivityMiddleware',
-	'htmlmin.middleware.HtmlMinifyMiddleware',
-	'htmlmin.middleware.MarkRequestMiddleware',
+	# Uncomment the next line for simple clickjacking protection:
+	# 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'diary.middleware.TrackLastActivityMiddleware'
 )
 
 debug_context = lambda request: {'DEBUG': DEBUG}
