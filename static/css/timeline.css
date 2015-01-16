@@ -126,6 +126,34 @@
 	margin: 0;
 }
 
+.timeline-post-date {
+	/* Evil hack, please fix some time */
+	float: left;
+	margin-left: -77px;
+	padding-right: 7px;
+	padding-left: 7px;
+	padding-top: 0;
+
+	color: #515151;
+	border: 1px solid #d9d9d9;
+	border-radius: 5px;
+	width: 50px;
+	overflow: hidden;
+	text-align: center;
+}
+
+.timeline-post-date .date-num {
+	font-size: 1.8em;
+	line-height: 1.3;
+	padding-top: 4px;
+	display: block;
+}
+
+.timeline-post-date .date-dow {
+	font-size: .7em;
+	display: block;
+}
+
 .timeline-details {
 	border-bottom: 1px solid #d9d9d9;
 	background: #fafafa;
@@ -137,6 +165,12 @@
 
 .timeline-privacy-icon {
 	margin-right: 5px;
+	padding-right: 10px;
+	border-right: 1px solid #d9d9d9;
+}
+
+.timeline-post-location i {
+	margin-right: 3px;
 }
 
 .timeline-post-image {

@@ -77,6 +77,12 @@
 						<div class='timeline'>
 							{{#each this.posts}}
 								<div class='timeline-box clearfix' data-post-id='{{ this.id }}'>
+									<time datetime='{{ this.date }}' class='timeline-post-date'>
+										<span class='date-num'>{{ this.day }}</span>
+
+										<span class='date-dow'>{{ this.dow }}</span>
+									</time>
+
 									<div class='timeline-details'>
 										{{#if this.public }}
 											<i class="icon-unlock timeline-privacy-icon"></i>
@@ -84,7 +90,10 @@
 											<i class="icon-lock timeline-privacy-icon"></i>
 										{{/if}}
 
-										<a href='/posts/{{ this.id }}'>{{ this.date }}</a> <i class="icon-location-arrow"></i> <a href=''>{{ this.location_verbose }}</a>
+										<span class='timeline-post-location'>
+											<i class="icon-location-arrow"></i>
+											<a href='/posts/{{ this.id }}/'>{{ this.location_verbose }}</a>
+										</span>
 
 										{{#if this.editable}}
 											<span style='float: right;'>
@@ -94,8 +103,9 @@
 									</div>
 									
 									{{# if this.image }}
-										<a href='/asset/{{{ this.image }}}' target='_blank'>
-											<img class='timeline-post-image' src='/asset/{{{ this.image }}}' />
+										<!-- Handlebars, you have some seriously weird syntax. -->
+										<a href='{{ ../../../../media_url }}{{ this.image }}' target='_blank'>
+											<img class='timeline-post-image' src='{{ ../../../../media_url }}{{ this.image }}' />
 										</a>
 									{{/if}}
 

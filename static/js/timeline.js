@@ -89,7 +89,7 @@ function render_datepicker(posts) {
 
 function render(posts) {
 	var template = Handlebars.compile($("#timeline-main").html());
-	var html = template({timegroups: posts});
+	var html = template({timegroups: posts, media_url: media_url});
 	$('#timeline-stage').html(html);
 
 	render_datepicker(posts);
@@ -112,6 +112,9 @@ function reformat_data(posts) {
 	var month_names = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June",
 		7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"};
 
+	var day_names = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+
 	var day = 1000 * 60 * 60 * 24;
 
 	// Reformat and sort posts (objects are unsorted, so convert to arrays)
@@ -119,8 +122,11 @@ function reformat_data(posts) {
 		year_posts = _.map(year_posts, function (month_posts, month) {
 			month_posts = _.map(month_posts, function (post) {
 				// FIXME Code/logic duplication
-				post['editable'] = (new Date() - new Date(post['date'])) <= day * 3;
+				var js_date = new Date(post['date']);
+				post['editable'] = (new Date() - js_date) <= day * 3;
 				post['text'] = post['text'].replace(/\n/g, '<br />');
+				post['day'] = js_date.getDate();
+				post['dow'] = day_names[js_date.getDay()];
 				return post;
 			});
 
