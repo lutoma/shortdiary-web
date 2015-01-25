@@ -87,7 +87,7 @@
 						<h2 class='timeline-month' id='timegroup-m-{{this.year}}-{{this.month}}'>{{ this.month_name }} <span>{{ this.year }}</span></h2>
 						<div class='timeline'>
 							{{#each this.posts}}
-								<div class='timeline-box clearfix' data-post-id='{{ this.id }}'>
+								<div class='timeline-box {{#if this.image}}clearfix{{/if}}' data-post-id='{{ this.id }}'>
 									<time datetime='{{ this.date }}' class='timeline-post-date'>
 										<span class='date-num'>{{ this.day }}</span>
 
