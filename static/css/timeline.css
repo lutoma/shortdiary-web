@@ -55,6 +55,21 @@
 	margin-top: 40px;
 }
 
+#timeline-optionfilter {
+	padding-left: 4px;
+}
+
+#timeline-optionfilter li {
+	list-style-type: none;
+}
+
+#timeline-optionfilter input {
+	display: inline-block;
+	margin: 0;
+	margin-right: 3px;
+	vertical-align: bottom;
+}
+
 #timeline-datepicker {
 	margin: 0;
 	padding: 0;
@@ -75,12 +90,8 @@
 	font-weight: 600;
 }
 
-#timeline-filter-notposts {
+#timeline-filter-noposts {
 	display: none;
-}
-
-#timeline-filter-notposts > h2 > span {
-	font-weight: 200;
 }
 
 .timeline {

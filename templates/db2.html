@@ -52,21 +52,32 @@
 			<hr />
 
 			<div class='aside-keepvisible'>
-				<input id='timeline-filter' type='text' placeholder='Filter posts' />
-
 				<ul id='timeline-datepicker'>
 					{% comment %}<!--
 						Timeline datepicker template gets inserted here.
 						(See template below).
 					-->{% endcomment %}
 				</ul>
+
+				<input id='timeline-filter' type='text' placeholder='Filter posts' />
+
+				{% verbatim %}
+					<ul id='timeline-optionfilter'>
+						{{#each filters}}
+							<li>
+								<input type='checkbox' name='{{ this.[0] }}' id='{{ this.[0] }}' />
+								<label for='{{ this.[0] }}'>{{ this.[1] }}</label>
+							</li>
+						{{/each}}
+					</ul>
+				{% endverbatim %}
 			</div>
 		</aside>
 
 		{% verbatim %}
-			<div id='timeline-filter-notposts'>
+			<div id='timeline-filter-noposts'>
 				<h1>Looks like it's just us here</h1>
-				<h2>I couldn't find any posts containing <span>...</span></h2>
+				<h2>I couldn't find any posts matching your filters</h2>
 			</div>
 
 			{{#each timegroups}}

@@ -1,16 +1,17 @@
 'use strict';
 
 var current_year = null;
-var last_filter = null;
+
+var filters = [
+	['has_image', 'With image'],
+	['is_private', 'Private posts'],
+	['is_public', 'Public posts'],
+]
+
 
 function handle_filter(event) {
 	var posts = event.data;
-	var search_string = $(this).val().toLowerCase();
-
-	// Check if anything has changed
-	if (last_filter === search_string) {
-		return;
-	}
+	var search_string = $('#timeline-filter').val().toLowerCase();
 
 	// Clone posts element so we don't delete entries from the original one
 	posts = jQuery.extend(true, {}, posts);
@@ -26,9 +27,25 @@ function handle_filter(event) {
 	posts = _.filter(posts, function(year) {
 		year.posts = _.filter(year.posts, function(month) {
 			month.posts = _.filter(month.posts, function(post) {
-				var match = (post.text.toLowerCase().indexOf(search_string) >= 0);
+				var match = true;
+
+				if(search_string.length > 0) {
+					match = match && (post.text.toLowerCase().indexOf(search_string) >= 0);
+				}
+
+				// Apply the option filters
+				if($('#has_image').prop('checked')) {
+					match = match && (post.image.length > 0);
+				}
+				if($('#is_private').prop('checked')) {
+					match = match && (!post.public);
+				}
+				if($('#is_public').prop('checked')) {
+					match = match && post.public;
+				}
+
 				$('.timeline-box[data-post-id="' + post.id + '"]').toggle(match);
-				return match;
+				return (match);
 			})
 
 			var match = (month.posts.length > 0);
@@ -45,10 +62,7 @@ function handle_filter(event) {
 	render_datepicker(posts);
 
 	// Show/hide 'no posts' message if necessary
-	$('#timeline-filter-notposts > h2 > span').html($(this).val());
-	$('#timeline-filter-notposts').toggle(posts.length < 1);
-
-	last_filter = search_string;
+	$('#timeline-filter-noposts').toggle(posts.length < 1);
 }
 
 function setup_handlers(posts) {
@@ -74,6 +88,7 @@ function setup_handlers(posts) {
 
 	// Monitor changes to the filter input and rerender on change
 	$('#timeline-filter').on('keyup input blur', posts, handle_filter);
+	$('#timeline-optionfilter input').change(posts, handle_filter);
 }
 
 function render_datepicker(posts) {
@@ -89,7 +104,7 @@ function render_datepicker(posts) {
 
 function render(posts) {
 	var template = Handlebars.compile($("#timeline-main").html());
-	var html = template({timegroups: posts, media_url: media_url});
+	var html = template({timegroups: posts, media_url: media_url, filters: filters});
 	$('#timeline-stage').html(html);
 
 	render_datepicker(posts);
