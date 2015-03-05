@@ -114,6 +114,23 @@ function render(posts) {
 	setup_handlers(posts);
 }
 
+function mention_click_handler(link) {
+	// FIXME Hacky.
+	var field = $('#timeline-filter');
+	field.val(link.text);
+	field.trigger("input");
+	return false;
+};
+
+function reformat_post_text(text) {
+	text = text.replace(/\n/g, '<br />');
+	// FIXME This is code duplication / regex duplication from diary/models.py
+	// The mentions should instead be passed over by the API.
+	// Also, this is superhacky. Also, fuck Javascript and its lack of proper utf8 regexes.
+	text = text.replace(/@\w+\b/g, "<a href='#' onclick='mention_click_handler(this);'>$&</a>");
+	return text;
+}
+
 function reformat_data(posts) {
 	if (_.isEmpty(posts)) {
 		var template = Handlebars.compile($("#timeline-noposts").html());
@@ -128,8 +145,6 @@ function reformat_data(posts) {
 		7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"};
 
 	var day_names = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-
-
 	var day = 1000 * 60 * 60 * 24;
 
 	// Reformat and sort posts (objects are unsorted, so convert to arrays)
@@ -139,7 +154,7 @@ function reformat_data(posts) {
 				// FIXME Code/logic duplication
 				var js_date = new Date(post['date']);
 				post['editable'] = (new Date() - js_date) <= day * 3;
-				post['text'] = post['text'].replace(/\n/g, '<br />');
+				post['text'] = reformat_post_text(post['text']);
 				post['day'] = js_date.getDate();
 				post['dow'] = day_names[js_date.getDay()];
 				return post;
