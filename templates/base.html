@@ -117,12 +117,11 @@
 
 			{% block footer %}
 				<div id='footer'>
-					shortdiary {% include 'current_git_version.txt' %} | <a href='{% url "privacy" %}'>{% trans 'Privacy' %}</a> | <a href='{% url "about" %}'>{% trans 'Security &amp; Imprint' %}</a>
+					<a href='https://fnordcordia.eu/'><img src='{%static "img/fnordcordia-logo.png" %}' id='fnordcordia-footerlogo' /></a> | shortdiary {% include 'current_git_version.txt' %} | <a href='{% url "privacy" %}'>{% trans 'Privacy' %}</a> | <a href='{% url "about" %}'>{% trans 'Security &amp; Imprint' %}</a>
 
 					{% if user.is_staff %}
 						 | <a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
 					{% endif %}
-
 
 					<span id="languages">
 						<i class="icon-flag" style="margin-right: 7px;"></i>
