@@ -180,6 +180,12 @@
 	border-right: 1px solid #d9d9d9;
 }
 
+.timeline-post-inline-date {
+	margin-right: 7px;
+	padding-right: 3px;
+	border-right: 1px solid #d9d9d9;
+}
+
 .timeline-post-location i {
 	margin-right: 3px;
 }

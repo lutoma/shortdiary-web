@@ -157,6 +157,8 @@ function reformat_data(posts) {
 				post['text'] = reformat_post_text(post['text']);
 				post['day'] = js_date.getDate();
 				post['dow'] = day_names[js_date.getDay()];
+				post['month_name'] = month_names[month];
+				post['year'] = year;
 				return post;
 			});
 

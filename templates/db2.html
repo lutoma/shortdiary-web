@@ -101,9 +101,13 @@
 											<i class="icon-lock timeline-privacy-icon"></i>
 										{{/if}}
 
+										<span class='timeline-post-inline-date'>
+											<a href='/posts/{{ this.id }}/'>{{ this.month_name }} {{ this.year }}</a>
+										</span>
+
 										<span class='timeline-post-location'>
 											<i class="icon-location-arrow"></i>
-											<a href='/posts/{{ this.id }}/'>{{ this.location_verbose }}</a>
+											{{ this.location_verbose }}
 										</span>
 
 										{{#if this.editable}}

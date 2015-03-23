@@ -232,6 +232,8 @@ def delete_post(request, post_id):
 	Delete a post. This is currently an AJAX only view
 	"""
 
+	# FIXME This should be migrated to the api app.
+
 	post = get_object_or_404(Post,
 		id = post_id,
 		author = request.user,
