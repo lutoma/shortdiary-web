@@ -8,7 +8,10 @@ from rest_framework import status, mixins
 from django.utils.translation import ugettext_lazy as _
 from collections import OrderedDict
 from rest_framework.permissions import AllowAny
-
+from django.core.cache import cache
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
 	model = DiaryUser
@@ -76,6 +79,13 @@ class PostTimeline(ListAPIView):
 	"""
 	serializer_class=PostSerializer
 	def get(self, request, format=None):
+		# This should probably be moved to the model
+		cache_key = 'api_timeline_{}'.format(request.user.id)
+		cached_timeline = cache.get(cache_key)
+
+		if cached_timeline:
+			return Response(cached_timeline)
+
 		posts = Post.objects.filter(author=request.user).order_by("-date")
 		sorted_posts = OrderedDict()
 
@@ -88,9 +98,19 @@ class PostTimeline(ListAPIView):
 				sorted_year_posts[month_obj.month] = map(lambda post: PostSerializer(post).data, month_posts)
 
 			sorted_posts[year_obj.year] = sorted_year_posts
-		
+
+		# Infinite lifetime since this is invalidated as soon as a new
+		# post is written by the user
+		cache.set(cache_key, sorted_posts, None)
+
 		return Response(sorted_posts)
 
+@receiver(post_save, sender=Post)
+def post_save_timeline_invalidate(sender, **kwargs):
+	# Close enough for now. Should probably regenerate the timeline in a
+	# separate background job in the future to avoid long waits after saving
+	# a post.
+	cache.delete('api_timeline_{}'.format(kwargs['instance'].author.id))
 
 class PostDetail(RetrieveUpdateDestroyAPIView):
 	"""

@@ -44,6 +44,7 @@ class DiaryUser(AbstractUser):
 	def get_streak(self):
 		# We need to base64 this since the username might contain characters
 		# that are invalid as memcache keys.
+		# FIXME Why does this not simply use the user ID?
 		cache_key = base64.b64encode('diary_{}_streak'.format(self.username))
 		cached_streak = cache.get(cache_key)
 
