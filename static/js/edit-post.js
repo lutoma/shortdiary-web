@@ -55,4 +55,25 @@ $(document).ready(function() {
 	$('#image-upload').click(function() {
 		$('#image-upload-input').click();
 	});
+
+	$('#text-input').textcomplete([
+    { 
+        mentions: mention_toplist,
+        match: /\B@(\w*)$/,
+        search: function (term, callback) {
+            callback($.map(this.mentions, function (mention) {
+                return mention.indexOf(term) === 0 ? mention : null;
+            }));
+        },
+        index: 1,
+        replace: function (mention) {
+            return '@' + mention + ' ';
+        }
+    }
+], { appendTo: 'body' })
+
+	$('#text-input').overlay([{
+		match: /\B@\w+/g,
+		css: {'background-color': '#d8dfea'}
+	}]);
 });

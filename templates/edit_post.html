@@ -4,8 +4,12 @@
 {% load staticfiles %}
 
 {% block headeradd %}
+	<link href="{% static 'css/jquery.textcomplete.css' %}" rel="stylesheet" />
+
 	<script src='{% static "js/edit-post.js" %}'></script>
 	<script src='{% static "js/html5slider.js" %}'></script>
+	<script src='{% static "js/jquery.textcomplete.min.js" %}'></script>
+	<script src='{% static "js/jquery.overlay.min.js" %}'></script>
 
 	{% if user.geolocation_enabled %}
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true&amp;language=en"></script>
@@ -20,6 +24,12 @@
 		var t_words = "{% trans 'words' %}";
 		var t_characters = "{% trans 'characters' %}";
 		var t_eventful = "{% trans 'Wow, what an eventful day!' %}";
+
+		var mention_toplist = [
+			{% for mention in user.get_mention_toplist %}
+				'{{ mention.0 }}',
+			{% endfor %}
+		];
 	</script>
 
 	<style>
