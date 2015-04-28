@@ -4,6 +4,7 @@ function location_callback(position) {
 
 	L.mapbox.accessToken = 'pk.eyJ1IjoibHV0b21hIiwiYSI6ImVkbzF4MG8ifQ.pIpC2pu9savl1ZZLl8TGrA';
 	var map = L.mapbox.map('map-canvas', 'lutoma.m1iha18e', {zoomControl: false});
+	map.scrollWheelZoom.disable();
 	var layer = L.mapbox.featureLayer().addTo(map);
 
 	map.setView([position.coords.latitude, position.coords.longitude], 16);
