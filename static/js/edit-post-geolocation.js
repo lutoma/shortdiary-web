@@ -2,18 +2,14 @@ function location_callback(position) {
 	$('input[name=location_lat]').val(position.coords.latitude.toFixed(12));
 	$('input[name=location_lon]').val(position.coords.longitude.toFixed(12));
 
+	L.mapbox.accessToken = 'pk.eyJ1IjoibHV0b21hIiwiYSI6ImVkbzF4MG8ifQ.pIpC2pu9savl1ZZLl8TGrA';
+	var map = L.mapbox.map('map-canvas', 'lutoma.m1iha18e', {zoomControl: false});
+	var layer = L.mapbox.featureLayer().addTo(map);
+
+	map.setView([position.coords.latitude, position.coords.longitude], 16);
+	L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+
 	var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-	var map_options = {
-		zoom: 12,
-		center: pos,
-		mapTypeId: google.maps.MapTypeId.ROADMAP,
-		streetViewControl: false,
-		mapTypeControl: false
-	}
-
-	map = new google.maps.Map($("#map-canvas").get(0), map_options);
-	new google.maps.Marker({position: pos, map: map});
 
 	geocoder = new google.maps.Geocoder();
 
