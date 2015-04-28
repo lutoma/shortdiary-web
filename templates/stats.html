@@ -65,46 +65,42 @@
 	</script>
 
 	{% if user.geolocation_enabled %}
-		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true"></script>
+		<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
+		<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
+		<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-heat/v0.1.3/leaflet-heat.js'></script>
+
 		<script type="text/javascript">
 			$(document).ready(function() {
-				var map_options = {
-					zoom: 1,
-					center: new google.maps.LatLng(0, 0),
-					mapTypeId: google.maps.MapTypeId.ROADMAP,
-					streetViewControl: true,
-					mapTypeControl: true
+				L.mapbox.accessToken = 'pk.eyJ1IjoibHV0b21hIiwiYSI6ImVkbzF4MG8ifQ.pIpC2pu9savl1ZZLl8TGrA';
+				var map = L.mapbox.map('map-canvas', 'lutoma.m1iha18e');
+				var layer = L.mapbox.featureLayer().addTo(map);
+				
+				var geojson = {
+					type: 'FeatureCollection',
+					features: [
+
+						{% for post in posts %}
+							{% if post.location_lat and post.location_lon %}
+								{
+									type: 'Feature',
+									geometry: {
+										type: 'Point',
+										coordinates: [{{ post.location_lon}}, {{ post.location_lat}}]
+									},
+								
+									properties: {url: '/posts/{{ post.id }}/'}
+								},
+							{% endif %}
+						{% endfor %}
+					]
 				}
 
-				map = new google.maps.Map($("#map-canvas").get(0), map_options);
-				var bounds = new google.maps.LatLngBounds();
-				
-				// Enforce minimum zoom level of 12
-				// Has to be done using a callback since the map rendering is asynchronous
-				google.maps.event.addListenerOnce(map, 'zoom_changed', function() {
-					google.maps.event.addListener(map, 'bounds_changed', function(event) {
-						if (this.getZoom() > 12 && this.initialZoom == true) {
-							this.setZoom(12);
-							this.initialZoom = false;
-						}
-					});
-				});
+				layer.setGeoJSON(geojson);
+				layer.on('click', function(e) {
+					window.location.href = e.layer.feature.properties.url;
+				});	
 
-				{% for post in posts %}
-					{% if post.location_lat and post.location_lon %}
-						
-						var marker = new google.maps.Marker({
-							position: new google.maps.LatLng({{ post.location_lat}}, {{ post.location_lon }}),
-							map: map,
-							animation: google.maps.Animation.DROP
-						});
-
-						bounds.extend(marker.position);
-					{% endif %}				
-				{% endfor %}
-
-				map.initialZoom = true;
-				map.fitBounds(bounds);
+				map.fitBounds(layer.getBounds());
 			});
 		</script>
 	{% endif %}
