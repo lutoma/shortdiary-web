@@ -376,13 +376,13 @@ aside > .first {
     color: rgba(140, 140, 140, .8);
 }
 #nav-login input:-moz-placeholder {
-    color: red;
+    color: rgba(140, 140, 140, .8);
 }
 #nav-login input::-moz-placeholder {
-    color: red;
+    color: rgba(140, 140, 140, .8);
 }
 #nav-login input:-ms-input-placeholder {
-    color: red;
+    color: rgba(140, 140, 140, .8);
 }
 
 /* –––––––––––––––––––– */
