@@ -109,7 +109,7 @@ class Post(models.Model):
 
 	author = models.ForeignKey(DiaryUser, verbose_name = _('author'))
 	date = models.DateField(verbose_name = ('date'))
-	text = models.TextField(max_length = 350, verbose_name = _('text'))
+	text = models.TextField(verbose_name = _('text'))
 	mood = models.IntegerField(verbose_name = _ ('mood'))
 	image = models.ImageField(upload_to = 'postimages/%d%m%y/', blank = True, verbose_name = _('image'))
 	public = models.BooleanField(verbose_name = _('public'), default = False)
