@@ -6,7 +6,7 @@ from django.utils.translation import ugettext as _
 from celery.schedules import crontab
 from celery.decorators import periodic_task, task
 import diary.models
-from django.template.loader import get_template, Context
+from django.template.loader import get_template
 from django.conf import settings
 from django.core.cache import cache
 from django.core.mail import mail_managers

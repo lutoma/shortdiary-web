@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
 from django.core.mail import EmailMessage, EmailMultiAlternatives
-from django.template.loader import get_template, Context
+from django.template.loader import get_template
 from django.conf import settings
 from email_extras.utils import send_mail_template
 from django.db.models import Avg
@@ -36,7 +36,7 @@ class DiaryUser(AbstractUser):
 		mail_template = get_template('mails/verification.txt')
 		mail = EmailMessage(
 			_('Please verify your email address on shortdiary, {0}'.format(self.username)),
-			mail_template.render(Context({'mailuser': self, 'hash': self.get_verification_hash()})),
+			mail_template.render({'mailuser': self, 'hash': self.get_verification_hash()}),
 			'shortdiary <team@shortdiary.me>',
 			['{0} <{1}>'.format(self.username, self.email)])
 		mail.send()

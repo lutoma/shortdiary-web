@@ -141,7 +141,6 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'django.contrib.humanize',
-	'south',
 	'django.contrib.admin',
 	'django.contrib.admindocs',
 	'kombu.transport.django',
