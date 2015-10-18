@@ -1,8 +1,5 @@
 Django
 
-# Schema migrations
-south
-
 # For the admin documentation
 docutils
 
