@@ -87,7 +87,7 @@ class DiaryUser(AbstractUser):
 	def has_paid(self):
 		if self.is_superuser or self.is_staff:
 			return True
-		
+
 		return self.payment_set.filter(valid_until__gte = datetime.datetime.now(), valid_from__lte = datetime.datetime.now()).count() > 0
 
 	def get_mention_toplist(self):
@@ -96,6 +96,10 @@ class DiaryUser(AbstractUser):
 		'''
 
 		names = map(lambda post: post.get_mentions(), self.get_posts())
+
+		if len(names) < 1:
+			return
+
 		names = reduce(lambda names, name: names + name, names)
 		names = map(lambda name: name[1:].lower(), names)
 		return Counter(names).most_common()
