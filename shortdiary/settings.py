@@ -214,7 +214,10 @@ LOGIN_URL = reverse_lazy('two_factor:login')
 STRIPE_SECRET_KEY = None
 STRIPE_PUBLIC_KEY = None
 
-TWO_FACTOR_CALL_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
+#TWO_FACTOR_CALL_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
+# Disabled until the twilio bug is resolved.
+TWO_FACTOR_CALL_GATEWAY = None
+
 TWO_FACTOR_SMS_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
 TWILIO_ACCOUNT_SID = 'ACf521380e135a1e44e8a5f2457a8159d3'
 TWILIO_AUTH_TOKEN = 'dd7059a9681b37dc5a172514d8e2ba6b'
