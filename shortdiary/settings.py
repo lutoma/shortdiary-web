@@ -3,6 +3,7 @@
 # Instead, create a file called local_settings.py and override stuff you want to change there.
 
 import os
+from django.core.urlresolvers import reverse_lazy
 
 SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
@@ -101,6 +102,8 @@ MIDDLEWARE_CLASSES = (
 	'django.middleware.locale.LocaleMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django_otp.middleware.OTPMiddleware',
+	'two_factor.middleware.threadlocals.ThreadLocals',
 	'django.contrib.messages.middleware.MessageMiddleware',
 	# Uncomment the next line for simple clickjacking protection:
 	# 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -151,6 +154,11 @@ INSTALLED_APPS = (
 	'diary',
 	'provider',
 	'provider.oauth2',
+	'django_otp',
+	'django_otp.plugins.otp_static',
+	'django_otp.plugins.otp_totp',
+	'two_factor',
+	'otp_yubikey',
 )
 
 # Asynchronous jobs
@@ -201,9 +209,16 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'diary.DiaryUser'
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = reverse_lazy('two_factor:login')
 
 STRIPE_SECRET_KEY = None
 STRIPE_PUBLIC_KEY = None
+
+TWO_FACTOR_CALL_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
+TWO_FACTOR_SMS_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
+TWILIO_ACCOUNT_SID = 'ACf521380e135a1e44e8a5f2457a8159d3'
+TWILIO_AUTH_TOKEN = 'dd7059a9681b37dc5a172514d8e2ba6b'
+TWILIO_CALLER_ID = '+14159663673'
 
 # Use the file local_settings.py to overwrite the defaults with your own settings
 try:

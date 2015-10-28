@@ -109,6 +109,7 @@ textarea {
 }
 
 input[type=submit], input[type=button], button, .button {
+	display: inline-block;
 	min-width: 50px;
 	padding: 4px 10px;
 	font-family: inherit;
@@ -193,7 +194,7 @@ select {
 }
 
 ul {
-	list-style-type: square;
+	list-style-type: none;
 }
 
 hr {

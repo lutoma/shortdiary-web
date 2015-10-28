@@ -81,7 +81,7 @@
 							<li {% if request.path == '/stats/leaderboard/' %}class='active'{% endif %}><a href="/stats/leaderboard/">{% trans 'Leaderboard' %}</a></li>
 							<li {% if request.path == '/vip/' %}class='active'{% endif %}><a href="/vip/">{% trans 'VIP' %}</a></li>
 						{% else %}
-							<li {% if request.path == '/accounts/login/' %}class='active'{% endif %}><a href="/accounts/login/">{% trans 'Log in' %}</a></li>
+							<li {% if request.path == '/account/login/' %}class='active'{% endif %}><a href="/account/login/">{% trans 'Log in' %}</a></li>
 							<li {% if request.path == '/accounts/signup/' %}class='active'{% endif %}><a href="/accounts/signup/">{% trans 'Sign up' %}</a></li>
 						{% endif %}
 					</ul>
@@ -92,10 +92,11 @@
 							<li><a href="{% url 'django.contrib.auth.views.logout' %}" title="{% trans 'Sign out' %}"><i class="icon-signout"></i></a></li>
 						{% else %}
 							<div id='nav-login'>
-								<form action='/accounts/login/' method='POST' enctype='multipart/form-data' id='register'>
+								<form action='/account/login/' method='POST' enctype='multipart/form-data' id='register'>
 									{% csrf_token %}
-									<input type='text' name='username' placeholder='Username' />
-									<input type='password' name='password' placeholder='Password' />
+									<input id='id_login_view-current_step' name='login_view-current_step' type='hidden' value='auth' />
+									<input type='text' name='auth-username' placeholder='Username' />
+									<input type='password' name='auth-password' placeholder='Password' />
 									<input type='submit' value='Log in' style='display: none;' />
 								</form>
 							</div>
@@ -106,7 +107,7 @@
 		</div>
 		<div role="main">
 			{% block maintitle %}{% endblock %}
-			
+
 			{% block content %}
 				{% if content %}
 					{{ content|safe }}

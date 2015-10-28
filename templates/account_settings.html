@@ -38,6 +38,7 @@
 		</small>
 
 		<p><a href='{% url "django.contrib.auth.views.password_change" %}'>{% trans "Change my password" %}</a></p>
+		<p><a href='{% url "two_factor:profile" %}'>{% trans "Two-factor authentication" %}</a></p>
 
 		<button type='submit'>
 				<i class='icon-share-alt'></i> {% trans "submit" %}

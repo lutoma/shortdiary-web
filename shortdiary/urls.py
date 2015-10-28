@@ -4,6 +4,8 @@ from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 from api.views import PostList, PostTimeline, PostDetail, PublicPostDetail, ProfileDetail, PostYearAgo
 from django.views.generic import TemplateView
+from two_factor.urls import urlpatterns as tf_urls
+from two_factor.gateways.twilio.urls import urlpatterns as tf_twilio_urls
 admin.autodiscover()
 
 if settings.DEBUG:
@@ -30,7 +32,6 @@ urlpatterns += patterns('',
 
 	url(r'^i18n/setlang/(?P<language>[a-z]+)/', 'diary.views.switch_language'),
 
-	url(r'^accounts/login/$','django.contrib.auth.views.login',{'template_name':'login.html'}),
 	url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
 	url(r'^accounts/signup/$', 'diary.views.sign_up'),
 	url(r'^accounts/settings/$', 'diary.views.account_settings'),
@@ -70,6 +71,7 @@ urlpatterns += patterns('',
 
 	url(r'^api/v1/', include(api_patterns)),
 	url(r'^api/v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
+	url(r'', include(tf_urls + tf_twilio_urls, 'two_factor')),
 )
 
 
