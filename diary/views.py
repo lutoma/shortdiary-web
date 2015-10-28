@@ -30,21 +30,6 @@ def index(request):
 
 	return render_to_response('db2.html', context_instance=RequestContext(request, context))
 
-
-@login_required
-def dashboard_old(request):
-	try:
-		randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
-	except Post.DoesNotExist:
-		randompost = None
-
-	context = {
-		'title': None,
-		'randompost': randompost,
-		'posts': Post.objects.filter(author = request.user, date__gte = datetime.date.today() - datetime.timedelta(days = 6)).order_by('-date', '-created_at'),
-	}
-	return render_to_response('index.html', context_instance=RequestContext(request, context))
-
 @login_required
 def edit_post(request, post_id = None):
 	"""
