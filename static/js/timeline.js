@@ -180,7 +180,6 @@ function reformat_data(posts) {
 }
 
 $(window).ready(function() {
-	mixpanel.track('Dashboard load');
 	Handlebars.registerPartial("timeline-boxlist", $("#timeline-boxlist-partial").html());
 
 	$.get('/api/v1/posts/timeline/?format=json', reformat_data);
