@@ -2,11 +2,6 @@
 {% load i18n %}
 
 {%block content %}
-	<script>
-		mixpanel.track("Signup load");
-		mixpanel.track_forms("#register", "Created Account");
-	</script>
-
 	{% if form.errors %}
 		<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
 	{% endif %}
