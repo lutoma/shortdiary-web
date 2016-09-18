@@ -159,6 +159,7 @@ INSTALLED_APPS = (
 	'django_otp.plugins.otp_totp',
 	'two_factor',
 	'otp_yubikey',
+	'raven.contrib.django.raven_compat',
 )
 
 # Asynchronous jobs
