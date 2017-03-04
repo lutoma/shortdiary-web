@@ -1,4 +1,4 @@
-Django==1.8.5
+Django>=1.8.17,<1.9
 
 # For the admin documentation
 docutils
