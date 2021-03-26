@@ -1,0 +1,711 @@
+[[package]]
+name = "amqp"
+version = "1.4.9"
+description = "Low-level AMQP client for Python (fork of amqplib)"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "anyjson"
+version = "0.3.3"
+description = "Wraps the best available JSON implementation available in a common interface"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "argparse"
+version = "1.2.1"
+description = "Python command-line parsing library"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "babel"
+version = "2.2.0"
+description = "Internationalization utilities"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pytz = ">=0a"
+
+[[package]]
+name = "beautifulsoup4"
+version = "4.3.2"
+description = "Screen-scraping library"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "billiard"
+version = "3.3.0.23"
+description = "Python multiprocessing fork with improvements and bugfixes"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "celery"
+version = "3.1.18"
+description = "Distributed Task Queue"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pytz = ">0.0-dev"
+billiard = ">=3.3.0.20,<3.4"
+kombu = ">=3.0.25,<3.1"
+
+[package.extras]
+msgpack = ["msgpack-python (>=0.3.0)"]
+slmq = ["softlayer-messaging (>=1.0.3)"]
+eventlet = ["eventlet"]
+librabbitmq = ["librabbitmq (>=1.6.1)"]
+mongodb = ["pymongo (>=2.6.2)"]
+zookeeper = ["kazoo (>=1.3.1)"]
+redis = ["redis (>=2.8.0)"]
+auth = ["pyopenssl"]
+pyro = ["pyro4"]
+couchbase = ["couchbase"]
+beanstalk = ["beanstalkc"]
+memcache = ["pylibmc"]
+gevent = ["gevent"]
+yaml = ["PyYAML (>=3.10)"]
+threads = ["threadpool"]
+zeromq = ["pyzmq (>=13.1.0)"]
+sqlalchemy = ["sqlalchemy"]
+couchdb = ["couchdb"]
+sqs = ["boto (>=2.13.3)"]
+cassandra = ["pycassa"]
+
+[[package]]
+name = "contextlib2"
+version = "0.5.4"
+description = "Backports and enhancements for the contextlib module"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "django"
+version = "1.8.5"
+description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+bcrypt = ["bcrypt"]
+
+[[package]]
+name = "django-celery"
+version = "3.1.17"
+description = "Old django celery integration project."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+celery = ">=3.1.15"
+
+[[package]]
+name = "django-email-extras"
+version = "0.3.2"
+description = "A Django reusable app providing the ability to send PGP encrypted and multipart emails using the Django templating system."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+sphinx-me = "*"
+python-gnupg = "*"
+
+[[package]]
+name = "django-formtools"
+version = "1.0"
+description = "A set of high-level abstractions for Django forms"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Django = ">=1.7"
+
+[[package]]
+name = "django-gravatar2"
+version = "1.4.0"
+description = "Essential Gravatar support for Django. Features helper methods, templatetags and a full test suite!"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "django-htmlmin"
+version = "0.7.0"
+description = "html minify for django"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+argparse = "*"
+beautifulsoup4 = "*"
+html5lib = "*"
+
+[[package]]
+name = "django-oauth2-provider"
+version = "0.2.6.1"
+description = "Provide OAuth2 access to your app"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+shortuuid = ">=0.3"
+
+[[package]]
+name = "django-otp"
+version = "0.3.4"
+description = "A pluggable framework for adding two-factor authentication to Django using one-time passwords."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+django = ">=1.4.2"
+
+[[package]]
+name = "django-otp-yubikey"
+version = "0.3.3"
+description = "A django-otp plugin that verifies YubiKey OTP tokens."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+django-otp = ">=0.3.0"
+YubiOTP = ">=0.2.1"
+
+[[package]]
+name = "django-phonenumber-field"
+version = "0.7.2"
+description = "An international phone number field for django models."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+phonenumbers = ">=7.0.2"
+
+[[package]]
+name = "django-two-factor-auth"
+version = "1.3.1"
+description = "Complete Two-Factor Authentication for Django"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+phonenumbers = ">=7.0.9,<7.99"
+django-otp = ">=0.3.4,<0.99"
+django-phonenumber-field = ">=0.7.2,<0.99"
+Django = ">=1.8,<1.9.99"
+qrcode = ">=4.0.0,<4.99"
+django-formtools = "*"
+
+[package.extras]
+Call = ["twilio"]
+SMS = ["twilio"]
+YubiKey = ["django-otp-yubikey"]
+
+[[package]]
+name = "djangorestframework"
+version = "2.3.12"
+description = "Web APIs for Django, made easy."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "docutils"
+version = "0.12"
+description = "Docutils -- Python Documentation Utilities"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "futures"
+version = "3.0.5"
+description = "Backport of the concurrent.futures package from Python 3.2"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "guess-language"
+version = "0.2"
+description = "Guess the natural language of a text"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "gunicorn"
+version = "19.1.1"
+description = "WSGI HTTP Server for UNIX"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "html5lib"
+version = "0.999"
+description = "HTML parser based on the WHATWG HTML specifcation"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+
+[[package]]
+name = "httplib2"
+version = "0.9.2"
+description = "A comprehensive HTTP client library."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "kombu"
+version = "3.0.34"
+description = "Messaging library for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+anyjson = ">=0.3.3"
+amqp = ">=1.4.9,<2.0"
+
+[[package]]
+name = "newrelic"
+version = "2.40.0.34"
+description = "New Relic Python Agent"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "phonenumbers"
+version = "7.2.6"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "pillow"
+version = "3.1.1"
+description = "Python Imaging Library (Fork)"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "psycopg2"
+version = "2.8.6"
+description = "psycopg2 - Python-PostgreSQL Database Adapter"
+category = "main"
+optional = false
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
+
+[[package]]
+name = "pycrypto"
+version = "2.6.1"
+description = "Cryptographic modules for Python."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "python-gnupg"
+version = "0.3.8"
+description = "A wrapper for the Gnu Privacy Guard (GPG or GnuPG)"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "python-memcached"
+version = "1.57"
+description = "Pure python memcached client"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+
+[[package]]
+name = "pytz"
+version = "2015.7"
+description = "World timezone definitions, modern and historical"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "qrcode"
+version = "4.0.4"
+description = "QR Code image generator"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+
+[[package]]
+name = "raven"
+version = "5.27.0"
+description = "Raven is a client for Sentry (https://getsentry.com)"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+contextlib2 = "*"
+
+[package.extras]
+flask = ["Flask (>=0.8)", "blinker (>=1.1)"]
+tests = ["Django (>=1.4)", "Flask (>=0.8)", "Flask-Login (>=0.2.0)", "anyjson", "blinker (>=1.1)", "bottle", "celery (>=2.5)", "django-celery (>=2.5)", "exam (>=0.5.2)", "flake8 (>=2.6,<2.7)", "logbook", "mock", "nose", "paste", "pycodestyle", "pytest", "pytest-django (==2.9.1)", "pytest-timeout (==0.4)", "pytz", "requests", "six", "tornado (>=4.1)", "unittest2", "web.py", "webob", "webtest"]
+
+[[package]]
+name = "requests"
+version = "2.9.1"
+description = "Python HTTP for Humans."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+security = ["ndg-httpsclient", "pyOpenSSL (>=0.13)", "pyasn1"]
+
+[[package]]
+name = "shortuuid"
+version = "0.4.3"
+description = "A generator library for concise, unambiguous and URL-safe UUIDs."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "six"
+version = "1.10.0"
+description = "Python 2 and 3 compatibility utilities"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "sphinx-me"
+version = "0.3"
+description = "Wraps your README-only projects in a dynamic Sphinx shell for hosting on http://readthedocs.org"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "stripe"
+version = "1.30.0"
+description = "Stripe python bindings"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+requests = ">=0.8.8"
+
+[[package]]
+name = "twilio"
+version = "5.4.0"
+description = "Twilio API client and TwiML generator"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+pytz = "*"
+httplib2 = ">=0.7"
+
+[[package]]
+name = "wsgiref"
+version = "0.1.2"
+description = "WSGI (PEP 333) Reference Library"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "yubiotp"
+version = "0.2.1"
+description = "A library for verifying YubiKey OTP tokens, both locally and through a Yubico web service."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+pycrypto = "*"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "2.7.18"
+content-hash = "1178ca0f4909c158d1bf48de3c8c7ea5f8a67861e98b7e8c1205b0d96b65397c"
+
+[metadata.files]
+amqp = [
+    {file = "amqp-1.4.9-py2.py3-none-any.whl", hash = "sha256:e0ed0ce6b8ffe5690a2e856c7908dc557e0e605283d6885dd1361d79f2928908"},
+    {file = "amqp-1.4.9.tar.gz", hash = "sha256:2dea4d16d073c902c3b89d9b96620fb6729ac0f7a923bbc777cb4ad827c0c61a"},
+]
+anyjson = [
+    {file = "anyjson-0.3.3.tar.gz", hash = "sha256:37812d863c9ad3e35c0734c42e0bf0320ce8c3bed82cd20ad54cb34d158157ba"},
+]
+argparse = [
+    {file = "argparse-1.2.1.tar.gz", hash = "sha256:ddaf4b0a618335a32b6664d4ae038a1de8fbada3b25033f9021510ed2b3941a4"},
+]
+babel = [
+    {file = "Babel-2.2.0-py2.py3-none-any.whl", hash = "sha256:fed07cbcdcb3de79b53a8220eebed21c93f8dbb3dbce1d9c6b1c4b09e8aecf2b"},
+    {file = "Babel-2.2.0.tar.gz", hash = "sha256:d8cb4c0e78148aee89560f9fe21587aa57739c975bb89ff66b1e842cc697428f"},
+]
+beautifulsoup4 = [
+    {file = "beautifulsoup4-4.3.2.tar.gz", hash = "sha256:a2b29bd048ca2fe54a046b29770964738872a9747003a371344a93eedf7ad58e"},
+]
+billiard = [
+    {file = "billiard-3.3.0.23-cp27-none-macosx_10_6_intel.whl", hash = "sha256:c0cbe8d45ba8d8213ad68ef9a1881002a151569c9424d551634195a18c3a4160"},
+    {file = "billiard-3.3.0.23-cp27-none-win32.whl", hash = "sha256:82041dbaa62f7fde1464d7ab449978618a38b241b40c0d31dafabb36446635dc"},
+    {file = "billiard-3.3.0.23-cp27-none-win_amd64.whl", hash = "sha256:958fc9f8fd5cc9b936b2cb9d96f02aa5ec3613ba13ee7f089c77ff0bcc368fac"},
+    {file = "billiard-3.3.0.23-cp3-none-win32.whl", hash = "sha256:23cb71472712e96bff3e0d45763b7b8a99e5040385fffb96816028352c255682"},
+    {file = "billiard-3.3.0.23-cp3-none-win_amd64.whl", hash = "sha256:ccfe0419eb5e49f27ad35cf06e75360af903df6d576c66cb8073246d4e023e5c"},
+    {file = "billiard-3.3.0.23-cp33-none-win32.whl", hash = "sha256:204e75d390ef8f839c30a93b696bd842c3941916e15921745d05edc2a83868ab"},
+    {file = "billiard-3.3.0.23-cp33-none-win_amd64.whl", hash = "sha256:d4d2fed1a251ea58eed47b48db3778ebb92f5ff4407dc91869c6f41c3a9249d0"},
+    {file = "billiard-3.3.0.23.tar.gz", hash = "sha256:692a2a5a55ee39a42bcb7557930e2541da85df9ea81c6e24827f63b80cd39d0b"},
+]
+celery = [
+    {file = "celery-3.1.18-py2.py3-none-any.whl", hash = "sha256:dbf59618d5a9eff172d25021f36614be5af0501e4527975ca504b95863f14fed"},
+    {file = "celery-3.1.18.tar.gz", hash = "sha256:0924f94070c6fc57d408b169848c5b38832668fffe060e48b4803fb23e0e3eaf"},
+]
+contextlib2 = [
+    {file = "contextlib2-0.5.4-py2.py3-none-any.whl", hash = "sha256:399f659f2a8b5d5d529f132e1136fc404fbbc28e34e4618c5c92bd595be9b162"},
+    {file = "contextlib2-0.5.4.tar.gz", hash = "sha256:710626cde569f51a87f216ff757fe60f5cd13ae8f8114706590510cd5649ce88"},
+]
+django = [
+    {file = "Django-1.8.5-py2.py3-none-any.whl", hash = "sha256:644c5cc2d064a38d439627549e6382a8bc28b80a243fe5cbba40b1efd2babdeb"},
+    {file = "Django-1.8.5.tar.gz", hash = "sha256:2d174e4a3f54708d0d5b6ff1bf54ae71652e83bb06d7576b3b20d916b29c3653"},
+]
+django-celery = [
+    {file = "django-celery-3.1.17.tar.gz", hash = "sha256:254a95b0a4386df1fd949823942f6312c80fba3c88c5efad79cad8648bc5feb5"},
+]
+django-email-extras = [
+    {file = "django-email-extras-0.3.2.tar.gz", hash = "sha256:0475c203526d7e2969feaa8f8cda6501b8356c42c1397e947205880583124358"},
+]
+django-formtools = [
+    {file = "django-formtools-1.0.tar.gz", hash = "sha256:647a5855277dcf335902eeeeeba3056e439493e6b7de70b942c988a6d8d70e04"},
+    {file = "django_formtools-1.0-py2.py3-none-any.whl", hash = "sha256:6cee6e7b8990898332af2c00020195aacd428bd97ff99d1ec02e9deec84d928c"},
+]
+django-gravatar2 = [
+    {file = "django-gravatar2-1.4.0.tar.gz", hash = "sha256:94b19a30d49d64febbd3a64967769dba8965209be1890fb80f62e83a8df498ec"},
+    {file = "django_gravatar2-1.4.0-py2.py3-none-any.whl", hash = "sha256:48a18d3b6fcf9628bb0522e45cbe3bc2fb50c63f6f5851ae6fdede9e86a11eb2"},
+]
+django-htmlmin = [
+    {file = "django-htmlmin-0.7.0.tar.gz", hash = "sha256:3d808019d9185b47a5dbdd7239596ae81e8949bb2e78d51a007f4568b8ac543b"},
+]
+django-oauth2-provider = [
+    {file = "django-oauth2-provider-0.2.6.1.tar.gz", hash = "sha256:acda20a3555166ec47bacabe962878045caa0901c75634d179d1cd31b169ee52"},
+]
+django-otp = [
+    {file = "django-otp-0.3.4.tar.gz", hash = "sha256:5e002e6f63211f1d2babb525f3ba7ef07851239671c48c439ba4800099cb5a2e"},
+    {file = "django_otp-0.3.4-py2.py3-none-any.whl", hash = "sha256:ef0aadbf24e176043fb8fc13041ce71c79d5bc6e61c926d290bbfbbae2a66962"},
+]
+django-otp-yubikey = [
+    {file = "django-otp-yubikey-0.3.3.tar.gz", hash = "sha256:0e9f748abf2e380163f33b28de2a1a1a5bb06b8f0c6e91fabdea70d49f1cf58a"},
+    {file = "django_otp_yubikey-0.3.3-py2.py3-none-any.whl", hash = "sha256:ed96330a699eace639c8675ceaf2f1313cbb7779dde8d4717b712b6edfd04602"},
+]
+django-phonenumber-field = [
+    {file = "django-phonenumber-field-0.7.2.tar.gz", hash = "sha256:f3b23af290d0f800945c44e0737bd32f3ee38f63e7ad7076450778fe682a52fe"},
+]
+django-two-factor-auth = [
+    {file = "django-two-factor-auth-1.3.1.tar.gz", hash = "sha256:82f47fca26f0886ca94a54fc872766a0d6f6f5ecb755ac1218590ee15dff841d"},
+    {file = "django_two_factor_auth-1.3.1-py2.py3-none-any.whl", hash = "sha256:e4766c85c6241a685f7632cea6d2d31859e616539d634d6de402dfd108db1c01"},
+]
+djangorestframework = [
+    {file = "djangorestframework-2.3.12-py2.py3-none-any.whl", hash = "sha256:6dea5aca68a4492f7c546f81a582a8afa075895b2068da5096c696b67a7d2114"},
+    {file = "djangorestframework-2.3.12.tar.gz", hash = "sha256:3a47d99bdeb9e92ca7e2eabc27d897d977460d49069d1864215470ab17643aa7"},
+]
+docutils = [
+    {file = "docutils-0.12-py3-none-any.whl", hash = "sha256:dcebd4928112631626f4c4d0df59787c748404e66dda952110030ea883d3b8cd"},
+    {file = "docutils-0.12.tar.gz", hash = "sha256:c7db717810ab6965f66c8cf0398a98c9d8df982da39b4cd7f162911eb89596fa"},
+]
+futures = [
+    {file = "futures-3.0.5-py2-none-any.whl", hash = "sha256:f7f16b6bf9653a918a03f1f2c2d62aac0cd64b1bc088e93ea279517f6b61120b"},
+    {file = "futures-3.0.5.tar.gz", hash = "sha256:0542525145d5afc984c88f914a0c85c77527f65946617edb5274f72406f981df"},
+]
+guess-language = [
+    {file = "guess-language-0.2.tar.gz", hash = "sha256:b31ba2a279b8e6a19e9aa2f8e21c5fc4a56cd5557aea3f806cba73ecf38696e7"},
+]
+gunicorn = [
+    {file = "gunicorn-19.1.1-py2.py3-none-any.whl", hash = "sha256:ffb411757de374d05c759c929908d2397c66e3bcf6f35dee41a6ef9eb851497b"},
+    {file = "gunicorn-19.1.1.tar.gz", hash = "sha256:82715511fb6246fad4ba66d812eb93416ae8371b464fa88bf3867c9c177daa14"},
+]
+html5lib = [
+    {file = "html5lib-0.999.tar.gz", hash = "sha256:c3887f7e2875d7666107fa8bee761ff95b9391acdcc7cd1b5fd57a23b5fbc49e"},
+]
+httplib2 = [
+    {file = "httplib2-0.9.2.tar.gz", hash = "sha256:c3aba1c9539711551f4d83e857b316b5134a1c4ddce98a875b7027be7dd6d988"},
+    {file = "httplib2-0.9.2.zip", hash = "sha256:fe187f315336c3daa6616d09f327a6e6560b082fce59723f77336329fdcbfc36"},
+]
+kombu = [
+    {file = "kombu-3.0.34-py2.py3-none-any.whl", hash = "sha256:ba39da5f7e1166de64f38ad88c0bfb417f17c24f2e6b584a4d53ae8a8fc98605"},
+    {file = "kombu-3.0.34.tar.gz", hash = "sha256:8878ff19b09d86b2689682a4a3eb163d70115ef4ebd974966079a0edd80075da"},
+]
+newrelic = [
+    {file = "newrelic-2.40.0.34.tar.gz", hash = "sha256:27b92a7a00f162e79b5896fe9e589719b985e9cfdf445826cc18856159ce6c1e"},
+]
+phonenumbers = [
+    {file = "phonenumbers-7.2.6.tar.gz", hash = "sha256:673a7ea919a9cf5d2f4b784c203c098cf3528215df8bd26f79df2b7ea791c2c4"},
+]
+pillow = [
+    {file = "Pillow-3.1.1-cp26-none-win32.whl", hash = "sha256:3183b19cdd6fb5c68498334601eba770bc7abd44977b4119e4fa49d45e12845b"},
+    {file = "Pillow-3.1.1-cp26-none-win_amd64.whl", hash = "sha256:c34d10dda36d64cecf78bc4689758eca1e79b1e88f6e1d8c7cf207e6b9e7c984"},
+    {file = "Pillow-3.1.1-cp27-none-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl", hash = "sha256:9992d8f4b4ad53467ea76e6b796c18e22ec948dcee064be07fb43c155472e1d7"},
+    {file = "Pillow-3.1.1-cp27-none-win32.whl", hash = "sha256:4678857a6dd0834a77ad6b5eb75a6d79753aa1a13f54f1c47fdb1e9bca63f389"},
+    {file = "Pillow-3.1.1-cp27-none-win_amd64.whl", hash = "sha256:a0b7eeee0346ca67cdd9b23a613de3fe71a4c46419c37bdfef69b82dd32a9a0a"},
+    {file = "Pillow-3.1.1-cp32-none-win32.whl", hash = "sha256:a47f8b12541ffc219a0f26030daee2a57d1251cfd76a9101cbea74674909d5a3"},
+    {file = "Pillow-3.1.1-cp32-none-win_amd64.whl", hash = "sha256:1263e38b91ca0132c77d5ae5a4d396bce7e7b1d13427b5d2982ac8f5bfbef62b"},
+    {file = "Pillow-3.1.1-cp33-cp33m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl", hash = "sha256:77eac8ee2b400be84618ab5876b0e59fe98e32fc4d99aaa34bf413e125361a05"},
+    {file = "Pillow-3.1.1-cp33-none-win32.whl", hash = "sha256:f336019509df1a042b7d6bed69a0cb6c52108b6327ce936c2870145dc18f1394"},
+    {file = "Pillow-3.1.1-cp33-none-win_amd64.whl", hash = "sha256:ddef2a522ba13348ecec354d6c4d2e24bd68fba2605d7c32682bc0140d9c4e9c"},
+    {file = "Pillow-3.1.1-cp34-cp34m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl", hash = "sha256:d7cf28e14b55e2f8848fb5e37655ffe13a0d5846cccc6ba46e031d0cf21879a3"},
+    {file = "Pillow-3.1.1-cp34-none-win32.whl", hash = "sha256:95bd8811ad4ece9df7b8cb9a1eef6184b80b6b8b8c199751ab0a5fb48ae82f64"},
+    {file = "Pillow-3.1.1-cp34-none-win_amd64.whl", hash = "sha256:2602c7152e26f5bece294edb97af40345409ae55f8ad2a6d5da4380f4178defe"},
+    {file = "Pillow-3.1.1-cp35-cp35m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl", hash = "sha256:6a06f165dcec5789fd98a5d4fe542619ffd3b86b9bf616d1a54d824e9428c6d3"},
+    {file = "Pillow-3.1.1-cp35-none-win32.whl", hash = "sha256:f040b4709cba8922f60de441684b3d061fedb61c6ca50d231df8a4d55e45943c"},
+    {file = "Pillow-3.1.1-cp35-none-win_amd64.whl", hash = "sha256:412f4999794a80c9153cd2156f040b8e570b145d2edf5830854578ffb0b27cac"},
+    {file = "Pillow-3.1.1-py2.6-win-amd64.egg", hash = "sha256:e04df3808d6202dd552c837c824796899c09ff0ff9c335607904e31f9d387110"},
+    {file = "Pillow-3.1.1-py2.6-win32.egg", hash = "sha256:82351254350d9212bccf71d387efae8ad8f6f4b904d095546a77852a6b16e05b"},
+    {file = "Pillow-3.1.1-py2.7-win-amd64.egg", hash = "sha256:2ee30463cbc8e60cba92722a3a64881a0d3df534a047e299a9bcf62ea34fd061"},
+    {file = "Pillow-3.1.1-py2.7-win32.egg", hash = "sha256:a10befeb7b9975d7c3d2ca3eaf0cb505db98fe50874130e182c2a6f7a606591f"},
+    {file = "Pillow-3.1.1-py3.2-win-amd64.egg", hash = "sha256:69ec2f0effe8b395e55929bb4d9a3ca8ff0c40f85d61d00e1e5b1e504d28b5e2"},
+    {file = "Pillow-3.1.1-py3.2-win32.egg", hash = "sha256:95236f64904157256254b6cc8e29feecd9ee6985732dcb36c9f58d7dabe081d0"},
+    {file = "Pillow-3.1.1-py3.3-win-amd64.egg", hash = "sha256:2052f0372123c98497ee3294f4e20347d87b9f70d9c65ce2fc520b9339aa8465"},
+    {file = "Pillow-3.1.1-py3.3-win32.egg", hash = "sha256:26b4a2bcdf0e674505fcd2f1a882f29a99339ac3b5a8e7997b90ede2995434e2"},
+    {file = "Pillow-3.1.1-py3.4-win-amd64.egg", hash = "sha256:69c3cc797a66241ed2fa61ff6f52c73e7bd3e738d80d64abb3500e6fbdec30a3"},
+    {file = "Pillow-3.1.1-py3.4-win32.egg", hash = "sha256:02d2ae1d7c311e6fa038abda0843683ae652c9292d723270c85deeb04a1001a8"},
+    {file = "Pillow-3.1.1-py3.5-win-amd64.egg", hash = "sha256:1ce73edaeb49af9ebeacfb8c58428ae39592839d3a7a16ef3926773f1c8ff8ee"},
+    {file = "Pillow-3.1.1-py3.5-win32.egg", hash = "sha256:1937c9e17f685fe6c360dd96ddb8f93f159ac721939ccbfc91a62d8124a29945"},
+    {file = "Pillow-3.1.1.tar.gz", hash = "sha256:486f4ccddee09429cb1c63ea56c02894aecf9d69acdcaf006c53835df2549fff"},
+    {file = "Pillow-3.1.1.win-amd64-py2.6.exe", hash = "sha256:5bcea0df97fe0b911a6629aab0997b98e8811561c27167266758a7ede173123e"},
+    {file = "Pillow-3.1.1.win-amd64-py2.7.exe", hash = "sha256:282e069f92e43047b34bbd995a8800669af11d038db571758708ebcd96462964"},
+    {file = "Pillow-3.1.1.win-amd64-py3.2.exe", hash = "sha256:61cb7e1ff212293d74155397fad008b052bc9633efdf9caa4271c316cd25b99f"},
+    {file = "Pillow-3.1.1.win-amd64-py3.3.exe", hash = "sha256:502275e7a83872e62e0cd0be4da575a53a1f9703341aba814527dacdda3660a8"},
+    {file = "Pillow-3.1.1.win-amd64-py3.4.exe", hash = "sha256:cf4b3c634b317ee247c3add4375b0a6bdc45eb0c12a5d7fbf9bfd47ec10b020f"},
+    {file = "Pillow-3.1.1.win-amd64-py3.5.exe", hash = "sha256:bf83901c158ad92e77e990f51531434e5a96c6aef805a84b6e3bfe825f4d4d0c"},
+    {file = "Pillow-3.1.1.win32-py2.6.exe", hash = "sha256:eae3711a7916eb5ec800dfb6963da09db0ada63c0481639dd0ddc0b505883a02"},
+    {file = "Pillow-3.1.1.win32-py2.7.exe", hash = "sha256:b55f62882d8db466fcf2228422bf3147617744888bf0cf6dffb3254a52eb316b"},
+    {file = "Pillow-3.1.1.win32-py3.2.exe", hash = "sha256:4756b77682c7335751a2cfc0e9e6d96945d88ffd315420d9010235021ddfc64c"},
+    {file = "Pillow-3.1.1.win32-py3.3.exe", hash = "sha256:9e274583a0eab0b6d227139146e28f74488cfbc0d262c4ba2e5c0998b9c498d2"},
+    {file = "Pillow-3.1.1.win32-py3.4.exe", hash = "sha256:68e45ed91531d3b05a17a356fd4cb928603a00259916e057730a024b029d6b51"},
+    {file = "Pillow-3.1.1.win32-py3.5.exe", hash = "sha256:c32f99a0c7c5313b2df78399ef908563b319de23bec0cc89f1d04c37be19eb2d"},
+    {file = "Pillow-3.1.1.zip", hash = "sha256:e784b1a9fc54ae88a7171aef60a38c2ec0dc463f066691765d11748e014ce2a0"},
+]
+psycopg2 = [
+    {file = "psycopg2-2.8.6-cp27-cp27m-win32.whl", hash = "sha256:068115e13c70dc5982dfc00c5d70437fe37c014c808acce119b5448361c03725"},
+    {file = "psycopg2-2.8.6-cp27-cp27m-win_amd64.whl", hash = "sha256:d160744652e81c80627a909a0e808f3c6653a40af435744de037e3172cf277f5"},
+    {file = "psycopg2-2.8.6-cp34-cp34m-win32.whl", hash = "sha256:b8cae8b2f022efa1f011cc753adb9cbadfa5a184431d09b273fb49b4167561ad"},
+    {file = "psycopg2-2.8.6-cp34-cp34m-win_amd64.whl", hash = "sha256:f22ea9b67aea4f4a1718300908a2fb62b3e4276cf00bd829a97ab5894af42ea3"},
+    {file = "psycopg2-2.8.6-cp35-cp35m-win32.whl", hash = "sha256:26e7fd115a6db75267b325de0fba089b911a4a12ebd3d0b5e7acb7028bc46821"},
+    {file = "psycopg2-2.8.6-cp35-cp35m-win_amd64.whl", hash = "sha256:00195b5f6832dbf2876b8bf77f12bdce648224c89c880719c745b90515233301"},
+    {file = "psycopg2-2.8.6-cp36-cp36m-win32.whl", hash = "sha256:a49833abfdede8985ba3f3ec641f771cca215479f41523e99dace96d5b8cce2a"},
+    {file = "psycopg2-2.8.6-cp36-cp36m-win_amd64.whl", hash = "sha256:f974c96fca34ae9e4f49839ba6b78addf0346777b46c4da27a7bf54f48d3057d"},
+    {file = "psycopg2-2.8.6-cp37-cp37m-win32.whl", hash = "sha256:6a3d9efb6f36f1fe6aa8dbb5af55e067db802502c55a9defa47c5a1dad41df84"},
+    {file = "psycopg2-2.8.6-cp37-cp37m-win_amd64.whl", hash = "sha256:56fee7f818d032f802b8eed81ef0c1232b8b42390df189cab9cfa87573fe52c5"},
+    {file = "psycopg2-2.8.6-cp38-cp38-win32.whl", hash = "sha256:ad2fe8a37be669082e61fb001c185ffb58867fdbb3e7a6b0b0d2ffe232353a3e"},
+    {file = "psycopg2-2.8.6-cp38-cp38-win_amd64.whl", hash = "sha256:56007a226b8e95aa980ada7abdea6b40b75ce62a433bd27cec7a8178d57f4051"},
+    {file = "psycopg2-2.8.6-cp39-cp39-win32.whl", hash = "sha256:2c93d4d16933fea5bbacbe1aaf8fa8c1348740b2e50b3735d1b0bf8154cbf0f3"},
+    {file = "psycopg2-2.8.6-cp39-cp39-win_amd64.whl", hash = "sha256:d5062ae50b222da28253059880a871dc87e099c25cb68acf613d9d227413d6f7"},
+    {file = "psycopg2-2.8.6.tar.gz", hash = "sha256:fb23f6c71107c37fd667cb4ea363ddeb936b348bbd6449278eb92c189699f543"},
+]
+pycrypto = [
+    {file = "pycrypto-2.6.1.tar.gz", hash = "sha256:f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c"},
+]
+python-gnupg = [
+    {file = "python-gnupg-0.3.8.tar.gz", hash = "sha256:3872ced77d69203f31817107b324b0dd33d4437a330dc58eca140c8758d26b5a"},
+    {file = "python-gnupg-0.3.8.win32.exe", hash = "sha256:98625cd11f1d5eaf0180e4c22eecd326daa0e8a64bee1e9fe310ff39c6734a1d"},
+]
+python-memcached = [
+    {file = "python-memcached-1.57.tar.gz", hash = "sha256:3b689a135afb2fdb6da2298d5213780f43a3f210cf8c960d50b252acb3f62902"},
+    {file = "python_memcached-1.57-py2.py3-none-any.whl", hash = "sha256:544419fd5e33300835de3b2f8462a145dda451d5e3088a69e0cd0da2b5bc0f7a"},
+]
+pytz = [
+    {file = "pytz-2015.7-py2.4.egg", hash = "sha256:3abe6a6d3fc2fbbe4c60144211f45da2edbe3182a6f6511af6bbba0598b1f992"},
+    {file = "pytz-2015.7-py2.5.egg", hash = "sha256:939ef9c1e1224d980405689a97ffcf7828c56d1517b31d73464356c1f2b7769e"},
+    {file = "pytz-2015.7-py2.6.egg", hash = "sha256:ead4aefa7007249e05e51b01095719d5a8dd95760089f5730aac5698b1932918"},
+    {file = "pytz-2015.7-py2.7.egg", hash = "sha256:3cca0df08bd0ed98432390494ce3ded003f5e661aa460be7a734bffe35983605"},
+    {file = "pytz-2015.7-py2.py3-none-any.whl", hash = "sha256:3ede470d3d17ba3c07638dfa0d10452bc1b6e5ad326127a65ba77e6aaeb11bec"},
+    {file = "pytz-2015.7-py3.1.egg", hash = "sha256:68c47964f7186eec306b13629627722b9079cd4447ed9e5ecaecd4eac84ca734"},
+    {file = "pytz-2015.7-py3.2.egg", hash = "sha256:dd5d3991950aae40a6c81de1578942e73d629808cefc51d12cd157980e6cfc18"},
+    {file = "pytz-2015.7-py3.3.egg", hash = "sha256:a77c52062c07eb7c7b30545dbc73e32995b7e117eea750317b5cb5c7a4618f14"},
+    {file = "pytz-2015.7-py3.4.egg", hash = "sha256:81af9aec4bc960a9a0127c488f18772dae4634689233f06f65443e7b11ebeb51"},
+    {file = "pytz-2015.7-py3.5.egg", hash = "sha256:e079b1dadc5c06246cc1bb6fe1b23a50b1d1173f2edd5104efd40bb73a28f406"},
+    {file = "pytz-2015.7.tar.bz2", hash = "sha256:fbd26746772c24cb93c8b97cbdad5cb9e46c86bbdb1b9d8a743ee00e2fb1fc5d"},
+    {file = "pytz-2015.7.tar.gz", hash = "sha256:99266ef30a37e43932deec2b7ca73e83c8dbc3b9ff703ec73eca6b1dae6befea"},
+    {file = "pytz-2015.7.zip", hash = "sha256:8b6ce1c993909783bc96e0b4f34ea223bff7a4df2c90bdb9c4e0f1ac928689e3"},
+]
+qrcode = [
+    {file = "qrcode-4.0.4.tar.gz", hash = "sha256:f3993aea9e3af2ca92b64128a81f36ed978a44d115a214293bfcd2cae7de8f6e"},
+]
+raven = [
+    {file = "raven-5.27.0-py2.py3-none-any.whl", hash = "sha256:30cd4819885f526f12dbcc9803659d3d5cb5f7d983c77815b11db6d977b3d537"},
+    {file = "raven-5.27.0.tar.gz", hash = "sha256:3d8f7d6a783615d7a07e0d817999cd23b3d9866ef6dd095ad16ac669fd6e3727"},
+]
+requests = [
+    {file = "requests-2.9.1-py2.py3-none-any.whl", hash = "sha256:113fbba5531a9e34945b7d36b33a084e8ba5d0664b703c81a7c572d91919a5b8"},
+    {file = "requests-2.9.1.tar.gz", hash = "sha256:c577815dd00f1394203fc44eb979724b098f88264a9ef898ee45b8e5e9cf587f"},
+]
+shortuuid = [
+    {file = "shortuuid-0.4.3.tar.gz", hash = "sha256:4606dbb19124d98109c00e2cafae2df8117aec02115623e18fb2abe3f766d293"},
+]
+six = [
+    {file = "six-1.10.0-py2.py3-none-any.whl", hash = "sha256:0ff78c403d9bccf5a425a6d31a12aa6b47f1c21ca4dc2573a7e2f32a97335eb1"},
+    {file = "six-1.10.0.tar.gz", hash = "sha256:105f8d68616f8248e24bf0e9372ef04d3cc10104f1980f54d57b2ce73a5ad56a"},
+]
+sphinx-me = [
+    {file = "sphinx-me-0.3.tar.gz", hash = "sha256:98bef823a4053ca1ccbbe2322bd855a3c5e98797c50bcfeeb630fe11c47d5f1a"},
+    {file = "sphinx_me-0.3-py2.py3-none-any.whl", hash = "sha256:2c67a6bbf9d60631a84b687f0bafbfe2cb16e2663deee28ce03d5f07c7d89807"},
+]
+stripe = [
+    {file = "stripe-1.30.0-py2-none-any.whl", hash = "sha256:53071d2118f8f9ab4d4b12586b19fd976a02a7f77f5b211107bc7577598b4e5c"},
+    {file = "stripe-1.30.0-py3-none-any.whl", hash = "sha256:92600a66862c4555fa6c79582277f0cd050ecb5fd5cdf03fb3d37c43193077cb"},
+    {file = "stripe-1.30.0.tar.gz", hash = "sha256:90d8c6f6acc9485bae5d106b62c6b09b62eea9d7fb1c8476fb4c85b04777fa3a"},
+]
+twilio = [
+    {file = "twilio-5.4.0.tar.gz", hash = "sha256:d856d821f151e0d71e3b1d799e8577efa7807b0f44b68ee0563ae9d914e43986"},
+]
+wsgiref = [
+    {file = "wsgiref-0.1.2-py2.3.egg", hash = "sha256:5e41d89a25465ec65f0f8caf09a2225cf71cfa78b208418177fc2a9420eb51f2"},
+    {file = "wsgiref-0.1.2-py2.4.egg", hash = "sha256:a8fb9fc452e52b175bb2e0f03f6a640d5efbec2ee23d23464590b1b86d324d4b"},
+    {file = "wsgiref-0.1.2.zip", hash = "sha256:c7e610c800957046c04c8014aab8cce8f0b9f0495c8cd349e57c1f7cabf40e79"},
+]
+yubiotp = [
+    {file = "YubiOTP-0.2.1-py2.py3-none-any.whl", hash = "sha256:ca6766b7325c7ec311fb3097f6496a35177950b184c3d8e60b03160d09a7bbfe"},
+    {file = "YubiOTP-0.2.1.tar.gz", hash = "sha256:458b6db6e9988740766dc47ca5583ac4c4db8b7483ffa7e3bc82101e6b07075c"},
+]
