@@ -1,0 +1,16 @@
+:80
+
+root /asset/* /data/asset
+root /static/* /code/static-collect
+
+route /static/* {
+	uri strip_prefix /static
+	file_server
+}
+
+route /asset/* {
+	uri strip_prefix /asset
+	file_server
+}
+
+reverse_proxy localhost:8000
