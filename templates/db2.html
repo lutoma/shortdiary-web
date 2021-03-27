@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% load i18n %} 
-{% load l10n %} 
+{% load i18n %}
+{% load l10n %}
 {% load humanize %}
 {% load staticfiles %}
 {% load gravatar %}
@@ -33,7 +33,8 @@
 
 
 			<h3>
-				<span class='metric'>{% if user.get_streak %}{{ user.get_streak|intcomma }}{% else %}0{% endif %}</span>
+				FIXME
+			{#	<span class='metric'>{% if user.get_streak %}{{ user.get_streak|intcomma }}{% else %}0{% endif %}</span> #}
 				day streak</h3>
 
 			<hr />
@@ -115,7 +116,7 @@
 											</span>
 										{{/if}}
 									</div>
-									
+
 									{{# if this.image }}
 										<!-- Handlebars, you have some seriously weird syntax. -->
 										<a href='{{ ../../../../media_url }}{{ this.image }}' target='_blank'>

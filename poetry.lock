@@ -58,29 +58,29 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
-pytz = ">0.0-dev"
 billiard = ">=3.3.0.20,<3.4"
 kombu = ">=3.0.25,<3.1"
+pytz = ">0.0-dev"
 
 [package.extras]
+zookeeper = ["kazoo (>=1.3.1)"]
 msgpack = ["msgpack-python (>=0.3.0)"]
+librabbitmq = ["librabbitmq (>=1.6.1)"]
 slmq = ["softlayer-messaging (>=1.0.3)"]
 eventlet = ["eventlet"]
-librabbitmq = ["librabbitmq (>=1.6.1)"]
-mongodb = ["pymongo (>=2.6.2)"]
-zookeeper = ["kazoo (>=1.3.1)"]
+couchbase = ["couchbase"]
 redis = ["redis (>=2.8.0)"]
+couchdb = ["couchdb"]
+gevent = ["gevent"]
 auth = ["pyopenssl"]
 pyro = ["pyro4"]
-couchbase = ["couchbase"]
+yaml = ["PyYAML (>=3.10)"]
 beanstalk = ["beanstalkc"]
 memcache = ["pylibmc"]
-gevent = ["gevent"]
-yaml = ["PyYAML (>=3.10)"]
 threads = ["threadpool"]
+mongodb = ["pymongo (>=2.6.2)"]
 zeromq = ["pyzmq (>=13.1.0)"]
 sqlalchemy = ["sqlalchemy"]
-couchdb = ["couchdb"]
 sqs = ["boto (>=2.13.3)"]
 cassandra = ["pycassa"]
 
@@ -94,13 +94,17 @@ python-versions = "*"
 
 [[package]]
 name = "django"
-version = "1.8.5"
+version = "1.11.29"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
 python-versions = "*"
 
+[package.dependencies]
+pytz = "*"
+
 [package.extras]
+argon2 = ["argon2-cffi (>=16.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
@@ -123,19 +127,19 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
-sphinx-me = "*"
 python-gnupg = "*"
+sphinx-me = "*"
 
 [[package]]
 name = "django-formtools"
-version = "1.0"
+version = "2.2"
 description = "A set of high-level abstractions for Django forms"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-Django = ">=1.7"
+Django = ">=1.11"
 
 [[package]]
 name = "django-gravatar2"
@@ -146,39 +150,18 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "django-htmlmin"
-version = "0.7.0"
-description = "html minify for django"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-argparse = "*"
-beautifulsoup4 = "*"
-html5lib = "*"
-
-[[package]]
-name = "django-oauth2-provider"
-version = "0.2.6.1"
-description = "Provide OAuth2 access to your app"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-shortuuid = ">=0.3"
-
-[[package]]
 name = "django-otp"
-version = "0.3.4"
+version = "0.9.4"
 description = "A pluggable framework for adding two-factor authentication to Django using one-time passwords."
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-django = ">=1.4.2"
+django = ">=1.11"
+
+[package.extras]
+qrcode = ["qrcode"]
 
 [[package]]
 name = "django-otp-yubikey"
@@ -194,43 +177,52 @@ YubiOTP = ">=0.2.1"
 
 [[package]]
 name = "django-phonenumber-field"
-version = "0.7.2"
+version = "3.0.1"
 description = "An international phone number field for django models."
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.5"
 
 [package.dependencies]
-phonenumbers = ">=7.0.2"
+babel = "*"
+Django = ">=1.11.3"
+
+[package.extras]
+phonenumbers = ["phonenumbers (>=7.0.2)"]
+phonenumberslite = ["phonenumberslite (>=7.0.2)"]
 
 [[package]]
 name = "django-two-factor-auth"
-version = "1.3.1"
+version = "1.11.0"
 description = "Complete Two-Factor Authentication for Django"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-phonenumbers = ">=7.0.9,<7.99"
-django-otp = ">=0.3.4,<0.99"
-django-phonenumber-field = ">=0.7.2,<0.99"
-Django = ">=1.8,<1.9.99"
-qrcode = ">=4.0.0,<4.99"
+Django = ">=1.11"
 django-formtools = "*"
+django-otp = ">=0.6.0,<0.99"
+django-phonenumber-field = ">=1.1.0,<3.99"
+qrcode = ">=4.0.0,<6.99"
 
 [package.extras]
-Call = ["twilio"]
-SMS = ["twilio"]
-YubiKey = ["django-otp-yubikey"]
+call = ["twilio (>=6.0)"]
+phonenumbers = ["phonenumbers (>=7.0.9,<8.99)"]
+phonenumberslite = ["phonenumberslite (>=7.0.9,<8.99)"]
+sms = ["twilio (>=6.0)"]
+yubikey = ["django-otp-yubikey"]
 
 [[package]]
 name = "djangorestframework"
-version = "2.3.12"
+version = "3.11.2"
 description = "Web APIs for Django, made easy."
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.5"
+
+[package.dependencies]
+django = ">=1.11"
 
 [[package]]
 name = "docutils"
@@ -292,20 +284,12 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
-anyjson = ">=0.3.3"
 amqp = ">=1.4.9,<2.0"
-
-[[package]]
-name = "newrelic"
-version = "2.40.0.34"
-description = "New Relic Python Agent"
-category = "main"
-optional = false
-python-versions = "*"
+anyjson = ">=0.3.3"
 
 [[package]]
 name = "phonenumbers"
-version = "7.2.6"
+version = "8.12.20"
 description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
 category = "main"
 optional = false
@@ -334,6 +318,19 @@ description = "Cryptographic modules for Python."
 category = "main"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "pyjwt"
+version = "1.7.1"
+description = "JSON Web Token implementation in Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+crypto = ["cryptography (>=1.4)"]
+flake8 = ["flake8", "flake8-import-order", "pep8-naming"]
+test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner (>=4.2,<5.0.0)"]
 
 [[package]]
 name = "python-gnupg"
@@ -372,21 +369,6 @@ python-versions = "*"
 
 [package.dependencies]
 six = "*"
-
-[[package]]
-name = "raven"
-version = "5.27.0"
-description = "Raven is a client for Sentry (https://getsentry.com)"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-contextlib2 = "*"
-
-[package.extras]
-flask = ["Flask (>=0.8)", "blinker (>=1.1)"]
-tests = ["Django (>=1.4)", "Flask (>=0.8)", "Flask-Login (>=0.2.0)", "anyjson", "blinker (>=1.1)", "bottle", "celery (>=2.5)", "django-celery (>=2.5)", "exam (>=0.5.2)", "flake8 (>=2.6,<2.7)", "logbook", "mock", "nose", "paste", "pycodestyle", "pytest", "pytest-django (==2.9.1)", "pytest-timeout (==0.4)", "pytz", "requests", "six", "tornado (>=4.1)", "unittest2", "web.py", "webob", "webtest"]
 
 [[package]]
 name = "requests"
@@ -436,24 +418,17 @@ requests = ">=0.8.8"
 
 [[package]]
 name = "twilio"
-version = "5.4.0"
+version = "6.55.0"
 description = "Twilio API client and TwiML generator"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-six = "*"
+PyJWT = "1.7.1"
 pytz = "*"
-httplib2 = ">=0.7"
-
-[[package]]
-name = "wsgiref"
-version = "0.1.2"
-description = "WSGI (PEP 333) Reference Library"
-category = "main"
-optional = false
-python-versions = "*"
+requests = {version = ">=2.0.0", markers = "python_version >= \"3.0\""}
+six = "*"
 
 [[package]]
 name = "yubiotp"
@@ -464,13 +439,13 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
-six = "*"
 pycrypto = "*"
+six = "*"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "2.7.18"
-content-hash = "1178ca0f4909c158d1bf48de3c8c7ea5f8a67861e98b7e8c1205b0d96b65397c"
+python-versions = "3.9.2"
+content-hash = "e906064aa7f16e7144fa8aa760657c061e4806e5636a448fc45fb034666a6793"
 
 [metadata.files]
 amqp = [
@@ -509,8 +484,8 @@ contextlib2 = [
     {file = "contextlib2-0.5.4.tar.gz", hash = "sha256:710626cde569f51a87f216ff757fe60f5cd13ae8f8114706590510cd5649ce88"},
 ]
 django = [
-    {file = "Django-1.8.5-py2.py3-none-any.whl", hash = "sha256:644c5cc2d064a38d439627549e6382a8bc28b80a243fe5cbba40b1efd2babdeb"},
-    {file = "Django-1.8.5.tar.gz", hash = "sha256:2d174e4a3f54708d0d5b6ff1bf54ae71652e83bb06d7576b3b20d916b29c3653"},
+    {file = "Django-1.11.29-py2.py3-none-any.whl", hash = "sha256:014e3392058d94f40569206a24523ce254d55ad2f9f46c6550b0fe2e4f94cf3f"},
+    {file = "Django-1.11.29.tar.gz", hash = "sha256:4200aefb6678019a0acf0005cd14cfce3a5e6b9b90d06145fcdd2e474ad4329c"},
 ]
 django-celery = [
     {file = "django-celery-3.1.17.tar.gz", hash = "sha256:254a95b0a4386df1fd949823942f6312c80fba3c88c5efad79cad8648bc5feb5"},
@@ -519,37 +494,32 @@ django-email-extras = [
     {file = "django-email-extras-0.3.2.tar.gz", hash = "sha256:0475c203526d7e2969feaa8f8cda6501b8356c42c1397e947205880583124358"},
 ]
 django-formtools = [
-    {file = "django-formtools-1.0.tar.gz", hash = "sha256:647a5855277dcf335902eeeeeba3056e439493e6b7de70b942c988a6d8d70e04"},
-    {file = "django_formtools-1.0-py2.py3-none-any.whl", hash = "sha256:6cee6e7b8990898332af2c00020195aacd428bd97ff99d1ec02e9deec84d928c"},
+    {file = "django-formtools-2.2.tar.gz", hash = "sha256:c5272c03c1cd51b2375abf7397a199a3148a9fbbf2f100e186467a84025d13b2"},
+    {file = "django_formtools-2.2-py2.py3-none-any.whl", hash = "sha256:304fa777b8ef9e0693ce7833f885cb89ba46b0e46fc23b01176900a93f46742f"},
 ]
 django-gravatar2 = [
     {file = "django-gravatar2-1.4.0.tar.gz", hash = "sha256:94b19a30d49d64febbd3a64967769dba8965209be1890fb80f62e83a8df498ec"},
     {file = "django_gravatar2-1.4.0-py2.py3-none-any.whl", hash = "sha256:48a18d3b6fcf9628bb0522e45cbe3bc2fb50c63f6f5851ae6fdede9e86a11eb2"},
 ]
-django-htmlmin = [
-    {file = "django-htmlmin-0.7.0.tar.gz", hash = "sha256:3d808019d9185b47a5dbdd7239596ae81e8949bb2e78d51a007f4568b8ac543b"},
-]
-django-oauth2-provider = [
-    {file = "django-oauth2-provider-0.2.6.1.tar.gz", hash = "sha256:acda20a3555166ec47bacabe962878045caa0901c75634d179d1cd31b169ee52"},
-]
 django-otp = [
-    {file = "django-otp-0.3.4.tar.gz", hash = "sha256:5e002e6f63211f1d2babb525f3ba7ef07851239671c48c439ba4800099cb5a2e"},
-    {file = "django_otp-0.3.4-py2.py3-none-any.whl", hash = "sha256:ef0aadbf24e176043fb8fc13041ce71c79d5bc6e61c926d290bbfbbae2a66962"},
+    {file = "django-otp-0.9.4.tar.gz", hash = "sha256:50e54bc09bc435e2ad88f0aa7008718079c3529c422b469b3991a97d28b147bb"},
+    {file = "django_otp-0.9.4-py3-none-any.whl", hash = "sha256:6b92c69021558765e80411479a01788977106d5696c391d2e5342074c1dd74d1"},
 ]
 django-otp-yubikey = [
     {file = "django-otp-yubikey-0.3.3.tar.gz", hash = "sha256:0e9f748abf2e380163f33b28de2a1a1a5bb06b8f0c6e91fabdea70d49f1cf58a"},
     {file = "django_otp_yubikey-0.3.3-py2.py3-none-any.whl", hash = "sha256:ed96330a699eace639c8675ceaf2f1313cbb7779dde8d4717b712b6edfd04602"},
 ]
 django-phonenumber-field = [
-    {file = "django-phonenumber-field-0.7.2.tar.gz", hash = "sha256:f3b23af290d0f800945c44e0737bd32f3ee38f63e7ad7076450778fe682a52fe"},
+    {file = "django-phonenumber-field-3.0.1.tar.gz", hash = "sha256:794ebbc3068a7af75aa72a80cb0cec67e714ff8409a965968040f1fd210b2d97"},
+    {file = "django_phonenumber_field-3.0.1-py3-none-any.whl", hash = "sha256:1ab19f723928582fed412bd9844221fa4ff466276d8526b8b4a9913ee1487c5e"},
 ]
 django-two-factor-auth = [
-    {file = "django-two-factor-auth-1.3.1.tar.gz", hash = "sha256:82f47fca26f0886ca94a54fc872766a0d6f6f5ecb755ac1218590ee15dff841d"},
-    {file = "django_two_factor_auth-1.3.1-py2.py3-none-any.whl", hash = "sha256:e4766c85c6241a685f7632cea6d2d31859e616539d634d6de402dfd108db1c01"},
+    {file = "django-two-factor-auth-1.11.0.tar.gz", hash = "sha256:637bd96e76907d044206c3b038bf4b5eb4769e9e3a4718da755fafc97db38b26"},
+    {file = "django_two_factor_auth-1.11.0-py2.py3-none-any.whl", hash = "sha256:f1835e5368448d1b3d826ce7a36c590b3e39cd536523d372cfc5f9fbdc9731f4"},
 ]
 djangorestframework = [
-    {file = "djangorestframework-2.3.12-py2.py3-none-any.whl", hash = "sha256:6dea5aca68a4492f7c546f81a582a8afa075895b2068da5096c696b67a7d2114"},
-    {file = "djangorestframework-2.3.12.tar.gz", hash = "sha256:3a47d99bdeb9e92ca7e2eabc27d897d977460d49069d1864215470ab17643aa7"},
+    {file = "djangorestframework-3.11.2-py3-none-any.whl", hash = "sha256:5cc724dc4b076463497837269107e1995b1fbc917468d1b92d188fd1af9ea789"},
+    {file = "djangorestframework-3.11.2.tar.gz", hash = "sha256:a5967b68a04e0d97d10f4df228e30f5a2d82ba63b9d03e1759f84993b7bf1b53"},
 ]
 docutils = [
     {file = "docutils-0.12-py3-none-any.whl", hash = "sha256:dcebd4928112631626f4c4d0df59787c748404e66dda952110030ea883d3b8cd"},
@@ -577,11 +547,9 @@ kombu = [
     {file = "kombu-3.0.34-py2.py3-none-any.whl", hash = "sha256:ba39da5f7e1166de64f38ad88c0bfb417f17c24f2e6b584a4d53ae8a8fc98605"},
     {file = "kombu-3.0.34.tar.gz", hash = "sha256:8878ff19b09d86b2689682a4a3eb163d70115ef4ebd974966079a0edd80075da"},
 ]
-newrelic = [
-    {file = "newrelic-2.40.0.34.tar.gz", hash = "sha256:27b92a7a00f162e79b5896fe9e589719b985e9cfdf445826cc18856159ce6c1e"},
-]
 phonenumbers = [
-    {file = "phonenumbers-7.2.6.tar.gz", hash = "sha256:673a7ea919a9cf5d2f4b784c203c098cf3528215df8bd26f79df2b7ea791c2c4"},
+    {file = "phonenumbers-8.12.20-py2.py3-none-any.whl", hash = "sha256:7c2b26ee026f765a8032fc2a333b46fa1860445c7ce6df3b717b9f6985106084"},
+    {file = "phonenumbers-8.12.20.tar.gz", hash = "sha256:ee5a8508c4a414262abad92ec33f050347f681973ed0fb36e98b52bfe159f6b8"},
 ]
 pillow = [
     {file = "Pillow-3.1.1-cp26-none-win32.whl", hash = "sha256:3183b19cdd6fb5c68498334601eba770bc7abd44977b4119e4fa49d45e12845b"},
@@ -647,6 +615,10 @@ psycopg2 = [
 pycrypto = [
     {file = "pycrypto-2.6.1.tar.gz", hash = "sha256:f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c"},
 ]
+pyjwt = [
+    {file = "PyJWT-1.7.1-py2.py3-none-any.whl", hash = "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e"},
+    {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
+]
 python-gnupg = [
     {file = "python-gnupg-0.3.8.tar.gz", hash = "sha256:3872ced77d69203f31817107b324b0dd33d4437a330dc58eca140c8758d26b5a"},
     {file = "python-gnupg-0.3.8.win32.exe", hash = "sha256:98625cd11f1d5eaf0180e4c22eecd326daa0e8a64bee1e9fe310ff39c6734a1d"},
@@ -673,10 +645,6 @@ pytz = [
 qrcode = [
     {file = "qrcode-4.0.4.tar.gz", hash = "sha256:f3993aea9e3af2ca92b64128a81f36ed978a44d115a214293bfcd2cae7de8f6e"},
 ]
-raven = [
-    {file = "raven-5.27.0-py2.py3-none-any.whl", hash = "sha256:30cd4819885f526f12dbcc9803659d3d5cb5f7d983c77815b11db6d977b3d537"},
-    {file = "raven-5.27.0.tar.gz", hash = "sha256:3d8f7d6a783615d7a07e0d817999cd23b3d9866ef6dd095ad16ac669fd6e3727"},
-]
 requests = [
     {file = "requests-2.9.1-py2.py3-none-any.whl", hash = "sha256:113fbba5531a9e34945b7d36b33a084e8ba5d0664b703c81a7c572d91919a5b8"},
     {file = "requests-2.9.1.tar.gz", hash = "sha256:c577815dd00f1394203fc44eb979724b098f88264a9ef898ee45b8e5e9cf587f"},
@@ -698,12 +666,7 @@ stripe = [
     {file = "stripe-1.30.0.tar.gz", hash = "sha256:90d8c6f6acc9485bae5d106b62c6b09b62eea9d7fb1c8476fb4c85b04777fa3a"},
 ]
 twilio = [
-    {file = "twilio-5.4.0.tar.gz", hash = "sha256:d856d821f151e0d71e3b1d799e8577efa7807b0f44b68ee0563ae9d914e43986"},
-]
-wsgiref = [
-    {file = "wsgiref-0.1.2-py2.3.egg", hash = "sha256:5e41d89a25465ec65f0f8caf09a2225cf71cfa78b208418177fc2a9420eb51f2"},
-    {file = "wsgiref-0.1.2-py2.4.egg", hash = "sha256:a8fb9fc452e52b175bb2e0f03f6a640d5efbec2ee23d23464590b1b86d324d4b"},
-    {file = "wsgiref-0.1.2.zip", hash = "sha256:c7e610c800957046c04c8014aab8cce8f0b9f0495c8cd349e57c1f7cabf40e79"},
+    {file = "twilio-6.55.0.tar.gz", hash = "sha256:766555e9f3bdfe9eb2fad9e2efa701f6f7644337a3f6b31a660293d2fbd54331"},
 ]
 yubiotp = [
     {file = "YubiOTP-0.2.1-py2.py3-none-any.whl", hash = "sha256:ca6766b7325c7ec311fb3097f6496a35177950b184c3d8e60b03160d09a7bbfe"},

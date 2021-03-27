@@ -4,7 +4,7 @@ import datetime
 from django.utils.translation import ugettext as _
 
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
 	lastseen = serializers.CharField(source="last_seen_at", read_only=True)
 
 	class Meta:
@@ -13,29 +13,29 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 		read_only_fields = ('username', 'mail_verified')
 
 
-class PostSerializer(serializers.HyperlinkedModelSerializer):
-	url = serializers.HyperlinkedIdentityField(
-		view_name='api-post-detail',
-	)
+class PostSerializer(serializers.ModelSerializer):
+#	url = serializers.HyperlinkedIdentityField(
+#		view_name='api-post-detail',
+#	)
 
 	public_text = serializers.SerializerMethodField('get_public_text')
 	get_public_text = lambda self, obj: obj.get_public_text()
 
 	class Meta:
 		model = Post
-		fields = ('id', 'url', 'date', 'text', 'public_text', 'mood', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'part_of', 'natural_language')
+		fields = ('id', 'date', 'text', 'public_text', 'mood', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'part_of', 'natural_language')
 
 class PublicPostSerializer(serializers.ModelSerializer):
-	url = serializers.HyperlinkedIdentityField(
-		view_name='api-post-detail',
-	)
+#	url = serializers.HyperlinkedIdentityField(
+#		view_name='api-post-detail',
+#	)
 
 	public_text = serializers.SerializerMethodField('get_public_text')
 	get_public_text = lambda self, obj: obj.get_public_text()
 
 	class Meta:
 		model = Post
-		fields = ('id', 'url', 'date', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'public_text', 'natural_language')
+		fields = ('id', 'date', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'public_text', 'natural_language')
 
 class PostCreateSerializer(serializers.ModelSerializer):
 	class Meta:

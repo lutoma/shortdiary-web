@@ -94,34 +94,21 @@ if not DEBUG:
 		('django.template.loaders.cached.Loader', TEMPLATE_LOADERS),
 	)
 
+# Legacy middlewares, need to migrate
 MIDDLEWARE_CLASSES = (
+	'diary.middleware.TrackLastActivityMiddleware'
+)
+
+MIDDLEWARE = (
 	'django.middleware.gzip.GZipMiddleware',
-#	'htmlmin.middleware.HtmlMinifyMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.locale.LocaleMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
-	'django_otp.middleware.OTPMiddleware',
 	'two_factor.middleware.threadlocals.ThreadLocals',
+	'django_otp.middleware.OTPMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
-	# Uncomment the next line for simple clickjacking protection:
-	# 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'diary.middleware.TrackLastActivityMiddleware'
-)
-
-debug_context = lambda request: {'DEBUG': DEBUG}
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-	'django.contrib.auth.context_processors.auth',
-	'django.core.context_processors.request',
-	'django.core.context_processors.debug',
-	'django.core.context_processors.i18n',
-	'django.core.context_processors.media',
-	'django.core.context_processors.static',
-	'django.core.context_processors.tz',
-	'django.contrib.messages.context_processors.messages',
-	'shortdiary.settings.debug_context',
 )
 
 ROOT_URLCONF = 'shortdiary.urls'
@@ -129,9 +116,25 @@ ROOT_URLCONF = 'shortdiary.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'shortdiary.wsgi.application'
 
-TEMPLATE_DIRS = (
-	os.path.join(SITE_ROOT, 'templates'),
-)
+TEMPLATES = [
+	{
+		'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'DIRS': ['templates/'],
+		'OPTIONS': {
+			'context_processors': [
+				'shortdiary.context_processors.debug',
+				'django.template.context_processors.request',
+				'django.contrib.auth.context_processors.auth',
+				'django.contrib.messages.context_processors.messages',
+				'django.template.context_processors.i18n',
+			],
+			'loaders': [
+				'django.template.loaders.filesystem.Loader',
+				'django.template.loaders.app_directories.Loader',
+			]
+		},
+	},
+]
 
 GRAVATAR_URL_PREFIX = 'https://secure.gravatar.com/'
 GRAVATAR_DEFAULT_IMAGE = 'mm'
@@ -152,14 +155,13 @@ INSTALLED_APPS = (
 	'rest_framework',
 	'email_extras',
 	'diary',
-	'provider',
-	'provider.oauth2',
+#	'provider',
+#	'provider.oauth2',
 	'django_otp',
 	'django_otp.plugins.otp_static',
 	'django_otp.plugins.otp_totp',
 	'two_factor',
 	'otp_yubikey',
-	'raven.contrib.django.raven_compat',
 )
 
 # Asynchronous jobs
@@ -202,7 +204,7 @@ REST_FRAMEWORK = {
         'api.permissions.IsOwner',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-    	'rest_framework.authentication.OAuth2Authentication',
+#    	'rest_framework.authentication.OAuth2Authentication',
     	'rest_framework.authentication.SessionAuthentication',
     	'rest_framework.authentication.BasicAuthentication',
 	),

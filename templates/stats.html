@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% load i18n %} 
-{% load l10n %} 
+{% load i18n %}
+{% load l10n %}
 {% load humanize %}
 {% load staticfiles %}
 {% load timetags %}
@@ -75,7 +75,7 @@
 			$(document).ready(function() {
 				L.mapbox.accessToken = 'pk.eyJ1IjoibHV0b21hIiwiYSI6ImVkbzF4MG8ifQ.pIpC2pu9savl1ZZLl8TGrA';
 				var map = L.mapbox.map('map-canvas', 'lutoma.m1iha18e');
-				
+
 				var geojson = {
 					type: 'FeatureCollection',
 					features: [
@@ -88,7 +88,7 @@
 										type: 'Point',
 										coordinates: [{{ post.location_lon}}, {{ post.location_lat}}]
 									},
-								
+
 									properties: {url: '/posts/{{ post.id }}/'}
 								},
 							{% endif %}
@@ -99,7 +99,7 @@
 				var layer = L.mapbox.featureLayer().setGeoJSON(geojson);
 				layer.on('click', function(e) {
 					window.location.href = e.layer.feature.properties.url;
-				});	
+				});
 
 				map.fitBounds(layer.getBounds());
 
@@ -186,7 +186,7 @@
 									#{{ forloop.counter }}
 								</td>
 								<td>
-									<a href='{% url 'diary.views.search' %}?q=@{{ name.0|urlencode }}'>{{ name.0 }}</a>
+									<a href='{% url 'diary:search' %}?q=@{{ name.0|urlencode }}'>{{ name.0 }}</a>
 								</td>
 								<td style='width: 170px;'>
 									{{ name.1 }} {% trans "mentions" %}

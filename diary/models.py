@@ -11,6 +11,7 @@ from django.db.models import Avg
 from django.core.cache import cache
 from django.dispatch import receiver
 from collections import Counter
+from functools import reduce
 import diary.tasks as tasks
 import hashlib, base64
 import babel
@@ -42,10 +43,7 @@ class DiaryUser(AbstractUser):
 		mail.send()
 
 	def get_streak(self):
-		# We need to base64 this since the username might contain characters
-		# that are invalid as memcache keys.
-		# FIXME Why does this not simply use the user ID?
-		cache_key = base64.b64encode('diary_{}_streak'.format(self.username))
+		cache_key = f'diary_{self.id}_streak'
 		cached_streak = cache.get(cache_key)
 
 		if cached_streak:
@@ -95,13 +93,13 @@ class DiaryUser(AbstractUser):
 		Returns the most frequently mentioned nicknames of this user
 		'''
 
-		names = map(lambda post: post.get_mentions(), self.get_posts())
+		names = list(map(lambda post: post.get_mentions(), self.get_posts()))
 
 		if len(names) < 1:
 			return
 
 		names = reduce(lambda names, name: names + name, names)
-		names = map(lambda name: name[1:].lower(), names)
+		names = list(map(lambda name: name[1:].lower(), names))
 		return Counter(names).most_common()
 
 class Post(models.Model):

@@ -18,7 +18,7 @@ class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
 	serializer_class = ProfileSerializer
 
 	def get(self, request, format=None):
-		serializer = self.serializer_class(request.user)
+		serializer = self.serializer_class(request.user, context=self.context)
 		return Response(serializer.data)
 
 	def put(self, request, *args, **kwargs):
@@ -53,19 +53,19 @@ class PostList(ListCreateAPIView):
 	serializer_class=PostSerializer
 	def get(self, request, format=None):
 		posts = Post.objects.filter(author=request.user).order_by("-date")
-		serializer = PostSerializer(posts, many=True)
+		serializer = PostSerializer(posts, many=True, context=self.context)
 		return Response(serializer.data)
 
 	def create(self, request, *args, **kwargs):
 		data = request.DATA.copy()
 		data["author"] = request.user.pk
-		serializer = PostCreateSerializer(data=data, files=request.FILES)
+		serializer = PostCreateSerializer(data=data, files=request.FILES, context=self.context)
 
 		if serializer.is_valid():
 			self.pre_save(serializer.object)
 			self.object = serializer.save(force_insert=True)
 			self.post_save(self.object, created=True)
-			serializer = PostSerializer(self.object)
+			serializer = PostSerializer(self.object, context=self.context)
 			headers = self.get_success_headers(serializer.data)
 			return Response(serializer.data, status=status.HTTP_201_CREATED,
 							headers=headers)
@@ -77,7 +77,8 @@ class PostTimeline(ListAPIView):
 	"""
 	List of your posts grouped by year and month
 	"""
-	serializer_class=PostSerializer
+
+	serializer_class = PostSerializer
 	def get(self, request, format=None):
 		# This should probably be moved to the model
 		cache_key = 'api_timeline_{}'.format(request.user.id)
@@ -101,7 +102,9 @@ class PostTimeline(ListAPIView):
 
 		# Infinite lifetime since this is invalidated as soon as a new
 		# post is written by the user
-		cache.set(cache_key, sorted_posts, None)
+
+# FIXME
+#		cache.set(cache_key, sorted_posts, None)
 
 		return Response(sorted_posts)
 
@@ -153,7 +156,7 @@ class PostYearAgo(GenericAPIView):
 		yearago = datetime.date(today.year-1, today.month, today.day)
 		try:
 			post = Post.objects.get(author=request.user, date=yearago)
-			serializer = self.serializer_class(post)
+			serializer = self.serializer_class(post, context=self.context)
 			response = Response(serializer.data)
 		except:
 			response = Response({"No post for last year"})
@@ -171,7 +174,7 @@ class PublicPostDetail(APIView):
 	def get(self, request, format=None):
 		try:
 			randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
-			serializer = PublicPostSerializer(randompost)
+			serializer = PublicPostSerializer(randompost, context=self.context)
 			return Response(serializer.data)
 		except Post.DoesNotExist:
 			randompost = None

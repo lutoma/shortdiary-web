@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% load i18n %} 
-{% load l10n %} 
+{% load i18n %}
+{% load l10n %}
 {% load humanize %}
 {% load staticfiles %}
 
@@ -8,27 +8,27 @@
 	<table class="post-list border alternate">
 		<tbody>
 			{% for post in posts %}
-					<tr id='post-{{ post.id }}' data-id='{{ post.id }}' onclick="window.location.href = '{% url "diary.views.show_post" post.id %}';">
+					<tr id='post-{{ post.id }}' data-id='{{ post.id }}' onclick="window.location.href = '{% url "diary:post_show" post.id %}';">
 						<td style="width: 45px; text-align: center;">
-							<a href='{% url "diary.views.show_post" post.id %}'><strong>#{{ post.get_user_id }}</strong></a>
+							<a href='{% url "diary:post_show" post.id %}'><strong>#{{ post.get_user_id }}</strong></a>
 						</td>
 						<td style="width: 250px;">
 							<!-- We heard you like tables … -->
 							<table>
 								<tbody>
 									<tr>
-										<td><a href='{% url "diary.views.show_post" post.id %}'><strong>{{ post.date|naturalday }}</strong></a></td>
+										<td><a href='{% url "diary:post_show" post.id %}'><strong>{{ post.date|naturalday }}</strong></a></td>
 									</tr>
 									<tr>
 										<td>
-											<a href='{% url "diary.views.show_post" post.id %}'><small style='font-size: .8em; font-weight: 300;'>{% trans 'Posted' context 'In front of post creation date' %} {{ post.created_at|naturaltime }}</small></a>
+											<a href='{% url "diary:post_show" post.id %}'><small style='font-size: .8em; font-weight: 300;'>{% trans 'Posted' context 'In front of post creation date' %} {{ post.created_at|naturaltime }}</small></a>
 										</td>
 									</tr>
 								</tbody>
 							</table>
 						</td>
 						<td>
-							<a href='{% url "diary.views.show_post" post.id %}'><small class="text-teaser">{{ post.text|truncatechars:140 }}</small></a>
+							<a href='{% url "diary:post_show" post.id %}'><small class="text-teaser">{{ post.text|truncatechars:140 }}</small></a>
 						</td>
 					</tr>
 			{% empty %}

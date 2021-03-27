@@ -1,7 +1,7 @@
 # coding: utf-8
 import datetime
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render_to_response, render
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.template.context import RequestContext
@@ -26,9 +26,9 @@ def index(request):
 	context = {'title': None}
 
 	if not request.user.is_authenticated():
-		return render_to_response('frontpage.html', context_instance=RequestContext(request, context))
+		return render(request, 'frontpage.html', context=context)
 
-	return render_to_response('db2.html', context_instance=RequestContext(request, context))
+	return render(request, 'db2.html', context=context)
 
 @login_required
 def edit_post(request, post_id = None):
@@ -53,7 +53,7 @@ def edit_post(request, post_id = None):
 			raise PermissionDenied
 
 	yesterday = datetime.date.today() - datetime.timedelta(days=1)
-	
+
 	if not request.method == 'POST':
 		# Check if there are not already posts existing for the last 2 days
 		# This is only relevant if we add a new post
@@ -73,7 +73,7 @@ def edit_post(request, post_id = None):
 			'edit_post': edit_post,
 		}
 
-		return render_to_response('edit_post.html', context_instance=RequestContext(request, context))
+		return render(request, 'edit_post.html', context=context)
 
 	# Request method is POST
 	form = PostForm(request.POST, request.FILES)
@@ -85,7 +85,7 @@ def edit_post(request, post_id = None):
 			'edit_post': edit_post,
 		}
 
-		return render_to_response('edit_post.html', context_instance=RequestContext(request, context))
+		return render(request, 'edit_post.html', context=context)
 
 
 	if not edit_post:
@@ -99,13 +99,13 @@ def edit_post(request, post_id = None):
 		post.save()
 	else:
 		# This is an edit of an existing post
-		edit_post.text = form.cleaned_data['text']		
+		edit_post.text = form.cleaned_data['text']
 		edit_post.mood = form.cleaned_data['mood']
 		edit_post.public = form.cleaned_data['public']
 		edit_post.location_lat = form.cleaned_data['location_lat']
 		edit_post.location_lon = form.cleaned_data['location_lon']
-		edit_post.location_verbose = form.cleaned_data['location_verbose']	
-		edit_post.save()	
+		edit_post.location_verbose = form.cleaned_data['location_verbose']
+		edit_post.save()
 
 	return HttpResponseRedirect('/')
 
@@ -119,8 +119,8 @@ def show_post(request, post_id):
 		context = {
 			'title': _('Sorry! :('),
 		}
-		
-		return render_to_response('not_public.html', context_instance=RequestContext(request, context))
+
+		return render(request, 'not_public.html', context=context)
 
 	context = {
 		'post': post,
@@ -131,7 +131,7 @@ def show_post(request, post_id):
 	if post.author == request.user:
 		context['title'] = _('Your post #{}').format(post.get_user_id(), post.date)
 
-	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
+	return render(request, 'show_post.html', context=context)
 
 def switch_language(request, language):
 	request.session['django_language'] = language
@@ -144,7 +144,7 @@ def sign_up(request):
 			'title': _('Sign up'),
 		}
 
-		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
+		return render(request, 'sign_up.html', context=context)
 
 	# Request method is POST
 	form = SignUpForm(request.POST, request.FILES)
@@ -153,7 +153,7 @@ def sign_up(request):
 			'title': _('Sign up'),
 			'form': form,
 		}
-		return render_to_response('sign_up.html', context_instance=RequestContext(request, context))
+		return render(request, 'sign_up.html', context=context)
 
 	# Fixme
 	user = form.save()
@@ -183,7 +183,7 @@ def account_settings(request):
 			'title': _('Account settings'),
 			'form': AccountSettingsForm(),
 		}
-		return render_to_response('account_settings.html', context_instance=RequestContext(request, context))
+		return render(request, 'account_settings.html', context=context)
 
 	# Request method is POST
 	form = AccountSettingsForm(request.POST, request.FILES)
@@ -193,7 +193,7 @@ def account_settings(request):
 			'title': _('Account settings'),
 			'form': form,
 		}
-		return render_to_response('account_settings.html', context_instance=RequestContext(request, context))
+		return render(request, 'account_settings.html', context=context)
 
 	# Save form
 
@@ -209,7 +209,7 @@ def account_settings(request):
 		'title': _('Account settings'),
 		'success': True,
 	}
-	return render_to_response('account_settings.html', context_instance=RequestContext(request, context))
+	return render(request, 'account_settings.html', context=context)
 
 @api_view(['DELETE'])
 def delete_post(request, post_id):
@@ -235,7 +235,7 @@ def stats(request):
 	user_posts = Post.objects.filter(author = request.user).order_by('date')
 
 	if user_posts.count() < 1:
-		return render_to_response('stats_noposts.html', context_instance=RequestContext(request))
+		return render(request, 'stats_noposts.html')
 
 	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:10]
 
@@ -248,7 +248,7 @@ def stats(request):
 		'top_mentions': request.user.get_mention_toplist()[:10],
 		'top_mood_locations': top_mood_locations,
 	}
-	return render_to_response('stats.html', context_instance=RequestContext(request, context))
+	return render(request, 'stats.html', context=context)
 
 def leaderboard(request):
 	leaders = cache.get_many([
@@ -268,7 +268,7 @@ def leaderboard(request):
 		else:
 			tasks.update_leaderboard.delay()
 
-		return render_to_response('leaderboard_wait.html', context_instance=RequestContext(request))
+		return render(request, 'leaderboard_wait.html')
 
 	context = {
 		'title': 'Leaderboard',
@@ -281,7 +281,7 @@ def leaderboard(request):
 		'last_update': leaders['leaderboard_last_update'],
 	}
 
-	return render_to_response('leaderboard.html', context_instance=RequestContext(request, context))
+	return render(request, 'leaderboard.html', context=context)
 
 #@user_passes_test(lambda u: u.has_paid(), login_url = '/pay/')
 def explore(request):
@@ -293,14 +293,14 @@ def explore(request):
 	try:
 		post = Post.objects.filter(**post_filters).order_by('?')[:1].get()
 	except Post.DoesNotExist:
-		return render_to_response('explore_nosuchpost.html', context_instance=RequestContext(request))
+		return render(request, 'explore_nosuchpost.html')
 
 	context = {
 		'title': 'Explore',
 		'post': post,
 		'language': post.get_language_name(locale = get_language_from_request(request)),
 	}
-	return render_to_response('show_post.html', context_instance=RequestContext(request, context))
+	return render(request, 'show_post.html', context=context)
 
 @login_required
 def search(request):
@@ -312,7 +312,7 @@ def search(request):
 		'title': 'Search',
 		'posts': posts,
 	}
-	return render_to_response('search_results.html', context_instance=RequestContext(request, context))
+	return render(request, 'search_results.html', context=context)
 
 
 @login_required
@@ -332,7 +332,7 @@ def pay_stripe_handle(request):
 			plan = 'shortdiary-vip',
 			email = request.user.email
 		)
-	except stripe.CardError, e:
+	except stripe.CardError as e:
 		return HttpResponse('Card declined.')
 
 	Payment(

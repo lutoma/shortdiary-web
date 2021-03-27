@@ -29,15 +29,15 @@
 
 		<small>
 			<p>{% trans "<strong>Caution:</strong> If you change your email address, you won't receive any mails until you've verified the new address, so be sure to do that quickly!" %}</p>
-			{% trans 'Current status' %}: 
+			{% trans 'Current status' %}:
 			{% if user.mail_verified %}
-				{% trans 'Verified' %}. 
+				{% trans 'Verified' %}.
 			{% else %}
 				<span style="color: red;">{% trans 'Unverified' %}. </span>
 			{% endif %}
 		</small>
 
-		<p><a href='{% url "django.contrib.auth.views.password_change" %}'>{% trans "Change my password" %}</a></p>
+		<p><a href='{% url "password_change" %}'>{% trans "Change my password" %}</a></p>
 		<p><a href='{% url "two_factor:profile" %}'>{% trans "Two-factor authentication" %}</a></p>
 
 		<button type='submit'>
