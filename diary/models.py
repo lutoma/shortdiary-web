@@ -3,20 +3,18 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
-from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.conf import settings
-#from email_extras.utils import send_mail_template
-from django.db.models import Avg
+from django_q.tasks import async_task
 from django.core.cache import cache
 from django.dispatch import receiver
 from collections import Counter
 from functools import reduce
 import diary.tasks as tasks
-import hashlib, base64
+import hashlib
 import babel
 import datetime
-import gnupg
 import re
 
 class DiaryUser(AbstractUser):
@@ -235,16 +233,12 @@ class Post(models.Model):
 @receiver(post_save, sender=Post)
 @receiver(post_delete, sender=Post)
 def update_post_signal(sender, instance, **kwargs):
-	#tasks.async_update_streak.delay(instance.author)
-	# FIXME
-	tasks.async_update_streak(instance.author)
+	async_task('diary.tasks.async_update_streak', instance.author)
 
 	# Only run the post language guesser if other fields than the natural
 	# language were updated. Otherwise, this would result in recursion.
 	if not ('update_fields' in kwargs and kwargs['update_fields'] == frozenset(['natural_language'])):
-#		tasks.guess_post_language.delay(instance)
-# FIXME
-		tasks.guess_post_language(instance)
+		async_task('diary.tasks.guess_post_language', instance)
 
 
 class Payment(models.Model):

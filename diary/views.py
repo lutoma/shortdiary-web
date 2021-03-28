@@ -17,6 +17,8 @@ from django.conf import settings
 from django.core.cache import cache
 import diary.tasks as tasks
 from django.db.models import Q, Count, Avg
+from django_q.tasks import async_task
+
 from django.utils.translation import get_language_from_request
 import stripe
 
@@ -264,7 +266,7 @@ def leaderboard(request):
 		if settings.DEBUG:
 			tasks.update_leaderboard()
 		else:
-			tasks.update_leaderboard.delay()
+			async_task('diary.tasks.update_leaderboard')
 
 		return render(request, 'leaderboard_wait.html')
 

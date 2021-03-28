@@ -28,12 +28,10 @@ def process_mails(searched_date):
 
 		post.send_mail()
 
-#@periodic_task(run_every = crontab(hour="0", minute="0", day_of_week="*"))
 def process_mails_for_today():
 	searched_date = datetime.date.today() - datetime.timedelta(days = 365)
 	process_mails(searched_date)
 
-#@periodic_task(run_every = crontab(hour="*", minute="*/5", day_of_week="*"))
 def update_leaderboard():
 	streak_leaders = sorted(diary.models.DiaryUser.objects.all(), key = lambda t: t.get_streak(), reverse = True)[:10]
 	streak_leaders = filter(lambda t: t.get_streak() > 1, streak_leaders)
@@ -76,7 +74,6 @@ def update_leaderboard():
 		'leaderboard_last_update': datetime.datetime.now(),
 	})
 
-#@task
 def update_streak(user):
 	"""
 	This returns information on how long the "streak" of this user has been
@@ -105,7 +102,6 @@ def update_streak(user):
 
 	return streak
 
-#@task
 def async_update_streak(user):
 		cache_key = f'diary_{user.id}_streak'
 		streak = update_streak(user)
@@ -130,7 +126,6 @@ def send_reminder_mail(user):
 #		context = {'user': user}
 #	)
 
-#@periodic_task(run_every = crontab(hour="11", minute="0", day_of_week="*"))
 def send_reminder_mails():
 
 	# Get all relevant users (Have streak, last post 2 days ago)
@@ -140,7 +135,6 @@ def send_reminder_mails():
 
 	map(send_reminder_mail, users)
 
-#@task
 def guess_post_language(post):
 	if post.uses_pgp():
 		return
@@ -156,7 +150,6 @@ def guess_post_language(post):
 	# in the event to avoid recursion, so don't remove it!
 	post.save(update_fields=['natural_language'])
 
-#@task
 def send_inactivity_retention_mail(user):
 	"""
 	Sends out a 'we haven't seen you in a while' mail
@@ -178,7 +171,6 @@ def get_users_for_timeframe(**kwargs):
 	users = diary.models.DiaryUser.objects.filter(last_seen_at__gte = filter_time)
 	return '\n'.join(map(lambda u: u.username, users))
 
-#@periodic_task(run_every = crontab(hour="0", minute="0", day_of_week="*"))
 def send_active_users_overview():
 	'''
 	Sends simple stats of current active users to managers

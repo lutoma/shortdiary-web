@@ -27,10 +27,10 @@ DATABASES = {
 }
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'shortdiary-main'
-    }
+	'default': {
+		'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+		'LOCATION': 'shortdiary-main'
+	}
 }
 
 TIME_ZONE = 'Europe/Berlin'
@@ -41,15 +41,15 @@ USE_L10N = True
 USE_TZ = True
 
 LANGUAGES = (
-    ('en', 'English'),
-    ('de', 'Deutsch'),
-    ('sv', 'Svenska'),
-    ('eo', 'Esperanto'),
+	('en', 'English'),
+	('de', 'Deutsch'),
+	('sv', 'Svenska'),
+	('eo', 'Esperanto'),
 )
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.getcwd() + '/asset/'
+MEDIA_ROOT = os.path.join(SITE_ROOT, 'asset')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -60,7 +60,7 @@ MEDIA_URL = '/asset/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.getcwd() + '/static-collect/'
+STATIC_ROOT = os.path.join(SITE_ROOT, 'static-collect')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -148,31 +148,19 @@ INSTALLED_APPS = (
 	'django.contrib.humanize',
 	'django.contrib.admin',
 	'django.contrib.admindocs',
-#	'kombu.transport.django',
-#	'djcelery',
 	'django_gravatar',
 	'rest_framework',
-	#'email_extras',
 	'diary',
 
 	'django_otp',
 	'django_otp.plugins.otp_static',
 	'django_otp.plugins.otp_totp',
 	'two_factor',
+	'django_q',
 
-#	'provider',
-#	'provider.oauth2',
-#	'django_otp',
-#	'django_otp.plugins.otp_static',
-#	'django_otp.plugins.otp_totp',
 #	'two_factor',
 #	'otp_yubikey',
 )
-
-# Asynchronous jobs
-#BROKER_URL = "django://"
-#import djcelery
-#djcelery.setup_loader()
 
 LOGGING = {
 	'version': 1,
@@ -205,13 +193,13 @@ AUTH_PROFILE_MODULE = 'diary.UserProfile'
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'api.permissions.IsOwner',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-#    	'rest_framework.authentication.OAuth2Authentication',
-    	'rest_framework.authentication.SessionAuthentication',
-    	'rest_framework.authentication.BasicAuthentication',
+	'DEFAULT_PERMISSION_CLASSES': (
+		'api.permissions.IsOwner',
+	),
+	'DEFAULT_AUTHENTICATION_CLASSES': (
+		# 'rest_framework.authentication.OAuth2Authentication',
+		'rest_framework.authentication.SessionAuthentication',
+		'rest_framework.authentication.BasicAuthentication',
 	),
 }
 
