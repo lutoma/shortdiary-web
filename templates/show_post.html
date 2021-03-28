@@ -18,7 +18,7 @@
 	{% endif %}
 
 	<meta name="twitter:title" content="Post #{{ post.id }} from {{ post.date }}" />
-	<meta name="twitter:description" content="{{ post.text|remove_newlines|truncatechars:200|escapejs }}" />
+	<meta name="twitter:description" content="{{ post.get_public_text|remove_newlines|truncatechars:200|escapejs }}" />
 
 	{% if post.location_lat and post.location_lon and post.location_verbose %}
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=true"></script>
