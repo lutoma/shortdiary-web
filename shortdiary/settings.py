@@ -145,9 +145,6 @@ INSTALLED_APPS = (
 	'django_otp.plugins.otp_totp',
 	'two_factor',
 	'django_q',
-
-#	'two_factor',
-#	'otp_yubikey',
 )
 
 LOGGING = {
@@ -195,14 +192,11 @@ AUTH_USER_MODEL = 'diary.DiaryUser'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'two_factor:login'
 
-STRIPE_SECRET_KEY = None
-STRIPE_PUBLIC_KEY = None
-
 TWO_FACTOR_CALL_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
 TWO_FACTOR_SMS_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
-TWILIO_ACCOUNT_SID = 'ACf521380e135a1e44e8a5f2457a8159d3'
-TWILIO_AUTH_TOKEN = 'dd7059a9681b37dc5a172514d8e2ba6b'
-TWILIO_CALLER_ID = '+14159663673'
+TWILIO_ACCOUNT_SID = None
+TWILIO_AUTH_TOKEN = None
+TWILIO_CALLER_ID = None
 
 POSTMARK_KEY = None
 
