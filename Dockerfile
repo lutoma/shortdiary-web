@@ -11,7 +11,7 @@ RUN poetry add gunicorn
 RUN poetry run ./manage.py collectstatic --noinput
 
 RUN mkdir /data
-RUN ln -s /data/settings_local.py shortdiary/local_settings.py
+RUN ln -s /data/settings_local.py shortdiary/settings_local.py
 RUN ln -s /data/asset asset
 
 RUN wget "https://caddyserver.com/api/download?os=linux&arch=amd64" -O /usr/local/bin/caddy

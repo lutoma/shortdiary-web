@@ -1,13 +1,12 @@
 # Default settings
 # DO NOT MODIFY THIS FILE FOR YOUR LOCAL INSTALLATION.
-# Instead, create a file called local_settings.py and override stuff you want to change there.
+# Instead, create a file called settings_local.py and override stuff you want to change there.
 
 import os
 
 SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
 	('Example Admin', 'shortdiary-admin@example.org'),
@@ -81,17 +80,6 @@ STATICFILES_FINDERS = (
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '38wok0-b&amp;0r31$+m4)24#)vrt(_$84mfi*2gqooc#*x3%-xop9'
-
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-	'django.template.loaders.filesystem.Loader',
-	'django.template.loaders.app_directories.Loader',
-)
-
-if not DEBUG:
-	TEMPLATE_LOADERS = (
-		('django.template.loaders.cached.Loader', TEMPLATE_LOADERS),
-	)
 
 # Legacy middlewares, need to migrate
 MIDDLEWARE_CLASSES = (
@@ -218,7 +206,6 @@ TWILIO_CALLER_ID = '+14159663673'
 
 # Use the file local_settings.py to overwrite the defaults with your own settings
 try:
-	from local_settings import *
+	from settings_local import * # noqa
 except ImportError:
 	pass
-
