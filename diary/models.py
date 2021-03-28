@@ -1,4 +1,3 @@
-# coding: utf-8
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -17,21 +16,22 @@ import babel
 import datetime
 import re
 
+
 class DiaryUser(AbstractUser):
-	"""
-	The extended user
-	"""
+	invited_by = models.ForeignKey("DiaryUser", related_name='user_invited_by',
+		blank=True, null=True, verbose_name=_('invited by'), on_delete=models.SET_NULL)
 
-	invited_by = models.ForeignKey("DiaryUser", related_name = 'user_invited_by', blank = True, null = True, verbose_name = _('invited by'), on_delete=models.SET_NULL)
-	invites_left = models.IntegerField(default = 5, verbose_name = _('invites left'))
-	last_seen_at = models.DateTimeField(blank = True, null = True, verbose_name = _('last seen at'))
-	mail_verified = models.BooleanField(default = False, verbose_name = _('email verified?'))
-	language = models.CharField(default = 'en_US', max_length = 5, verbose_name = _('language'))
-	geolocation_enabled = models.BooleanField(verbose_name = _('Post location enabled'), default = True)
+	invites_left = models.IntegerField(default=5, verbose_name=_('invites left'))
+	last_seen_at = models.DateTimeField(blank=True, null=True, verbose_name=_('last seen at'))
+	mail_verified = models.BooleanField(default=False, verbose_name=_('email verified?'))
+	language = models.CharField(default='en_US', max_length=5, verbose_name=_('language'))
+	geolocation_enabled = models.BooleanField(verbose_name=_('Post location enabled'), default=True)
 
-	get_verification_hash = lambda self: hashlib.sha256(self.email.encode('utf-8') + settings.SECRET_KEY).hexdigest()
+	def get_verification_hash(self):
+		return hashlib.sha256(self.email.encode('utf-8') + settings.SECRET_KEY).hexdigest()
 
 	def send_verification_mail(self):
+		# FIXME Postmarkify
 		mail_template = get_template('mails/verification.txt')
 		mail = EmailMessage(
 			_('Please verify your email address on shortdiary, {0}'.format(self.username)),
@@ -61,13 +61,13 @@ class DiaryUser(AbstractUser):
 
 		grid = [None] * 365
 
-		for post in Post.objects.filter(author = self, date__year = datetime.date.today().year):
+		for post in Post.objects.filter(author=self, date__year=datetime.date.today().year):
 			grid[post.date.timetuple().tm_yday] = post
 
 		return grid
 
 	def get_posts(self):
-		return Post.objects.filter(author = self)
+		return Post.objects.filter(author=self)
 
 	def get_post_characters(self):
 		return reduce(lambda x, post: x + len(post.text), self.get_posts(), 0)
@@ -84,7 +84,8 @@ class DiaryUser(AbstractUser):
 		if self.is_superuser or self.is_staff:
 			return True
 
-		return self.payment_set.filter(valid_until__gte = datetime.datetime.now(), valid_from__lte = datetime.datetime.now()).count() > 0
+		return self.payment_set.filter(valid_until__gte=datetime.datetime.now(),
+			valid_from__lte=datetime.datetime.now()).count() > 0
 
 	def get_mention_toplist(self):
 		'''
@@ -100,43 +101,46 @@ class DiaryUser(AbstractUser):
 		names = list(map(lambda name: name[1:].lower(), names))
 		return Counter(names).most_common()
 
-class Post(models.Model):
-	"""
-	A diary post
-	"""
 
+class Post(models.Model):
 	MENTION_REGEX = re.compile(r'@\w+', re.UNICODE)
 
-	author = models.ForeignKey(DiaryUser, verbose_name = _('author'), on_delete=models.CASCADE)
-	date = models.DateField(verbose_name = ('date'))
-	text = models.TextField(verbose_name = _('text'))
-	mood = models.IntegerField(verbose_name = _ ('mood'))
-	image = models.ImageField(upload_to = 'postimages/%d%m%y/', blank = True, verbose_name = _('image'))
-	public = models.BooleanField(verbose_name = _('public'), default = False)
-	part_of = models.CharField(blank = True, null = True, max_length = 600, verbose_name = _('part of'))
+	author = models.ForeignKey(DiaryUser, verbose_name=_('author'), on_delete=models.CASCADE)
+	date = models.DateField(verbose_name=('date'))
+	text = models.TextField(verbose_name=_('text'))
+	mood = models.IntegerField(verbose_name=_('mood'))
+	image = models.ImageField(upload_to='postimages/%d%m%y/', blank=True, verbose_name=_('image'))
+	public = models.BooleanField(verbose_name=_('public'), default=False)
+	part_of = models.CharField(blank=True, null=True, max_length=600, verbose_name=_('part of'))
 
-	created_at = models.DateTimeField(auto_now_add = True, verbose_name = _('created at'))
-	last_changed_at = models.DateTimeField(auto_now = True, verbose_name = _('last changed at'))
+	created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+	last_changed_at = models.DateTimeField(auto_now=True, verbose_name=_('last changed at'))
 
-	sent = models.BooleanField(default = False, verbose_name = _('mail sent?'))
+	sent = models.BooleanField(default=False, verbose_name=_('mail sent?'))
 
-	location_lat = models.DecimalField(max_digits=16, decimal_places=12, blank = True, null = True, verbose_name = _('Location latitude'))
-	location_lon = models.DecimalField(max_digits=16, decimal_places=12, blank = True, null = True, verbose_name = _('Location longitude'))
-	location_verbose = models.CharField(max_length = 400, blank = True, verbose_name = _('Location name'))
+	location_lat = models.DecimalField(max_digits=16, decimal_places=12, blank=True, null=True,
+		verbose_name=_('Location latitude'))
 
-	natural_language = models.CharField(max_length = 5, blank = True, null = True, verbose_name = _('Natural language'))
+	location_lon = models.DecimalField(max_digits=16, decimal_places=12, blank=True, null=True,
+		verbose_name=_('Location longitude'))
 
-	__unicode__ = lambda self: _('{0} at {1}').format(self.author, self.date)
+	location_verbose = models.CharField(max_length=400, blank=True, verbose_name=_('Location name'))
+
+	natural_language = models.CharField(max_length=5, blank=True, null=True,
+		verbose_name=_('Natural language'))
 
 	class Meta:
 		verbose_name = _('post')
 		verbose_name_plural = _('posts')
 
+	def __str__(self):
+		return f'{self.author} on {self.data}'
+
 	def get_user_id(self):
 		"""
 		Get user specific post ID (Aka: The how-manieth post of this user is this?)
 		"""
-		return len(Post.objects.filter(author = self.author, date__lt = self.date)) + 1
+		return len(Post.objects.filter(author=self.author, date__lt=self.date)) + 1
 
 	get_user_id.admin_order_field = 'date'
 	get_user_id.boolean = False
@@ -152,7 +156,6 @@ class Post(models.Model):
 	is_editable.admin_order_field = 'date'
 	is_editable.boolean = True
 	is_editable.short_description = 'Still editable by user?'
-
 
 	def get_activity_color(self):
 		length = len(self.text)
@@ -173,14 +176,7 @@ class Post(models.Model):
 		Sends out the mail for this post
 		"""
 
-		#gpg = gnupg.GPG(gnupghome='/tmp/sd-gpg/')
-		#gpg.encoding = 'utf-8'
-
-		#data = mail_template.render(Context({'post': self, 'MEDIA_URL': settings.MEDIA_URL}))
-		#pgp_signature = gpg.sign(data, keyid = '0x95CAF8BC', detach = True).data
-		#data = gpg.encrypt(data, 'hello@lutoma.org', always_trust = True, sign = '0x95CAF8BC').data
-
-		# FIXME Posmarkify
+		# FIXME Postmarkify
 #		send_mail_template(
 #			_('A chunk of your past - Here\'s what you did last year ({0})!').format(self.date),
 #			'post',
@@ -207,7 +203,7 @@ class Post(models.Model):
 		The public version of this post's text (i.e. with all names replaced)
 		"""
 
-		return self.MENTION_REGEX.sub(u'███', self.text)
+		return self.MENTION_REGEX.sub('███', self.text)
 
 	def uses_pgp(self):
 		"""
@@ -217,7 +213,7 @@ class Post(models.Model):
 
 		return '-BEGIN PGP MESSAGE-' in self.text
 
-	def get_language_name(self, locale = 'en_US'):
+	def get_language_name(self, locale='en_US'):
 		verbose_language = _('Unknown')
 
 		if self.natural_language:
@@ -229,6 +225,7 @@ class Post(models.Model):
 			verbose_language = _('PGP encrypted')
 
 		return verbose_language
+
 
 @receiver(post_save, sender=Post)
 @receiver(post_delete, sender=Post)
@@ -242,14 +239,18 @@ def update_post_signal(sender, instance, **kwargs):
 
 
 class Payment(models.Model):
-	user = models.ForeignKey(DiaryUser, verbose_name = _('paying user'), on_delete=models.CASCADE)
-	created_at = models.DateTimeField(auto_now_add = True, verbose_name = _('created at'))
-	gateway = models.CharField(max_length = 200, verbose_name = _('payment gateway'))
-	gateway_identifier = models.CharField(max_length = 500, verbose_name = _('identifier of this payment at payment gateway'))
-	amount = models.IntegerField(verbose_name = _('amount paid'))
-	currency = models.CharField(max_length = 3, verbose_name = _('currency'))
-	valid_from = models.DateTimeField(verbose_name = _('payment valid from'))
-	valid_until = models.DateTimeField(verbose_name = _('payment valid until'))
-	recurring = models.BooleanField(verbose_name = _('recurring'))
+	user = models.ForeignKey(DiaryUser, verbose_name=_('paying user'), on_delete=models.CASCADE)
+	created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+	gateway = models.CharField(max_length=200, verbose_name=_('payment gateway'))
+	gateway_identifier = models.CharField(max_length=500,
+		verbose_name=_('identifier of this payment at payment gateway'))
 
-	__unicode__ = lambda self: _('{0} {1} by {2} via {3}').format(self.amount / 100, self.currency, self.user, self.gateway)
+	amount = models.IntegerField(verbose_name=_('amount paid'))
+	currency = models.CharField(max_length=3, verbose_name=_('currency'))
+	valid_from = models.DateTimeField(verbose_name=_('payment valid from'))
+	valid_until = models.DateTimeField(verbose_name=_('payment valid until'))
+	recurring = models.BooleanField(verbose_name=_('recurring'))
+
+	def __str__(self):
+		return _('{0} {1} by {2} via {3}').format(self.amount / 100,
+			self.currency, self.user, self.gateway)

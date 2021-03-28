@@ -1,8 +1,7 @@
-# coding: utf-8
-
 from django.utils.translation import ugettext_lazy as _
 from diary.models import Post, DiaryUser, Payment
 from django.contrib import admin
+
 
 class PostAdmin(admin.ModelAdmin):
 	# Hide text, mood and image so that they have to manually be collapsed.
@@ -29,12 +28,14 @@ class PostAdmin(admin.ModelAdmin):
 	list_filter = ['sent', 'created_at', 'public', 'natural_language']
 	date_hierarchy = 'date'
 
+
 class UserAdmin(admin.ModelAdmin):
 	list_display = ['username', 'email', 'last_seen_at', 'invited_by', 'language']
 	list_filter = ['mail_verified', 'last_seen_at', 'geolocation_enabled']
-	readonly_fields=('last_seen_at',)
+	readonly_fields = ('last_seen_at',)
 	date_hierarchy = 'last_seen_at'
 	search_fields = ('username',)
+
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(DiaryUser, UserAdmin)

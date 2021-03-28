@@ -1,4 +1,3 @@
-# coding: utf-8
 import datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -22,6 +21,7 @@ from django_q.tasks import async_task
 from django.utils.translation import get_language_from_request
 import stripe
 
+
 def index(request):
 	context = {'title': None}
 
@@ -30,8 +30,9 @@ def index(request):
 
 	return render(request, 'db2.html', context=context)
 
+
 @login_required
-def edit_post(request, post_id = None):
+def edit_post(request, post_id=None):
 	"""
 	Edit or add post.
 
@@ -44,10 +45,7 @@ def edit_post(request, post_id = None):
 	# Do we want to edit an existing post? If yes, try to find that post.
 	# (And also check if that post was within the last 7 days)
 	if post_id:
-		edit_post = get_object_or_404(Post,
-			id = post_id,
-			author = request.user,
-		)
+		edit_post = get_object_or_404(Post, id=post_id, author=request.user)
 
 		if not edit_post.is_editable():
 			raise PermissionDenied
@@ -58,8 +56,8 @@ def edit_post(request, post_id = None):
 		# Check if there are not already posts existing for the last 2 days
 		# This is only relevant if we add a new post
 		existing_posts = (
-			Post.objects.filter(author = request.user, date = yesterday),
-			Post.objects.filter(author = request.user, date = datetime.date.today())
+			Post.objects.filter(author=request.user, date=yesterday),
+			Post.objects.filter(author=request.user, date=datetime.date.today())
 		)
 
 		# Pass this information along to the template, which will show an error
@@ -87,7 +85,6 @@ def edit_post(request, post_id = None):
 
 		return render(request, 'edit_post.html', context=context)
 
-
 	if not edit_post:
 		# This is a new post, save it
 		post = form.save(commit = False)
@@ -109,8 +106,9 @@ def edit_post(request, post_id = None):
 
 	return HttpResponseRedirect('/')
 
+
 def show_post(request, post_id):
-	post = get_object_or_404(Post, id = post_id)
+	post = get_object_or_404(Post, id=post_id)
 
 	if not post.public and not request.user.is_authenticated:
 		return HttpResponseRedirect('/accounts/login/?next={}'.format(request.get_full_path()))
@@ -132,6 +130,7 @@ def show_post(request, post_id):
 		context['title'] = _('Your post #{}').format(post.get_user_id(), post.date)
 
 	return render(request, 'show_post.html', context=context)
+
 
 def switch_language(request, language):
 	request.session['django_language'] = language
@@ -166,8 +165,9 @@ def sign_up(request):
 	django.contrib.auth.login(request, login_user)
 	return HttpResponseRedirect('/')
 
+
 def mail_verify(request, user_id, hash):
-	user = get_object_or_404(DiaryUser, id = user_id)
+	user = get_object_or_404(DiaryUser, id=user_id)
 
 	if not hash == user.get_verification_hash():
 		return HttpResponse('Sorry, invalid hash.')
@@ -175,6 +175,7 @@ def mail_verify(request, user_id, hash):
 	user.mail_verified = True
 	user.save()
 	return HttpResponseRedirect("/")
+
 
 @login_required
 def account_settings(request):
@@ -211,6 +212,7 @@ def account_settings(request):
 	}
 	return render(request, 'account_settings.html', context=context)
 
+
 @api_view(['DELETE'])
 def delete_post(request, post_id):
 	"""
@@ -219,10 +221,7 @@ def delete_post(request, post_id):
 
 	# FIXME This should be migrated to the api app.
 
-	post = get_object_or_404(Post,
-		id = post_id,
-		author = request.user,
-	)
+	post = get_object_or_404(Post, id=post_id, author=request.user)
 
 	if not post.is_editable():
 		raise PermissionDenied
@@ -230,16 +229,23 @@ def delete_post(request, post_id):
 	post.delete()
 	return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 @login_required
 def stats(request):
-	user_posts = Post.objects.filter(author = request.user).order_by('date')
+	user_posts = Post.objects.filter(author=request.user).order_by('date')
 
 	if user_posts.count() < 1:
 		return render(request, 'stats_noposts.html')
 
-	top_locations = Post.objects.filter(~Q(location_verbose = ''), author = request.user).values('location_verbose').annotate(location_count=Count('location_verbose')).order_by('-location_count')[:10]
+	top_locations = Post.objects.filter(~Q(location_verbose=''),
+		author=request.user).values('location_verbose').annotate(
+		location_count=Count('location_verbose')).order_by('-location_count')[:10]
 
-	top_mood_locations = request.user.get_posts().filter(~Q(location_verbose = '')).annotate(mood_avg = Avg('mood')).values('location_verbose', 'mood_avg').annotate(location_count=Count('location_verbose')).filter(location_count__gte = 3).order_by('-mood_avg').values('location_verbose', 'mood_avg')[:10]
+	top_mood_locations = request.user.get_posts().filter(
+		~Q(location_verbose='')).annotate(mood_avg=Avg('mood')).values(
+		'location_verbose', 'mood_avg').annotate(location_count=Count(
+			'location_verbose')).filter(location_count__gte=3).order_by(
+			'-mood_avg').values('location_verbose', 'mood_avg')[:10]
 
 	context = {
 		'title': 'Stats',
@@ -250,15 +256,17 @@ def stats(request):
 	}
 	return render(request, 'stats.html', context=context)
 
+
+@login_required
 def leaderboard(request):
 	leaders = cache.get_many([
-			'leaderboard_streak_leaders',
-			'leaderboard_posts_leaders',
-			'leaderboard_char_leaders',
-			'leaderboard_avg_post_length_leaders',
-			'leaderboard_last_update',
-			'leaderboard_popular_languages',
-			'leaderboard_popular_locations',
+		'leaderboard_streak_leaders',
+		'leaderboard_posts_leaders',
+		'leaderboard_char_leaders',
+		'leaderboard_avg_post_length_leaders',
+		'leaderboard_last_update',
+		'leaderboard_popular_languages',
+		'leaderboard_popular_locations',
 	])
 
 	if(len(leaders) < 5):
@@ -283,7 +291,7 @@ def leaderboard(request):
 
 	return render(request, 'leaderboard.html', context=context)
 
-#@user_passes_test(lambda u: u.has_paid(), login_url = '/pay/')
+
 def explore(request):
 	post_filters = {'public': True}
 
@@ -298,14 +306,15 @@ def explore(request):
 	context = {
 		'title': 'Explore',
 		'post': post,
-		'language': post.get_language_name(locale = get_language_from_request(request)),
+		'language': post.get_language_name(locale=get_language_from_request(request)),
 	}
 	return render(request, 'show_post.html', context=context)
+
 
 @login_required
 def search(request):
 	query = request.GET.get('q', '')
-	posts = request.user.get_posts().filter(text__icontains = query)
+	posts = request.user.get_posts().filter(text__icontains=query)
 	posts.order_by('-date')
 
 	context = {
@@ -328,22 +337,22 @@ def pay_stripe_handle(request):
 
 	try:
 		customer = stripe.Customer.create(
-			card = token,
-			plan = 'shortdiary-vip',
-			email = request.user.email
+			card=token,
+			plan='shortdiary-vip',
+			email=request.user.email
 		)
-	except stripe.CardError as e:
+	except stripe.CardError:
 		return HttpResponse('Card declined.')
 
 	Payment(
-		user = request.user,
-		gateway = 'stripe-recurring',
-		gateway_identifier = customer.id,
-		amount = 350,
-		currency = 'EUR',
-		valid_from = datetime.datetime.now(),
-		valid_until = datetime.datetime.now() + datetime.timedelta(6*30),
-		recurring = True,
+		user=request.user,
+		gateway='stripe-recurring',
+		gateway_identifier=customer.id,
+		amount=350,
+		currency='EUR',
+		valid_from=datetime.datetime.now(),
+		valid_until=datetime.datetime.now() + datetime.timedelta(6 * 30),
+		recurring=True,
 	).save()
 
 	return HttpResponseRedirect('/pay/success/')

@@ -1,12 +1,13 @@
 import django.forms as forms
 from diary.models import Post, DiaryUser
-import datetime
-from django.utils.translation import ugettext as _
+
 
 class PostForm(forms.ModelForm):
 	class Meta:
 		model = Post
-		fields = ('text', 'mood', 'date', 'image', 'location_lat', 'location_lon', 'location_verbose', 'public', 'part_of')
+		fields = ('text', 'mood', 'date', 'image', 'location_lat',
+			'location_lon', 'location_verbose', 'public', 'part_of')
+
 
 class SignUpForm(forms.ModelForm):
 	class Meta:
@@ -15,10 +16,10 @@ class SignUpForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
-	username = forms.CharField(max_length = 200)
-	password = forms.CharField(max_length = 200)
+	username = forms.CharField(max_length=200)
+	password = forms.CharField(max_length=200)
 
 
 class AccountSettingsForm(forms.Form):
-	email = forms.EmailField(max_length = 100)
-	geolocation_enabled = forms.BooleanField(required = False)
+	email = forms.EmailField(max_length=100)
+	geolocation_enabled = forms.BooleanField(required=False)

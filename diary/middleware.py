@@ -1,7 +1,6 @@
-# coding: utf-8
-
 from datetime import datetime
 from django.utils.timezone import utc
+
 
 class TrackLastActivityMiddleware:
 	def process_request(self, request):

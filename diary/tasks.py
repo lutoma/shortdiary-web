@@ -1,8 +1,4 @@
-# coding: utf-8
 import datetime
-from django.utils.translation import ugettext as _
-#from celery.schedules import crontab
-#from celery.decorators import periodic_task, task
 import diary.models
 from django.core.cache import cache
 from django.core.mail import mail_managers
@@ -28,9 +24,11 @@ def process_mails(searched_date):
 
 		post.send_mail()
 
+
 def process_mails_for_today():
 	searched_date = datetime.date.today() - datetime.timedelta(days = 365)
 	process_mails(searched_date)
+
 
 def update_leaderboard():
 	streak_leaders = sorted(diary.models.DiaryUser.objects.all(), key = lambda t: t.get_streak(), reverse = True)[:10]
@@ -74,6 +72,7 @@ def update_leaderboard():
 		'leaderboard_last_update': datetime.datetime.now(),
 	})
 
+
 def update_streak(user):
 	"""
 	This returns information on how long the "streak" of this user has been
@@ -102,6 +101,7 @@ def update_streak(user):
 
 	return streak
 
+
 def async_update_streak(user):
 		cache_key = f'diary_{user.id}_streak'
 		streak = update_streak(user)
@@ -109,6 +109,7 @@ def async_update_streak(user):
 		# Infinite lifetime since this is invalidated as soon as a new
 		# post is written by the user
 		cache.set(cache_key, streak, None)
+
 
 def send_reminder_mail(user):
 	"""
@@ -135,6 +136,7 @@ def send_reminder_mails():
 
 	map(send_reminder_mail, users)
 
+
 def guess_post_language(post):
 	if post.uses_pgp():
 		return
@@ -149,6 +151,7 @@ def guess_post_language(post):
 	# This update_fields part here is crucial since this allows us to filter
 	# in the event to avoid recursion, so don't remove it!
 	post.save(update_fields=['natural_language'])
+
 
 def send_inactivity_retention_mail(user):
 	"""
@@ -166,10 +169,12 @@ def send_inactivity_retention_mail(user):
 #		context = {'user': user}
 #	)
 
+
 def get_users_for_timeframe(**kwargs):
 	filter_time = datetime.datetime.now() - datetime.timedelta(**kwargs)
 	users = diary.models.DiaryUser.objects.filter(last_seen_at__gte = filter_time)
 	return '\n'.join(map(lambda u: u.username, users))
+
 
 def send_active_users_overview():
 	'''
@@ -179,7 +184,6 @@ def send_active_users_overview():
 	active_24h = get_users_for_timeframe(hours = 24)
 	active_7d = get_users_for_timeframe(days = 7)
 	active_30d = get_users_for_timeframe(days = 30)
-
 
 	message = '''
 	Current active shortdiary users:
