@@ -1,21 +1,17 @@
 # coding: utf-8
-import os
 import datetime
-import mimetypes
 from django.utils.translation import ugettext as _
-from celery.schedules import crontab
-from celery.decorators import periodic_task, task
+#from celery.schedules import crontab
+#from celery.decorators import periodic_task, task
 import diary.models
-from django.template.loader import get_template
-from django.conf import settings
 from django.core.cache import cache
 from django.core.mail import mail_managers
-from email_extras.utils import send_mail_template
+#from email_extras.utils import send_mail_template
 from django.contrib.humanize.templatetags.humanize import apnumber
 from django.db.models import Count
-import hashlib, base64
-import guess_language
+from guess_language import guess_language
 import babel
+
 
 def process_mails(searched_date):
 	print('Sending mails for {0}…'.format(searched_date))
@@ -25,19 +21,19 @@ def process_mails(searched_date):
 
 	for post in posts:
 		print('Sending mail for post #{} ({})'.format(post.id, post))
-		
+
 		if not post.author.mail_verified:
 			print('–– User hasn\'t verified email address, skipping')
 			continue
 
 		post.send_mail()
 
-@periodic_task(run_every = crontab(hour="0", minute="0", day_of_week="*"))
+#@periodic_task(run_every = crontab(hour="0", minute="0", day_of_week="*"))
 def process_mails_for_today():
 	searched_date = datetime.date.today() - datetime.timedelta(days = 365)
 	process_mails(searched_date)
 
-@periodic_task(run_every = crontab(hour="*", minute="*/5", day_of_week="*"))
+#@periodic_task(run_every = crontab(hour="*", minute="*/5", day_of_week="*"))
 def update_leaderboard():
 	streak_leaders = sorted(diary.models.DiaryUser.objects.all(), key = lambda t: t.get_streak(), reverse = True)[:10]
 	streak_leaders = filter(lambda t: t.get_streak() > 1, streak_leaders)
@@ -80,7 +76,7 @@ def update_leaderboard():
 		'leaderboard_last_update': datetime.datetime.now(),
 	})
 
-@task
+#@task
 def update_streak(user):
 	"""
 	This returns information on how long the "streak" of this user has been
@@ -109,9 +105,9 @@ def update_streak(user):
 
 	return streak
 
-@task
+#@task
 def async_update_streak(user):
-		cache_key = base64.b64encode('diary_{}_streak'.format(user.username))
+		cache_key = f'diary_{user.id}_streak'
 		streak = update_streak(user)
 
 		# Infinite lifetime since this is invalidated as soon as a new
@@ -125,15 +121,16 @@ def send_reminder_mail(user):
 
 	print('Sending reminder mail to user {}'.format(user.username))
 
-	send_mail_template(
-		_('Don\'t loose your {0} day streak, {1}!').format(apnumber(user.get_streak()), user),
-		'reminder',
-		'Shortdiary <yourfriends@shortdiary.me>',
-		['{0} <{1}>'.format(user.username, user.email)],
-		context = {'user': user}
-	)
+	# FIXME Postmarkify
+#	send_mail_template(
+#		_('Don\'t loose your {0} day streak, {1}!').format(apnumber(user.get_streak()), user),
+#		'reminder',
+#		'Shortdiary <yourfriends@shortdiary.me>',
+#		['{0} <{1}>'.format(user.username, user.email)],
+#		context = {'user': user}
+#	)
 
-@periodic_task(run_every = crontab(hour="11", minute="0", day_of_week="*"))
+#@periodic_task(run_every = crontab(hour="11", minute="0", day_of_week="*"))
 def send_reminder_mails():
 
 	# Get all relevant users (Have streak, last post 2 days ago)
@@ -143,13 +140,13 @@ def send_reminder_mails():
 
 	map(send_reminder_mail, users)
 
-@task
+#@task
 def guess_post_language(post):
 	if post.uses_pgp():
 		return
 
-	guess = guess_language.guessLanguage(post.text)
-	
+	guess = guess_language(post.text)
+
 	if guess == 'UNKNOWN':
 		return
 
@@ -159,7 +156,7 @@ def guess_post_language(post):
 	# in the event to avoid recursion, so don't remove it!
 	post.save(update_fields=['natural_language'])
 
-@task
+#@task
 def send_inactivity_retention_mail(user):
 	"""
 	Sends out a 'we haven't seen you in a while' mail
@@ -167,20 +164,21 @@ def send_inactivity_retention_mail(user):
 
 	print('Sending haventseenyou mail to user {}'.format(user.username))
 
-	send_mail_template(
-		_('Hi there, haven\'t seen you in a while!').format(apnumber(user.get_streak()), user),
-		'haventseenyou',
-		'Shortdiary <yourfriends@shortdiary.me>',
-		['{0} <{1}>'.format(user.username, user.email)],
-		context = {'user': user}
-	)
+# FIMXE Postmarkify
+#	send_mail_template(
+#		_('Hi there, haven\'t seen you in a while!').format(apnumber(user.get_streak()), user),
+#		'haventseenyou',
+#		'Shortdiary <yourfriends@shortdiary.me>',
+#		['{0} <{1}>'.format(user.username, user.email)],
+#		context = {'user': user}
+#	)
 
 def get_users_for_timeframe(**kwargs):
 	filter_time = datetime.datetime.now() - datetime.timedelta(**kwargs)
 	users = diary.models.DiaryUser.objects.filter(last_seen_at__gte = filter_time)
 	return '\n'.join(map(lambda u: u.username, users))
 
-@periodic_task(run_every = crontab(hour="0", minute="0", day_of_week="*"))
+#@periodic_task(run_every = crontab(hour="0", minute="0", day_of_week="*"))
 def send_active_users_overview():
 	'''
 	Sends simple stats of current active users to managers

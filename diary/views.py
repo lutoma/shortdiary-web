@@ -1,19 +1,17 @@
 # coding: utf-8
 import datetime
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render_to_response, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
-from django.template.context import RequestContext
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.views.decorators.http import require_http_methods, require_POST
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 import django.contrib.auth
 from diary.models import Post, DiaryUser, Payment
-from diary.forms import PostForm, SignUpForm, LoginForm, AccountSettingsForm
-from django.views.decorators.cache import cache_page
+from diary.forms import PostForm, SignUpForm, AccountSettingsForm
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.cache import cache
@@ -25,7 +23,7 @@ import stripe
 def index(request):
 	context = {'title': None}
 
-	if not request.user.is_authenticated():
+	if not request.user.is_authenticated:
 		return render(request, 'frontpage.html', context=context)
 
 	return render(request, 'db2.html', context=context)
@@ -112,7 +110,7 @@ def edit_post(request, post_id = None):
 def show_post(request, post_id):
 	post = get_object_or_404(Post, id = post_id)
 
-	if not post.public and not request.user.is_authenticated():
+	if not post.public and not request.user.is_authenticated:
 		return HttpResponseRedirect('/accounts/login/?next={}'.format(request.get_full_path()))
 
 	if not post.public and post.author != request.user:

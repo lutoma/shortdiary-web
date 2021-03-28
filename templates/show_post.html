@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %} 
+{% load i18n %}
 {% load humanize %}
 {% load remove_newlines %}
 
@@ -73,14 +73,14 @@
 		{{ post.created_at }}
 
 		<div class='label first'><i class='icon-link'></i>{% trans "Link" %}</div>
-		<a href='{% url "diary.views.show_post" post.id %}'>{% trans "Permalink" %}</a>
+		<a href='{% url "post_show" post.id %}'>{% trans "Permalink" %}</a>
 
 		{% if post.location_lat and post.location_lon and post.location_verbose %}
 			<div class='label'><i class='icon-location-arrow'></i>{% trans "Location" %}: {{ post.location_verbose }}</div>
 			<div id="map-canvas"><i class='icon-spinner icon-spin'></i> {% trans "Loading map…" %}</div>
 		{% endif %}
 	</aside>
-	
+
 	{% if user.is_authenticated and user == post.author %}
 		<article>{{ post.text|urlize|linebreaks }}</article>
 	{% else %}
@@ -92,7 +92,7 @@
 	{% endif %}
 
 	{% if user.is_authenticated and user == post.author and post.is_editable %}
-		 <a href='{% url "diary.views.edit_post" post.id %}'><i class='icon-edit'></i> {% trans 'Edit' %}</a>
+		 <a href='{% url "post_edit" post.id %}'><i class='icon-edit'></i> {% trans 'Edit' %}</a>
 	{% endif %}
 
 	<br class='clear' />

@@ -6,7 +6,7 @@ from django.db.models.signals import post_save, post_delete
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import get_template
 from django.conf import settings
-from email_extras.utils import send_mail_template
+#from email_extras.utils import send_mail_template
 from django.db.models import Avg
 from django.core.cache import cache
 from django.dispatch import receiver
@@ -24,7 +24,7 @@ class DiaryUser(AbstractUser):
 	The extended user
 	"""
 
-	invited_by = models.ForeignKey("DiaryUser", related_name = 'user_invited_by', blank = True, null = True, verbose_name = _('invited by'))
+	invited_by = models.ForeignKey("DiaryUser", related_name = 'user_invited_by', blank = True, null = True, verbose_name = _('invited by'), on_delete=models.SET_NULL)
 	invites_left = models.IntegerField(default = 5, verbose_name = _('invites left'))
 	last_seen_at = models.DateTimeField(blank = True, null = True, verbose_name = _('last seen at'))
 	mail_verified = models.BooleanField(default = False, verbose_name = _('email verified?'))
@@ -109,7 +109,7 @@ class Post(models.Model):
 
 	MENTION_REGEX = re.compile(r'@\w+', re.UNICODE)
 
-	author = models.ForeignKey(DiaryUser, verbose_name = _('author'))
+	author = models.ForeignKey(DiaryUser, verbose_name = _('author'), on_delete=models.CASCADE)
 	date = models.DateField(verbose_name = ('date'))
 	text = models.TextField(verbose_name = _('text'))
 	mood = models.IntegerField(verbose_name = _ ('mood'))
@@ -182,13 +182,14 @@ class Post(models.Model):
 		#pgp_signature = gpg.sign(data, keyid = '0x95CAF8BC', detach = True).data
 		#data = gpg.encrypt(data, 'hello@lutoma.org', always_trust = True, sign = '0x95CAF8BC').data
 
-		send_mail_template(
-			_('A chunk of your past - Here\'s what you did last year ({0})!').format(self.date),
-			'post',
-			'Shortdiary Robot <team@shortdiary.me>',
-			['{0} <{1}>'.format(self.author.username, self.author.email)],
-			context = {'post': self}
-		)
+		# FIXME Posmarkify
+#		send_mail_template(
+#			_('A chunk of your past - Here\'s what you did last year ({0})!').format(self.date),
+#			'post',
+#			'Shortdiary Robot <team@shortdiary.me>',
+#			['{0} <{1}>'.format(self.author.username, self.author.email)],
+#			context = {'post': self}
+#		)
 
 		self.sent = True
 		self.save()
@@ -234,16 +235,20 @@ class Post(models.Model):
 @receiver(post_save, sender=Post)
 @receiver(post_delete, sender=Post)
 def update_post_signal(sender, instance, **kwargs):
-	tasks.async_update_streak.delay(instance.author)
+	#tasks.async_update_streak.delay(instance.author)
+	# FIXME
+	tasks.async_update_streak(instance.author)
 
 	# Only run the post language guesser if other fields than the natural
 	# language were updated. Otherwise, this would result in recursion.
 	if not ('update_fields' in kwargs and kwargs['update_fields'] == frozenset(['natural_language'])):
-		tasks.guess_post_language.delay(instance)
+#		tasks.guess_post_language.delay(instance)
+# FIXME
+		tasks.guess_post_language(instance)
 
 
 class Payment(models.Model):
-	user = models.ForeignKey(DiaryUser, verbose_name = _('paying user'))
+	user = models.ForeignKey(DiaryUser, verbose_name = _('paying user'), on_delete=models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add = True, verbose_name = _('created at'))
 	gateway = models.CharField(max_length = 200, verbose_name = _('payment gateway'))
 	gateway_identifier = models.CharField(max_length = 500, verbose_name = _('identifier of this payment at payment gateway'))

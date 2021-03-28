@@ -1,12 +1,4 @@
 [[package]]
-name = "amqp"
-version = "1.4.9"
-description = "Low-level AMQP client for Python (fork of amqplib)"
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "anyjson"
 version = "0.3.3"
 description = "Wraps the best available JSON implementation available in a common interface"
@@ -21,6 +13,17 @@ description = "Python command-line parsing library"
 category = "main"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "asgiref"
+version = "3.3.1"
+description = "ASGI specs, helper code, and adapters"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.extras]
+tests = ["pytest", "pytest-asyncio"]
 
 [[package]]
 name = "babel"
@@ -42,49 +45,6 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "billiard"
-version = "3.3.0.23"
-description = "Python multiprocessing fork with improvements and bugfixes"
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
-name = "celery"
-version = "3.1.18"
-description = "Distributed Task Queue"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-billiard = ">=3.3.0.20,<3.4"
-kombu = ">=3.0.25,<3.1"
-pytz = ">0.0-dev"
-
-[package.extras]
-zookeeper = ["kazoo (>=1.3.1)"]
-msgpack = ["msgpack-python (>=0.3.0)"]
-librabbitmq = ["librabbitmq (>=1.6.1)"]
-slmq = ["softlayer-messaging (>=1.0.3)"]
-eventlet = ["eventlet"]
-couchbase = ["couchbase"]
-redis = ["redis (>=2.8.0)"]
-couchdb = ["couchdb"]
-gevent = ["gevent"]
-auth = ["pyopenssl"]
-pyro = ["pyro4"]
-yaml = ["PyYAML (>=3.10)"]
-beanstalk = ["beanstalkc"]
-memcache = ["pylibmc"]
-threads = ["threadpool"]
-mongodb = ["pymongo (>=2.6.2)"]
-zeromq = ["pyzmq (>=13.1.0)"]
-sqlalchemy = ["sqlalchemy"]
-sqs = ["boto (>=2.13.3)"]
-cassandra = ["pycassa"]
-
-[[package]]
 name = "contextlib2"
 version = "0.5.4"
 description = "Backports and enhancements for the contextlib module"
@@ -94,33 +54,24 @@ python-versions = "*"
 
 [[package]]
 name = "django"
-version = "1.11.29"
+version = "3.1.7"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 
 [package.dependencies]
+asgiref = ">=3.2.10,<4"
 pytz = "*"
+sqlparse = ">=0.2.2"
 
 [package.extras]
 argon2 = ["argon2-cffi (>=16.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
-name = "django-celery"
-version = "3.1.17"
-description = "Old django celery integration project."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-celery = ">=3.1.15"
-
-[[package]]
 name = "django-email-extras"
-version = "0.3.2"
+version = "0.3.4"
 description = "A Django reusable app providing the ability to send PGP encrypted and multipart emails using the Django templating system."
 category = "main"
 optional = false
@@ -128,7 +79,9 @@ python-versions = "*"
 
 [package.dependencies]
 python-gnupg = "*"
-sphinx-me = "*"
+
+[package.extras]
+dev = ["sphinx-me"]
 
 [[package]]
 name = "django-formtools"
@@ -151,29 +104,17 @@ python-versions = "*"
 
 [[package]]
 name = "django-otp"
-version = "0.9.4"
+version = "1.0.2"
 description = "A pluggable framework for adding two-factor authentication to Django using one-time passwords."
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-django = ">=1.11"
+django = ">=2.2"
 
 [package.extras]
 qrcode = ["qrcode"]
-
-[[package]]
-name = "django-otp-yubikey"
-version = "0.3.3"
-description = "A django-otp plugin that verifies YubiKey OTP tokens."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-django-otp = ">=0.3.0"
-YubiOTP = ">=0.2.1"
 
 [[package]]
 name = "django-phonenumber-field"
@@ -193,16 +134,16 @@ phonenumberslite = ["phonenumberslite (>=7.0.2)"]
 
 [[package]]
 name = "django-two-factor-auth"
-version = "1.11.0"
+version = "1.13"
 description = "Complete Two-Factor Authentication for Django"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-Django = ">=1.11"
+Django = ">=2.2"
 django-formtools = "*"
-django-otp = ">=0.6.0,<0.99"
+django-otp = ">=0.8.0"
 django-phonenumber-field = ">=1.1.0,<3.99"
 qrcode = ">=4.0.0,<6.99"
 
@@ -215,14 +156,14 @@ yubikey = ["django-otp-yubikey"]
 
 [[package]]
 name = "djangorestframework"
-version = "3.11.2"
+version = "3.12.4"
 description = "Web APIs for Django, made easy."
 category = "main"
 optional = false
 python-versions = ">=3.5"
 
 [package.dependencies]
-django = ">=1.11"
+django = ">=2.2"
 
 [[package]]
 name = "docutils"
@@ -241,8 +182,8 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "guess-language"
-version = "0.2"
+name = "guess-language-spirit"
+version = "0.5.3"
 description = "Guess the natural language of a text"
 category = "main"
 optional = false
@@ -274,18 +215,6 @@ description = "A comprehensive HTTP client library."
 category = "main"
 optional = false
 python-versions = "*"
-
-[[package]]
-name = "kombu"
-version = "3.0.34"
-description = "Messaging library for Python"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-amqp = ">=1.4.9,<2.0"
-anyjson = ">=0.3.3"
 
 [[package]]
 name = "phonenumbers"
@@ -406,6 +335,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "sqlparse"
+version = "0.4.1"
+description = "A non-validating SQL parser."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[[package]]
 name = "stripe"
 version = "1.30.0"
 description = "Stripe python bindings"
@@ -445,18 +382,18 @@ six = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.2"
-content-hash = "e906064aa7f16e7144fa8aa760657c061e4806e5636a448fc45fb034666a6793"
+content-hash = "27bbc9732e32a700e7df372146551dfb1837b6d9a4485fb41128be9a69c32f57"
 
 [metadata.files]
-amqp = [
-    {file = "amqp-1.4.9-py2.py3-none-any.whl", hash = "sha256:e0ed0ce6b8ffe5690a2e856c7908dc557e0e605283d6885dd1361d79f2928908"},
-    {file = "amqp-1.4.9.tar.gz", hash = "sha256:2dea4d16d073c902c3b89d9b96620fb6729ac0f7a923bbc777cb4ad827c0c61a"},
-]
 anyjson = [
     {file = "anyjson-0.3.3.tar.gz", hash = "sha256:37812d863c9ad3e35c0734c42e0bf0320ce8c3bed82cd20ad54cb34d158157ba"},
 ]
 argparse = [
     {file = "argparse-1.2.1.tar.gz", hash = "sha256:ddaf4b0a618335a32b6664d4ae038a1de8fbada3b25033f9021510ed2b3941a4"},
+]
+asgiref = [
+    {file = "asgiref-3.3.1-py3-none-any.whl", hash = "sha256:5ee950735509d04eb673bd7f7120f8fa1c9e2df495394992c73234d526907e17"},
+    {file = "asgiref-3.3.1.tar.gz", hash = "sha256:7162a3cb30ab0609f1a4c95938fd73e8604f63bdba516a7f7d64b83ff09478f0"},
 ]
 babel = [
     {file = "Babel-2.2.0-py2.py3-none-any.whl", hash = "sha256:fed07cbcdcb3de79b53a8220eebed21c93f8dbb3dbce1d9c6b1c4b09e8aecf2b"},
@@ -465,33 +402,17 @@ babel = [
 beautifulsoup4 = [
     {file = "beautifulsoup4-4.3.2.tar.gz", hash = "sha256:a2b29bd048ca2fe54a046b29770964738872a9747003a371344a93eedf7ad58e"},
 ]
-billiard = [
-    {file = "billiard-3.3.0.23-cp27-none-macosx_10_6_intel.whl", hash = "sha256:c0cbe8d45ba8d8213ad68ef9a1881002a151569c9424d551634195a18c3a4160"},
-    {file = "billiard-3.3.0.23-cp27-none-win32.whl", hash = "sha256:82041dbaa62f7fde1464d7ab449978618a38b241b40c0d31dafabb36446635dc"},
-    {file = "billiard-3.3.0.23-cp27-none-win_amd64.whl", hash = "sha256:958fc9f8fd5cc9b936b2cb9d96f02aa5ec3613ba13ee7f089c77ff0bcc368fac"},
-    {file = "billiard-3.3.0.23-cp3-none-win32.whl", hash = "sha256:23cb71472712e96bff3e0d45763b7b8a99e5040385fffb96816028352c255682"},
-    {file = "billiard-3.3.0.23-cp3-none-win_amd64.whl", hash = "sha256:ccfe0419eb5e49f27ad35cf06e75360af903df6d576c66cb8073246d4e023e5c"},
-    {file = "billiard-3.3.0.23-cp33-none-win32.whl", hash = "sha256:204e75d390ef8f839c30a93b696bd842c3941916e15921745d05edc2a83868ab"},
-    {file = "billiard-3.3.0.23-cp33-none-win_amd64.whl", hash = "sha256:d4d2fed1a251ea58eed47b48db3778ebb92f5ff4407dc91869c6f41c3a9249d0"},
-    {file = "billiard-3.3.0.23.tar.gz", hash = "sha256:692a2a5a55ee39a42bcb7557930e2541da85df9ea81c6e24827f63b80cd39d0b"},
-]
-celery = [
-    {file = "celery-3.1.18-py2.py3-none-any.whl", hash = "sha256:dbf59618d5a9eff172d25021f36614be5af0501e4527975ca504b95863f14fed"},
-    {file = "celery-3.1.18.tar.gz", hash = "sha256:0924f94070c6fc57d408b169848c5b38832668fffe060e48b4803fb23e0e3eaf"},
-]
 contextlib2 = [
     {file = "contextlib2-0.5.4-py2.py3-none-any.whl", hash = "sha256:399f659f2a8b5d5d529f132e1136fc404fbbc28e34e4618c5c92bd595be9b162"},
     {file = "contextlib2-0.5.4.tar.gz", hash = "sha256:710626cde569f51a87f216ff757fe60f5cd13ae8f8114706590510cd5649ce88"},
 ]
 django = [
-    {file = "Django-1.11.29-py2.py3-none-any.whl", hash = "sha256:014e3392058d94f40569206a24523ce254d55ad2f9f46c6550b0fe2e4f94cf3f"},
-    {file = "Django-1.11.29.tar.gz", hash = "sha256:4200aefb6678019a0acf0005cd14cfce3a5e6b9b90d06145fcdd2e474ad4329c"},
-]
-django-celery = [
-    {file = "django-celery-3.1.17.tar.gz", hash = "sha256:254a95b0a4386df1fd949823942f6312c80fba3c88c5efad79cad8648bc5feb5"},
+    {file = "Django-3.1.7-py3-none-any.whl", hash = "sha256:baf099db36ad31f970775d0be5587cc58a6256a6771a44eb795b554d45f211b8"},
+    {file = "Django-3.1.7.tar.gz", hash = "sha256:32ce792ee9b6a0cbbec340123e229ac9f765dff8c2a4ae9247a14b2ba3a365a7"},
 ]
 django-email-extras = [
-    {file = "django-email-extras-0.3.2.tar.gz", hash = "sha256:0475c203526d7e2969feaa8f8cda6501b8356c42c1397e947205880583124358"},
+    {file = "django-email-extras-0.3.4.tar.gz", hash = "sha256:eb1a1ec4edc20776010e09087c8516474abd4e7d88a91d64350dddf6e917e537"},
+    {file = "django_email_extras-0.3.4-py2.py3-none-any.whl", hash = "sha256:208aec64d5e3a5c5afb8bab007a22c24e1566b44d4dd3f98137296726d76ce14"},
 ]
 django-formtools = [
     {file = "django-formtools-2.2.tar.gz", hash = "sha256:c5272c03c1cd51b2375abf7397a199a3148a9fbbf2f100e186467a84025d13b2"},
@@ -502,24 +423,20 @@ django-gravatar2 = [
     {file = "django_gravatar2-1.4.0-py2.py3-none-any.whl", hash = "sha256:48a18d3b6fcf9628bb0522e45cbe3bc2fb50c63f6f5851ae6fdede9e86a11eb2"},
 ]
 django-otp = [
-    {file = "django-otp-0.9.4.tar.gz", hash = "sha256:50e54bc09bc435e2ad88f0aa7008718079c3529c422b469b3991a97d28b147bb"},
-    {file = "django_otp-0.9.4-py3-none-any.whl", hash = "sha256:6b92c69021558765e80411479a01788977106d5696c391d2e5342074c1dd74d1"},
-]
-django-otp-yubikey = [
-    {file = "django-otp-yubikey-0.3.3.tar.gz", hash = "sha256:0e9f748abf2e380163f33b28de2a1a1a5bb06b8f0c6e91fabdea70d49f1cf58a"},
-    {file = "django_otp_yubikey-0.3.3-py2.py3-none-any.whl", hash = "sha256:ed96330a699eace639c8675ceaf2f1313cbb7779dde8d4717b712b6edfd04602"},
+    {file = "django-otp-1.0.2.tar.gz", hash = "sha256:f523fb9dec420f28a29d3e2ad72ac06f64588956ed4f2b5b430d8e957ebb8287"},
+    {file = "django_otp-1.0.2-py3-none-any.whl", hash = "sha256:8ba5ab9bd2738c7321376c349d7cce49cf4404e79f6804e0a3cc462a91728e18"},
 ]
 django-phonenumber-field = [
     {file = "django-phonenumber-field-3.0.1.tar.gz", hash = "sha256:794ebbc3068a7af75aa72a80cb0cec67e714ff8409a965968040f1fd210b2d97"},
     {file = "django_phonenumber_field-3.0.1-py3-none-any.whl", hash = "sha256:1ab19f723928582fed412bd9844221fa4ff466276d8526b8b4a9913ee1487c5e"},
 ]
 django-two-factor-auth = [
-    {file = "django-two-factor-auth-1.11.0.tar.gz", hash = "sha256:637bd96e76907d044206c3b038bf4b5eb4769e9e3a4718da755fafc97db38b26"},
-    {file = "django_two_factor_auth-1.11.0-py2.py3-none-any.whl", hash = "sha256:f1835e5368448d1b3d826ce7a36c590b3e39cd536523d372cfc5f9fbdc9731f4"},
+    {file = "django-two-factor-auth-1.13.tar.gz", hash = "sha256:24c2850a687c86800f4aa4131b7cebadf56f35be04ca359c4990578df1cc249a"},
+    {file = "django_two_factor_auth-1.13-py2.py3-none-any.whl", hash = "sha256:afb60e62f22b1f29a568666c0444ab05cabe8acc4d7c54d833d67f7b50f842fd"},
 ]
 djangorestframework = [
-    {file = "djangorestframework-3.11.2-py3-none-any.whl", hash = "sha256:5cc724dc4b076463497837269107e1995b1fbc917468d1b92d188fd1af9ea789"},
-    {file = "djangorestframework-3.11.2.tar.gz", hash = "sha256:a5967b68a04e0d97d10f4df228e30f5a2d82ba63b9d03e1759f84993b7bf1b53"},
+    {file = "djangorestframework-3.12.4-py3-none-any.whl", hash = "sha256:6d1d59f623a5ad0509fe0d6bfe93cbdfe17b8116ebc8eda86d45f6e16e819aaf"},
+    {file = "djangorestframework-3.12.4.tar.gz", hash = "sha256:f747949a8ddac876e879190df194b925c177cdeb725a099db1460872f7c0a7f2"},
 ]
 docutils = [
     {file = "docutils-0.12-py3-none-any.whl", hash = "sha256:dcebd4928112631626f4c4d0df59787c748404e66dda952110030ea883d3b8cd"},
@@ -529,8 +446,8 @@ futures = [
     {file = "futures-3.0.5-py2-none-any.whl", hash = "sha256:f7f16b6bf9653a918a03f1f2c2d62aac0cd64b1bc088e93ea279517f6b61120b"},
     {file = "futures-3.0.5.tar.gz", hash = "sha256:0542525145d5afc984c88f914a0c85c77527f65946617edb5274f72406f981df"},
 ]
-guess-language = [
-    {file = "guess-language-0.2.tar.gz", hash = "sha256:b31ba2a279b8e6a19e9aa2f8e21c5fc4a56cd5557aea3f806cba73ecf38696e7"},
+guess-language-spirit = [
+    {file = "guess_language-spirit-0.5.3.tar.bz2", hash = "sha256:a9b20470246bbfd1b69b055ff6459e05aa8cb5f1f1d8481350819cd7680792cc"},
 ]
 gunicorn = [
     {file = "gunicorn-19.1.1-py2.py3-none-any.whl", hash = "sha256:ffb411757de374d05c759c929908d2397c66e3bcf6f35dee41a6ef9eb851497b"},
@@ -542,10 +459,6 @@ html5lib = [
 httplib2 = [
     {file = "httplib2-0.9.2.tar.gz", hash = "sha256:c3aba1c9539711551f4d83e857b316b5134a1c4ddce98a875b7027be7dd6d988"},
     {file = "httplib2-0.9.2.zip", hash = "sha256:fe187f315336c3daa6616d09f327a6e6560b082fce59723f77336329fdcbfc36"},
-]
-kombu = [
-    {file = "kombu-3.0.34-py2.py3-none-any.whl", hash = "sha256:ba39da5f7e1166de64f38ad88c0bfb417f17c24f2e6b584a4d53ae8a8fc98605"},
-    {file = "kombu-3.0.34.tar.gz", hash = "sha256:8878ff19b09d86b2689682a4a3eb163d70115ef4ebd974966079a0edd80075da"},
 ]
 phonenumbers = [
     {file = "phonenumbers-8.12.20-py2.py3-none-any.whl", hash = "sha256:7c2b26ee026f765a8032fc2a333b46fa1860445c7ce6df3b717b9f6985106084"},
@@ -659,6 +572,10 @@ six = [
 sphinx-me = [
     {file = "sphinx-me-0.3.tar.gz", hash = "sha256:98bef823a4053ca1ccbbe2322bd855a3c5e98797c50bcfeeb630fe11c47d5f1a"},
     {file = "sphinx_me-0.3-py2.py3-none-any.whl", hash = "sha256:2c67a6bbf9d60631a84b687f0bafbfe2cb16e2663deee28ce03d5f07c7d89807"},
+]
+sqlparse = [
+    {file = "sqlparse-0.4.1-py3-none-any.whl", hash = "sha256:017cde379adbd6a1f15a61873f43e8274179378e95ef3fede90b5aa64d304ed0"},
+    {file = "sqlparse-0.4.1.tar.gz", hash = "sha256:0f91fd2e829c44362cbcfab3e9ae12e22badaa8a29ad5ff599f9ec109f0454e8"},
 ]
 stripe = [
     {file = "stripe-1.30.0-py2-none-any.whl", hash = "sha256:53071d2118f8f9ab4d4b12586b19fd976a02a7f77f5b211107bc7577598b4e5c"},

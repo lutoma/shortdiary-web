@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load staticfiles %}
+{% load static %}
 
 <!doctype html>
 <html xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml">
@@ -97,8 +97,8 @@
 
 					<ul class="right">
 						{% if user.is_authenticated %}
-							<li><a href="{% url 'diary:account_settings' %}" title="{% trans 'Account settings' %}"><i class="icon-wrench"></i></a></li>
-							<li><a href="{% url 'diary:logout' %}" title="{% trans 'Sign out' %}"><i class="icon-signout"></i></a></li>
+							<li><a href="{% url 'account_settings' %}" title="{% trans 'Account settings' %}"><i class="icon-wrench"></i></a></li>
+							<li><a href="{% url 'logout' %}" title="{% trans 'Sign out' %}"><i class="icon-signout"></i></a></li>
 						{% else %}
 							<div id='nav-login'>
 								<form action='/account/login/' method='POST' enctype='multipart/form-data' id='register'>
@@ -127,7 +127,7 @@
 
 			{% block footer %}
 				<div id='footer'>
-					<a href='https://fnordcordia.eu/'><img src='{%static "img/fnordcordia-logo.png" %}' id='fnordcordia-footerlogo' /></a> | shortdiary {% include 'current_git_version.txt' %} | <a href='{% url "diary:privacy" %}'>{% trans 'Privacy' %}</a> | <a href='{% url "diary:about" %}'>{% trans 'Security &amp; Imprint' %}</a>
+					<a href='https://fnordcordia.eu/'><img src='{%static "img/fnordcordia-logo.png" %}' id='fnordcordia-footerlogo' /></a> | shortdiary {% include 'current_git_version.txt' %} | <a href='{% url "privacy" %}'>{% trans 'Privacy' %}</a> | <a href='{% url "about" %}'>{% trans 'Security &amp; Imprint' %}</a>
 
 					{% if user.is_staff %}
 						 | <a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
@@ -136,7 +136,7 @@
 					<span id="languages">
 						<i class="icon-flag" style="margin-right: 7px;"></i>
 						{% for lang in LANGUAGES %}
-							<a href="{%url 'diary:switch_language' lang.0 %}">{{ lang.1 }}</a>{% if not forloop.last %} |{% endif %}
+							<a href="{%url 'switch_language' lang.0 %}">{{ lang.1 }}</a>{% if not forloop.last %} |{% endif %}
 						{% endfor %}
 					</span>
 				</div>

@@ -3,7 +3,6 @@
 # Instead, create a file called local_settings.py and override stuff you want to change there.
 
 import os
-from django.core.urlresolvers import reverse_lazy
 
 SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
@@ -149,25 +148,31 @@ INSTALLED_APPS = (
 	'django.contrib.humanize',
 	'django.contrib.admin',
 	'django.contrib.admindocs',
-	'kombu.transport.django',
-	'djcelery',
+#	'kombu.transport.django',
+#	'djcelery',
 	'django_gravatar',
 	'rest_framework',
-	'email_extras',
+	#'email_extras',
 	'diary',
-#	'provider',
-#	'provider.oauth2',
+
 	'django_otp',
 	'django_otp.plugins.otp_static',
 	'django_otp.plugins.otp_totp',
 	'two_factor',
-	'otp_yubikey',
+
+#	'provider',
+#	'provider.oauth2',
+#	'django_otp',
+#	'django_otp.plugins.otp_static',
+#	'django_otp.plugins.otp_totp',
+#	'two_factor',
+#	'otp_yubikey',
 )
 
 # Asynchronous jobs
-BROKER_URL = "django://"
-import djcelery
-djcelery.setup_loader()
+#BROKER_URL = "django://"
+#import djcelery
+#djcelery.setup_loader()
 
 LOGGING = {
 	'version': 1,
@@ -197,7 +202,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 AUTH_PROFILE_MODULE = 'diary.UserProfile'
 
 # Cache busting
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -212,7 +217,7 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'diary.DiaryUser'
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = reverse_lazy('two_factor:login')
+LOGIN_URL = 'two_factor:login'
 
 STRIPE_SECRET_KEY = None
 STRIPE_PUBLIC_KEY = None

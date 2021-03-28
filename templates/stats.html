@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load l10n %}
 {% load humanize %}
-{% load staticfiles %}
+{% load static %}
 {% load timetags %}
 
 {% block headeradd %}
@@ -186,7 +186,7 @@
 									#{{ forloop.counter }}
 								</td>
 								<td>
-									<a href='{% url 'diary:search' %}?q=@{{ name.0|urlencode }}'>{{ name.0 }}</a>
+									<a href='{% url 'search' %}?q=@{{ name.0|urlencode }}'>{{ name.0 }}</a>
 								</td>
 								<td style='width: 170px;'>
 									{{ name.1 }} {% trans "mentions" %}
