@@ -2,12 +2,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
-from django.core.mail import EmailMessage
-from django.template.loader import get_template
 from django.conf import settings
 from django_q.tasks import async_task
 from django.core.cache import cache
 from django.dispatch import receiver
+from shortdiary.email import send_email
 from collections import Counter
 from functools import reduce
 import diary.tasks as tasks
@@ -28,17 +27,11 @@ class DiaryUser(AbstractUser):
 	geolocation_enabled = models.BooleanField(verbose_name=_('Post location enabled'), default=True)
 
 	def get_verification_hash(self):
-		return hashlib.sha256(self.email.encode('utf-8') + settings.SECRET_KEY).hexdigest()
+		return hashlib.sha256(self.email.encode('utf-8')
+			+ settings.SECRET_KEY.encode('utf-8')).hexdigest()
 
 	def send_verification_mail(self):
-		# FIXME Postmarkify
-		mail_template = get_template('mails/verification.txt')
-		mail = EmailMessage(
-			_('Please verify your email address on shortdiary, {0}'.format(self.username)),
-			mail_template.render({'mailuser': self, 'hash': self.get_verification_hash()}),
-			'shortdiary <team@shortdiary.me>',
-			['{0} <{1}>'.format(self.username, self.email)])
-		mail.send()
+		send_email(self.author, 'email-verification', {'hash': self.get_verification_hash()})
 
 	def get_streak(self):
 		cache_key = f'diary_{self.id}_streak'
@@ -134,7 +127,7 @@ class Post(models.Model):
 		verbose_name_plural = _('posts')
 
 	def __str__(self):
-		return f'{self.author} on {self.data}'
+		return f'{self.author} on {self.date}'
 
 	def get_user_id(self):
 		"""
@@ -176,20 +169,18 @@ class Post(models.Model):
 		Sends out the mail for this post
 		"""
 
-		# FIXME Postmarkify
-#		send_mail_template(
-#			_('A chunk of your past - Here\'s what you did last year ({0})!').format(self.date),
-#			'post',
-#			'Shortdiary Robot <team@shortdiary.me>',
-#			['{0} <{1}>'.format(self.author.username, self.author.email)],
-#			context = {'post': self}
-#		)
+		# FIXME Might want to attach image if it exists, but probably
+		# need to check size for that/do resizing
+		send_email(self.author, 'post', {
+			'text': self.text,
+			'date': self.date.strftime("%B %d, %Y"),
+			'post_id': self.id,
+			'post_is_public': self.public,
+			'post_has_image': self.image is not None,
+		})
 
 		self.sent = True
 		self.save()
-
-		#if self.image:
-		#	message.attach_file(os.path.split(self.image.path))
 
 	def get_mentions(self):
 		'''

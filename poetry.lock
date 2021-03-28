@@ -323,6 +323,17 @@ flake8 = ["flake8", "flake8-import-order", "pep8-naming"]
 test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner (>=4.2,<5.0.0)"]
 
 [[package]]
+name = "pystmark"
+version = "0.5.0"
+description = "A Python library for the Postmark API (http://developer.postmarkapp.com/)."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+requests = ">=1.2.0"
+
+[[package]]
 name = "python-dateutil"
 version = "2.8.1"
 description = "Extensions to the standard Python datetime module"
@@ -473,7 +484,7 @@ six = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.2"
-content-hash = "688ebd06e5c7e00e36fe3e8e581e57dfe99ec0ff31922c923b1670bb6a61525b"
+content-hash = "da9399e8f536f59f5008fb15ea0755d2ba5107a57f03de1287c28d7ed608c209"
 
 [metadata.files]
 ansicon = [
@@ -642,6 +653,9 @@ pycrypto = [
 pyjwt = [
     {file = "PyJWT-1.7.1-py2.py3-none-any.whl", hash = "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e"},
     {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
+]
+pystmark = [
+    {file = "pystmark-0.5.0.tar.gz", hash = "sha256:d6ab2f060e52aacf2b0a751b73a20c2548b72f5a88e08e0591d1b8113db9b8af"},
 ]
 python-dateutil = [
     {file = "python-dateutil-2.8.1.tar.gz", hash = "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"},

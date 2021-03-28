@@ -204,8 +204,10 @@ TWILIO_ACCOUNT_SID = 'ACf521380e135a1e44e8a5f2457a8159d3'
 TWILIO_AUTH_TOKEN = 'dd7059a9681b37dc5a172514d8e2ba6b'
 TWILIO_CALLER_ID = '+14159663673'
 
+POSTMARK_KEY = None
+
 # Use the file local_settings.py to overwrite the defaults with your own settings
 try:
-	from settings_local import * # noqa
+	from shortdiary.settings_local import *  # noqa: F403 F401
 except ImportError:
 	pass

@@ -2,8 +2,8 @@ import datetime
 import diary.models
 from django.core.cache import cache
 from django.core.mail import mail_managers
-#from email_extras.utils import send_mail_template
 from django.contrib.humanize.templatetags.humanize import apnumber
+from shortdiary.email import send_email
 from django.db.models import Count
 from guess_language import guess_language
 import babel
@@ -118,19 +118,15 @@ def send_reminder_mail(user):
 
 	print('Sending reminder mail to user {}'.format(user.username))
 
-	# FIXME Postmarkify
-#	send_mail_template(
-#		_('Don\'t loose your {0} day streak, {1}!').format(apnumber(user.get_streak()), user),
-#		'reminder',
-#		'Shortdiary <yourfriends@shortdiary.me>',
-#		['{0} <{1}>'.format(user.username, user.email)],
-#		context = {'user': user}
-#	)
+	send_email(user, 'streak-reminder', {
+		'streak_length': apnumber(user.get_streak())
+	})
+
 
 def send_reminder_mails():
 
 	# Get all relevant users (Have streak, last post 2 days ago)
-	two_days_ago = datetime.date.today() - datetime.timedelta(days = 2)
+	two_days_ago = datetime.date.today() - datetime.timedelta(days=2)
 	users = diary.models.DiaryUser.objects.all()
 	users = filter(lambda t: t.get_streak() > 0 and t.post_set.order_by('-date')[0].date == two_days_ago, users)
 
@@ -153,26 +149,9 @@ def guess_post_language(post):
 	post.save(update_fields=['natural_language'])
 
 
-def send_inactivity_retention_mail(user):
-	"""
-	Sends out a 'we haven't seen you in a while' mail
-	"""
-
-	print('Sending haventseenyou mail to user {}'.format(user.username))
-
-# FIMXE Postmarkify
-#	send_mail_template(
-#		_('Hi there, haven\'t seen you in a while!').format(apnumber(user.get_streak()), user),
-#		'haventseenyou',
-#		'Shortdiary <yourfriends@shortdiary.me>',
-#		['{0} <{1}>'.format(user.username, user.email)],
-#		context = {'user': user}
-#	)
-
-
 def get_users_for_timeframe(**kwargs):
 	filter_time = datetime.datetime.now() - datetime.timedelta(**kwargs)
-	users = diary.models.DiaryUser.objects.filter(last_seen_at__gte = filter_time)
+	users = diary.models.DiaryUser.objects.filter(last_seen_at__gte=filter_time)
 	return '\n'.join(map(lambda u: u.username, users))
 
 
@@ -181,24 +160,24 @@ def send_active_users_overview():
 	Sends simple stats of current active users to managers
 	'''
 
-	active_24h = get_users_for_timeframe(hours = 24)
-	active_7d = get_users_for_timeframe(days = 7)
-	active_30d = get_users_for_timeframe(days = 30)
+	active_24h = get_users_for_timeframe(hours=24)
+	active_7d = get_users_for_timeframe(days=7)
+	active_30d = get_users_for_timeframe(days=30)
 
 	message = '''
-	Current active shortdiary users:
+Current active shortdiary users:
 
-	Last 24 hours:
+Last 24 hours:
 
-	{}
+{}
 
-	Last 7 days:
+Last 7 days:
 
-	{}
+{}
 
-	Last 30 days:
+Last 30 days:
 
-	{}
+{}
 	'''.format(active_24h, active_7d, active_30d)
 
 	mail_managers('Current active users statistics', message)
