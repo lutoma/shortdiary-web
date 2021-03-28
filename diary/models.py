@@ -73,13 +73,6 @@ class DiaryUser(AbstractUser):
 
 		return self.get_post_characters() / own_posts
 
-	def has_paid(self):
-		if self.is_superuser or self.is_staff:
-			return True
-
-		return self.payment_set.filter(valid_until__gte=datetime.datetime.now(),
-			valid_from__lte=datetime.datetime.now()).count() > 0
-
 	def get_mention_toplist(self):
 		'''
 		Returns the most frequently mentioned nicknames of this user
@@ -227,21 +220,3 @@ def update_post_signal(sender, instance, **kwargs):
 	# language were updated. Otherwise, this would result in recursion.
 	if not ('update_fields' in kwargs and kwargs['update_fields'] == frozenset(['natural_language'])):
 		async_task('diary.tasks.guess_post_language', instance)
-
-
-class Payment(models.Model):
-	user = models.ForeignKey(DiaryUser, verbose_name=_('paying user'), on_delete=models.CASCADE)
-	created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
-	gateway = models.CharField(max_length=200, verbose_name=_('payment gateway'))
-	gateway_identifier = models.CharField(max_length=500,
-		verbose_name=_('identifier of this payment at payment gateway'))
-
-	amount = models.IntegerField(verbose_name=_('amount paid'))
-	currency = models.CharField(max_length=3, verbose_name=_('currency'))
-	valid_from = models.DateTimeField(verbose_name=_('payment valid from'))
-	valid_until = models.DateTimeField(verbose_name=_('payment valid until'))
-	recurring = models.BooleanField(verbose_name=_('recurring'))
-
-	def __str__(self):
-		return _('{0} {1} by {2} via {3}').format(self.amount / 100,
-			self.currency, self.user, self.gateway)

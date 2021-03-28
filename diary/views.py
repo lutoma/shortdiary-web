@@ -4,14 +4,12 @@ from django.shortcuts import get_object_or_404, render
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 import django.contrib.auth
-from diary.models import Post, DiaryUser, Payment
+from diary.models import Post, DiaryUser
 from diary.forms import PostForm, SignUpForm, AccountSettingsForm
-from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.cache import cache
 import diary.tasks as tasks
@@ -19,7 +17,6 @@ from django.db.models import Q, Count, Avg
 from django_q.tasks import async_task
 
 from django.utils.translation import get_language_from_request
-import stripe
 
 
 def index(request):
@@ -322,37 +319,3 @@ def search(request):
 		'posts': posts,
 	}
 	return render(request, 'search_results.html', context=context)
-
-
-@login_required
-@require_POST
-@csrf_exempt
-def pay_stripe_handle(request):
-	stripe.api_key = getattr(settings, 'STRIPE_SECRET_KEY', None)
-
-	if not stripe.api_key:
-		return HttpResponse('Not configured for Stripe.')
-
-	token = request.POST['stripeToken']
-
-	try:
-		customer = stripe.Customer.create(
-			card=token,
-			plan='shortdiary-vip',
-			email=request.user.email
-		)
-	except stripe.CardError:
-		return HttpResponse('Card declined.')
-
-	Payment(
-		user=request.user,
-		gateway='stripe-recurring',
-		gateway_identifier=customer.id,
-		amount=350,
-		currency='EUR',
-		valid_from=datetime.datetime.now(),
-		valid_until=datetime.datetime.now() + datetime.timedelta(6 * 30),
-		recurring=True,
-	).save()
-
-	return HttpResponseRedirect('/pay/success/')

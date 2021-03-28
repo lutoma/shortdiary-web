@@ -231,7 +231,7 @@ div[role=main] {
 
 aside {
 	float: right;
-	
+
 	padding: 10px 15px;
 
 	width: 250px;
@@ -493,10 +493,4 @@ aside > .first {
 #text-input {
 	width: 619px;
 	height: 260px;
-}
-
-/* VIP site */
-
-.stripe-button-el {
-	height: 30px;
 }

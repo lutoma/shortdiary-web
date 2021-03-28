@@ -15,8 +15,8 @@ from api.views import (
 )
 
 from diary.views import (
-	switch_language, sign_up, account_settings, pay_stripe_handle, edit_post,
-	show_post, delete_post, stats, leaderboard, explore, search, mail_verify,
+	switch_language, sign_up, account_settings, edit_post, show_post,
+	delete_post, stats, leaderboard, explore, search, mail_verify,
 	index
 )
 
@@ -40,10 +40,6 @@ diary_urls = [
 	path('tos/', TemplateView.as_view(template_name='tos.html'), name='tos'),
 	path('privacy/', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
 	path('about/', TemplateView.as_view(template_name='about.html'), name='about'),
-
-	path('vip/', TemplateView.as_view(template_name='pay.html'), name='pay'),
-	path('pay/success/', TemplateView.as_view(template_name='pay_success.html'), name='pay'),
-	path('pay/stripe/', pay_stripe_handle, name='stripe'),
 
 	path('posts/new/', edit_post, name='new'),
 	url(r'^posts/(?P<post_id>[0-9]+)/$', show_post, name='post_show'),
