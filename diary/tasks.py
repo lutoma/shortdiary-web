@@ -12,7 +12,7 @@ import babel
 def process_mails(searched_date):
 	print('Sending mails for {0}…'.format(searched_date))
 
-	posts = diary.models.Post.objects.filter(date = searched_date, sent = False)
+	posts = diary.models.Post.objects.filter(date=searched_date, sent=False)
 	print('Found {} mail(s) to send'.format(len(posts)))
 
 	for post in posts:
@@ -26,23 +26,31 @@ def process_mails(searched_date):
 
 
 def process_mails_for_today():
-	searched_date = datetime.date.today() - datetime.timedelta(days = 365)
+	searched_date = datetime.date.today() - datetime.timedelta(days=365)
 	process_mails(searched_date)
 
 
 def update_leaderboard():
-	streak_leaders = sorted(diary.models.DiaryUser.objects.all(), key = lambda t: t.get_streak(), reverse = True)[:10]
+	streak_leaders = sorted(diary.models.DiaryUser.objects.all(),
+		key=lambda t: t.get_streak(), reverse=True)[:10]
+
 	streak_leaders = filter(lambda t: t.get_streak() > 1, streak_leaders)
 
-	posts_leaders = sorted(diary.models.DiaryUser.objects.all(), key = lambda t: t.post_set.all().count(), reverse = True)[:10]
+	posts_leaders = sorted(diary.models.DiaryUser.objects.all(),
+		key=lambda t: t.post_set.all().count(), reverse=True)[:10]
+
 	posts_leaders = filter(lambda t: t.post_set.all().count() > 1, posts_leaders)
 
-	char_leaders = sorted(diary.models.DiaryUser.objects.all(), key = lambda t: t.get_post_characters(), reverse = True)[:10]
+	char_leaders = sorted(diary.models.DiaryUser.objects.all(),
+		key=lambda t: t.get_post_characters(), reverse=True)[:10]
+
 	char_leaders = filter(lambda t: t.get_post_characters() > 1, char_leaders)
 
-	avg_post_length_leaders = filter(lambda t: t.post_set.all().count() > 20, diary.models.DiaryUser.objects.all())
+	avg_post_length_leaders = filter(lambda t: t.post_set.all().count() > 20,
+		diary.models.DiaryUser.objects.all())
+
 	avg_post_length_leaders = sorted(avg_post_length_leaders,
-		key = lambda t: t.get_average_post_length(), reverse = True)[:10]
+		key=lambda t: t.get_average_post_length(), reverse=True)[:10]
 
 	# This is ugly and should be rewritten at some point to use Post.get_language_name().
 	def get_language_name(iso):
@@ -51,16 +59,23 @@ def update_leaderboard():
 		except babel.UnknownLocaleError:
 			return ''
 
-	popular_languages = diary.models.Post.objects.filter(natural_language__isnull = False)
-	popular_languages = popular_languages.values('natural_language').annotate(count = Count('natural_language'))
-	popular_languages = filter(lambda t: len(t['natural_language'].strip()) > 0, popular_languages)
-	popular_languages = sorted(popular_languages, key = lambda t: t['count'], reverse = True)[:10]
-	popular_languages = map(lambda l: {'count': l['count'], 'name': get_language_name(l['natural_language'])}, popular_languages)
+	popular_languages = diary.models.Post.objects.filter(natural_language__isnull=False)
+	popular_languages = popular_languages.values('natural_language').annotate(
+		count=Count('natural_language'))
 
-	popular_locations = diary.models.Post.objects.filter(location_verbose__isnull = False)
-	popular_locations = popular_locations.values('location_verbose').annotate(count = Count('location_verbose'))
+	popular_languages = filter(lambda t: len(t['natural_language'].strip()) > 0, popular_languages)
+	popular_languages = sorted(popular_languages, key=lambda t: t['count'], reverse=True)[:10]
+	popular_languages = map(lambda l: {
+		'count': l['count'],
+		'name': get_language_name(l['natural_language'])
+	}, popular_languages)
+
+	popular_locations = diary.models.Post.objects.filter(location_verbose__isnull=False)
+	popular_locations = popular_locations.values('location_verbose').annotate(
+		count=Count('location_verbose'))
+
 	popular_locations = filter(lambda t: len(t['location_verbose']) > 0, popular_locations)
-	popular_locations = sorted(popular_locations, key = lambda t: t['count'], reverse = True)[:10]
+	popular_locations = sorted(popular_locations, key=lambda t: t['count'], reverse=True)[:10]
 
 	cache.set_many({
 		'leaderboard_streak_leaders': list(streak_leaders),
@@ -82,20 +97,20 @@ def update_streak(user):
 
 	# It probably makes sense to move this function back to models.py
 
-	user_posts = diary.models.Post.objects.filter(author = user).order_by('-date')
+	user_posts = diary.models.Post.objects.filter(author=user).order_by('-date')
 
 	if len(user_posts) == 0:
 		return 0
 
-	first_posssible = datetime.date.today() - datetime.timedelta(days = 2)
+	first_posssible = datetime.date.today() - datetime.timedelta(days=2)
 	post = user_posts[0]
 
-	if first_posssible - post.date > datetime.timedelta(days = 1):
+	if first_posssible - post.date > datetime.timedelta(days=1):
 		return 0
 
 	streak = 0
 	for post, previous_post in zip(user_posts, [post] + list(user_posts)):
-		if (previous_post.date - post.date) > datetime.timedelta(days = 1):
+		if (previous_post.date - post.date) > datetime.timedelta(days=1):
 			return streak
 		streak += 1
 
@@ -128,7 +143,8 @@ def send_reminder_mails():
 	# Get all relevant users (Have streak, last post 2 days ago)
 	two_days_ago = datetime.date.today() - datetime.timedelta(days=2)
 	users = diary.models.DiaryUser.objects.all()
-	users = filter(lambda t: t.get_streak() > 0 and t.post_set.order_by('-date')[0].date == two_days_ago, users)
+	users = filter(lambda t: t.get_streak() > 0
+		and t.post_set.order_by('-date')[0].date == two_days_ago, users)
 
 	map(send_reminder_mail, users)
 

@@ -1,7 +1,15 @@
 from diary.models import Post, DiaryUser
 from rest_framework.views import APIView
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, ListAPIView, GenericAPIView
-from api.serializers import PostSerializer, PostCreateSerializer, PublicPostSerializer, ProfileSerializer
+from rest_framework.generics import (
+	RetrieveUpdateDestroyAPIView, ListCreateAPIView, ListAPIView,
+	GenericAPIView
+)
+
+from api.serializers import (
+	PostSerializer, PostCreateSerializer, PublicPostSerializer,
+	ProfileSerializer
+)
+
 from rest_framework.response import Response
 import datetime
 from rest_framework import status, mixins
@@ -11,7 +19,7 @@ from rest_framework.permissions import AllowAny
 from django.core.cache import cache
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-from django.dispatch import receiver
+
 
 class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
 	model = DiaryUser
@@ -26,8 +34,10 @@ class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
 		if request.DATA["email"] != request.user.email:
 			request.user.mail_verified = False
 			request.user.save()
+
 		response = self.update(request, *args, **kwargs)
-		if request.user.mail_verified == False:
+
+		if request.user.mail_verified is False:
 			request.user.send_verification_mail()
 		return response
 
@@ -36,8 +46,10 @@ class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
 		if request.DATA["email"] != request.user.email:
 			request.user.mail_verified = False
 			request.user.save()
+
 		response = self.partial_update(request, *args, **kwargs)
-		if request.user.mail_verified == False:
+
+		if request.user.mail_verified is False:
 			request.user.send_verification_mail()
 		return response
 
@@ -45,12 +57,12 @@ class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
 		return self.request.user
 
 
-
 class PostList(ListCreateAPIView):
 	"""
 	List your posts
 	"""
-	serializer_class=PostSerializer
+	serializer_class = PostSerializer
+
 	def get(self, request, format=None):
 		posts = Post.objects.filter(author=request.user).order_by("-date")
 		serializer = PostSerializer(posts, many=True, context=self.context)
@@ -79,6 +91,7 @@ class PostTimeline(ListAPIView):
 	"""
 
 	serializer_class = PostSerializer
+
 	def get(self, request, format=None):
 		# This should probably be moved to the model
 		cache_key = 'api_timeline_{}'.format(request.user.id)
@@ -90,13 +103,14 @@ class PostTimeline(ListAPIView):
 		posts = Post.objects.filter(author=request.user).order_by("-date")
 		sorted_posts = OrderedDict()
 
-		for year_obj in posts.dates('date','year', order='DESC'):
-			year_posts = posts.filter(date__year = year_obj.year)
+		for year_obj in posts.dates('date', 'year', order='DESC'):
+			year_posts = posts.filter(date__year=year_obj.year)
 			sorted_year_posts = OrderedDict()
 
-			for month_obj in year_posts.dates('date','month', order='DESC'):
-				month_posts = year_posts.filter(date__month = month_obj.month)
-				sorted_year_posts[month_obj.month] = list(map(lambda post: PostSerializer(post).data, month_posts))
+			for month_obj in year_posts.dates('date', 'month', order='DESC'):
+				month_posts = year_posts.filter(date__month=month_obj.month)
+				sorted_year_posts[month_obj.month] = list(map(
+					lambda post: PostSerializer(post).data, month_posts))
 
 			sorted_posts[year_obj.year] = sorted_year_posts
 
@@ -106,12 +120,14 @@ class PostTimeline(ListAPIView):
 
 		return Response(sorted_posts)
 
+
 @receiver(post_save, sender=Post)
 def post_save_timeline_invalidate(sender, **kwargs):
 	# Close enough for now. Should probably regenerate the timeline in a
 	# separate background job in the future to avoid long waits after saving
 	# a post.
 	cache.delete('api_timeline_{}'.format(kwargs['instance'].author.id))
+
 
 class PostDetail(RetrieveUpdateDestroyAPIView):
 	"""
@@ -121,42 +137,50 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
 	serializer_class = PostSerializer
 
 	def get(self, request, *args, **kwargs):
-		object = Post.objects.get(pk=kwargs["pk"])
 		return super(PostDetail, self).get(request, *args, **kwargs)
-
 
 	def put(self, request, *args, **kwargs):
 		today = datetime.date.today()
-		object = Post.objects.get(pk=kwargs["pk"])
-		if (today - object.date).days > 3:
-			return Response({"Error":_("This entry is too old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
+		obj = Post.objects.get(pk=kwargs["pk"])
+
+		if (today - obj.date).days > 3:
+			return Response({"Error": _("This entry is too old and can't be edited")},
+				status=status.HTTP_400_BAD_REQUEST)
+
 		return super(PostDetail, self).update(request, *args, **kwargs)
 
 	def patch(self, request, *args, **kwargs):
 		today = datetime.date.today()
-		object = Post.objects.get(pk=kwargs["pk"])
-		if (today - object.date).days > 3:
-			return Response({"Error":_("This entry is too old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
+		obj = Post.objects.get(pk=kwargs["pk"])
+
+		if (today - obj.date).days > 3:
+			return Response({"Error": _("This entry is too old and can't be edited")},
+				status=status.HTTP_400_BAD_REQUEST)
+
 		return super(PostDetail, self).partial_update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
 		today = datetime.date.today()
-		object = Post.objects.get(pk=kwargs["pk"])
-		if (today - object.date).days > 3:
-			return Response({"Error":_("This entry is to old and can't be edited")}, status=status.HTTP_400_BAD_REQUEST)
-		return  super(PostDetail, self).destroy(request, *args, **kwargs)
+		obj = Post.objects.get(pk=kwargs["pk"])
+
+		if (today - obj.date).days > 3:
+			return Response({"Error": _("This entry is to old and can't be edited")},
+				status=status.HTTP_400_BAD_REQUEST)
+
+		return super(PostDetail, self).destroy(request, *args, **kwargs)
+
 
 class PostYearAgo(GenericAPIView):
 	serializer_class = PostSerializer
 
 	def get(self, request, format=None):
 		today = datetime.date.today()
-		yearago = datetime.date(today.year-1, today.month, today.day)
+		yearago = datetime.date(today.year - 1, today.month, today.day)
 		try:
 			post = Post.objects.get(author=request.user, date=yearago)
 			serializer = self.serializer_class(post, context=self.context)
 			response = Response(serializer.data)
-		except:
+		except Post.DoesNotExist:
 			response = Response({"No post for last year"})
 			response.status_code = 404
 		return response
@@ -171,7 +195,7 @@ class PublicPostDetail(APIView):
 
 	def get(self, request, format=None):
 		try:
-			randompost = Post.objects.filter(public = True).order_by('?')[:1].get()
+			randompost = Post.objects.filter(public=True).order_by('?')[:1].get()
 			serializer = PublicPostSerializer(randompost, context=self.context)
 			return Response(serializer.data)
 		except Post.DoesNotExist:

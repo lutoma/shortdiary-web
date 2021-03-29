@@ -84,9 +84,9 @@ def edit_post(request, post_id=None):
 
 	if not edit_post:
 		# This is a new post, save it
-		post = form.save(commit = False)
+		post = form.save(commit=False)
 
-		if Post.objects.filter(author = request.user, date = post.date).count() > 0:
+		if Post.objects.filter(author=request.user, date=post.date).count() > 0:
 			return HttpResponse('Sorry, you already have an entry for that day')
 
 		post.author = request.user
@@ -120,7 +120,7 @@ def show_post(request, post_id):
 	context = {
 		'post': post,
 		'title': _('Post #{} from {}').format(post.id, post.date),
-		'language': post.get_language_name(locale = get_language_from_request(request))
+		'language': post.get_language_name(locale=get_language_from_request(request))
 	}
 
 	if post.author == request.user:
@@ -158,7 +158,9 @@ def sign_up(request):
 
 	user.send_verification_mail()
 
-	login_user = django.contrib.auth.authenticate(username = user.username, password = request.POST.get('password', None))
+	login_user = django.contrib.auth.authenticate(username=user.username,
+		password=request.POST.get('password', None))
+
 	django.contrib.auth.login(request, login_user)
 	return HttpResponseRedirect('/')
 
