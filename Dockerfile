@@ -1,4 +1,4 @@
-FROM python:2.7-buster
+FROM python:3.9-buster
 LABEL maintainer="lukas@fnordserver.eu"
 ENV PYTHONUNBUFFERED 1
 
