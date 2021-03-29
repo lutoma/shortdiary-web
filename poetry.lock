@@ -187,6 +187,18 @@ rollbar = ["django-q-rollbar (>=0.1)"]
 sentry = ["django-q-sentry (>=0.1)"]
 
 [[package]]
+name = "django-redis"
+version = "4.12.1"
+description = "Full featured redis cache backend for Django."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.dependencies]
+Django = ">=2.2"
+redis = ">=3.0.0"
+
+[[package]]
 name = "django-two-factor-auth"
 version = "1.13"
 description = "Complete Two-Factor Authentication for Django"
@@ -465,7 +477,7 @@ pycryptodome = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.2"
-content-hash = "979398c75a160c28295f692e62ed130fb27010517d2ee4c51d633121633e8d9c"
+content-hash = "0c2afb689f77d0091af5e398e3d6174e50af66af375c34ce8b62ad20229aa243"
 
 [metadata.files]
 ansicon = [
@@ -531,6 +543,10 @@ django-picklefield = [
 django-q = [
     {file = "django-q-1.3.5.tar.gz", hash = "sha256:8871c602e2c7e892fbedc271d5b91c4a96803b689c3ee2f15464931f99f4e32b"},
     {file = "django_q-1.3.5-py3-none-any.whl", hash = "sha256:bebfbd0699f609997467dfada2db9f7a30a594f202359e543baff906d1ff20b6"},
+]
+django-redis = [
+    {file = "django-redis-4.12.1.tar.gz", hash = "sha256:306589c7021e6468b2656edc89f62b8ba67e8d5a1c8877e2688042263daa7a63"},
+    {file = "django_redis-4.12.1-py3-none-any.whl", hash = "sha256:1133b26b75baa3664164c3f44b9d5d133d1b8de45d94d79f38d1adc5b1d502e5"},
 ]
 django-two-factor-auth = [
     {file = "django-two-factor-auth-1.13.tar.gz", hash = "sha256:24c2850a687c86800f4aa4131b7cebadf56f35be04ca359c4990578df1cc249a"},

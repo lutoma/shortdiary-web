@@ -10,7 +10,7 @@ RUN poetry install
 RUN poetry add gunicorn
 RUN poetry run ./manage.py collectstatic --noinput
 
-RUN mkdir /data
+RUN mkdir -p /data/redis
 RUN ln -s /data/settings_local.py shortdiary/settings_local.py
 RUN ln -s /data/asset asset
 
