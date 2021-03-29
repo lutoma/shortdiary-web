@@ -63,7 +63,7 @@ class DiaryUser(AbstractUser):
 		if own_posts < 1:
 			return 0
 
-		return self.get_post_characters() / own_posts
+		return int(self.get_post_characters() / own_posts)
 
 	def get_mention_toplist(self):
 		'''
