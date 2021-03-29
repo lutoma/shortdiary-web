@@ -96,15 +96,13 @@ class PostTimeline(ListAPIView):
 
 			for month_obj in year_posts.dates('date','month', order='DESC'):
 				month_posts = year_posts.filter(date__month = month_obj.month)
-				sorted_year_posts[month_obj.month] = map(lambda post: PostSerializer(post).data, month_posts)
+				sorted_year_posts[month_obj.month] = list(map(lambda post: PostSerializer(post).data, month_posts))
 
 			sorted_posts[year_obj.year] = sorted_year_posts
 
 		# Infinite lifetime since this is invalidated as soon as a new
 		# post is written by the user
-
-# FIXME
-#		cache.set(cache_key, sorted_posts, None)
+		cache.set(cache_key, sorted_posts, None)
 
 		return Response(sorted_posts)
 

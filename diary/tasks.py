@@ -63,12 +63,12 @@ def update_leaderboard():
 	popular_locations = sorted(popular_locations, key = lambda t: t['count'], reverse = True)[:10]
 
 	cache.set_many({
-		'leaderboard_streak_leaders': streak_leaders,
-		'leaderboard_posts_leaders': posts_leaders,
-		'leaderboard_char_leaders': char_leaders,
-		'leaderboard_avg_post_length_leaders': avg_post_length_leaders,
-		'leaderboard_popular_languages': popular_languages,
-		'leaderboard_popular_locations': popular_locations,
+		'leaderboard_streak_leaders': list(streak_leaders),
+		'leaderboard_posts_leaders': list(posts_leaders),
+		'leaderboard_char_leaders': list(char_leaders),
+		'leaderboard_avg_post_length_leaders': list(avg_post_length_leaders),
+		'leaderboard_popular_languages': list(popular_languages),
+		'leaderboard_popular_locations': list(popular_locations),
 		'leaderboard_last_update': datetime.datetime.now(),
 	})
 
