@@ -114,9 +114,10 @@ class PostTimeline(ListAPIView):
 
 			sorted_posts[year_obj.year] = sorted_year_posts
 
-		# Infinite lifetime since this is invalidated as soon as a new
-		# post is written by the user
-		cache.set(cache_key, sorted_posts, None)
+		# This is invalidated as soon as a new post is written, so use a long
+		# lifetime. Don't make it infinite though so as to not fill up Redis
+		# with timelines of inactive users
+		cache.set(cache_key, sorted_posts, 2419200)
 
 		return Response(sorted_posts)
 
