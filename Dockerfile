@@ -17,5 +17,6 @@ RUN ln -s /data/asset asset
 RUN wget "https://caddyserver.com/api/download?os=linux&arch=amd64" -O /usr/local/bin/caddy
 RUN chmod +x /usr/local/bin/caddy
 
-RUN apt update && apt install -y supervisor redis-server
+RUN apt update && apt install -y supervisor redis-server git
+RUN git rev-parse --short HEAD > templates/current_git_version.txt
 CMD ["/usr/bin/supervisord", "-c", "/code/supervisord.conf"]
