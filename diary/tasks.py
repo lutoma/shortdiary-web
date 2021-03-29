@@ -114,16 +114,11 @@ def update_streak(user):
 			return streak
 		streak += 1
 
+	# This is invalidated as soon as a new post is written, so use a long
+	# lifetime. Don't make it infinite though so as to not fill up Redis
+	# with timelines of inactive users
+	cache.set(f'diary_{user.id}_streak', streak, 2419200)
 	return streak
-
-
-def async_update_streak(user):
-		streak = update_streak(user)
-
-		# This is invalidated as soon as a new post is written, so use a long
-		# lifetime. Don't make it infinite though so as to not fill up Redis
-		# with timelines of inactive users
-		cache.set(f'diary_{user.id}_streak', streak, 2419200)
 
 
 def send_reminder_mail(user):

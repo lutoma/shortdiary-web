@@ -34,18 +34,10 @@ class DiaryUser(AbstractUser):
 		send_email(self.author, 'email-verification', {'hash': self.get_verification_hash()})
 
 	def get_streak(self):
-		cache_key = f'diary_{self.id}_streak'
-		cached_streak = cache.get(cache_key)
-
+		cached_streak = cache.get(f'diary_{self.id}_streak')
 		if cached_streak:
 			return cached_streak
-
-		streak = tasks.update_streak(self)
-
-		# Infinite lifetime since this is invalidated as soon as a new
-		# post is written by the user
-		cache.set(cache_key, streak, None)
-		return streak
+		return tasks.update_streak(self)
 
 	def get_year_history(self):
 		"""
@@ -214,7 +206,7 @@ class Post(models.Model):
 @receiver(post_save, sender=Post)
 @receiver(post_delete, sender=Post)
 def update_post_signal(sender, instance, **kwargs):
-	async_task('diary.tasks.async_update_streak', instance.author)
+	async_task('diary.tasks.update_streak', instance.author)
 
 	# Only run the post language guesser if other fields than the natural
 	# language were updated. Otherwise, this would result in recursion.
