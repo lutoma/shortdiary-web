@@ -33,7 +33,7 @@
 				</form>
 			</div>
 
-			<a href='{% url "diary:sign_up" %}'>Sign up for free.</a>
+			<a href='{% url "sign_up" %}'>Sign up for free.</a>
 		</div>
 	</div>
 
@@ -49,6 +49,6 @@
 
 {% block footer %}
 	<div id='footer'>
-	<a href="/privacy/">{% trans 'Privacy' %}</a> | <a href='{% url "diary:about" %}'>{% trans 'Imprint' %}</a>
+	<a href="/privacy/">{% trans 'Privacy' %}</a> | <a href='{% url "about" %}'>{% trans 'Imprint' %}</a>
 	</div>
 {% endblock %}
