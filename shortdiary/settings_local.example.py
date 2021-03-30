@@ -36,6 +36,11 @@ CACHES = {
 	}
 }
 
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
 SECRET_KEY = ''
 
 # Email settings
