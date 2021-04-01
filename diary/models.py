@@ -39,6 +39,9 @@ class DiaryUser(AbstractUser):
 			return cached_streak
 		return tasks.update_streak(self)
 
+	def posts_count(self):
+		self.posts.count()
+
 	def get_year_history(self):
 		"""
 		Returns the length of posts for a user for the last 356 days.
@@ -83,7 +86,9 @@ class DiaryUser(AbstractUser):
 class Post(models.Model):
 	MENTION_REGEX = re.compile(r'@\w+', re.UNICODE)
 
-	author = models.ForeignKey(DiaryUser, verbose_name=_('author'), on_delete=models.CASCADE)
+	author = models.ForeignKey(DiaryUser, verbose_name=_('author'), related_name='posts',
+		on_delete=models.CASCADE)
+
 	date = models.DateField(verbose_name=('date'))
 	text = models.TextField(verbose_name=_('text'))
 	mood = models.IntegerField(verbose_name=_('mood'))

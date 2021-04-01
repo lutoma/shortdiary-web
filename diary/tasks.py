@@ -37,16 +37,16 @@ def update_leaderboard():
 	streak_leaders = filter(lambda t: t.get_streak() > 1, streak_leaders)
 
 	posts_leaders = sorted(diary.models.DiaryUser.objects.all(),
-		key=lambda t: t.post_set.all().count(), reverse=True)[:10]
+		key=lambda t: t.posts.all().count(), reverse=True)[:10]
 
-	posts_leaders = filter(lambda t: t.post_set.all().count() > 1, posts_leaders)
+	posts_leaders = filter(lambda t: t.posts.all().count() > 1, posts_leaders)
 
 	char_leaders = sorted(diary.models.DiaryUser.objects.all(),
 		key=lambda t: t.get_post_characters(), reverse=True)[:10]
 
 	char_leaders = filter(lambda t: t.get_post_characters() > 1, char_leaders)
 
-	avg_post_length_leaders = filter(lambda t: t.post_set.all().count() > 20,
+	avg_post_length_leaders = filter(lambda t: t.posts.all().count() > 20,
 		diary.models.DiaryUser.objects.all())
 
 	avg_post_length_leaders = sorted(avg_post_length_leaders,
@@ -139,7 +139,7 @@ def send_reminder_mails():
 	two_days_ago = datetime.date.today() - datetime.timedelta(days=2)
 	users = diary.models.DiaryUser.objects.all()
 	users = filter(lambda t: t.get_streak() > 0
-		and t.post_set.order_by('-date')[0].date == two_days_ago, users)
+		and t.posts.order_by('-date')[0].date == two_days_ago, users)
 
 	map(send_reminder_mail, users)
 

@@ -20,7 +20,7 @@
 									{{ user.username }}
 								</td>
 								<td style='width: 170px;'>
-									{{ user.post_set.all|length }} {% trans "posts" %}
+									{{ user.posts.all|length }} {% trans "posts" %}
 								</td>
 							</tr>
 					{% endfor %}

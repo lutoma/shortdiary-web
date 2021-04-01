@@ -240,7 +240,7 @@ def stats(request):
 		author=request.user).values('location_verbose').annotate(
 		location_count=Count('location_verbose')).order_by('-location_count')[:10]
 
-	top_mood_locations = request.user.get_posts().filter(
+	top_mood_locations = request.user.posts.filter(
 		~Q(location_verbose='')).annotate(mood_avg=Avg('mood')).values(
 		'location_verbose', 'mood_avg').annotate(location_count=Count(
 			'location_verbose')).filter(location_count__gte=3).order_by(
@@ -313,7 +313,7 @@ def explore(request):
 @login_required
 def search(request):
 	query = request.GET.get('q', '')
-	posts = request.user.get_posts().filter(text__icontains=query)
+	posts = request.user.posts.filter(text__icontains=query)
 	posts.order_by('-date')
 
 	context = {
