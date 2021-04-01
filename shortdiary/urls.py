@@ -1,5 +1,5 @@
-from django.conf.urls import include, url
-from django.urls import path
+from django.conf.urls import url
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -10,7 +10,7 @@ from two_factor.urls import urlpatterns as tf_urls
 #from two_factor.urls import urlpatterns as tf_urls
 #from two_factor.gateways.twilio.urls import urlpatterns as tf_twilio_urls
 
-from api.views import (
+from apiv1.views import (
 	PostList, PostTimeline, PostDetail, PublicPostDetail, ProfileDetail, PostYearAgo
 )
 
@@ -27,12 +27,12 @@ from django.contrib.auth.views import (
 )
 
 api_patterns = format_suffix_patterns([
-	url(r'^posts/$', PostList.as_view(), name="api-post-list"),
-	url(r'^posts/timeline/$', PostTimeline.as_view(), name='api-post-timeline'),
-	url(r'^posts/(?P<pk>\d+)/$', PostDetail.as_view(), name='api-post-detail'),
-	url(r'^posts/year_ago/$', PostYearAgo.as_view(), name='api-post-yearago'),
-	url(r'^posts/random_public/$', PublicPostDetail.as_view(), name='api-public-post'),
-	url(r'^profile/$', ProfileDetail.as_view(), name='api-profile-detail'),
+	url(r'^posts/$', PostList.as_view(), name="apiv1-post-list"),
+	url(r'^posts/timeline/$', PostTimeline.as_view(), name='apiv1-post-timeline'),
+	url(r'^posts/(?P<pk>\d+)/$', PostDetail.as_view(), name='apiv1-post-detail'),
+	url(r'^posts/year_ago/$', PostYearAgo.as_view(), name='apiv1-post-yearago'),
+	url(r'^posts/random_public/$', PublicPostDetail.as_view(), name='apiv1-public-post'),
+	url(r'^profile/$', ProfileDetail.as_view(), name='apiv1-profile-detail'),
 ], allowed=["json", "html"])
 
 
@@ -79,7 +79,7 @@ urlpatterns = [
 
 	path('', include(diary_urls)),
 
-	url(r'^api/v1/', include(api_patterns)),
+	path('api/v1/', include(api_patterns)),
 #	url(r'^api/v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
 #	url(r'', include(tf_urls, 'two_factor')),
 #	url(r'', include(tf_twilio_urls, 'two_factor')),

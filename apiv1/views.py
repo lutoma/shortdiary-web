@@ -5,7 +5,7 @@ from rest_framework.generics import (
 	GenericAPIView
 )
 
-from api.serializers import (
+from .serializers import (
 	PostSerializer, PostCreateSerializer, PublicPostSerializer,
 	ProfileSerializer
 )

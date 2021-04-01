@@ -139,6 +139,7 @@ INSTALLED_APPS = (
 	'django_gravatar',
 	'rest_framework',
 	'diary',
+	'apiv1',
 	'django_otp',
 	'django_otp.plugins.otp_static',
 	'django_otp.plugins.otp_totp',
@@ -179,7 +180,7 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 REST_FRAMEWORK = {
 	'DEFAULT_PERMISSION_CLASSES': (
-		'api.permissions.IsOwner',
+		'apiv1.permissions.IsOwner',
 	),
 	'DEFAULT_AUTHENTICATION_CLASSES': (
 		# 'rest_framework.authentication.OAuth2Authentication',
