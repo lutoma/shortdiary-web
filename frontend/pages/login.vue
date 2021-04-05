@@ -8,10 +8,10 @@
 			</el-form-item>
 
 			<el-form-item label="Username" prop="username">
-					<el-input ref="username" placeholder="Username" v-model="credentials.username" required autofocus />
+				<el-input ref="username" placeholder="Username" v-model="credentials.username" @keyup.enter.native="login" required autofocus />
 			</el-form-item>
 			<el-form-item label="Password" prop="password">
-					<el-input placeholder="Password" v-model="credentials.password" show-password required />
+				<el-input placeholder="Password" v-model="credentials.password" @keyup.enter.native="login" show-password required />
 			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" @click="login" :loading.sync="loading"><fa :icon="['far', 'sign-in']" /> Sign in</el-button>
@@ -38,7 +38,7 @@ export default {
 			},
 			rules: {
 				username: [{ required: true, message: 'Please enter a username', trigger: 'change' }],
-				password: [{ required: true, message: 'Please enter a password', trigger: 'change' }],
+				password: [{ required: true, message: 'Please enter a password', trigger: 'change' }]
 			}
 		}
 	},
@@ -49,7 +49,7 @@ export default {
 			this.loading = true
 
 			this.$refs.form.validate(async valid => {
-				if(valid) {
+				if (valid) {
 					try {
 						await this.$auth.loginWith('local', { data: this.credentials })
 						this.$router.go('/dashboard')
@@ -60,7 +60,7 @@ export default {
 					}
 				}
 			})
-		},
+		}
 	}
 
 }
