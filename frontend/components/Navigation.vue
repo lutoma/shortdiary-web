@@ -3,11 +3,13 @@
 		<nav>
 			<div class="name"><n-link :to="$auth.loggedIn ? '/dashboard' : '/'">shortdiary</n-link></div>
 			<el-menu :default-active="$route.path" mode="horizontal" class="main-nav" @select="navSelect">
-				<el-menu-item v-for="item of nav_items" :key="item.path" :index="item.path">{{ item.label }}</el-menu-item>
+				<el-menu-item v-for="item of nav_items" :key="item.path" :index="item.path">
+					<fa v-if="item.icon" :icon="['far', item.icon]" /> {{ item.label }}
+				</el-menu-item>
 			</el-menu>
 			<el-menu mode="horizontal" @select="navSelect" v-if="$auth.loggedIn">
-				<el-menu-item index="/settings"><fa :icon="['fas', 'wrench']" /></el-menu-item>
-				<el-menu-item index="logout"><fa :icon="['fas', 'sign-out']" /></el-menu-item>
+				<el-menu-item index="/settings"><fa :icon="['far', 'wrench']" /></el-menu-item>
+				<el-menu-item index="logout"><fa :icon="['far', 'sign-out']" /></el-menu-item>
 			</el-menu>
 		</nav>
 	</div>
@@ -18,31 +20,32 @@ export default {
 	methods: {
 		navSelect(path, _) {
 			// Bit hacky
-			if(path === 'logout') {
+			if (path === 'logout') {
 				this.$auth.logout()
 				this.$router.push('/', () => {
-					this.$message({ type: 'success', message: 'You have been logged out.' });
+					this.$message({ type: 'success', message: 'You have been logged out.' })
 				})
 			} else {
-				this.$router.push({path})
+				this.$router.push({ path })
 			}
-		},
+		}
 
 	},
 	data() {
-		let nav_items;
-		if(this.$auth.loggedIn) {
+		let nav_items
+
+		if (this.$auth.loggedIn) {
 			nav_items = [
-				{path: '/dashboard', label: 'Dashboard'},
-				{path: '/new', label: 'New entry'},
-				{path: '/discover', label: 'Discover'},
-				{path: '/stats', label: 'Stats'},
-				{path: '/leaderboard', label: 'Leaderboard'},
+				{ path: '/dashboard', label: 'Dashboard', icon: 'columns' },
+				{ path: '/new', label: 'New entry', icon: 'pencil' },
+				{ path: '/stats', label: 'Stats', icon: 'chart-bar' },
+				{ path: '/leaderboard', label: 'Leaderboard', icon: 'medal' },
+				{ path: '/discover', label: 'Discover', icon: 'compass' }
 			]
 		} else {
 			nav_items = [
-				{path: '/login', label: 'Sign in'},
-				{path: '/signup', label: 'Join'},
+				{ path: '/login', label: 'Sign in', icon: 'sign-in' },
+				{ path: '/signup', label: 'Join', icon: 'user-friends' }
 			]
 		}
 

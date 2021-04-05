@@ -100,11 +100,14 @@ export default {
 				'faLockOpen',
 				'faKey',
 				'faPencil',
-				'faSignIn'
-			],
-			solid: [
+				'faSignIn',
+				'faColumns',
+				'faChartBar',
+				'faMedal',
 				'faWrench',
-				'faSignOut'
+				'faSignOut',
+				'faCompass',
+				'faUserFriends'
 			]
 		}
 	}
