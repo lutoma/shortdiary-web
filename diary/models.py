@@ -40,7 +40,7 @@ class DiaryUser(AbstractUser):
 		return tasks.update_streak(self)
 
 	def posts_count(self):
-		self.posts.count()
+		return self.posts.count()
 
 	def get_year_history(self):
 		"""
@@ -134,7 +134,7 @@ class Post(models.Model):
 		Should this post still be editable by the user?
 		"""
 
-		return (self.date > datetime.date.today() - datetime.timedelta(days = 3))
+		return (self.date > datetime.date.today() - datetime.timedelta(days=3))
 
 	is_editable.admin_order_field = 'date'
 	is_editable.boolean = True

@@ -1,0 +1,90 @@
+@import "@fontsource/fira-sans/latin-400.css";
+@import "@fontsource/exo-2/latin-200.css";
+@import "@fontsource/exo-2/latin-400.css";
+@import "@fontsource/exo-2/latin-600.css";
+@import "@fontsource/exo-2/latin-800.css";
+
+$text-color: #222;
+$link-color: #2683E4;
+
+html, body, #__nuxt, #__layout {
+	width: 100%;
+	height: 100%;
+}
+
+html {
+	font-family: "Exo 2", "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	font-size: 17px;
+	word-spacing: 1px;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	background: #f9f9f9;
+	color: $text-color;
+
+	// Fixed top menu
+	padding-top: 50px;
+}
+
+*, *:before, *:after {
+	box-sizing: border-box;
+	margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 600;
+}
+
+h1 {
+	font-weight: 800;
+	margin-bottom: 2rem;
+}
+
+h2 {
+	margin-bottom: 1rem;
+}
+
+textarea {
+	font-family: "Fira Sans";
+}
+
+a {
+	&, &:hover {
+		color: #033649;
+		text-decoration: none;
+	}
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+
+#default-layout-container {
+	height: 100%;
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
+}
+
+#main-container {
+	flex-grow: 1;
+	width: 100%;
+	max-width: 1600px;
+	margin: 0 auto;
+	padding: 0 2rem;
+	padding-top: 30px;
+}
+
+.el-message {
+	// Push message boxes below top header
+	top: 65px !important;
+}

@@ -86,7 +86,10 @@ MIDDLEWARE_CLASSES = (
 	'diary.middleware.TrackLastActivityMiddleware'
 )
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 MIDDLEWARE = (
+	'corsheaders.middleware.CorsMiddleware',
 	'django.middleware.gzip.GZipMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
@@ -138,14 +141,18 @@ INSTALLED_APPS = (
 	'django.contrib.admindocs',
 	'django_gravatar',
 	'rest_framework',
+	'rest_framework.authtoken',
+	'rest_auth',
 	'diary',
 	'apiv1',
+	'apiv2',
 	'django_otp',
 	'django_otp.plugins.otp_static',
 	'django_otp.plugins.otp_totp',
 	'otp_yubikey',
 	'two_factor',
 	'django_q',
+	'corsheaders',
 )
 
 LOGGING = {
@@ -184,10 +191,14 @@ REST_FRAMEWORK = {
 	),
 	'DEFAULT_AUTHENTICATION_CLASSES': (
 		# 'rest_framework.authentication.OAuth2Authentication',
+		'rest_framework.authentication.TokenAuthentication',
 		'rest_framework.authentication.SessionAuthentication',
-		'rest_framework.authentication.BasicAuthentication',
 	),
+	'DEFAULT_RENDERER_CLASSES': (
+		'rest_framework.renderers.JSONRenderer',
+	)
 }
+
 
 AUTH_USER_MODEL = 'diary.DiaryUser'
 LOGIN_REDIRECT_URL = '/'

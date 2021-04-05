@@ -80,6 +80,7 @@ urlpatterns = [
 	path('', include(diary_urls)),
 
 	path('api/v1/', include(api_patterns)),
+	path('api/v2/', include('apiv2.urls')),
 #	url(r'^api/v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
 #	url(r'', include(tf_urls, 'two_factor')),
 #	url(r'', include(tf_twilio_urls, 'two_factor')),
