@@ -7,10 +7,26 @@ export default {
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
-			{ hid: 'description', name: 'description', content: '' }
+			{ name: 'apple-mobile-web-app-capable', content: 'yes' },
+
+			{ name: 'application-name', content: 'Shortdiary' },
+			{ name: 'msapplication-TileColor', content: '#036564' },
+			{ name: 'msapplication-square70x70logo', content: '/windows-tile-tiny.png' },
+			{ name: 'msapplication-square150x150logo', content: '/windows-tile-square.png' },
+			{ name: 'msapplication-wide310x150logo', content: '/windows-tile-wide.png' },
+			{ name: 'msapplication-square310x310logo', content: '/windows-tile-large.png' }
 		],
+
 		link: [
-			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+			{ rel: 'icon', type: 'image/png', href: '/favicon.png' },
+			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+
+			{ rel: 'apple-touch-icon', sizes: '57x57', href: '/apple-touch-icon-114.png' },
+			{ rel: 'apple-touch-icon', sizes: '114x114', href: '/apple-touch-icon-114.png' },
+			{ rel: 'apple-touch-icon', sizes: '72x72', href: '/apple-touch-icon-144.png' },
+			{ rel: 'apple-touch-icon', sizes: '144x144', href: '/apple-touch-icon-144.png' },
+			{ rel: 'apple-touch-icon', href: '/apple-touch-icon-114.png' }
+
 		]
 	},
 
@@ -51,10 +67,10 @@ export default {
 
 	// Proxy external services to avoid leaking user IPs
 	proxy: {
-		'/map/tiles/**/*.png': {
-			target: 'https://api.maptiler.com/maps/bright',
-			pathRewrite: { '^/map/tiles': '' },
-			onProxyReq: (proxyReq, req, res) => {
+		'/maptiler/': {
+			target: 'https://api.maptiler.com',
+			pathRewrite: { '^/maptiler/': '' },
+			onProxyReq(proxyReq, req, res) {
 				proxyReq.path += '?key=bfo60JdkhRcsQQlWkLEc'
 			}
 		},
@@ -107,7 +123,8 @@ export default {
 				'faWrench',
 				'faSignOut',
 				'faCompass',
-				'faUserFriends'
+				'faUserFriends',
+				'faLink'
 			]
 		}
 	}

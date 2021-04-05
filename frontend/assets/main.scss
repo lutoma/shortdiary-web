@@ -57,9 +57,9 @@ textarea {
 	font-family: "Fira Sans";
 }
 
-a {
+a, .el-button--text {
 	&, &:hover {
-		color: #033649;
+		color: #036564;
 		text-decoration: none;
 	}
 
@@ -90,3 +90,49 @@ a {
 	// Push message boxes below top header
 	top: 65px !important;
 }
+
+.el-slider__bar {
+	background-color: #CDB380;
+}
+
+.el-slider__button {
+	border-color: #CDB380;
+}
+
+.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+	background-color: #CDB380;
+	border-color: #CDB380;
+	box-shadow: -1px 0 0 0 #CDB380;
+}
+
+.el-radio-button__inner:hover {
+	color: #036564;
+}
+
+.el-switch.is-checked .el-switch__core {
+	background-color: #CDB380;
+	border-color: #CDB380;
+}
+
+.el-switch__label.is-active {
+	color: initial;
+}
+
+.el-button--primary {
+	background-color: #CDB380;
+	border-color: #CDB380;
+}
+
+.el-button--primary.is-disabled,
+.el-button--primary.is-disabled:active,
+.el-button--primary.is-disabled:focus,
+.el-button--primary.is-disabled:hover {
+
+}
+
+
+/*
+.el-tag.el-tag--warning {
+	color: #CDB380;
+}
+*/
