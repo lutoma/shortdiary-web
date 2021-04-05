@@ -22,15 +22,14 @@
 					action="https://jsonplaceholder.typicode.com/posts/"
 					list-type="picture-card"
 					:thumbnail-mode="true"
-					:auto-upload="false"
-					:on-preview="handlePictureCardPreview"
-					:on-remove="handleRemove">
-						<i class="el-icon-plus"></i>
+					:auto-upload="false">
+
+					<i class="el-icon-plus"></i>
 				</el-upload>
 			</el-col>
 
 			<el-col :span="5" class="index-sidebar">
-				<el-form ref="form" :model="post" label-width="60px" @submit="savePost">
+				<el-form ref="form" :model="post" label-position="top" label-width="60px" @submit="savePost">
 					<el-form-item label="Date">
 						<el-select v-model="post.date" placeholder="Date">
 							<el-option label="Yesterday" value="yesterday"/>
@@ -46,15 +45,21 @@
 					</el-form-item>
 
 					<el-form-item label="Mood">
-						<el-rate v-model="post.mood"></el-rate>
-						    <el-slider v-model="post.mood" :step="1" :min="1" :max="10" show-stops />
+						<el-slider v-model="post.mood" :step="1" :min="1" :max="10" show-stops />
 					</el-form-item>
 
 					<el-form-item label="Location">
 						<span v-loading="!this.location_name">{{ this.location_name }}</span>
 					</el-form-item>
 
-					<!--<Map :zoom=11 :center="this.post.location" :options="{zoomControl: false}" :markers="[this.post.location]" />-->
+<!--
+					<Map
+						v-loading="this.post.location"
+						:zoom="11"
+						:center="this.post.location"
+						:options="{zoomControl: false}"
+						:markers="this.post.location ? [this.post.location] : []" />
+-->
 
 					<el-form-item>
 						<el-button type="primary" :disabled="!this.post.text.length" @click="savePost">
@@ -114,19 +119,25 @@ export default {
 
 		geoLocationCallback(position) {
 			this.post.location = [position.coords.latitude, position.coords.longitude]
-			/*this.$axios.$get(`https://api.maptiler.com/geocoding/${position.coords.longitude},${position.coords.latitude}.json?key=bfo60JdkhRcsQQlWkLEc`).then(loc => {
+			const url = `/maptiler/geocoding/${position.coords.longitude},${position.coords.latitude}.json`
+
+			this.$axios({ url, baseURL: '' }).then(({ data }) => {
+				if (!data || !data.features) {
+					return
+				}
+
 				// We don't want to go all the way down to street/subcity level
-				const features = loc.features.filter(feature => !['street', 'subcity'].includes(feature.place_type[0]))
+				const features = data.features.filter(feature => !['street', 'subcity'].includes(feature.place_type[0]))
 
 				// Now pick the most exact name the API has to offer (Usually 'city', sometimes 'county' or even 'country' if nothing better is available)
-				if(features) {
+				if (features) {
 					this.location_name = features[0].text
 				}
-			})*/
+			})
 		},
 
 		async savePost() {
-			if(!this.post.text.length) {
+			if (!this.post.text.length) {
 				return
 			}
 

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1>Discover</h1>
+		<h1>Post</h1>
 		<Post :post="post" v-if="post" v-loading="!post" />
 	</div>
 </template>
@@ -20,7 +20,7 @@ export default {
 	},
 
 	async fetch() {
-		this.post = await this.$axios.$get('/posts/random_public/')
-	}
+		this.post = await this.$axios.$get(`/posts/${ this.$route.params.pathMatch }/`)
+	},
 }
 </script>

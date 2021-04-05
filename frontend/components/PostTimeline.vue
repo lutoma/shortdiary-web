@@ -12,7 +12,13 @@
 				<h1 class="year-header" :id="`year-${year}`">{{ year }}</h1>
 				<template v-for="[month, posts] of months">
 					<h2 class="month-header">{{ getMonthName(month) }} <span>{{ year }}</span></h2>
-						<Post :post="post" v-for="post in posts" :key="post.id" />
+						<div class="post-container" v-for="post in posts" :key="post.id">
+							<div class="post-date">
+								<h3>{{ post.date.split('-')[2] }}</h3>
+								<div>Mon</div>
+							</div>
+							<Post :post="post" :show-date="false" />
+						</div>
 					</el-timeline>
 				</template>
 			</template>
@@ -156,8 +162,41 @@ export default {
 			font-weight: 200;
 		}
 
-		.post {
+		.post-container {
+			display: flex;
+			flex-direction: row;
 			margin: 30px 0;
+
+			.post-date {
+				flex: 0 0 50px;
+				height: 50px;
+				margin-right: 25px;
+				margin-top: 5px;
+
+				// FIXME Think long and hard about how to make this work in a properly responsive way
+				margin-left: -75px;
+
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+
+				border: 1px solid #000;
+				border-radius: 5px;
+
+				h3 {
+					font-size: 1.5rem;
+				}
+
+				div {
+					font-size: .8rem;
+					font-weight: 300;
+				}
+			}
+
+			.post {
+				flex-grow: 1;
+			}
 		}
 	}
 
@@ -186,8 +225,8 @@ export default {
 				}
 
 				&.active {
-					border-left-color: #7e7e7e;
-					font-weight: 600;
+					border-left-color: #CDB380;
+					font-weight: 700;
 				}
 			}
 		}
