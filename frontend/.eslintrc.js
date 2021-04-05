@@ -11,6 +11,7 @@ module.exports = {
 	},
 
 	extends: [
+		'plugin:vue/base',
 		'standard'
 		// 'plugin:vue/recommended'
 	],

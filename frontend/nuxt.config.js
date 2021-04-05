@@ -26,7 +26,7 @@ export default {
 
 	buildModules: [
 		'@nuxtjs/eslint-module',
-		'@nuxtjs/fontawesome',
+		'@nuxtjs/fontawesome'
 	],
 
 	modules: [
@@ -38,6 +38,11 @@ export default {
 
 	build: {
 		transpile: [/^element-ui/],
+		hotMiddleware: {
+			client: {
+				overlay: false
+			}
+		}
 	},
 
 	router: {
@@ -48,17 +53,17 @@ export default {
 	proxy: {
 		'/map/tiles/**/*.png': {
 			target: 'https://api.maptiler.com/maps/bright',
-			pathRewrite: {'^/map/tiles' : ''},
+			pathRewrite: { '^/map/tiles': '' },
 			onProxyReq: (proxyReq, req, res) => {
-				proxyReq.path += '?key=bfo60JdkhRcsQQlWkLEc';
-			},
+				proxyReq.path += '?key=bfo60JdkhRcsQQlWkLEc'
+			}
 		},
 		'/avatar/': 'https://www.gravatar.com/'
 	},
 
 	axios: {
-//		baseURL: 'https://api.shortdiary.me/v2',
-		baseURL: 'http://10.35.22.2:8000/api/v2',
+		// baseURL: 'https://api.shortdiary.me/v2',
+		baseURL: 'http://10.35.22.2:8000/api/v2'
 	},
 
 	auth: {
@@ -83,7 +88,7 @@ export default {
 			login: '/login',
 			logout: '/login',
 			callback: '/',
-			home: '/',
+			home: '/'
 		}
 	},
 
@@ -95,12 +100,12 @@ export default {
 				'faLockOpen',
 				'faKey',
 				'faPencil',
-				'faSignIn',
+				'faSignIn'
 			],
 			solid: [
 				'faWrench',
-				'faSignOut',
-			],
-		},
+				'faSignOut'
+			]
+		}
 	}
 }
