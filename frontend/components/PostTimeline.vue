@@ -9,9 +9,9 @@
 				Could not find any posts matching your filters.
 			</template>
 			<template v-for="[year, months] of sorted_posts">
-				<h1 :id="`year-${year}`">{{ year }}</h1>
+				<h1 class="year-header" :id="`year-${year}`">{{ year }}</h1>
 				<template v-for="[month, posts] of months">
-					<h2>{{ getMonthName(month) }} {{ year }}</h2>
+					<h2 class="month-header">{{ getMonthName(month) }} <span>{{ year }}</span></h2>
 						<Post :post="post" v-for="post in posts" :key="post.id" />
 					</el-timeline>
 				</template>
@@ -29,7 +29,7 @@
 
 				<h2>Filters</h2>
 				<el-form label-position="top" label-width="100px" :model="filter">
-					<el-form-item label="Text">
+					<el-form-item>
 						<el-input placeholder="Text" v-model="filter.text" />
 					</el-form-item>
 
@@ -146,8 +146,15 @@ export default {
 
 	.left {
 		height: 100%;
-
 		padding-right: 3rem;
+
+		.year-header {
+			margin-bottom: 1rem;
+		}
+
+		.month-header span {
+			font-weight: 200;
+		}
 
 		.post {
 			margin: 30px 0;
