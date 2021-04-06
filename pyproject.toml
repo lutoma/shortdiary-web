@@ -28,6 +28,8 @@ pycrypto = "^2.6.1"
 django-redis = "^4.12.1"
 django-rest-auth = "^0.9.5"
 django-cors-headers = "^3.7.0"
+django-storages = "^1.11.1"
+boto3 = "^1.17.45"
 
 
 [tool.poetry.dev-dependencies]
