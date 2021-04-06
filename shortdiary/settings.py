@@ -79,7 +79,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '38wok0-b&amp;0r31$+m4)24#)vrt(_$84mfi*2gqooc#*x3%-xop9'
+SECRET_KEY = 'this-is-not-the-production-key'
 
 # Legacy middlewares, need to migrate
 MIDDLEWARE_CLASSES = (
