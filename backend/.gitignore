@@ -1,8 +1,5 @@
 *.pyc
 development.db
-celery
-celerybeat-schedule
-.virtualenv
 asset
 static-collect
 shortdiary/settings_local.py
