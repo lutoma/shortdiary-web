@@ -14,7 +14,7 @@
 			</div>
 		</div>
 
-		<div class="text" v-html="text_html" />
+		<component class="text" v-bind:is="PostTextComponent" />
 
 		<CoolLightBox :items="[{src: this.post.image}]" :index="lightboxIndex" @close="lightboxIndex = null" :slideshow="false" />
 		<el-image v-if="post.image" :src="post.image" fit="fit" @click="lightboxIndex = 0" />
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-//import marked from 'marked'
 import CoolLightBox from 'vue-cool-lightbox'
 import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css'
 
@@ -38,14 +37,22 @@ export default {
 	},
 
 	data() {
-		const text = this.post.text || this.post.public_text
+		let text_html = this.post.text || this.post.public_text
+		text_html = text_html.replace(/(?:\r\n|\r|\n)/g, '<br>')
+		text_html = text_html.replace(/@\w+\b/g, '<n-link to="/dashboard?filter=$&">$&</n-link>')
 
 		return {
-			text_html: text.replace(/(?:\r\n|\r|\n)/g, '<br>'),
+			text_html,
 			lightboxIndex: null
+		}
+	},
 
-			// Rendering as markdown unfortunately breaks old posts
-			// text_html: marked(this.post.text)
+	// Render post text using a dynamically generated component. This is needed
+	// so we can use other Vue components, most notably <nuxt-link>, inside the
+	// rendered markup, which would not be possible with v-html.
+	computed: {
+		PostTextComponent() {
+			return { template: `<div>${this.text_html}</div>` }
 		}
 	}
 }
@@ -64,6 +71,7 @@ export default {
 
 		.el-button {
 			padding: 0;
+			margin-left: .5rem;
 		}
 	}
 
