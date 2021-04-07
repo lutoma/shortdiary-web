@@ -103,7 +103,7 @@ export default {
 			scroll_state: {
 				observer_els: {},
 				year: null,
-				month: '04'
+				month: null
 			},
 
 			filter: {
