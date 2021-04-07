@@ -1,15 +1,16 @@
 <template>
-	<el-row class="post-timeline">
+	<el-row class="post-timeline" :gutter="50">
 		<el-col :span="19" class="left" v-loading="!all_posts">
-			<!-- v-infinite-scroll="loadPosts" -->
 			<template v-if="!sorted_posts">
 				&nbsp;
 			</template>
+
 			<template v-if="sorted_posts && !sorted_posts.length">
-				Could not find any posts matching your filters.
+				<h2>Could not find any posts matching your filters.</h2>
 			</template>
-			<template v-for="[year, months] of sorted_posts">
-				<h1 class="year-header" :id="`year-${year}`">{{ year }}</h1>
+
+			<div ref="yearContainer" v-for="[year, months] of sorted_posts" :key="year" :id="`year-${year}`" :data-year="year">
+				<h1 class="year-header">{{ year }}</h1>
 				<template v-for="[month, posts] of months">
 					<h2 class="month-header">{{ getMonthName(month) }} <span>{{ year }}</span></h2>
 						<div class="post-container" v-for="post in posts" :key="post.id">
@@ -21,15 +22,15 @@
 						</div>
 					</el-timeline>
 				</template>
-			</template>
+			</div>
 		</el-col>
 
 		<el-col :span="5" class="right">
 			<slot name="sidebar"></slot>
 			<div class="timeline-options">
 				<ul class='datepicker'>
-					<li v-for="[year, _] of sorted_posts" :class="year == active_year ? 'active': ''" @click="datePickerSelect" :data-scrollto="year">
-						<a :href="`#year-${year}`" :data-scrollto="year">{{ year }}</a>
+					<li v-for="[year, _] of sorted_posts" :class="year == visible_year ? 'active': ''" @click="datePickerSelect" :data-scrollto="year">
+						{{ year }}
 					</li>
 				</ul>
 
@@ -40,10 +41,14 @@
 					</el-form-item>
 
 					<el-form-item>
-						<el-switch v-model="filter.need_image" active-text="With image" />
+						<el-radio-group v-model="filter.image" size="small">
+							<el-radio-button :label="null">Any</el-radio-button>
+							<el-radio-button :label="true"><fa :icon="['far', 'images']" /> Has images</el-radio-button>
+							<el-radio-button :label="false"><fa :icon="['far', 'empty-set']" /> No image</el-radio-button>
+						</el-radio-group>
 					</el-form-item>
 
-					<el-form-item label="Visibility">
+					<el-form-item>
 						<el-radio-group v-model="filter.visibility" size="small">
 							<el-radio-button :label="null">Any</el-radio-button>
 							<el-radio-button label="public"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
@@ -72,11 +77,12 @@ export default {
 	data() {
 		return {
 			all_posts: null,
-			active_year: null,
+			visible_year: null,
+			scroll_state: {},
 
 			filter: {
-				text: '',
-				need_image: false,
+				text: this.$route.query.filter || '',
+				image: null,
 				visibility: null,
 				mood: [1, 10],
 			}
@@ -93,11 +99,11 @@ export default {
 				.filter(x => x.text.includes(this.filter.text))
 				.filter(x => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1])
 
-			if(this.filter.need_image) {
-				filtered = filtered.filter('image')
+			if(this.filter.image !== null) {
+				filtered = filtered.filter({'image': this.filter.image})
 			}
 
-			if(this.filter.visibility) {
+			if(this.filter.visibility !== null) {
 				filtered = filtered.filter({'public': this.filter.visibility === 'public'})
 			}
 
@@ -119,7 +125,6 @@ export default {
 
 	async fetch() {
 		this.all_posts = await this.$axios.$get('/posts/')
-		//this.active_year = this.sorted_posts[0][0]
 	},
 
 	methods: {
@@ -127,17 +132,50 @@ export default {
 			return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][Number(num) - 1]
 		},
 
-		loadPosts() {
-			console.log('loading new posts')
-		},
-
 		datePickerSelect(event) {
 			const year = event.target.dataset.scrollto
 			const dest = document.querySelector(`#year-${year}`)
-			dest.scrollIntoView({ behavior: 'smooth' })
-			this.active_year = year
+
+			// Cannot use ScrollIntoView here due to the abolute positioned
+			// navbar that would cover up the heading
+			window.scrollTo({ top: dest.offsetTop, left: 0, behavior: 'smooth' })
+		},
+
+		intersectionCallback(update, observer) {
+			// Handle IntersectionObserver callbacks. We need to store state
+			// here to account for situations where two elements are visible at
+			// once, and then later one of those goes out of view. The update
+			// event in these cases will only list the element that has gone
+			// out of view, but not the one that remains visible.
+
+			// Turn into an Object for easier deduplication
+			update = update.reduce((obj, item) => (obj[item.target.dataset.year] = item, obj), {});
+			Object.assign(this.scroll_state, update)
+
+			const entries = Object.values(this.scroll_state).filter(x => x.isIntersecting)
+			if(entries && entries.length) {
+				this.visible_year = entries[0].target.dataset.year
+			}
 		}
 	},
+
+	updated() {
+		this.$nextTick(() => {
+			const elements = this.$refs.yearContainer
+			if(!elements) {
+				return
+			}
+
+			const observer = new IntersectionObserver(this.intersectionCallback, {
+				rootMargin: '30px 0px 0px 0px',
+				//threshold: [0, 0.25, 0.5, 0.75, 1]
+			})
+
+			for(const el of elements) {
+				observer.observe(el)
+			}
+		})
+	}
 }
 </script>
 
@@ -152,10 +190,13 @@ export default {
 
 	.left {
 		height: 100%;
-		padding-right: 3rem;
 
 		.year-header {
 			margin-bottom: 1rem;
+
+			&:not(:first-of-type) {
+				margin-top: 4rem;
+			}
 		}
 
 		.month-header span {
@@ -206,6 +247,20 @@ export default {
 			top: 80px;
 		}
 
+		.el-radio-group {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+
+			.el-radio-button {
+				flex: 1 1 33%;
+
+				span {
+					width: 100%;
+				}
+			}
+		}
+
 		.datepicker {
 			margin: 0;
 			padding: 0;
@@ -216,12 +271,14 @@ export default {
 				padding-left: 8px;
 				margin-bottom: 4px;
 				padding: 3px 8px;
-
 				border-left: 4px solid #dedede;
 				transition: border-left-color .3s;
+				cursor: pointer;
+				color: #036564;
 
 				&:hover {
 					border-left-color: #aeaeae;
+					text-decoration: underline;
 				}
 
 				&.active {
