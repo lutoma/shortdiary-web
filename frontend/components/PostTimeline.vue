@@ -25,14 +25,13 @@
 					:data-month="month">
 
 					<h2 class="month-header">{{ getMonthName(month) }} <span>{{ year }}</span></h2>
-						<div class="post-container" v-for="post in posts" :key="post.id">
-							<div class="post-date">
-								<h3>{{ post.date.split('-')[2] }}</h3>
-								<div>Mon</div>
-							</div>
-							<Post :post="post" :show-date="false" />
+					<div class="post-container" v-for="post in posts" :key="post.id">
+						<div class="post-date">
+							<h3>{{ post.date.split('-')[2] }}</h3>
+							<div>Mon</div>
 						</div>
-					</el-timeline>
+						<Post :post="post" :show-date="false" />
+					</div>
 				</div>
 			</div>
 		</el-col>
@@ -111,14 +110,14 @@ export default {
 				text: this.$route.query.filter || '',
 				image: null,
 				visibility: null,
-				mood: [1, 10],
+				mood: [1, 10]
 			}
 		}
 	},
 
 	computed: {
 		sorted_posts() {
-			if(!this.all_posts) {
+			if (!this.all_posts) {
 				return null
 			}
 
@@ -126,12 +125,12 @@ export default {
 				.filter(x => x.text.includes(this.filter.text))
 				.filter(x => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1])
 
-			if(this.filter.image !== null) {
-				filtered = filtered.filter({'image': this.filter.image})
+			if (this.filter.image !== null) {
+				filtered = filtered.filter({ image: this.filter.image })
 			}
 
-			if(this.filter.visibility !== null) {
-				filtered = filtered.filter({'public': this.filter.visibility === 'public'})
+			if (this.filter.visibility !== null) {
+				filtered = filtered.filter({ public: this.filter.visibility === 'public' })
 			}
 
 			return filtered
@@ -177,13 +176,13 @@ export default {
 			// out of view, but not the one that remains visible.
 
 			// Turn into an Object for easier deduplication
-			update = update.reduce((obj, item) => (obj[item.target.id] = item, obj), {});
+			update = update.reduce((obj, item) => (obj[item.target.id] = item, obj), {})
 			Object.assign(this.scroll_state.observer_els, update)
 
 			const entries = Object.values(this.scroll_state.observer_els)
 				.filter(x => x.isIntersecting)
 
-			if(entries && entries.length) {
+			if (entries && entries.length) {
 				this.scroll_state.year = entries[0].target.dataset.year
 				this.scroll_state.month = entries[0].target.dataset.month
 			}
@@ -193,16 +192,16 @@ export default {
 	updated() {
 		this.$nextTick(() => {
 			const elements = this.$refs.monthContainer
-			if(!elements) {
+			if (!elements) {
 				return
 			}
 
 			const observer = new IntersectionObserver(this.intersectionCallback, {
-				rootMargin: '-20% 0px 0px 0px',
-				//threshold: [0, 0.25, 0.5, 0.75, 1]
+				rootMargin: '-20% 0px 0px 0px'
+				// threshold: [0, 0.25, 0.5, 0.75, 1]
 			})
 
-			for(const el of elements) {
+			for (const el of elements) {
 				observer.observe(el)
 			}
 		})
