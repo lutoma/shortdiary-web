@@ -9,9 +9,21 @@
 				<h2>Could not find any posts matching your filters.</h2>
 			</template>
 
-			<div ref="yearContainer" v-for="[year, months] of sorted_posts" :key="year" :id="`year-${year}`" :data-year="year">
+			<div
+				v-for="[year, months] of sorted_posts"
+				:key="year"
+				:id="`year-${year}`">
+
 				<h1 class="year-header">{{ year }}</h1>
-				<template v-for="[month, posts] of months">
+
+				<div
+					ref="monthContainer"
+					v-for="[month, posts] of months"
+					:key="`${year}-${month}`"
+					:id="`month-${year}-${month}`"
+					:data-year="year"
+					:data-month="month">
+
 					<h2 class="month-header">{{ getMonthName(month) }} <span>{{ year }}</span></h2>
 						<div class="post-container" v-for="post in posts" :key="post.id">
 							<div class="post-date">
@@ -21,16 +33,27 @@
 							<Post :post="post" :show-date="false" />
 						</div>
 					</el-timeline>
-				</template>
+				</div>
 			</div>
 		</el-col>
 
 		<el-col :span="5" class="right">
 			<slot name="sidebar"></slot>
 			<div class="timeline-options">
-				<ul class='datepicker'>
-					<li v-for="[year, _] of sorted_posts" :class="year == visible_year ? 'active': ''" @click="datePickerSelect" :data-scrollto="year">
-						{{ year }}
+				<ul class="datepicker">
+					<li v-for="[year, months] of sorted_posts" :class="year == scroll_state.year ? 'active': ''">
+						<div @click="datePickerSelect" :data-scrolltarget="`#year-${year}`">{{ year }}</div>
+
+						<ul>
+							<li
+								v-for="[month, _] of months"
+								:class="month == scroll_state.month ? 'active': ''"
+								:data-scrolltarget="`#month-${year}-${month}`"
+								@click="datePickerSelect">
+
+								{{ getMonthName(month) }}
+							</li>
+						</ul>
 					</li>
 				</ul>
 
@@ -77,8 +100,12 @@ export default {
 	data() {
 		return {
 			all_posts: null,
-			visible_year: null,
-			scroll_state: {},
+
+			scroll_state: {
+				observer_els: {},
+				year: null,
+				month: '04'
+			},
 
 			filter: {
 				text: this.$route.query.filter || '',
@@ -117,7 +144,7 @@ export default {
 						.toPairs()
 						.value()
 
-					return [x[0], mposts];
+					return [x[0], mposts]
 				})
 				.value()
 		}
@@ -133,12 +160,13 @@ export default {
 		},
 
 		datePickerSelect(event) {
-			const year = event.target.dataset.scrollto
-			const dest = document.querySelector(`#year-${year}`)
+			const dest = document.querySelector(event.target.dataset.scrolltarget)
 
 			// Cannot use ScrollIntoView here due to the abolute positioned
 			// navbar that would cover up the heading
-			window.scrollTo({ top: dest.offsetTop, left: 0, behavior: 'smooth' })
+			if (dest) {
+				window.scrollTo({ top: dest.offsetTop, left: 0, behavior: 'smooth' })
+			}
 		},
 
 		intersectionCallback(update, observer) {
@@ -149,25 +177,28 @@ export default {
 			// out of view, but not the one that remains visible.
 
 			// Turn into an Object for easier deduplication
-			update = update.reduce((obj, item) => (obj[item.target.dataset.year] = item, obj), {});
-			Object.assign(this.scroll_state, update)
+			update = update.reduce((obj, item) => (obj[item.target.id] = item, obj), {});
+			Object.assign(this.scroll_state.observer_els, update)
 
-			const entries = Object.values(this.scroll_state).filter(x => x.isIntersecting)
+			const entries = Object.values(this.scroll_state.observer_els)
+				.filter(x => x.isIntersecting)
+
 			if(entries && entries.length) {
-				this.visible_year = entries[0].target.dataset.year
+				this.scroll_state.year = entries[0].target.dataset.year
+				this.scroll_state.month = entries[0].target.dataset.month
 			}
 		}
 	},
 
 	updated() {
 		this.$nextTick(() => {
-			const elements = this.$refs.yearContainer
+			const elements = this.$refs.monthContainer
 			if(!elements) {
 				return
 			}
 
 			const observer = new IntersectionObserver(this.intersectionCallback, {
-				rootMargin: '30px 0px 0px 0px',
+				rootMargin: '-20% 0px 0px 0px',
 				//threshold: [0, 0.25, 0.5, 0.75, 1]
 			})
 
@@ -266,24 +297,51 @@ export default {
 			padding: 0;
 			margin-bottom: 2rem;
 
-			li {
-				list-style-type: none;
+			> li {
 				padding-left: 8px;
 				margin-bottom: 4px;
-				padding: 3px 8px;
-				border-left: 4px solid #dedede;
-				transition: border-left-color .3s;
+				list-style-type: none;
 				cursor: pointer;
 				color: #036564;
 
-				&:hover {
-					border-left-color: #aeaeae;
-					text-decoration: underline;
+				// Year display
+				div {
+					border-left: 4px solid #dedede;
+					transition: border-left-color .3s;
+					padding: .3rem .5rem;
+
+					&:hover {
+						border-left-color: #aeaeae;
+						text-decoration: underline;
+					}
+				}
+
+				// Sub-menu (months)
+				ul {
+					display: none;
+					padding: 0;
+					padding-left: 1rem;
+					font-size: .95em;
+					margin: .2rem 0;
+
+					li {
+						list-style-type: none;
+
+						&.active {
+							font-weight: 600;
+						}
+					}
 				}
 
 				&.active {
-					border-left-color: #CDB380;
-					font-weight: 700;
+					div {
+						border-left-color: #CDB380;
+						font-weight: 700;
+					}
+
+					ul {
+						display: block;
+					}
 				}
 			}
 		}
