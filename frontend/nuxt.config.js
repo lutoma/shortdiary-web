@@ -58,6 +58,11 @@ export default {
 			client: {
 				overlay: false
 			}
+		},
+
+		// Needed for dynamic template in Post.vue
+		extend(config) {
+			config.resolve.alias.vue = 'vue/dist/vue.common'
 		}
 	},
 
@@ -117,14 +122,16 @@ export default {
 				'faKey',
 				'faPencil',
 				'faSignIn',
-				'faColumns',
+				'faList',
 				'faChartBar',
 				'faMedal',
 				'faWrench',
 				'faSignOut',
 				'faCompass',
 				'faUserFriends',
-				'faLink'
+				'faLink',
+				'faImages',
+				'faEmptySet'
 			]
 		}
 	}

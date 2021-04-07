@@ -36,7 +36,7 @@ export default {
 
 		if (this.$auth.loggedIn) {
 			nav_items = [
-				{ path: '/dashboard', label: 'Dashboard', icon: 'columns' },
+				{ path: '/dashboard', label: 'Dashboard', icon: 'list' },
 				{ path: '/new', label: 'New entry', icon: 'pencil' },
 				{ path: '/stats', label: 'Stats', icon: 'chart-bar' },
 				{ path: '/leaderboard', label: 'Leaderboard', icon: 'medal' },
