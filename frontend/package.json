@@ -14,6 +14,7 @@
     "@fontsource/fira-sans": "^4.2.2",
     "@fortawesome/pro-regular-svg-icons": "^5.15.3",
     "@fortawesome/pro-solid-svg-icons": "^5.15.3",
+    "@hcaptcha/vue-hcaptcha": "^0.3.0",
     "@nuxtjs/auth-next": "5.0.0-1616003482.75c20e6",
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/fontawesome": "^1.1.2",
@@ -22,7 +23,6 @@
     "core-js": "^3.9.1",
     "element-ui": "^2.15.1",
     "lodash": "^4.17.21",
-    "marked": "^2.0.1",
     "md5": "^2.3.0",
     "node-sass": "^5.0.0",
     "nuxt": "^2.15.3",
@@ -30,7 +30,8 @@
     "sass-loader": "^10.1.1",
     "vue-calendar-heatmap": "^0.8.4",
     "vue-chartjs": "^3.5.1",
-    "vue-cool-lightbox": "^2.7.1"
+    "vue-cool-lightbox": "^2.7.1",
+    "vue-mention": "^1.0.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-module": "^3.0.2",

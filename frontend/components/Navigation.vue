@@ -31,25 +31,27 @@ export default {
 		}
 
 	},
-	data() {
-		let nav_items
+	computed: {
+		nav_items() {
+			let items
 
-		if (this.$auth.loggedIn) {
-			nav_items = [
-				{ path: '/dashboard', label: 'Dashboard', icon: 'list' },
-				{ path: '/new', label: 'New entry', icon: 'pencil' },
-				{ path: '/stats', label: 'Stats', icon: 'chart-bar' },
-				{ path: '/leaderboard', label: 'Leaderboard', icon: 'medal' },
-				{ path: '/discover', label: 'Discover', icon: 'compass' }
-			]
-		} else {
-			nav_items = [
-				{ path: '/login', label: 'Sign in', icon: 'sign-in' },
-				{ path: '/signup', label: 'Join', icon: 'user-friends' }
-			]
+			if (this.$auth.loggedIn) {
+				items = [
+					{ path: '/dashboard', label: 'Dashboard', icon: 'list' },
+					{ path: '/new', label: 'New entry', icon: 'pencil' },
+					{ path: '/stats', label: 'Stats', icon: 'chart-bar' },
+					{ path: '/leaderboard', label: 'Leaderboard', icon: 'medal' },
+					{ path: '/discover', label: 'Discover', icon: 'compass' }
+				]
+			} else {
+				items = [
+					{ path: '/login', label: 'Sign in', icon: 'sign-in' },
+					{ path: '/join', label: 'Join', icon: 'user-friends' }
+				]
+			}
+
+			return items
 		}
-
-		return { nav_items }
 	}
 }
 </script>

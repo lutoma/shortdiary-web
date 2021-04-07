@@ -3,16 +3,19 @@
 		<h1>New entry</h1>
 		<el-row :gutter="50">
 			<el-col :span="19" class="main-area">
-				<el-input
-					ref="text"
-					type="textarea"
-					:autosize="{ minRows: 15 }"
-					:placeholder="`Jot down ${this.post.date}'s adventures here`"
-					v-model="post.text"
-					autofocus
-					@input="updateLengthCounter()" />
+				<Mentionable :keys="['@']" :items="items" offset="6" insert-space>
 
-				<div ref="lengthCounter" class="length-counter">
+					<el-input
+						ref="text"
+						type="textarea"
+						:autosize="{ minRows: 15 }"
+						:placeholder="`Jot down ${this.post.date}'s adventures here`"
+						v-model="post.text"
+						autofocus
+						@input="updateLengthCounter()" />
+				</Mentionable>
+
+				<div class="length-counter">
 					<template v-if="text_length.chars > 800">Wow, what an eventful day!</template>
 					{{ text_length.sentences}} sentences, {{ text_length.words }} words, {{ text_length.chars }} characters
 				</div>
@@ -74,10 +77,12 @@
 </template>
 
 <script>
+import { Mentionable } from 'vue-mention'
 import Map from '~/components/Map'
 
 export default {
 	components: {
+		Mentionable,
 		Map
 	},
 	data() {
@@ -110,6 +115,7 @@ export default {
 
 	methods: {
 		updateLengthCounter() {
+			// FIXME Should probably be a computed property
 			this.text_length = {
 				chars: this.post.text.length,
 				words: this.post.text.split(' ').length - 1,
@@ -163,7 +169,7 @@ export default {
 		flex-grow: 1;
 	}
 
-	.main-area {
+	.main-area, .mentionable {
 		height: 100%;
 		display: flex;
 		flex-direction: column;

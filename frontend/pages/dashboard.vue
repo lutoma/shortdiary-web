@@ -9,7 +9,7 @@
 
 					<ul class="stats">
 						<li>{{ $auth.user.streak }} day streak</li>
-						<li>440 total posts</li>
+						<li>{{ $auth.user.posts_count }} total posts</li>
 						<li>{{ $auth.user.post_chars }} total chars</li>
 					</ul>
 				</div>
@@ -39,10 +39,10 @@ export default {
 	margin-bottom: 2rem;
 
 	.avatar {
-	    float: right;
-	    width: 65px;
-	    height: 65px;
-	    border-radius: 50%;
+		float: right;
+		width: 65px;
+		height: 65px;
+		border-radius: 50%;
 	}
 }
 </style>

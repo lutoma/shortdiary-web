@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h1>Post</h1>
-		<Post :post="post" v-if="post" v-loading="!post" />
+		<Post :post="post" v-if="post" v-loading="!post" :show-permalink="false" />
 	</div>
 </template>
 
