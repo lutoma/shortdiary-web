@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
 	post_chars = serializers.CharField(source='get_post_characters')
+	posts_avg_chars = serializers.CharField(source='get_average_post_length')
 	streak = serializers.CharField(source='get_streak')
 
 	class Meta:
@@ -15,6 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 			'language',
 			'is_staff',
 			'post_chars',
+			'posts_avg_chars',
 			'posts_count',
 			'streak',
 		]
@@ -48,5 +50,5 @@ class PrivatePostSerializer(PostSerializer):
 		fields = PostSerializer.Meta.fields + ['text']
 
 
-class UserStatsSerializer():
-	pass
+# class UserStatsSerializer():
+# 	pass
