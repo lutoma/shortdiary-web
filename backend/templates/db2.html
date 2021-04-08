@@ -116,9 +116,8 @@
 									</div>
 
 									{{# if this.image }}
-										<!-- Handlebars, you have some seriously weird syntax. -->
-										<a href='{{ ../../../../media_url }}{{ this.image }}' target='_blank'>
-											<img class='timeline-post-image' src='{{ ../../../../media_url }}{{ this.image }}' />
+										<a href='{{ this.image }}' target='_blank'>
+											<img class='timeline-post-image' src='{{ this.image }}' />
 										</a>
 									{{/if}}
 

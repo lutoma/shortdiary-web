@@ -88,7 +88,7 @@
 	{% endif %}
 
 	{% if post.image %}
-		<a href="{{ MEDIA_URL }}{{ post.image }}" target="_blank"><img itemprop="image" class="post-image" src="{{ MEDIA_URL }}{{ post.image }}" /></a>
+		<a href="{{ post.image.url }}" target="_blank"><img itemprop="image" class="post-image" src="{{ post.image.url }}" /></a>
 	{% endif %}
 
 	{% if user.is_authenticated and user == post.author and post.is_editable %}
