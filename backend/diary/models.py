@@ -54,15 +54,12 @@ class DiaryUser(AbstractUser):
 
 		return grid
 
-	def get_posts(self):
-		return Post.objects.filter(author=self)
-
 	def get_post_characters(self):
-		return reduce(lambda x, post: x + len(post.text), self.get_posts(), 0)
+		return reduce(lambda x, post: x + len(post.text), self.posts.all(), 0)
 
 	def get_average_post_length(self):
 		# Todo replace this with an QuerySet aggregate
-		own_posts = self.get_posts().count()
+		own_posts = self.posts.count()
 		if own_posts < 1:
 			return 0
 
@@ -73,7 +70,7 @@ class DiaryUser(AbstractUser):
 		Returns the most frequently mentioned nicknames of this user
 		'''
 
-		names = list(map(lambda post: post.get_mentions(), self.get_posts()))
+		names = list(map(lambda post: post.get_mentions(), self.posts.all()))
 
 		if len(names) < 1:
 			return
