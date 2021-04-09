@@ -117,7 +117,7 @@ class PostTimeline(ListAPIView):
 		# This is invalidated as soon as a new post is written, so use a long
 		# lifetime. Don't make it infinite though so as to not fill up Redis
 		# with timelines of inactive users
-		cache.set(cache_key, sorted_posts, 2419200)
+		cache.set(cache_key, sorted_posts, 604800)
 
 		return Response(sorted_posts)
 

@@ -70,3 +70,6 @@ AWS_QUERYSTRING_AUTH = True
 AWS_S3_FILE_OVERWRITE = False
 AWS_S3_ENDPOINT_URL = 'https://s3.dbl.cloud.syseleven.net'
 AWS_S3_REGION_NAME = 'dbl'
+
+# Must not be shorter than timeline cache time to avoid invalid URLs being returned
+AWS_QUERYSTRING_EXPIRE = 604800
