@@ -33,7 +33,7 @@ class DiaryUser(AbstractUser):
 			+ settings.SECRET_KEY.encode('utf-8')).hexdigest()
 
 	def send_verification_mail(self):
-		send_email(self.author, 'email-verification', {'hash': self.get_verification_hash()})
+		send_email(self, 'email-verification', {'hash': self.get_verification_hash()})
 
 	def get_streak(self):
 		cached_streak = cache.get(f'diary_{self.id}_streak')
