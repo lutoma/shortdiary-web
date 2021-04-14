@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
-from django.db.models.functions import Length
+from django.db.models.functions import Length, Coalesce
 from django.db.models import Sum, Avg
 from django.conf import settings
 from django_q.tasks import async_task
@@ -57,10 +57,10 @@ class DiaryUser(AbstractUser):
 		return grid
 
 	def get_post_characters(self):
-		return self.posts.aggregate(sum=Sum(Length('text')))['sum']
+		return self.posts.aggregate(sum=Coalesce(Sum(Length('text')), 0))['sum']
 
 	def get_average_post_length(self):
-		return int(self.posts.aggregate(avg=Avg(Length('text')))['avg'])
+		return int(self.posts.aggregate(avg=Coalesce(Avg(Length('text')), 0))['avg'])
 
 	def get_mention_toplist(self):
 		'''
