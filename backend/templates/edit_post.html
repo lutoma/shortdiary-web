@@ -79,13 +79,13 @@
 		<p>{% trans "You've already written posts for today and yesterday. Good work! Unfortunately, this also means you can't write any more new posts today :(. Check back tomorrow!" %}</p>
 	{% else %}
 		{% if edit_post %}
-				You're currently editing your {{ edit_post.get_user_id|ordinal }} post, which happens to be from {{ edit_post.date }} (That's {{ edit_post.date|naturalday }}).
+				You're currently editing your post from {{ edit_post.date|naturalday }} ({{ edit_post.date }}).
 		{% endif %}
 
 		{% if form.errors %}
 			<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
 		{% endif %}
-		
+
 		<form action='' method='POST' enctype='multipart/form-data' {% if not edit_post %} id='newpost-form' {% endif %}>
 			{% csrf_token %}
 
@@ -121,25 +121,25 @@
 			<p><small style='margin-top: 5px;'>{% trans '<em>Hint</em>: If you prefix a name with an at sign like this: @Joe, it will be hidden in public posts.' %}</small></p>
 
 			<textarea id="text-input" name='text' placeholder="To be or not to be, that is the question: Whether 'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles, and by opposing, end them? To die: to sleep; no more; and by a sleep to say we end the heart-ache and the thousand natural shocks that flesh is heir to, ’tis a consummation devoutly to be wish’d. To die, to sleep; to sleep: perchance to dream: ay, there’s the rub;" required>{% if form.text.value %}{{ form.text.value }}{% endif %}{{ edit_post.text }}</textarea>
-			
+
 			<small id="new-post-char-counter">0 {% trans 'sentences' %}, 0 {% trans 'words' %}, 0 {% trans 'characters' %}</small>
 
 			<p>{% trans 'This is part of ' context 'In front of part of input field on new post page' %}<input type='text' name='part_of' placeholder="{% trans 'e.g. Trip to San Francisco, Comic Con, Weekend with Tom, Mountain Expedition' %}" style='width: 622px' /></p>
-			
+
 			{% if not edit_post %}
 				<input id='image-upload-input' type='file' name='image' onchange="image_field_change(this);" style='display: none;' />
 				<div id='image-upload'>
 						<p id='image-upload-info'>{% trans '<strong>Click</strong> to upload image' %}</p>
 						<!--<p id='image-upload-info-small'>(or click)</p>-->
-					
+
 				</div>
 			{% endif %}
 
 
-			{{ form.text.errors }}	
+			{{ form.text.errors }}
 
 			{{ form.date.errors }}
-			
+
 			{{ form.mood.errors }}
 
 			{{ form.file.errors }}

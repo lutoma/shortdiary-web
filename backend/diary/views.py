@@ -123,9 +123,6 @@ def show_post(request, post_id):
 		'language': post.get_language_name(locale=get_language_from_request(request))
 	}
 
-	if post.author == request.user:
-		context['title'] = _('Your post #{}').format(post.get_user_id(), post.date)
-
 	return render(request, 'show_post.html', context=context)
 
 

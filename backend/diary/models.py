@@ -114,16 +114,6 @@ class Post(models.Model):
 	def __str__(self):
 		return f'{self.author} on {self.date}'
 
-	def get_user_id(self):
-		"""
-		Get user specific post ID (Aka: The how-manieth post of this user is this?)
-		"""
-		return len(Post.objects.filter(author=self.author, date__lt=self.date)) + 1
-
-	get_user_id.admin_order_field = 'date'
-	get_user_id.boolean = False
-	get_user_id.short_description = 'User post ID'
-
 	def is_editable(self):
 		"""
 		Should this post still be editable by the user?
