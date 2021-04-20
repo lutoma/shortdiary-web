@@ -13,10 +13,9 @@ from diary.forms import PostForm, SignUpForm, AccountSettingsForm
 from django.conf import settings
 from django.core.cache import cache
 import diary.tasks as tasks
+from django.utils import translation
 from django.db.models import Q, Count, Avg
 from django_q.tasks import async_task
-
-from django.utils.translation import get_language_from_request
 
 
 def index(request):
@@ -120,15 +119,23 @@ def show_post(request, post_id):
 	context = {
 		'post': post,
 		'title': _('Post #{} from {}').format(post.id, post.date),
-		'language': post.get_language_name(locale=get_language_from_request(request))
+		'language': post.get_language_name(locale=translation.get_language_from_request(request))
 	}
 
 	return render(request, 'show_post.html', context=context)
 
 
 def switch_language(request, language):
-	request.session['django_language'] = language
-	return HttpResponseRedirect('/')
+	response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+	translation.activate(language)
+
+	response.set_cookie(
+		settings.LANGUAGE_COOKIE_NAME, language,
+		max_age=settings.LANGUAGE_COOKIE_AGE,
+		path=settings.LANGUAGE_COOKIE_PATH,
+		domain=settings.LANGUAGE_COOKIE_DOMAIN)
+
+	return response
 
 
 def sign_up(request):
@@ -302,7 +309,7 @@ def explore(request):
 	context = {
 		'title': 'Explore',
 		'post': post,
-		'language': post.get_language_name(locale=get_language_from_request(request)),
+		'language': post.get_language_name(locale=translation.get_language_from_request(request)),
 	}
 	return render(request, 'show_post.html', context=context)
 
