@@ -142,6 +142,7 @@ def sign_up(request):
 	if not request.method == 'POST':
 		context = {
 			'title': _('Sign up'),
+			'form': SignUpForm()
 		}
 
 		return render(request, 'sign_up.html', context=context)

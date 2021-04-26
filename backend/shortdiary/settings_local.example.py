@@ -73,3 +73,7 @@ AWS_S3_REGION_NAME = 'dbl'
 
 # Must not be shorter than timeline cache time to avoid invalid URLs being returned
 AWS_QUERYSTRING_EXPIRE = 604800
+
+# hcaptcha.com
+HCAPTCHA_SITEKEY = ''
+HCAPTCHA_SECRET = ''

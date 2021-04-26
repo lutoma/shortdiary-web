@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{%block content %}
+{% block content %}
 	{% if form.errors %}
 		<p>{% trans 'There were some errors :(. Please correct them and try again.' %}</p>
 	{% endif %}
@@ -19,6 +19,10 @@
 
 		<input type='password' name='password' maxlength='100' placeholder='password' value="{% if form.password.value %}{{ form.password.value }}{% endif %}" />
 		{{ form.password.errors }}
+
+		<div style="margin-top: 1rem;">
+			{{ form.hcaptcha }}
+		</div>
 
 		<button type='submit' style='height: 35px;'>
 			<i class='icon-bolt'></i> {% trans "Make it so!" %}

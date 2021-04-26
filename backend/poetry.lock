@@ -153,6 +153,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "django-hcaptcha"
+version = "0.1.0"
+description = "Django hCaptcha provides a simple way to protect your django forms using hCaptcha"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "django-otp"
 version = "1.0.2"
 description = "A pluggable framework for adding two-factor authentication to Django using one-time passwords."
@@ -571,7 +579,7 @@ pycryptodome = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.2"
-content-hash = "6090bffb3f59c7446c367ecd8285addf5be94505c4ba743f99623a087a0b10d5"
+content-hash = "14ed74486d051f7ad69da8c16e6656af6b7c0b7ba8eb731294772a65d54af5af"
 
 [metadata.files]
 ansicon = [
@@ -629,6 +637,9 @@ django-formtools = [
 django-gravatar2 = [
     {file = "django-gravatar2-1.4.4.tar.gz", hash = "sha256:c813280967511ced93eea0359f60e5369c35b3311efe565c3e5d4ab35c10c9ee"},
     {file = "django_gravatar2-1.4.4-py2.py3-none-any.whl", hash = "sha256:545a6c2c5c624c7635dec29c7bc0be1a2cb89c9b8821af8616ae9838827cc35b"},
+]
+django-hcaptcha = [
+    {file = "django-hCaptcha-0.1.0.tar.gz", hash = "sha256:2b80197c07bb8444249bcce3758b0472d369cca309fb02d7abcd0a856431b76b"},
 ]
 django-otp = [
     {file = "django-otp-1.0.2.tar.gz", hash = "sha256:f523fb9dec420f28a29d3e2ad72ac06f64588956ed4f2b5b430d8e957ebb8287"},

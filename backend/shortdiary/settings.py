@@ -153,6 +153,7 @@ INSTALLED_APPS = (
 	'two_factor',
 	'django_q',
 	'corsheaders',
+	'hcaptcha',
 )
 
 LOGGING = {
@@ -211,6 +212,10 @@ TWILIO_AUTH_TOKEN = None
 TWILIO_CALLER_ID = None
 
 POSTMARK_KEY = None
+
+HCAPTCHA_SITEKEY = None
+HCAPTCHA_SECRET = None
+
 
 # Use the file local_settings.py to overwrite the defaults with your own settings
 try:

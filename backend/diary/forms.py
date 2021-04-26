@@ -1,5 +1,6 @@
 import django.forms as forms
 from diary.models import Post, DiaryUser
+from hcaptcha.fields import hCaptchaField
 
 
 class PostForm(forms.ModelForm):
@@ -10,6 +11,8 @@ class PostForm(forms.ModelForm):
 
 
 class SignUpForm(forms.ModelForm):
+	hcaptcha = hCaptchaField()
+
 	class Meta:
 		model = DiaryUser
 		fields = ('username', 'email', 'password')
