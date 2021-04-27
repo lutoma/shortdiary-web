@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from .views import (
-	CurrentUserView, PostViewSet, RandomPublicPostView
+	CurrentUserView, PostViewSet, RandomPublicPostView, LeaderboardView
 )
 
 
@@ -15,5 +15,6 @@ urlpatterns = [
 	path('user/', CurrentUserView.as_view()),
 # 	path('stats/', UserStatsView.as_view()),
 	path('posts/random_public/', RandomPublicPostView.as_view(), name='posts-random'),
+	path('leaderboard/', LeaderboardView.as_view(), name='leaderboard'),
 	path('', include(router.urls)),
 ]

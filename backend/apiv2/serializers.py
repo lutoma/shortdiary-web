@@ -50,5 +50,7 @@ class PrivatePostSerializer(PostSerializer):
 		fields = PostSerializer.Meta.fields + ['text']
 
 
-# class UserStatsSerializer():
-# 	pass
+class LeaderboardSerializer(serializers.Serializer):
+	number_of_posts = serializers.ListField(child=serializers.DictField(child=serializers.CharField()))
+	average_post_length = serializers.ListField(child=serializers.DictField(child=serializers.CharField()))
+	longest_current_streak = serializers.ListField(child=serializers.DictField(child=serializers.CharField()))
