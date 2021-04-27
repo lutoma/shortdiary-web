@@ -32,13 +32,13 @@ def update_leaderboard():
 		.filter(~Q(natural_language=''), natural_language__isnull=False) \
 		.values('natural_language') \
 		.annotate(count=Count('natural_language')) \
-		.order_by('-count')
+		.order_by('-count')[:10]
 
 	popular_locations = Post.objects \
 		.filter(~Q(location_verbose='')) \
 		.values('location_verbose') \
 		.annotate(count=Count('location_verbose')) \
-		.order_by('-count')
+		.order_by('-count')[:10]
 
 	cache.set('leaderboard', {
 		'number_of_posts': number_of_posts,
