@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
 		fields = [
 			'username',
 			'email',
-			'mail_verified',
+			'email_verified',
 			'language',
 			'is_staff',
 			'post_chars',

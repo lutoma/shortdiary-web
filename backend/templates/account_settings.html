@@ -30,7 +30,7 @@
 		<small>
 			<p>{% trans "<strong>Caution:</strong> If you change your email address, you won't receive any mails until you've verified the new address, so be sure to do that quickly!" %}</p>
 			{% trans 'Current status' %}:
-			{% if user.mail_verified %}
+			{% if user.email_verified %}
 				{% trans 'Verified' %}.
 			{% else %}
 				<span style="color: red;">{% trans 'Unverified' %}. </span>

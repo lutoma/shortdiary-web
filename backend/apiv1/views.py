@@ -32,24 +32,24 @@ class ProfileDetail(mixins.UpdateModelMixin, GenericAPIView):
 	def put(self, request, *args, **kwargs):
 		kwargs["pk"] = request.user.pk
 		if request.DATA["email"] != request.user.email:
-			request.user.mail_verified = False
+			request.user.email_verified = False
 			request.user.save()
 
 		response = self.update(request, *args, **kwargs)
 
-		if request.user.mail_verified is False:
+		if request.user.email_verified is False:
 			request.user.send_verification_mail()
 		return response
 
 	def patch(self, request, *args, **kwargs):
 		kwargs["pk"] = request.user.pk
 		if request.DATA["email"] != request.user.email:
-			request.user.mail_verified = False
+			request.user.email_verified = False
 			request.user.save()
 
 		response = self.partial_update(request, *args, **kwargs)
 
-		if request.user.mail_verified is False:
+		if request.user.email_verified is False:
 			request.user.send_verification_mail()
 		return response
 

@@ -176,7 +176,7 @@ def mail_verify(request, user_id, hash):
 	if not hash == user.get_verification_hash():
 		return HttpResponse('Sorry, invalid hash.')
 
-	user.mail_verified = True
+	user.email_verified = True
 	user.save()
 	return HttpResponseRedirect("/")
 

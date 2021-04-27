@@ -9,8 +9,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = DiaryUser
-		fields = ('id', 'username', 'email', 'mail_verified', 'language', 'lastseen', 'geolocation_enabled')
-		read_only_fields = ('username', 'mail_verified')
+		fields = ('id', 'username', 'email', 'email_verified', 'language', 'lastseen', 'geolocation_enabled')
+		read_only_fields = ('username', 'email_verified')
 
 
 class PostSerializer(serializers.ModelSerializer):

@@ -18,7 +18,7 @@ def process_mails(searched_date):
 	for post in posts:
 		print('Sending mail for post #{} ({})'.format(post.id, post))
 
-		if not post.author.mail_verified:
+		if not post.author.email_verified:
 			print('–– User hasn\'t verified email address, skipping')
 			continue
 

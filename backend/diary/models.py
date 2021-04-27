@@ -20,7 +20,7 @@ import re
 
 class DiaryUser(AbstractUser):
 	last_seen_at = models.DateTimeField(blank=True, null=True, verbose_name=_('last seen at'))
-	mail_verified = models.BooleanField(default=False, verbose_name=_('email verified?'))
+	email_verified = models.BooleanField(default=False, verbose_name=_('email verified?'))
 	language = models.CharField(default='en_US', max_length=5, verbose_name=_('language'))
 	geolocation_enabled = models.BooleanField(verbose_name=_('Post location enabled'), default=True)
 
