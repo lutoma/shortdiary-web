@@ -106,6 +106,7 @@ class Post(models.Model):
 		verbose_name = _('post')
 		verbose_name_plural = _('posts')
 		ordering = ['-date']
+		unique_together = [['author', 'date']]
 
 	def __str__(self):
 		return f'{self.author} on {self.date}'
