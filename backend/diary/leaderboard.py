@@ -6,6 +6,14 @@ from django.core.cache import cache
 from operator import itemgetter
 from django.db.models import Q
 import datetime
+import babel
+
+
+def get_language_name(iso):
+	try:
+		return babel.Locale(iso).get_display_name('en_US')
+	except babel.UnknownLocaleError:
+		return 'Unknown'
 
 
 def update_leaderboard():
@@ -31,14 +39,20 @@ def update_leaderboard():
 	popular_languages = Post.objects \
 		.filter(~Q(natural_language=''), natural_language__isnull=False) \
 		.values('natural_language') \
-		.annotate(count=Count('natural_language')) \
-		.order_by('-count')[:10]
+		.annotate(num_posts=Count('natural_language')) \
+		.order_by('-num_posts')[:10]
+
+	popular_languages = [{
+		'num_posts': x['num_posts'],
+		'iso_code': x['natural_language'],
+		'language': get_language_name(x['natural_language'])
+	} for x in popular_languages]
 
 	popular_locations = Post.objects \
 		.filter(~Q(location_verbose='')) \
 		.values('location_verbose') \
-		.annotate(count=Count('location_verbose')) \
-		.order_by('-count')[:10]
+		.annotate(num_posts=Count('location_verbose')) \
+		.order_by('-num_posts')[:10]
 
 	cache.set('leaderboard', {
 		'number_of_posts': number_of_posts,

@@ -79,16 +79,16 @@
 			<h3>{% trans "Popular languages" %}</h3>
 			<table class="border alternate">
 				<tbody>
-					{% for language in leaderboard.popular_languages %}
+					{% for entry in leaderboard.popular_languages %}
 							<tr>
 								<td style='width: 25px;'>
 									#{{ forloop.counter }}
 								</td>
 								<td>
-									{{ language.natural_language }}
+									{{ entry.language }}
 								</td>
 								<td style='width: 170px;'>
-									{{ language.count }} {% trans "posts" %}
+									{{ entry.num_posts }} {% trans "posts" %}
 								</td>
 							</tr>
 					{% endfor %}
@@ -101,16 +101,16 @@
 			<h3>{% trans "Popular locations" %}</h3>
 			<table class="border alternate">
 				<tbody>
-					{% for location in leaderboard.popular_locations %}
+					{% for entry in leaderboard.popular_locations %}
 							<tr>
 								<td style='width: 25px;'>
 									#{{ forloop.counter }}
 								</td>
 								<td>
-									{{ location.location_verbose }}
+									{{ entry.location_verbose }}
 								</td>
 								<td style='width: 170px;'>
-									{{ location.count }} {% trans "posts" %}
+									{{ entry.num_posts }} {% trans "posts" %}
 								</td>
 							</tr>
 					{% endfor %}
