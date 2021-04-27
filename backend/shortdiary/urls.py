@@ -53,7 +53,7 @@ diary_urls = [
 	url(r'^search/$', search, name='search'),
 	url(r'^email/verify/(?P<user_id>[0-9]+)/(?P<hash>[a-z0-9]+)/', mail_verify, name='email_verify'),
 
-	url(r'^accounts/logout/$', LogoutView.as_view(), {'next_page': '/'}, name='logout'),
+	url(r'^accounts/logout/$', LogoutView.as_view(next_page='/'), name='logout'),
 	url(r'^accounts/signup/$', sign_up, name='sign_up'),
 	url(r'^accounts/settings/$', account_settings, name='account_settings'),
 
