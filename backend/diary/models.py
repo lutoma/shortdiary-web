@@ -19,9 +19,14 @@ import re
 
 
 class DiaryUser(AbstractUser):
-	last_seen_at = models.DateTimeField(blank=True, null=True, verbose_name=_('last seen at'))
-	email_verified = models.BooleanField(default=False, verbose_name=_('email verified?'))
-	language = models.CharField(default='en_US', max_length=5, verbose_name=_('language'))
+	last_seen_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Last seen at'))
+	email_verified = models.BooleanField(default=False, verbose_name=_('Email verified?'))
+	language = models.CharField(default='en_US', max_length=5, verbose_name=_('Language'))
+
+	# Privacy settings
+	include_in_leaderboard = models.BooleanField(verbose_name=_('Include in leaderboard'),
+		default=True)
+
 	geolocation_enabled = models.BooleanField(verbose_name=_('Post location enabled'), default=True)
 
 	def get_verification_hash(self):
@@ -96,6 +101,7 @@ class Post(models.Model):
 
 	location_verbose = models.CharField(max_length=400, blank=True, verbose_name=_('Location name'))
 
+	# FIXME Should not be nullable with blank=True
 	natural_language = models.CharField(max_length=5, blank=True, null=True,
 		verbose_name=_('Natural language'))
 

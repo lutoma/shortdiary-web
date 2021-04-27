@@ -4,9 +4,7 @@ from django.core.cache import cache
 from django.core.mail import mail_managers
 from django.contrib.humanize.templatetags.humanize import apnumber
 from shortdiary.email import send_email
-from django.db.models import Count
 from guess_language import guess_language
-import babel
 
 
 def process_mails(searched_date):
@@ -28,64 +26,6 @@ def process_mails(searched_date):
 def process_mails_for_today():
 	searched_date = datetime.date.today() - datetime.timedelta(days=365)
 	process_mails(searched_date)
-
-
-def update_leaderboard():
-	streak_leaders = sorted(diary.models.DiaryUser.objects.all(),
-		key=lambda t: t.get_streak(), reverse=True)[:10]
-
-	streak_leaders = filter(lambda t: t.get_streak() > 1, streak_leaders)
-
-	posts_leaders = sorted(diary.models.DiaryUser.objects.all(),
-		key=lambda t: t.posts.all().count(), reverse=True)[:10]
-
-	posts_leaders = filter(lambda t: t.posts.all().count() > 1, posts_leaders)
-
-	char_leaders = sorted(diary.models.DiaryUser.objects.all(),
-		key=lambda t: t.get_post_characters(), reverse=True)[:10]
-
-	char_leaders = filter(lambda t: t.get_post_characters() > 1, char_leaders)
-
-	avg_post_length_leaders = filter(lambda t: t.posts.all().count() > 20,
-		diary.models.DiaryUser.objects.all())
-
-	avg_post_length_leaders = sorted(avg_post_length_leaders,
-		key=lambda t: t.get_average_post_length(), reverse=True)[:10]
-
-	# This is ugly and should be rewritten at some point to use Post.get_language_name().
-	def get_language_name(iso):
-		try:
-			return babel.Locale(iso).get_display_name('en_US')
-		except babel.UnknownLocaleError:
-			return ''
-
-	popular_languages = diary.models.Post.objects.filter(natural_language__isnull=False)
-	popular_languages = popular_languages.values('natural_language').annotate(
-		count=Count('natural_language'))
-
-	popular_languages = filter(lambda t: len(t['natural_language'].strip()) > 0, popular_languages)
-	popular_languages = sorted(popular_languages, key=lambda t: t['count'], reverse=True)[:10]
-	popular_languages = map(lambda l: {
-		'count': l['count'],
-		'name': get_language_name(l['natural_language'])
-	}, popular_languages)
-
-	popular_locations = diary.models.Post.objects.filter(location_verbose__isnull=False)
-	popular_locations = popular_locations.values('location_verbose').annotate(
-		count=Count('location_verbose'))
-
-	popular_locations = filter(lambda t: len(t['location_verbose']) > 0, popular_locations)
-	popular_locations = sorted(popular_locations, key=lambda t: t['count'], reverse=True)[:10]
-
-	cache.set_many({
-		'leaderboard_streak_leaders': list(streak_leaders),
-		'leaderboard_posts_leaders': list(posts_leaders),
-		'leaderboard_char_leaders': list(char_leaders),
-		'leaderboard_avg_post_length_leaders': list(avg_post_length_leaders),
-		'leaderboard_popular_languages': list(popular_languages),
-		'leaderboard_popular_locations': list(popular_locations),
-		'leaderboard_last_update': datetime.datetime.now(),
-	})
 
 
 def update_streak(user):

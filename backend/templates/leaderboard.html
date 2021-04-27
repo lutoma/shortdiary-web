@@ -11,16 +11,16 @@
 			<h3>{% trans "Number of posts" %}</h3>
 			<table class="border alternate">
 				<tbody>
-					{% for user in posts_leaders %}
+					{% for entry in leaderboard.number_of_posts %}
 							<tr>
 								<td style='width: 25px;'>
 									#{{ forloop.counter }}
 								</td>
 								<td>
-									{{ user.username }}
+									{{ entry.username }}
 								</td>
 								<td style='width: 170px;'>
-									{{ user.posts.all|length }} {% trans "posts" %}
+									{{ entry.num_posts }} {% trans "posts" %}
 								</td>
 							</tr>
 					{% endfor %}
@@ -33,16 +33,16 @@
 			<h3>{% trans "Longest streak" %}</h3>
 			<table class="border alternate">
 				<tbody>
-					{% for user in streak_leaders %}
+					{% for entry in leaderboard.longest_current_streak %}
 							<tr>
 								<td style='width: 25px;'>
 									#{{ forloop.counter }}
 								</td>
 								<td>
-									{{ user.username }}
+									{{ entry.username }}
 								</td>
 								<td style='width: 170px;'>
-									{{ user.get_streak }} {% trans "days" %}
+									{{ entry.streak }} {% trans "days" %}
 								</td>
 							</tr>
 					{% endfor %}
@@ -51,43 +51,21 @@
 		</div>
 	</div>
 	<br class='clear' />
-	<div style='width: 50%; float: left; padding: 0; margin: 0;'>
-		<div style='padding-right: 20px'>
-			<h3>{% trans "Most characters" %}</h3>
-			<table class="border alternate">
-				<tbody>
-					{% for user in chars_leaders %}
-							<tr>
-								<td style='width: 25px;'>
-									#{{ forloop.counter }}
-								</td>
-								<td>
-									{{ user.username }}
-								</td>
-								<td style='width: 170px;'>
-									{{ user.get_post_characters|intcomma }} {% trans "characters" %}
-								</td>
-							</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
 	<div style="width: 50%; padding: 0; margin: 0; float: right;">
 		<div style='padding-left: 20px'>
 			<h3>{% trans "Average post length" %}</h3>
 			<table class="border alternate">
 				<tbody>
-					{% for user in avg_post_length_leaders %}
+					{% for entry in leaderboard.average_post_length %}
 							<tr>
 								<td style='width: 25px;'>
 									#{{ forloop.counter }}
 								</td>
 								<td>
-									{{ user.username }}
+									{{ entry.username }}
 								</td>
 								<td style='width: 170px;'>
-									{{ user.get_average_post_length }} {% trans "characters" %}
+									{{ entry.avg_length }} {% trans "characters" %}
 								</td>
 							</tr>
 					{% endfor %}
@@ -101,13 +79,13 @@
 			<h3>{% trans "Popular languages" %}</h3>
 			<table class="border alternate">
 				<tbody>
-					{% for language in popular_languages %}
+					{% for language in leaderboard.popular_languages %}
 							<tr>
 								<td style='width: 25px;'>
 									#{{ forloop.counter }}
 								</td>
 								<td>
-									{{ language.name }}
+									{{ language.natural_language }}
 								</td>
 								<td style='width: 170px;'>
 									{{ language.count }} {% trans "posts" %}
@@ -123,7 +101,7 @@
 			<h3>{% trans "Popular locations" %}</h3>
 			<table class="border alternate">
 				<tbody>
-					{% for location in popular_locations %}
+					{% for location in leaderboard.popular_locations %}
 							<tr>
 								<td style='width: 25px;'>
 									#{{ forloop.counter }}
@@ -143,5 +121,5 @@
 
 	<br class='clear' />
 
-	<p><small>{% trans "This page is regenerated every 5 minutes. Last update " %} {{ last_update|naturaltime }}.</small></p>
+	<p><small>{% trans "This page is regenerated every 5 minutes. Last update " %} {{ leaderboard.last_update|naturaltime }}.</small></p>
 {% endblock %}

@@ -15,10 +15,10 @@ poetry run ./manage.py runserver
 
 In production, the following tasks need to be scheduled in the Django-Q settings:
 
-  * process_mails_for_today: Once daily
-  * update_leaderboard: Every five minutes
-  * send_reminder_mails: Once daily
-  * send_active_users_overview: Once a week or so
+  * diary.tasks.process_mails_for_today: Once daily
+  * diary.leaderboard.update_leaderboard: Every five minutes
+  * diary.tasks.send_reminder_mails: Once daily
+  * diary.tasks.send_active_users_overview: Once a week or so
 
 ## Frontend
 

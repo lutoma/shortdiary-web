@@ -12,7 +12,7 @@ from diary.models import Post, DiaryUser
 from diary.forms import PostForm, SignUpForm, AccountSettingsForm
 from django.conf import settings
 from django.core.cache import cache
-import diary.tasks as tasks
+from diary.leaderboard import update_leaderboard
 from django.utils import translation
 from django.db.models import Q, Count, Avg
 from django_q.tasks import async_task
@@ -267,36 +267,18 @@ def stats(request):
 
 @login_required
 def leaderboard(request):
-	leaders = cache.get_many([
-		'leaderboard_streak_leaders',
-		'leaderboard_posts_leaders',
-		'leaderboard_char_leaders',
-		'leaderboard_avg_post_length_leaders',
-		'leaderboard_last_update',
-		'leaderboard_popular_languages',
-		'leaderboard_popular_locations',
-	])
+	leaderboard = cache.get('leaderboard')
 
-	if(len(leaders) < 5):
+	if leaderboard is None:
 		# Cache is empty, render error page and start async generation of data
 		if settings.DEBUG:
-			tasks.update_leaderboard()
+			update_leaderboard()
 		else:
-			async_task('diary.tasks.update_leaderboard')
+			async_task('diary.leaderboard.update_leaderboard')
 
 		return render(request, 'leaderboard_wait.html')
 
-	context = {
-		'title': 'Leaderboard',
-		'streak_leaders': leaders['leaderboard_streak_leaders'],
-		'posts_leaders': leaders['leaderboard_posts_leaders'],
-		'chars_leaders': leaders['leaderboard_char_leaders'],
-		'avg_post_length_leaders': leaders['leaderboard_avg_post_length_leaders'],
-		'popular_languages': leaders['leaderboard_popular_languages'],
-		'popular_locations': leaders['leaderboard_popular_locations'],
-		'last_update': leaders['leaderboard_last_update'],
-	}
-
+	context = {'title': 'Leaderboard', 'leaderboard': leaderboard}
 	return render(request, 'leaderboard.html', context=context)
 
 
