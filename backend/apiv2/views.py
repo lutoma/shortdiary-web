@@ -6,7 +6,7 @@ from django.core.cache import cache
 
 
 from .serializers import (
-	UserSerializer, PostSerializer, PrivatePostSerializer,
+	UserSerializer, PostSerializer, PublicPostSerializer,
 	LeaderboardSerializer
 )
 

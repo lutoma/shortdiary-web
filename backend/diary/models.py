@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
 from django.db.models.functions import Length, Coalesce
@@ -78,10 +79,16 @@ class DiaryUser(AbstractUser):
 class Post(models.Model):
 	MENTION_REGEX = re.compile(r'@\w+', re.UNICODE)
 
+	def validate_date(value):
+		delta = datetime.date.today() - value
+		if delta.days > 4:
+			pass
+#			raise ValidationError(_('Post date cannot be older than 4 days'))
+
 	author = models.ForeignKey(DiaryUser, verbose_name=_('author'), related_name='posts',
 		on_delete=models.CASCADE)
 
-	date = models.DateField(verbose_name=('date'))
+	date = models.DateField(verbose_name=('date'), validators=[validate_date])
 	text = models.TextField(verbose_name=_('text'))
 	mood = models.IntegerField(verbose_name=_('mood'))
 	image = models.ImageField(upload_to='postimages/%d%m%y/', blank=True, verbose_name=_('image'))

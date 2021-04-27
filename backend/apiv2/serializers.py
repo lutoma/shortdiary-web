@@ -26,14 +26,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-	public_text = serializers.CharField(source='get_public_text')
-
 	class Meta:
 		model = Post
 		fields = [
 			'id',
 			'date',
-			'public_text',
+			'text',
 			'mood',
 			'image',
 			'location_lat',
