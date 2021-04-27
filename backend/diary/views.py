@@ -236,20 +236,24 @@ def delete_post(request, post_id):
 
 @login_required
 def stats(request):
-	user_posts = Post.objects.filter(author=request.user).order_by('date')
-
-	if user_posts.count() < 1:
+	user_posts = request.user.posts.all()
+	if not user_posts.exists():
 		return render(request, 'stats_noposts.html')
 
-	top_locations = Post.objects.filter(~Q(location_verbose=''),
-		author=request.user).values('location_verbose').annotate(
-		location_count=Count('location_verbose')).order_by('-location_count')[:10]
+	top_locations = user_posts \
+		.filter(~Q(location_verbose='')) \
+		.values('location_verbose') \
+		.annotate(location_count=Count('location_verbose')) \
+		.order_by('-location_count')[:10]
 
-	top_mood_locations = request.user.posts.filter(
-		~Q(location_verbose='')).annotate(mood_avg=Avg('mood')).values(
-		'location_verbose', 'mood_avg').annotate(location_count=Count(
-			'location_verbose')).filter(location_count__gte=3).order_by(
-			'-mood_avg').values('location_verbose', 'mood_avg')[:10]
+	top_mood_locations = user_posts \
+		.filter(~Q(location_verbose='')) \
+		.annotate(mood_avg=Avg('mood')) \
+		.values('location_verbose', 'mood_avg') \
+		.annotate(location_count=Count('location_verbose')) \
+		.filter(location_count__gte=3) \
+		.order_by('-mood_avg') \
+		.values('location_verbose', 'mood_avg')[:10]
 
 	context = {
 		'title': 'Stats',
