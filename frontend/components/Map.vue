@@ -4,7 +4,7 @@
 			<l-map :zoom="this.zoom" :center="this.center" :options="Object.assign({attributionControl: false}, this.options)">
 				<l-tile-layer url="/maptiler/maps/bright/{z}/{x}/{y}.png" />
 				<l-control-attribution position="topright" prefix='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>' />
-				<l-marker v-if="this.markers" v-for="marker of this.markers" :key="marker" :lat-lng="marker" />
+				<l-marker v-for="marker of this.markers" :key="marker" :lat-lng="marker" />
 			</l-map>
 		</client-only>
 	</div>
