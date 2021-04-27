@@ -1,6 +1,6 @@
 <template>
 	<el-row class="post-timeline" :gutter="50">
-		<el-col :span="19" class="left" v-loading="!all_posts">
+		<el-col :span="19" class="left" v-loading="!sorted_posts">
 			<template v-if="!sorted_posts">
 				&nbsp;
 			</template>
@@ -117,11 +117,12 @@ export default {
 
 	computed: {
 		sorted_posts() {
-			if (!this.all_posts) {
+			const posts = this.$store.state.posts
+			if (!posts) {
 				return null
 			}
 
-			let filtered = _(this.all_posts)
+			let filtered = _(posts)
 				.filter(x => x.text.includes(this.filter.text))
 				.filter(x => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1])
 
@@ -149,8 +150,8 @@ export default {
 		}
 	},
 
-	async fetch() {
-		this.all_posts = await this.$axios.$get('/posts/')
+	fetch() {
+		this.$store.dispatch('updatePosts')
 	},
 
 	methods: {
