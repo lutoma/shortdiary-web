@@ -35,7 +35,7 @@ function handle_filter(event) {
 
 				// Apply the option filters
 				if($('#has_image').prop('checked')) {
-					match = match && (post.image.length > 0);
+					match = match && (post.image !== null);
 				}
 				if($('#is_private').prop('checked')) {
 					match = match && (!post.public);
@@ -78,7 +78,7 @@ function setup_handlers(posts) {
 
 			return $('#timegroup-' + year_arr.year).isOnScreen();
 		});
-		
+
 		if (!year) return;
 
 		$('#timeline-datepicker > li.active').removeClass('active');
@@ -164,7 +164,7 @@ function reformat_data(posts) {
 
 			return {
 				'year': year,
-				'month': month, 
+				'month': month,
 				'month_name': month_names[month],
 				'posts': month_posts
 			};
