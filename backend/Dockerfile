@@ -23,5 +23,5 @@ RUN mkdir -p /data/redis
 RUN ln -s /data/settings_local.py shortdiary/settings_local.py
 RUN ln -s /data/asset asset
 
-RUN git rev-parse --short HEAD > templates/current_git_version.txt
+#RUN git rev-parse --short HEAD > templates/current_git_version.txt
 CMD ["/usr/bin/supervisord", "-c", "/code/supervisord.conf"]
