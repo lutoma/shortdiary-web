@@ -6,6 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
 	post_chars = serializers.CharField(source='get_post_characters')
 	posts_avg_chars = serializers.CharField(source='get_average_post_length')
 	streak = serializers.CharField(source='get_streak')
+	posts_count = serializers.IntegerField(source='posts.count')
 
 	class Meta:
 		model = DiaryUser

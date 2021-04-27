@@ -37,9 +37,6 @@ class DiaryUser(AbstractUser):
 			return cached_streak
 		return tasks.update_streak(self)
 
-	def posts_count(self):
-		return self.posts.count()
-
 	def get_year_history(self):
 		"""
 		Returns the length of posts for a user for the last 356 days.
