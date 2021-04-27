@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
-{% load i18n %}
-{% load static %}
 
+{# For some reason django-two-factor-auth just assumes bootstrap classes are available #}
+{% block headeradd %}
+	<style>
+		.d-none {
+			display: none !important;
+		}
+	</style>
+{% endblock %}
