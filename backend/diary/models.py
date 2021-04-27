@@ -19,10 +19,6 @@ import re
 
 
 class DiaryUser(AbstractUser):
-	invited_by = models.ForeignKey("DiaryUser", related_name='user_invited_by',
-		blank=True, null=True, verbose_name=_('invited by'), on_delete=models.SET_NULL)
-
-	invites_left = models.IntegerField(default=5, verbose_name=_('invites left'))
 	last_seen_at = models.DateTimeField(blank=True, null=True, verbose_name=_('last seen at'))
 	mail_verified = models.BooleanField(default=False, verbose_name=_('email verified?'))
 	language = models.CharField(default='en_US', max_length=5, verbose_name=_('language'))

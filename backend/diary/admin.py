@@ -30,7 +30,7 @@ class PostAdmin(admin.ModelAdmin):
 
 
 class UserAdmin(admin.ModelAdmin):
-	list_display = ['username', 'email', 'last_seen_at', 'invited_by', 'language']
+	list_display = ['username', 'email', 'last_seen_at', 'language']
 	list_filter = ['mail_verified', 'last_seen_at', 'geolocation_enabled']
 	readonly_fields = ('last_seen_at',)
 	date_hierarchy = 'last_seen_at'
