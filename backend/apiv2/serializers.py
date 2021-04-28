@@ -24,6 +24,11 @@ class UserSerializer(serializers.ModelSerializer):
 			'include_in_leaderboard'
 		]
 
+		read_only_fields = [
+			'email_verified',
+			'is_staff'
+		]
+
 
 class PostSerializer(serializers.ModelSerializer):
 	class Meta:

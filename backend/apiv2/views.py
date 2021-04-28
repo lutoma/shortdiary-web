@@ -1,6 +1,5 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import viewsets, status
+from rest_framework.generics import RetrieveUpdateAPIView, RetrieveAPIView
+from rest_framework import viewsets
 from diary.models import Post
 from django.core.cache import cache
 
@@ -11,10 +10,11 @@ from .serializers import (
 )
 
 
-class CurrentUserView(APIView):
-	def get(self, request):
-		serializer = UserSerializer(request.user, context={'request': request})
-		return Response(serializer.data)
+class CurrentUserView(RetrieveUpdateAPIView):
+	serializer_class = UserSerializer
+
+	def get_object(self):
+		return self.request.user
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -27,21 +27,15 @@ class PostViewSet(viewsets.ModelViewSet):
 		return Post.objects.filter(author=self.request.user)
 
 
-class RandomPublicPostView(APIView):
-	def get(self, request, format=None):
-		post = Post.objects.filter(public=True).order_by('?').first()
-		if not post:
-			return Response(None, status=status.HTTP_404_NOT_FOUND)
+class RandomPublicPostView(RetrieveAPIView):
+	serializer_class = PublicPostSerializer
 
-		serializer = PublicPostSerializer(post, context={'request': request})
-		return Response(serializer.data)
+	def get_object(self):
+		return Post.objects.filter(public=True).order_by('?').first()
 
 
-class LeaderboardView(APIView):
-	def get(self, request, format=None):
-		leaderboard = cache.get('leaderboard')
-		if not leaderboard:
-			return Response(None, status=status.HTTP_404_NOT_FOUND)
+class LeaderboardView(RetrieveAPIView):
+	serializer_class = LeaderboardSerializer
 
-		serializer = LeaderboardSerializer(leaderboard, context={'request': request})
-		return Response(serializer.data)
+	def get_object(self):
+		return cache.get('leaderboard')
