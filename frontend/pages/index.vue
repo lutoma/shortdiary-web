@@ -14,6 +14,7 @@
 <script>
 export default {
 	layout: 'no-container',
+	auth: 'guest'
 }
 </script>
 
