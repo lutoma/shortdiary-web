@@ -3,10 +3,10 @@ from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
-	post_chars = serializers.CharField(source='get_post_characters')
-	posts_avg_chars = serializers.CharField(source='get_average_post_length')
-	streak = serializers.CharField(source='get_streak')
-	posts_count = serializers.IntegerField(source='posts.count')
+	post_chars = serializers.CharField(source='get_post_characters', read_only=True)
+	posts_avg_chars = serializers.CharField(source='get_average_post_length', read_only=True)
+	streak = serializers.CharField(source='get_streak', read_only=True)
+	posts_count = serializers.IntegerField(source='posts.count', read_only=True)
 
 	class Meta:
 		model = DiaryUser
@@ -26,7 +26,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 		read_only_fields = [
 			'email_verified',
-			'is_staff'
+			'is_staff',
+			'post_chars',
+			'post_avg_chars',
+			'posts_count'
+			'streak'
 		]
 
 
