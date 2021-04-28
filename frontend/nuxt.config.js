@@ -109,6 +109,11 @@ export default {
 			login: '/login',
 			logout: '/login',
 			home: '/dashboard'
+		},
+		cookie: {
+			options: {
+				maxAge: 604800
+			}
 		}
 	},
 
