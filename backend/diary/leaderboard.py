@@ -18,6 +18,7 @@ def get_language_name(iso):
 
 def update_leaderboard():
 	users = DiaryUser.objects.filter(include_in_leaderboard=True)
+	posts = Post.objects.filter(author__include_in_leaderboard=True)
 
 	number_of_posts = users \
 		.annotate(num_posts=Count('posts')) \
@@ -36,7 +37,7 @@ def update_leaderboard():
 	streak_leaders = filter(itemgetter('streak'), streak_leaders)
 	streak_leaders = sorted(streak_leaders, key=itemgetter('streak'), reverse=True)[:10]
 
-	popular_languages = Post.objects \
+	popular_languages = posts \
 		.filter(~Q(natural_language=''), natural_language__isnull=False) \
 		.values('natural_language') \
 		.annotate(num_posts=Count('natural_language')) \
@@ -48,7 +49,7 @@ def update_leaderboard():
 		'language': get_language_name(x['natural_language'])
 	} for x in popular_languages]
 
-	popular_locations = Post.objects \
+	popular_locations = posts \
 		.filter(~Q(location_verbose='')) \
 		.values('location_verbose') \
 		.annotate(num_posts=Count('location_verbose')) \
