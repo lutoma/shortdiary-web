@@ -49,6 +49,7 @@ export default {
 		async saveSettings() {
 			// FIXME error handling
 			await this.$axios.$patch('/user/', this.user)
+			await this.$auth.fetchUser()
 			this.$message({ type: 'success', message: 'Your settings have been saved.' })
 		}
 	}
