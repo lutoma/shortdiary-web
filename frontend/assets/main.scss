@@ -5,8 +5,11 @@
 @import "@fontsource/exo-2/latin-600.css";
 @import "@fontsource/exo-2/latin-700.css";
 
-$text-color: #222;
-$link-color: #2683E4;
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+$--color-primary: #CDB380;
+$--background-color-base: #F9F9F9;
+
+@import "~element-ui/packages/theme-chalk/src/index";
 
 html, body, #__nuxt, #__layout {
 	width: 100%;
@@ -27,8 +30,7 @@ html {
 }
 
 body {
-	background: #f9f9f9;
-	color: $text-color;
+	background: $--background-color-base;
 
 	// Fixed top menu
 	padding-top: 50px;
@@ -93,49 +95,3 @@ p {
 	// Push message boxes below top header
 	top: 65px !important;
 }
-
-.el-slider__bar {
-	background-color: #CDB380;
-}
-
-.el-slider__button {
-	border-color: #CDB380;
-}
-
-.el-radio-button__orig-radio:checked + .el-radio-button__inner {
-	background-color: #CDB380;
-	border-color: #CDB380;
-	box-shadow: -1px 0 0 0 #CDB380;
-}
-
-.el-radio-button__inner:hover {
-	color: #036564;
-}
-
-.el-switch.is-checked .el-switch__core {
-	background-color: #CDB380;
-	border-color: #CDB380;
-}
-
-.el-switch__label.is-active {
-	color: initial;
-}
-
-.el-button--primary {
-	background-color: #CDB380;
-	border-color: #CDB380;
-}
-
-.el-button--primary.is-disabled,
-.el-button--primary.is-disabled:active,
-.el-button--primary.is-disabled:focus,
-.el-button--primary.is-disabled:hover {
-
-}
-
-
-/*
-.el-tag.el-tag--warning {
-	color: #CDB380;
-}
-*/
