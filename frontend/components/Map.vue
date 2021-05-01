@@ -1,22 +1,42 @@
 <template>
-	<div id="map-wrap">
-		<client-only>
-			<l-map :zoom="this.zoom" :center="this.center" :options="Object.assign({attributionControl: false}, this.options)">
-				<l-tile-layer url="/maptiler/maps/bright/{z}/{x}/{y}.png" />
-				<l-control-attribution position="topright" prefix='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>' />
-				<l-marker v-for="marker of this.markers" :key="marker" :lat-lng="marker" />
-			</l-map>
-		</client-only>
-	</div>
+	<div id="map-wrapper">&nbsp;</div>
 </template>
 
 <script>
+import 'mapbox-gl/dist/mapbox-gl.css'
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js'
+
 export default {
 	props: {
-		center: { type: Array, default: () => [49.5001306, 8.4320361] },
+		center: { type: Array, default: () => [8.4320361, 49.5001306] },
 		zoom: { type: Number, default: 12 },
 		markers: { type: Array, default: () => [] },
-		options: { type: Object, default: () => {} }
+		controls: { type: Boolean, default: true }
+	},
+
+	mounted() {
+		mapboxgl.accessToken = 'pk.eyJ1IjoibHV0b21hIiwiYSI6ImVkbzF4MG8ifQ.pIpC2pu9savl1ZZLl8TGrA'
+		mapboxgl.baseApiUrl = 'https://shortdiary.me/map'
+
+		const map = new mapboxgl.Map({
+			container: 'map-wrapper',
+			style: 'mapbox://styles/lutoma/cko3qggqm0cce17o6itr6j044?optimize=true',
+			center: this.center,
+			zoom: this.zoom,
+			scrollZoom: false
+
+		})
+
+		if (this.controls) {
+			const nav = new mapboxgl.NavigationControl()
+			map.addControl(nav, 'top-right')
+		}
+
+		for (const marker of this.markers) {
+			new mapboxgl.Marker({ color: '#CDB380' })
+				.setLngLat(marker)
+				.addTo(map)
+		}
 	}
 }
 </script>
