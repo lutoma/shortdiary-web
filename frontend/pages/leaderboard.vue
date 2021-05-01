@@ -13,7 +13,7 @@
 						style="width: 100%">
 
 						<el-table-column prop="username" label="Username" />
-						<el-table-column prop="streak" width="70" label="Days" />
+						<el-table-column prop="streak" width="70" align="right" label="Days" />
 					</el-table>
 				</el-card>
 			</el-col>
@@ -28,7 +28,7 @@
 						style="width: 100%">
 
 						<el-table-column prop="username" label="Username" />
-						<el-table-column prop="num_posts" width="70" label="Posts" />
+						<el-table-column prop="num_posts" width="70" align="right" label="Posts" />
 					</el-table>
 				</el-card>
 			</el-col>
@@ -43,7 +43,7 @@
 						style="width: 100%">
 
 						<el-table-column prop="username" label="Username" />
-						<el-table-column prop="avg_length" width="70" label="Chars" />
+						<el-table-column prop="avg_length" width="70" align="right" label="Chars" />
 					</el-table>
 				</el-card>
 			</el-col>
@@ -58,7 +58,7 @@
 						style="width: 100%">
 
 						<el-table-column prop="language" label="Language" />
-						<el-table-column prop="num_posts" width="70" label="Posts" />
+						<el-table-column prop="num_posts" width="70" align="right" label="Posts" />
 					</el-table>
 				</el-card>
 			</el-col>
@@ -73,7 +73,7 @@
 						style="width: 100%">
 
 						<el-table-column prop="location_verbose" label="Location" />
-						<el-table-column prop="num_posts" width="70" label="Posts" />
+						<el-table-column prop="num_posts" width="70" align="right" label="Posts" />
 					</el-table>
 				</el-card>
 			</el-col>
