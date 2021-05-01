@@ -127,7 +127,8 @@ export default {
 				'faUserFriends',
 				'faLink',
 				'faImages',
-				'faEmptySet'
+				'faEmptySet',
+				'faTrash'
 			]
 		}
 	}
