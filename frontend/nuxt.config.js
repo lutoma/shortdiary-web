@@ -61,6 +61,18 @@ export default {
 		}
 	},
 
+	render: {
+		csp: {
+			hashAlgorithm: 'sha256',
+			policies: {
+				'script-src': ['https://hcaptcha.com', 'https://*.hcaptcha.com'],
+				'frame-src': ['https://hcaptcha.com', 'https://*.hcaptcha.com'],
+				'style-src': ['https://hcaptcha.com', 'https://*.hcaptcha.com'],
+				'connect-src': ['https://api.shortdiary.com', 'https://hcaptcha.com', 'https://*.hcaptcha.com']
+			}
+		}
+	},
+
 	router: {
 		middleware: ['auth']
 	},
