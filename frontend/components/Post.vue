@@ -10,6 +10,7 @@
 			<el-rate v-model="post.mood" disabled />
 			<div class="right">
 				<el-button v-if="post.is_editable" class="edit-button" type="text"><fa :icon="['far', 'pencil']" /> Edit</el-button>
+				<el-button v-if="post.is_editable" class="delete-button" type="text" @click="deletePost"><fa :icon="['far', 'trash']" /> Delete</el-button>
 				<n-link v-if="showPermalink" :to="`/posts/${post.id}`"><el-button type="text"><fa :icon="['far', 'link']" /> Permalink</el-button></n-link>
 			</div>
 		</div>
@@ -17,7 +18,7 @@
 		<component class="text" v-bind:is="PostTextComponent" />
 
 		<CoolLightBox :items="[{src: this.post.image}]" :index="lightboxIndex" @close="lightboxIndex = null" :slideshow="false" />
-		<el-image v-if="post.image" :src="post.image" fit="fit" @click="lightboxIndex = 0" />
+		<el-image v-if="post.image" :src="post.image" fit="cover" @click="lightboxIndex = 0" />
 	</el-card>
 </template>
 
@@ -53,6 +54,24 @@ export default {
 	computed: {
 		PostTextComponent() {
 			return { template: `<div>${this.text_html}</div>` }
+		}
+	},
+
+	methods: {
+		// FIXME needs to emit event for timeline reload/redirect from post detail page
+		deletePost() {
+			this.$confirm('This will permanently delete the post. Continue?', 'Warning', {
+				confirmButtonText: 'OK',
+				cancelButtonText: 'Cancel',
+				type: 'warning'
+			}).then(() => {
+				this.$axios.$delete(`/posts/${this.post.id}`).then(() => {
+					this.$message({
+						type: 'success',
+						message: 'Post deleted'
+					})
+				})
+			})
 		}
 	}
 }
