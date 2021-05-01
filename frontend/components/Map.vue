@@ -16,7 +16,7 @@ export default {
 
 	mounted() {
 		mapboxgl.accessToken = 'pk.eyJ1IjoibHV0b21hIiwiYSI6ImVkbzF4MG8ifQ.pIpC2pu9savl1ZZLl8TGrA'
-		mapboxgl.baseApiUrl = 'https://shortdiary.me/map'
+		mapboxgl.baseApiUrl = 'https://shortdiary.com/map'
 
 		const map = new mapboxgl.Map({
 			container: 'map-wrapper',

@@ -75,8 +75,7 @@ export default {
 	},
 
 	axios: {
-		// baseURL: 'https://api.shortdiary.me/v2',
-		baseURL: 'http://10.35.22.2:8000/api/v2'
+		baseURL: 'https://api.shortdiary.com/v2'
 	},
 
 	auth: {
