@@ -65,10 +65,10 @@ export default {
 		csp: {
 			hashAlgorithm: 'sha256',
 			policies: {
-				'script-src': ['https://hcaptcha.com', 'https://*.hcaptcha.com'],
+				'script-src': ['blob:', 'https://hcaptcha.com', 'https://*.hcaptcha.com'],
 				'frame-src': ['https://hcaptcha.com', 'https://*.hcaptcha.com'],
-				'style-src': ['https://hcaptcha.com', 'https://*.hcaptcha.com'],
-				'connect-src': ['https://api.shortdiary.com', 'https://hcaptcha.com', 'https://*.hcaptcha.com']
+				'style-src': ["'self'", "'unsafe-inline'", 'https://hcaptcha.com', 'https://*.hcaptcha.com'],
+				'connect-src': ["'self'", 'https://api.shortdiary.com', 'https://hcaptcha.com', 'https://*.hcaptcha.com']
 			}
 		}
 	},
