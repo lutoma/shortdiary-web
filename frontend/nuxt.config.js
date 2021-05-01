@@ -44,8 +44,7 @@ export default {
 	modules: [
 		'@nuxtjs/axios',
 		'@nuxtjs/auth-next',
-		'@nuxtjs/proxy',
-		'nuxt-leaflet'
+		'@nuxtjs/proxy'
 	],
 
 	build: {
@@ -68,12 +67,9 @@ export default {
 
 	// Proxy external services to avoid leaking user IPs
 	proxy: {
-		'/maptiler/': {
-			target: 'https://api.maptiler.com',
-			pathRewrite: { '^/maptiler/': '' },
-			onProxyReq(proxyReq, req, res) {
-				proxyReq.path += '?key=bfo60JdkhRcsQQlWkLEc'
-			}
+		'/map/': {
+			target: 'https://api.mapbox.com',
+			pathRewrite: { '^/map/': '' }
 		},
 		'/avatar/': 'https://www.gravatar.com/'
 	},
