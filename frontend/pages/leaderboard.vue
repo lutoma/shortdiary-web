@@ -50,7 +50,7 @@
 
 			<el-col :span="8">
 				<el-card>
-					<h2>Popular languages</h2>
+					<h2><fa :icon="['fal', 'language']" /> Popular languages</h2>
 					<el-table
 						v-loading="!leaderboard.popular_languages.length"
 						:data="leaderboard.popular_languages"
@@ -65,7 +65,7 @@
 
 			<el-col :span="8">
 				<el-card>
-					<h2>Popular locations</h2>
+					<h2><fa :icon="['fal', 'map-marked-alt']" /> Popular locations</h2>
 					<el-table
 						v-loading="!leaderboard.popular_locations.length"
 						:data="leaderboard.popular_locations"

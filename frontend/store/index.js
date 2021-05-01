@@ -1,20 +1,23 @@
 export const state = () => ({
-	posts: null
+	posts: [],
+	posts_update: null
 })
+
+export const mutations = {
+	setPosts(state, data) {
+		state.posts = data
+		state.posts_update = new Date()
+	}
+}
 
 export const actions = {
 	async updatePosts({ commit }) {
-		if (this.state.posts !== null) {
+		const update_delta = new Date() - this.state.posts_update
+		if (this.state.post_update !== null && update_delta < 15000) {
 			return
 		}
 
 		const { data } = await this.$axios.get('/posts/')
-		commit('SET_POSTS', data)
-	}
-}
-
-export const mutations = {
-	SET_POSTS(state, data) {
-		state.posts = data
+		commit('setPosts', data)
 	}
 }

@@ -1,79 +1,145 @@
 <template>
 	<div class="stats">
-		<Map style="height: 350px" zoom="4" />
+		<Map class="stats-map" :zoom="4" :markers="this.markers" />
 
 		<div id="main-container">
 			<h1>Stats</h1>
 
-			<!--<calendar-heatmap :values="[{ date: '2021-3-22', count: 6 }]" :end-date="2021-3-30" />-->
-
-			<PostLengthChart :chart-data="{labels: ['January', 'February'], datasets: [{label: 'Data One', backgroundColor: '#f87979', data: [40, 20]}]}" :options="{responsive: true, maintainAspectRatio: false}" height="200" />
-
 			<el-row :gutter="50">
 				<el-col :span="8">
-					<h2>Frequent locations</h2>
-					<el-table
-					:data="frequent_locations"
-					stripe
-					style="width: 100%">
-						<el-table-column prop="rank" width="35" label="#" />
-						<el-table-column prop="name" label="Location" />
-						<el-table-column prop="num_posts" width="70" label="Posts" />
-					</el-table>
+					<el-card>
+						<h2><fa :icon="['fal', 'map-marked-alt']" /> Frequent locations</h2>
+						<el-table :data="top_locations.slice((top_locations_page - 1) * 10, (top_locations_page) * 10)" stripe>
+							<el-table-column prop="0" label="Location" />
+							<el-table-column prop="1" width="70" align="right" label="Posts" />
+						</el-table>
+						<el-pagination layout="prev, pager, next" :total="top_locations.length" :current-page.sync="top_locations_page" />
+					</el-card>
 				</el-col>
 				<el-col :span="8">
-					<h2>Frequently mentioned</h2>
-					<el-table
-					:data="frequent_locations"
-					stripe
-					style="width: 100%">
-						<el-table-column prop="rank" width="35" label="#" />
-						<el-table-column prop="name" label="Name" />
-						<el-table-column prop="num_posts" width="70" label="Posts" />
-					</el-table>
+					<el-card>
+						<h2><fa :icon="['fal', 'users']" /> Frequently mentioned</h2>
+						<el-table :data="top_mentions.slice((top_mentions_page - 1) * 10, (top_mentions_page) * 10)" stripe>
+							<el-table-column prop="0" label="Name">
+								<template slot-scope="scope">
+									<n-link :to="`/dashboard?filter=${scope.row[0]}`">{{ scope.row[0] }}</n-link>
+								</template>
+							</el-table-column>
+							<el-table-column prop="1" width="70" align="right" label="Posts" />
+						</el-table>
+						<el-pagination layout="prev, pager, next" :total="top_mentions.length" :current-page.sync="top_mentions_page" />
+					</el-card>
 				</el-col>
 				<el-col :span="8">
-					<h2>Locations by avg. mood</h2>
-					<el-table
-					:data="frequent_locations"
-					stripe
-					style="width: 100%">
-						<el-table-column prop="rank" width="35" label="#" />
-						<el-table-column prop="name" label="Name" />
-						<el-table-column prop="num_posts" width="70" label="Mood" />
-					</el-table>
+					<el-card>
+						<h2><fa :icon="['fal', 'chart-line']" /> Locations by avg. mood</h2>
+						<el-table :data="top_mood_locations.slice((top_mood_locations_page - 1) * 10, (top_mood_locations_page) * 10)" stripe>
+							<el-table-column prop="0" label="Name" />
+							<el-table-column prop="1" width="70" align="right" label="Mood" />
+						</el-table>
+						<el-pagination layout="prev, pager, next" :total="top_mood_locations.length" :current-page.sync="top_mood_locations_page" />
+					</el-card>
 				</el-col>
 			</el-row>
+
+			<h2>Year to date</h2>
+			<calendar-heatmap class="heatmap" :values="heatmap.values" :end-date="heatmap.endDate" />
+			<!--<PostLengthChart style="margin-top: 4rem;" :chart-data="{labels: ['January', 'February'], datasets: [{label: 'Data One', backgroundColor: '#f87979', data: [40, 20]}]}" :options="{responsive: true, maintainAspectRatio: false}" :height="200" />-->
 		</div>
 	</div>
 </template>
 
 <script>
-//import CalendarHeatmap from 'vue-calendar-heatmap'
+import CalendarHeatmap from '~/components/CalendarHeatmap'
 import Map from '~/components/Map'
 import PostLengthChart from '~/components/PostLengthChart'
+import _ from 'lodash'
 
 export default {
 	layout: 'no-container',
 	components: {
 		Map,
-		//CalendarHeatmap,
+		CalendarHeatmap,
 		PostLengthChart
 	},
+
+	async fetch() {
+		await this.$store.dispatch('updatePosts')
+	},
+
 	data() {
 		return {
-			frequent_locations: [
-				{rank: 1, name: 'Mannheim, Germany', num_posts: 123},
-				{rank: 2, name: 'Mannheim, Germany', num_posts: 123},
-				{rank: 3, name: 'Mannheim, Germany', num_posts: 123},
-				{rank: 4, name: 'Mannheim, Germany', num_posts: 123},
-				{rank: 5, name: 'Mannheim, Germany', num_posts: 123},
-				{rank: 6, name: 'Mannheim, Germany', num_posts: 123},
-				{rank: 7, name: 'Mannheim, Germany', num_posts: 123},
-				{rank: 8, name: 'Mannheim, Germany', num_posts: 123},
-				{rank: 9, name: 'Mannheim, Germany', num_posts: 123},
-				{rank: 10, name: 'Mannheim, Germany', num_posts: 123}
-			]
+			top_locations_page: 1,
+			top_mentions_page: 1,
+			top_mood_locations_page: 1
+		}
+	},
+
+	computed: {
+		posts() {
+			return this.$store.state.posts
+		},
+
+		top_locations() {
+			return _(this.posts)
+				.filter('location_verbose')
+				.countBy('location_verbose')
+				.toPairs()
+				.sortBy(1)
+				.reverse()
+				.value()
+		},
+
+		top_mentions() {
+			// FIXME Mentions should probably be extracted from text upon creation
+			// and then stored with the post
+			const mentions = []
+			for (const post of this.posts) {
+				// FIXME Should deduplicate/DRYfy regex with Post.vue
+				// Temporarily cast to Set to deduplicate mentions within a post
+				mentions.push(...[...new Set(post.text.toLowerCase().match(/@\w+\b/g))])
+			}
+
+			return _(mentions)
+				.countBy()
+				.toPairs()
+				.sortBy(1)
+				.reverse()
+				.value()
+		},
+
+		top_mood_locations() {
+			return _(this.posts)
+				.filter('location_verbose')
+				.filter('mood')
+				.groupBy('location_verbose')
+				.pickBy((entries, _) => entries.length >= 5)
+				.map((entries, location) => [location, _.meanBy(entries, entry => entry.mood).toPrecision(3)])
+				.sortBy(1)
+				.reverse()
+				.value()
+		},
+
+		markers() {
+			return _(this.posts)
+				.filter('location_lat')
+				.filter('location_lon')
+				.map(x => [x.location_lon, x.location_lat])
+		},
+
+		heatmap() {
+			const now = new Date()
+			const year = String(now.getFullYear())
+
+			const values = _(this.posts)
+				.filter(x => x.date.slice(0, 4) === year)
+				.map(x => ({ date: x.date, count: x.text.length }))
+				.value()
+
+			return {
+				endDate: now.toISOString().slice(0, 10),
+				values
+			}
 		}
 	}
 }
@@ -84,5 +150,34 @@ export default {
 	// Needed to push footer down. Usually done by main containerm, but we use
 	// the no-container layout here
 	flex-grow: 1;
+
+	.stats-map {
+		min-height: 250px;
+		max-height: 400px;
+		height: 30vh;
+	}
+
+	.el-row {
+		margin-bottom: 3rem;
+	}
+
+	.el-table {
+		width: 100%;
+	}
+
+	.heatmap {
+		margin: 1rem;
+		margin-bottom: 3rem;
+	}
+
+	.el-pagination {
+		margin-top: 1rem;
+		display: flex;
+
+		.el-pager {
+			flex-grow: 1;
+			text-align: center;
+		}
+	}
 }
 </style>

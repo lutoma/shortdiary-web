@@ -129,6 +129,12 @@ export default {
 				'faImages',
 				'faEmptySet',
 				'faTrash'
+			],
+			light: [
+				'faMapMarkedAlt',
+				'faUsers',
+				'faChartLine',
+				'faLanguage'
 			]
 		}
 	}
