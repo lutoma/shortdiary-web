@@ -11,7 +11,7 @@
 
 			<div
 				v-for="[year, months] of sorted_posts"
-				:key="year"
+				:key="Number(year)"
 				:id="`year-${year}`">
 
 				<h1 class="year-header">{{ year }}</h1>
@@ -19,7 +19,7 @@
 				<div
 					ref="monthContainer"
 					v-for="[month, posts] of months"
-					:key="`${year}-${month}`"
+					:key="Number(`${year}${month}`)"
 					:id="`month-${year}-${month}`"
 					:data-year="year"
 					:data-month="month">
@@ -40,15 +40,16 @@
 			<slot name="sidebar"></slot>
 			<div class="timeline-options">
 				<ul class="datepicker">
-					<li v-for="[year, months] of sorted_posts" :class="year == scroll_state.year ? 'active': ''">
+					<li v-for="[year, months] of sorted_posts" :class="year == scroll_state.year ? 'active': ''" :key="Number(year)">
 						<div @click="datePickerSelect" :data-scrolltarget="`#year-${year}`">{{ year }}</div>
 
-						<ul>
+						<ul v-show="year == scroll_state.year">
 							<li
 								v-for="[month, _] of months"
 								:class="month == scroll_state.month ? 'active': ''"
 								:data-scrolltarget="`#month-${year}-${month}`"
-								@click="datePickerSelect">
+								@click="datePickerSelect"
+								:key="Number(`${year}${month}`)">
 
 								{{ getMonthName(month) }}
 							</li>
@@ -96,10 +97,12 @@ export default {
 		Post
 	},
 
+	async fetch() {
+		await this.$store.dispatch('updatePosts')
+	},
+
 	data() {
 		return {
-			all_posts: null,
-
 			scroll_state: {
 				observer_els: {},
 				year: null,
@@ -116,13 +119,13 @@ export default {
 	},
 
 	computed: {
-		sorted_posts() {
-			const posts = this.$store.state.posts
-			if (!posts) {
-				return null
-			}
+		posts() {
+			return this.$store.state.posts
+		},
 
-			let filtered = _(posts)
+		sorted_posts() {
+			// FIXME case-insensitive matching
+			let filtered = _(this.posts)
 				.filter(x => x.text.includes(this.filter.text))
 				.filter(x => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1])
 
@@ -150,10 +153,6 @@ export default {
 		}
 	},
 
-	fetch() {
-		this.$store.dispatch('updatePosts')
-	},
-
 	methods: {
 		getMonthName(num) {
 			return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][Number(num) - 1]
@@ -177,8 +176,7 @@ export default {
 			// out of view, but not the one that remains visible.
 
 			// Turn into an Object for easier deduplication
-			update = update.reduce((obj, item) => (obj[item.target.id] = item, obj), {})
-			Object.assign(this.scroll_state.observer_els, update)
+			Object.assign(this.scroll_state.observer_els, _.keyBy(update, 'target.id'))
 
 			const entries = Object.values(this.scroll_state.observer_els)
 				.filter(x => x.isIntersecting)
@@ -318,7 +316,6 @@ export default {
 
 				// Sub-menu (months)
 				ul {
-					display: none;
 					padding: 0;
 					padding-left: 1rem;
 					font-size: .95em;
@@ -337,10 +334,6 @@ export default {
 					div {
 						border-left-color: #CDB380;
 						font-weight: 700;
-					}
-
-					ul {
-						display: block;
 					}
 				}
 			}
