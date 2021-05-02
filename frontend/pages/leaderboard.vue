@@ -2,7 +2,7 @@
 	<div class="leaderboard">
 		<h1>Leaderboard</h1>
 
-		<el-row :gutter="50">
+		<EqualHeightRow>
 			<el-col :span="8">
 				<el-card>
 					<h2>Longest current streak</h2>
@@ -77,14 +77,19 @@
 					</el-table>
 				</el-card>
 			</el-col>
-		</el-row>
+		</EqualHeightRow>
 
 		<p><small>Updated every five minutes. Last update: {{ leaderboard.last_update }}</small></p>
 	</div>
 </template>
 
 <script>
+import EqualHeightRow from '~/components/EqualHeightRow'
+
 export default {
+	components: {
+		EqualHeightRow
+	},
 	data() {
 		return {
 			leaderboard: {
@@ -105,8 +110,12 @@ export default {
 
 <style lang="scss">
 .leaderboard {
+	.el-row {
+		margin-bottom: 3rem;
+	}
+
 	.el-col {
-		margin-bottom: 50px;
+
 	}
 }
 </style>

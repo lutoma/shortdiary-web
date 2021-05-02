@@ -5,42 +5,30 @@
 		<div id="main-container">
 			<h1>Stats</h1>
 
-			<el-row :gutter="50">
+			<EqualHeightRow>
 				<el-col :span="8">
-					<el-card>
-						<h2><fa :icon="['fal', 'map-marked-alt']" /> Frequent locations</h2>
-						<el-table :data="top_locations.slice((top_locations_page - 1) * 10, (top_locations_page) * 10)" stripe>
-							<el-table-column prop="0" label="Location" />
-							<el-table-column prop="1" width="70" align="right" label="Posts" />
-						</el-table>
-						<el-pagination layout="prev, pager, next" :total="top_locations.length" :current-page.sync="top_locations_page" />
-					</el-card>
+					<PaginatedTableCard title="Frequent locations" icon="map-marked-alt" :data="top_locations">
+						<el-table-column prop="0" label="Location" />
+						<el-table-column prop="1" width="70" align="right" label="Posts" />
+					</PaginatedTableCard>
 				</el-col>
 				<el-col :span="8">
-					<el-card>
-						<h2><fa :icon="['fal', 'users']" /> Frequently mentioned</h2>
-						<el-table :data="top_mentions.slice((top_mentions_page - 1) * 10, (top_mentions_page) * 10)" stripe>
-							<el-table-column prop="0" label="Name">
-								<template slot-scope="scope">
-									<n-link :to="`/dashboard?filter=${scope.row[0]}`">{{ scope.row[0] }}</n-link>
-								</template>
-							</el-table-column>
-							<el-table-column prop="1" width="70" align="right" label="Posts" />
-						</el-table>
-						<el-pagination layout="prev, pager, next" :total="top_mentions.length" :current-page.sync="top_mentions_page" />
-					</el-card>
+					<PaginatedTableCard title="Frequent mentions" icon="users" :data="top_mentions">
+						<el-table-column prop="0" label="Name">
+							<template slot-scope="scope">
+								<n-link :to="`/dashboard?filter=${scope.row[0]}`">{{ scope.row[0] }}</n-link>
+							</template>
+						</el-table-column>
+						<el-table-column prop="1" width="70" align="right" label="Posts" />
+					</PaginatedTableCard>
 				</el-col>
 				<el-col :span="8">
-					<el-card>
-						<h2><fa :icon="['fal', 'chart-line']" /> Locations by avg. mood</h2>
-						<el-table :data="top_mood_locations.slice((top_mood_locations_page - 1) * 10, (top_mood_locations_page) * 10)" stripe>
-							<el-table-column prop="0" label="Name" />
-							<el-table-column prop="1" width="70" align="right" label="Mood" />
-						</el-table>
-						<el-pagination layout="prev, pager, next" :total="top_mood_locations.length" :current-page.sync="top_mood_locations_page" />
-					</el-card>
+					<PaginatedTableCard title="Locations by mood" icon="chart-line" :data="top_mood_locations">
+						<el-table-column prop="0" label="Name" />
+						<el-table-column prop="1" width="70" align="right" label="Mood" />
+					</PaginatedTableCard>
 				</el-col>
-			</el-row>
+			</EqualHeightRow>
 
 			<h2>Year to date</h2>
 			<calendar-heatmap class="heatmap" :values="heatmap.values" :end-date="heatmap.endDate" />
@@ -51,16 +39,20 @@
 
 <script>
 import CalendarHeatmap from '~/components/CalendarHeatmap'
-import Map from '~/components/Map'
 import PostLengthChart from '~/components/PostLengthChart'
+import EqualHeightRow from '~/components/EqualHeightRow'
+import PaginatedTableCard from '~/components/PaginatedTableCard'
+import Map from '~/components/Map'
 import _ from 'lodash'
 
 export default {
 	layout: 'no-container',
 	components: {
-		Map,
 		CalendarHeatmap,
-		PostLengthChart
+		PostLengthChart,
+		EqualHeightRow,
+		PaginatedTableCard,
+		Map
 	},
 
 	async fetch() {
@@ -157,16 +149,12 @@ export default {
 		height: 30vh;
 	}
 
-	.el-row {
+	.heatmap {
+		margin: 1rem;
 		margin-bottom: 3rem;
 	}
 
-	.el-table {
-		width: 100%;
-	}
-
-	.heatmap {
-		margin: 1rem;
+	.card-table-row {
 		margin-bottom: 3rem;
 	}
 
