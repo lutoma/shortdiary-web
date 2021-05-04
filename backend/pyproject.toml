@@ -6,7 +6,7 @@ authors = ["Lukas Martini <hello@lutoma.org>"]
 license = "Proprietary"
 
 [tool.poetry.dependencies]
-python = "3.9.2"
+python = "3.9.5"
 Django = "^3.1"
 Pillow = "^8.1.2"
 djangorestframework = "^3.4.7"
