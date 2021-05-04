@@ -1,4 +1,4 @@
-from rest_framework.generics import RetrieveUpdateAPIView, RetrieveAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework import viewsets
 from diary.models import Post
 from django.core.cache import cache
@@ -24,14 +24,14 @@ class PostViewSet(viewsets.ModelViewSet):
 		serializer.save(author=self.request.user)
 
 	def get_queryset(self):
-		return Post.objects.filter(author=self.request.user)
+		return self.request.user.posts
 
 
-class RandomPublicPostView(RetrieveAPIView):
+class RandomPublicPostView(ListAPIView):
 	serializer_class = PublicPostSerializer
 
-	def get_object(self):
-		return Post.objects.filter(public=True).order_by('?').first()
+	def get_queryset(self):
+		return Post.objects.filter(public=True).order_by('?')[:25]
 
 
 class LeaderboardView(RetrieveAPIView):
