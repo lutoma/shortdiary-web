@@ -124,8 +124,6 @@ export default {
 		component: 'fa',
 		proIcons: {
 			regular: [
-				'faLock',
-				'faLockOpen',
 				'faKey',
 				'faPencil',
 				'faSignIn',
@@ -136,12 +134,19 @@ export default {
 				'faSignOut',
 				'faCompass',
 				'faUserFriends',
-				'faLink',
 				'faImages',
-				'faEmptySet',
-				'faTrash'
+				'faEmptySet'
 			],
 			light: [
+				'faLock',
+				'faLockOpen',
+				'faLaugh',
+				'faSmile',
+				'faMeh',
+				'faFrown',
+				'faPencil',
+				'faLink',
+				'faTrash',
 				'faMapMarkedAlt',
 				'faUsers',
 				'faChartLine',

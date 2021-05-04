@@ -1,17 +1,29 @@
 <template>
 	<el-card class="post" v-if="post">
-		<div slot="header" class="clearfix">
-			<el-tag size="small" :type="post.public ? 'default' : 'warning'">
-				<template v-if="post.public"><fa :icon="['far', 'lock-open']" /> Public</template>
-				<template v-if="!post.public"><fa :icon="['far', 'lock']" /> Private</template>
-			</el-tag>
-			<template v-if="showDate">{{ post.date }}</template> <template v-if="post.location_verbose">| {{ post.location_verbose }}</template>
+		<div slot="header" class="post-header clearfix">
+			<span class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</span>
+			<el-divider direction="vertical" />
 
-			<el-rate v-model="post.mood" disabled />
+			{{ date.toLocaleString('en',  { weekday: 'long' }) }}
+			<el-divider direction="vertical" />
+
+			<template v-if="post.public"><fa :icon="['fal', 'lock-open']" /> Public</template>
+			<template v-if="!post.public"><fa :icon="['fal', 'lock']" /> Private</template>
+
+			<template v-if="post.location_verbose">
+				<el-divider direction="vertical" />
+				<fa :icon="['fal', 'map-marked-alt']" /> {{ post.location_verbose }}
+			</template>
+
+			<template v-if="post.mood">
+				<el-divider direction="vertical" />
+				<fa :icon="['fal', moodIcon]" /> Mood: {{ post.mood }}
+			</template>
+
 			<div class="right">
-				<el-button v-if="post.is_editable" class="edit-button" type="text"><fa :icon="['far', 'pencil']" /> Edit</el-button>
-				<el-button v-if="post.is_editable" class="delete-button" type="text" @click="deletePost"><fa :icon="['far', 'trash']" /> Delete</el-button>
-				<n-link v-if="showPermalink" :to="`/posts/${post.id}`"><el-button type="text"><fa :icon="['far', 'link']" /> Permalink</el-button></n-link>
+				<el-button v-if="post.is_editable" class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button>
+				<el-button v-if="post.is_editable" class="delete-button" type="text" @click="deletePost"><fa :icon="['fal', 'trash']" /> Delete</el-button>
+				<n-link v-if="showPermalink" :to="`/posts/${post.id}`"><el-button type="text"><fa :icon="['fal', 'link']" /> Permalink</el-button></n-link>
 			</div>
 		</div>
 
@@ -33,7 +45,6 @@ export default {
 
 	props: {
 		post: { type: Object, default: {} },
-		showDate: { type: Boolean, default: true },
 		showPermalink: { type: Boolean, default: true }
 	},
 
@@ -54,6 +65,26 @@ export default {
 	computed: {
 		PostTextComponent() {
 			return { template: `<div>${this.text_html}</div>` }
+		},
+
+		date() {
+			return new Date(this.post.date)
+		},
+
+		moodIcon() {
+			if (this.post.mood <= 2) {
+				return 'frown'
+			}
+
+			if (this.post.mood >= 6 && this.post.mood <= 8) {
+				return 'smile'
+			}
+
+			if (this.post.mood >= 9) {
+				return 'laugh'
+			}
+
+			return 'meh'
 		}
 	},
 
@@ -79,23 +110,31 @@ export default {
 
 <style lang="scss">
 .post {
-	.el-rate {
-		display: inline-block;
-		margin-left: 2rem;
-	}
+	.post-header {
+		font-weight: 300;
 
-	.right {
-		float: right;
-		padding: 3px 0;
+		.date {
+			font-weight: 400;
+		}
 
-		.el-button {
-			padding: 0;
-			margin-left: .5rem;
+		.el-rate {
+			display: inline-block;
+			margin-left: 2rem;
+		}
+
+		.right {
+			float: right;
+			padding: 3px 0;
+
+			.el-button {
+				padding: 0;
+				margin-left: .5rem;
+			}
 		}
 	}
 
 	.text {
-		line-height: 1.3;
+		line-height: 1.5;
 		font-size: 1.05rem;
 		font-family: "Fira Sans";
 	}

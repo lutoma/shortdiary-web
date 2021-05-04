@@ -20,7 +20,7 @@ export default {
 	},
 
 	async fetch() {
-		this.post = await this.$axios.$get(`/posts/${ this.$route.params.pathMatch }/`)
-	},
+		this.post = await this.$axios.$get(`/posts/${this.$route.params.pathMatch}/`)
+	}
 }
 </script>
