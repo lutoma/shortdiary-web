@@ -33,8 +33,7 @@
 			<el-form ref="form" :model="post" label-position="top" label-width="60px" @submit="savePost">
 				<el-form-item label="Date">
 					<el-select v-model="post.date" placeholder="Date">
-						<el-option label="Yesterday" value="2021-04-26"/>
-						<el-option label="Today" value="2021-04-27" />
+						<el-option v-for="option of dateOptions" :label="option.label" :value="option.date"/>
 					</el-select>
 				</el-form-item>
 
@@ -101,6 +100,19 @@ export default {
 				words: 0,
 				chars: 0
 			}
+		}
+	},
+
+	computed: {
+		dateOptions() {
+			const today = new Date()
+			const yesterday = today
+			yesterday.setDate(yesterday.getDate() - 1)
+
+			return [
+				{ label: 'Yesterday', date: yesterday.toISOString().slice(0, 10) },
+				{ label: 'Today', date: today.toISOString().slice(0, 10) }
+			]
 		}
 	},
 
