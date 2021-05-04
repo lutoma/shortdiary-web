@@ -135,22 +135,14 @@ Django = ">=2.2"
 
 [[package]]
 name = "django-formtools"
-version = "2.2"
+version = "2.3"
 description = "A set of high-level abstractions for Django forms"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 
 [package.dependencies]
-Django = ">=1.11"
-
-[[package]]
-name = "django-gravatar2"
-version = "1.4.4"
-description = "Essential Gravatar support for Django. Features helper methods, templatetags and a full test suite!"
-category = "main"
-optional = false
-python-versions = "*"
+Django = ">=2.2"
 
 [[package]]
 name = "django-hcaptcha"
@@ -579,7 +571,7 @@ pycryptodome = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.2"
-content-hash = "14ed74486d051f7ad69da8c16e6656af6b7c0b7ba8eb731294772a65d54af5af"
+content-hash = "e6122aab79a0c8e3d84b4cac1678f8df7c0ed718c334a8e716443917fbea61b9"
 
 [metadata.files]
 ansicon = [
@@ -631,12 +623,8 @@ django-cors-headers = [
     {file = "django_cors_headers-3.7.0-py3-none-any.whl", hash = "sha256:1ac2b1213de75a251e2ba04448da15f99bcfcbe164288ae6b5ff929dc49b372f"},
 ]
 django-formtools = [
-    {file = "django-formtools-2.2.tar.gz", hash = "sha256:c5272c03c1cd51b2375abf7397a199a3148a9fbbf2f100e186467a84025d13b2"},
-    {file = "django_formtools-2.2-py2.py3-none-any.whl", hash = "sha256:304fa777b8ef9e0693ce7833f885cb89ba46b0e46fc23b01176900a93f46742f"},
-]
-django-gravatar2 = [
-    {file = "django-gravatar2-1.4.4.tar.gz", hash = "sha256:c813280967511ced93eea0359f60e5369c35b3311efe565c3e5d4ab35c10c9ee"},
-    {file = "django_gravatar2-1.4.4-py2.py3-none-any.whl", hash = "sha256:545a6c2c5c624c7635dec29c7bc0be1a2cb89c9b8821af8616ae9838827cc35b"},
+    {file = "django-formtools-2.3.tar.gz", hash = "sha256:9663b6eca64777b68d6d4142efad8597fe9a685924673b25aa8a1dcff4db00c3"},
+    {file = "django_formtools-2.3-py3-none-any.whl", hash = "sha256:4699937e19ee041d803943714fe0c1c7ad4cab802600eb64bbf4cdd0a1bfe7d9"},
 ]
 django-hcaptcha = [
     {file = "django-hCaptcha-0.1.0.tar.gz", hash = "sha256:2b80197c07bb8444249bcce3758b0472d369cca309fb02d7abcd0a856431b76b"},

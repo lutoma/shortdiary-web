@@ -39,11 +39,6 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LANGUAGES = (
-	('en', 'English'),
-	('de', 'Deutsch'),
-)
-
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(SITE_ROOT, 'asset')
@@ -124,9 +119,6 @@ TEMPLATES = [
 	},
 ]
 
-GRAVATAR_URL_PREFIX = 'https://secure.gravatar.com/'
-GRAVATAR_DEFAULT_IMAGE = 'mm'
-
 INSTALLED_APPS = (
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
@@ -137,12 +129,10 @@ INSTALLED_APPS = (
 	'django.contrib.humanize',
 	'django.contrib.admin',
 	'django.contrib.admindocs',
-	'django_gravatar',
 	'rest_framework',
 	'rest_framework.authtoken',
 	'rest_auth',
 	'diary',
-	'apiv1',
 	'apiv2',
 	'django_otp',
 	'django_otp.plugins.otp_static',
@@ -185,9 +175,9 @@ AUTH_PROFILE_MODULE = 'diary.UserProfile'
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
-	'DEFAULT_PERMISSION_CLASSES': (
-		'apiv1.permissions.IsOwner',
-	),
+	'DEFAULT_PERMISSION_CLASSES': [
+		'rest_framework.permissions.IsAuthenticated',
+	],
 	'DEFAULT_AUTHENTICATION_CLASSES': (
 		# 'rest_framework.authentication.OAuth2Authentication',
 		'rest_framework.authentication.TokenAuthentication',
