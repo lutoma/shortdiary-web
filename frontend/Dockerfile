@@ -13,4 +13,4 @@ RUN yarn install
 COPY . .
 RUN yarn build
 EXPOSE 3000
-CMD ["yarn", "start", "-H", "0.0.0.0"]
+CMD ["node_modules/nuxt/bin/nuxt.js", "start", "-H", "0.0.0.0"]
