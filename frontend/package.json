@@ -32,6 +32,7 @@
     "vue-calendar-heatmap": "^0.8.4",
     "vue-chartjs": "^3.5.1",
     "vue-cool-lightbox": "^2.7.1",
+    "vue-masonry-wall": "^0.3.2",
     "vue-mention": "^1.0.0"
   },
   "devDependencies": {

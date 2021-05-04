@@ -1,26 +1,45 @@
 <template>
-	<div>
-		<h1>Discover</h1>
-		<Post :post="post" v-if="post" v-loading="!post" />
+	<div class="discover">
+		<h1>Discover public posts</h1>
+
+		<vue-masonry-wall :items="posts" :options="{width: 600, padding: 16}" :ssr="{columns: 2}" @append="loadMore">
+			<template v-slot:default="{item}">
+				<Post :post="item" />
+			</template>
+		</vue-masonry-wall>
+
+		<div class="more">
+			<h2>Hold up, loading more posts …</h2>
+		</div>
 	</div>
 </template>
 
 <script>
 import Post from '~/components/Post'
+import VueMasonryWall from 'vue-masonry-wall'
 
 export default {
 	components: {
-		Post
+		Post,
+		VueMasonryWall
 	},
 
 	data() {
 		return {
-			post: null
+			posts: []
 		}
 	},
 
 	async fetch() {
-		this.post = await this.$axios.$get('/posts/random_public/')
+		this.posts = await this.$axios.$get('/posts/random_public/')
+	},
+
+	methods: {
+		loadMore() {
+			this.$axios.$get('/posts/random_public/').then(posts => {
+				this.posts.push(...posts)
+			})
+		}
 	},
 
 	head () {
@@ -28,3 +47,10 @@ export default {
 	}
 }
 </script>
+
+<style>
+.discover .more {
+	margin-top: 5rem;
+	text-align: center;
+}
+</style>
