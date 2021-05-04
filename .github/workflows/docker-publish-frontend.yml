@@ -10,6 +10,7 @@ on:
 
 env:
   IMAGE_NAME: shortdiary-frontend
+  FONTAWESOME_AUTH_TOKEN: ${{ secrets.FONTAWESOME_AUTH_TOKEN }}
 
 defaults:
   run:
