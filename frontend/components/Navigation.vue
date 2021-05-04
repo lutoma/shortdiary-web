@@ -81,6 +81,7 @@ export default {
 		align-items: center;
 
 		.name {
+			font-family: "Exo 2", "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 			font-size: 25px;
 			font-weight: 600;
 			margin-right: 50px;

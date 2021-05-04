@@ -1,7 +1,9 @@
+@import "@fontsource/fira-sans/latin-300.css";
 @import "@fontsource/fira-sans/latin-400.css";
+@import "@fontsource/fira-sans/latin-600.css";
+@import "@fontsource/fira-sans/latin-700.css";
 @import "@fontsource/exo-2/latin-200.css";
 @import "@fontsource/exo-2/latin-300.css";
-@import "@fontsource/exo-2/latin-400.css";
 @import "@fontsource/exo-2/latin-600.css";
 @import "@fontsource/exo-2/latin-700.css";
 
@@ -17,7 +19,7 @@ html, body, #__nuxt, #__layout {
 }
 
 html {
-	font-family: "Exo 2", "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	font-family: "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 	font-size: 17px;
 	word-spacing: 1px;
 	-ms-text-size-adjust: 100%;
@@ -43,6 +45,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
 	font-weight: 600;
+	font-family: "Exo 2", "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 h1 {
@@ -53,10 +56,6 @@ h1 {
 h2 {
 	margin-bottom: 1rem;
 	font-weight: 300;
-}
-
-textarea {
-	font-family: "Fira Sans";
 }
 
 a, .el-button--text {
@@ -72,6 +71,10 @@ a, .el-button--text {
 
 p {
 	margin: 1.5rem 0;
+}
+
+input, textarea {
+	font-family: "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 #default-layout-container {
