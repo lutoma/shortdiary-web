@@ -1,11 +1,11 @@
 <template>
 	<el-row class="post-timeline" :gutter="50">
-		<el-col :span="19" class="left" v-loading="!sorted_posts">
-			<template v-if="!sorted_posts">
+		<el-col :span="19" class="left" v-loading="!posts.length">
+			<template v-if="!posts.length">
 				&nbsp;
 			</template>
 
-			<template v-if="sorted_posts && !sorted_posts.length">
+			<template v-if="posts.length && !sorted_posts.length">
 				<h2>Could not find any posts matching your filters.</h2>
 			</template>
 
