@@ -1,10 +1,10 @@
 FROM node:15
 WORKDIR /code
 
-COPY ./package.json ./
-COPY ./yarn.lock ./
+COPY package.json ./
+COPY yarn.lock ./
 
-# Needed for fontawesome pro, but not part of git repo
+# For fontawesome pro. Need to set FONTAWESOME_AUTH_TOKEN env variable
 COPY .npmrc ./
 
 RUN yarn install
