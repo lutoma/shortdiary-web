@@ -71,6 +71,8 @@ STATICFILES_FINDERS = (
 #	'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'this-is-not-the-production-key'
 
