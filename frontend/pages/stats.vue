@@ -133,6 +133,10 @@ export default {
 				values
 			}
 		}
+	},
+
+	head () {
+		return { title: 'Stats – shortdiary' }
 	}
 }
 </script>

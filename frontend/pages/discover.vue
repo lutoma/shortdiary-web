@@ -21,6 +21,10 @@ export default {
 
 	async fetch() {
 		this.post = await this.$axios.$get('/posts/random_public/')
+	},
+
+	head () {
+		return { title: 'Discover – shortdiary' }
 	}
 }
 </script>

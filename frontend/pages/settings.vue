@@ -45,6 +45,7 @@ export default {
 			user: JSON.parse(JSON.stringify(this.$auth.user))
 		}
 	},
+
 	methods: {
 		async saveSettings() {
 			// FIXME error handling
@@ -52,6 +53,10 @@ export default {
 			await this.$auth.fetchUser()
 			this.$message({ type: 'success', message: 'Your settings have been saved.' })
 		}
+	},
+
+	head () {
+		return { title: 'Settings – shortdiary' }
 	}
 }
 </script>

@@ -57,8 +57,11 @@ export default {
 	methods: {
 		join() {
 		}
-	}
+	},
 
+	head () {
+		return { title: 'Join – shortdiary' }
+	}
 }
 </script>
 

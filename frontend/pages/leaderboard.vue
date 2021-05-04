@@ -104,6 +104,10 @@ export default {
 
 	async fetch() {
 		this.leaderboard = await this.$axios.$get('/leaderboard/')
+	},
+
+	head () {
+		return { title: 'Leaderboard – shortdiary' }
 	}
 }
 </script>
