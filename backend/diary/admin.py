@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 from diary.models import Post, DiaryUser
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -26,15 +27,15 @@ class PostAdmin(admin.ModelAdmin):
 
 	list_display = ['author', 'date', 'public', 'natural_language', 'sent', 'is_editable']
 	list_filter = ['sent', 'created_at', 'public', 'natural_language']
+	search_fields = ('author__username',)
 	date_hierarchy = 'date'
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(DjangoUserAdmin):
 	list_display = ['username', 'email', 'last_seen_at', 'language']
 	list_filter = ['email_verified', 'last_seen_at', 'geolocation_enabled', 'include_in_leaderboard']
 	readonly_fields = ('last_seen_at',)
 	date_hierarchy = 'last_seen_at'
-	search_fields = ('username',)
 
 
 admin.site.register(Post, PostAdmin)
