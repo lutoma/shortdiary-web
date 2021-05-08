@@ -26,7 +26,7 @@
 
 					<h2 class="month-header">{{ getMonthName(month) }} <span>{{ year }}</span></h2>
 					<div class="post-container" v-for="post in posts" :key="post.id">
-						<Post :post="post" :show-date="false" />
+						<Post :post="post" />
 					</div>
 				</div>
 			</div>

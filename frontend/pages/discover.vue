@@ -4,7 +4,7 @@
 
 		<vue-masonry-wall :items="posts" :options="{width: 600, padding: 16}" :ssr="{columns: 2}" @append="loadMore">
 			<template v-slot:default="{item}">
-				<Post :post="item" />
+				<Post :post="item" :compact="true" />
 			</template>
 		</vue-masonry-wall>
 

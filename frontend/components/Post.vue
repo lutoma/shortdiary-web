@@ -1,14 +1,18 @@
 <template>
 	<el-card class="post" v-if="post">
 		<div slot="header" class="post-header clearfix">
-			<span class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</span>
-			<el-divider direction="vertical" />
+			<n-link :to="`/posts/${post.id}`" class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</n-link>
 
-			{{ date.toLocaleString('en',  { weekday: 'long' }) }}
-			<el-divider direction="vertical" />
+			<template v-if="!compact">
+				<el-divider direction="vertical" />
+				{{ date.toLocaleString('en',  { weekday: 'long' }) }}
+			</template>
 
-			<template v-if="post.public"><fa :icon="['fal', 'lock-open']" /> Public</template>
-			<template v-if="!post.public"><fa :icon="['fal', 'lock']" /> Private</template>
+			<template v-if="!compact">
+				<el-divider direction="vertical" />
+				<template v-if="post.public"><fa :icon="['fal', 'lock-open']" /> Public</template>
+				<template v-if="!post.public"><fa :icon="['fal', 'lock']" /> Private</template>
+			</template>
 
 			<template v-if="post.location_verbose">
 				<el-divider direction="vertical" />
@@ -23,7 +27,6 @@
 			<div class="right">
 				<el-button v-if="post.is_editable" class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button>
 				<el-button v-if="post.is_editable" class="delete-button" type="text" @click="deletePost"><fa :icon="['fal', 'trash']" /> Delete</el-button>
-				<n-link v-if="showPermalink" :to="`/posts/${post.id}`"><el-button type="text"><fa :icon="['fal', 'link']" /> Permalink</el-button></n-link>
 			</div>
 		</div>
 
@@ -45,7 +48,7 @@ export default {
 
 	props: {
 		post: { type: Object, default: {} },
-		showPermalink: { type: Boolean, default: true }
+		compact: { type: Boolean, default: false }
 	},
 
 	data() {
@@ -72,7 +75,7 @@ export default {
 		},
 
 		moodIcon() {
-			if (this.post.mood <= 2) {
+			if (this.post.mood <= 3) {
 				return 'frown'
 			}
 
