@@ -53,16 +53,30 @@ class PostSerializer(serializers.ModelSerializer):
 		]
 
 
+class FuzzedCoordinateField(serializers.ReadOnlyField):
+	"""
+	A field that drops significant digits from geo coordinates for privacy
+	Returns as strings for consistency with rest of API (DRF returns Decimals
+	as strings since JSON only support floats)
+	"""
+
+	def to_representation(self, value):
+		if not value:
+			return None
+		return str(round(value, 2))
+
+
 class PublicPostSerializer(PostSerializer):
-	# Like PostSerializer, but with public_text only
-	public_text = serializers.CharField(source='get_public_text')
+	text = serializers.CharField(source='get_public_text')
+	location_lat = FuzzedCoordinateField()
+	location_lon = FuzzedCoordinateField()
 
 	class Meta:
 		model = Post
 		fields = [
 			'id',
 			'date',
-			'public_text',
+			'text',
 			'mood',
 			'image',
 			'location_lat',
@@ -70,8 +84,7 @@ class PublicPostSerializer(PostSerializer):
 			'location_verbose',
 			'public',
 			'part_of',
-			'natural_language',
-			'is_editable'
+			'natural_language'
 		]
 
 
