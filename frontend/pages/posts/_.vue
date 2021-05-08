@@ -12,7 +12,7 @@ import Post from '~/components/Post'
 import Map from '~/components/Map'
 
 export default {
-	auth: 'guest',
+	auth: false,
 	components: {
 		Post,
 		Map
