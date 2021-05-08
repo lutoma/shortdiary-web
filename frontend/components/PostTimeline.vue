@@ -120,9 +120,8 @@ export default {
 		},
 
 		sorted_posts() {
-			// FIXME case-insensitive matching
 			let filtered = _(this.posts)
-				.filter(x => x.text.includes(this.filter.text))
+				.filter(x => x.text.toLowerCase().includes(this.filter.text.toLowerCase()))
 				.filter(x => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1])
 
 			if (this.filter.image !== null) {
@@ -151,7 +150,9 @@ export default {
 
 	methods: {
 		getMonthName(num) {
-			return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][Number(num) - 1]
+			const date = new Date()
+			date.setMonth(num)
+			return date.toLocaleString('en', { month: 'long' })
 		},
 
 		datePickerSelect(event) {
@@ -231,7 +232,7 @@ export default {
 		.post-container {
 			display: flex;
 			flex-direction: row;
-			margin: 30px 0;
+			margin: 35px 0;
 
 			.post {
 				flex-grow: 1;
