@@ -8,6 +8,9 @@ on:
     tags:
       - v*
 
+    paths:
+      - 'backend/**'
+
 env:
   IMAGE_NAME: shortdiary-backend
 
