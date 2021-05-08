@@ -27,6 +27,8 @@ def update_leaderboard():
 		.values('username', 'num_posts')[:10]
 
 	average_post_length = users \
+		.annotate(num_posts=Count('posts')) \
+		.filter(num_posts__gte=25) \
 		.annotate(avg_length=Cast(Avg(Length('posts__text')), IntegerField())) \
 		.filter(avg_length__gt=0) \
 		.order_by('-avg_length') \
