@@ -135,7 +135,9 @@ export default {
 				'faCompass',
 				'faUserFriends',
 				'faImages',
-				'faEmptySet'
+				'faEmptySet',
+				'faLock',
+				'faLockOpen'
 			],
 			light: [
 				'faLock',
