@@ -60,7 +60,7 @@ export default {
 <style lang="scss">
 .post-detail {
 	#map-background {
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		height: 100%;
