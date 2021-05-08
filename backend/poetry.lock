@@ -134,17 +134,6 @@ python-versions = ">=3.6"
 Django = ">=2.2"
 
 [[package]]
-name = "django-formtools"
-version = "2.3"
-description = "A set of high-level abstractions for Django forms"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-Django = ">=2.2"
-
-[[package]]
 name = "django-hcaptcha"
 version = "0.1.0"
 description = "Django hCaptcha provides a simple way to protect your django forms using hCaptcha"
@@ -177,21 +166,6 @@ python-versions = "*"
 [package.dependencies]
 django-otp = ">=1.0.0"
 YubiOTP = ">=0.2.2"
-
-[[package]]
-name = "django-phonenumber-field"
-version = "5.1.0"
-description = "An international phone number field for django models."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-Django = ">=2.2"
-
-[package.extras]
-phonenumbers = ["phonenumbers (>=7.0.2)"]
-phonenumberslite = ["phonenumberslite (>=7.0.2)"]
 
 [[package]]
 name = "django-picklefield"
@@ -271,28 +245,6 @@ dropbox = ["dropbox (>=7.2.1)"]
 google = ["google-cloud-storage (>=1.15.0)"]
 libcloud = ["apache-libcloud"]
 sftp = ["paramiko"]
-
-[[package]]
-name = "django-two-factor-auth"
-version = "1.13.1"
-description = "Complete Two-Factor Authentication for Django"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-Django = ">=2.2"
-django-formtools = "*"
-django-otp = ">=0.8.0"
-django-phonenumber-field = ">=1.1.0,<6"
-qrcode = ">=4.0.0,<6.99"
-
-[package.extras]
-call = ["twilio (>=6.0)"]
-phonenumbers = ["phonenumbers (>=7.0.9,<8.99)"]
-phonenumberslite = ["phonenumberslite (>=7.0.9,<8.99)"]
-sms = ["twilio (>=6.0)"]
-yubikey = ["django-otp-yubikey"]
 
 [[package]]
 name = "djangorestframework"
@@ -573,7 +525,7 @@ pycryptodome = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.5"
-content-hash = "9fecab44e88cda4e2bd9e7fd2d646b358bab3ccca2ca259fa0ebfb79000453c2"
+content-hash = "b1169da8cc4de3af23e8e3db715da8d7622eb36a1b8b7de4d85aa641e7671592"
 
 [metadata.files]
 ansicon = [
@@ -624,10 +576,6 @@ django-cors-headers = [
     {file = "django-cors-headers-3.7.0.tar.gz", hash = "sha256:96069c4aaacace786a34ee7894ff680780ec2644e4268b31181044410fecd12e"},
     {file = "django_cors_headers-3.7.0-py3-none-any.whl", hash = "sha256:1ac2b1213de75a251e2ba04448da15f99bcfcbe164288ae6b5ff929dc49b372f"},
 ]
-django-formtools = [
-    {file = "django-formtools-2.3.tar.gz", hash = "sha256:9663b6eca64777b68d6d4142efad8597fe9a685924673b25aa8a1dcff4db00c3"},
-    {file = "django_formtools-2.3-py3-none-any.whl", hash = "sha256:4699937e19ee041d803943714fe0c1c7ad4cab802600eb64bbf4cdd0a1bfe7d9"},
-]
 django-hcaptcha = [
     {file = "django-hCaptcha-0.1.0.tar.gz", hash = "sha256:2b80197c07bb8444249bcce3758b0472d369cca309fb02d7abcd0a856431b76b"},
 ]
@@ -638,10 +586,6 @@ django-otp = [
 django-otp-yubikey = [
     {file = "django-otp-yubikey-1.0.0.post1.tar.gz", hash = "sha256:1da060257611d06e681848b7923fd788d878a79e8c358a373374deab13a085af"},
     {file = "django_otp_yubikey-1.0.0.post1-py2.py3-none-any.whl", hash = "sha256:613c96be211c1267400a5a78ae63f212c722f82dffb9daef3c8b1df370abb9be"},
-]
-django-phonenumber-field = [
-    {file = "django-phonenumber-field-5.1.0.tar.gz", hash = "sha256:9eda963ac15b363393f677cc084efd45c3bd97bb5a0cdb4a06409ac99e05dd4b"},
-    {file = "django_phonenumber_field-5.1.0-py3-none-any.whl", hash = "sha256:48724ba235ee8248a474204faa0934c5baf9536f429859d05cb131fbd6b1c695"},
 ]
 django-picklefield = [
     {file = "django-picklefield-3.0.1.tar.gz", hash = "sha256:15ccba592ca953b9edf9532e64640329cd47b136b7f8f10f2939caa5f9ce4287"},
@@ -661,10 +605,6 @@ django-rest-auth = [
 django-storages = [
     {file = "django-storages-1.11.1.tar.gz", hash = "sha256:c823dbf56c9e35b0999a13d7e05062b837bae36c518a40255d522fbe3750fbb4"},
     {file = "django_storages-1.11.1-py3-none-any.whl", hash = "sha256:f28765826d507a0309cfaa849bd084894bc71d81bf0d09479168d44785396f80"},
-]
-django-two-factor-auth = [
-    {file = "django-two-factor-auth-1.13.1.tar.gz", hash = "sha256:a20e03d256fd9fd668988545f052cedcc47e5a981888562e5e27d0bb83deae89"},
-    {file = "django_two_factor_auth-1.13.1-py2.py3-none-any.whl", hash = "sha256:d270d4288731233621a9462a89a8dfed2dcb86fa354125c816a89772d55f9e29"},
 ]
 djangorestframework = [
     {file = "djangorestframework-3.12.4-py3-none-any.whl", hash = "sha256:6d1d59f623a5ad0509fe0d6bfe93cbdfe17b8116ebc8eda86d45f6e16e819aaf"},

@@ -81,7 +81,6 @@ MIDDLEWARE = (
 	'django.middleware.locale.LocaleMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
-	'two_factor.middleware.threadlocals.ThreadLocals',
 	'django_otp.middleware.OTPMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'diary.middleware.TrackLastActivityMiddleware'
@@ -128,8 +127,6 @@ INSTALLED_APPS = (
 	'django_otp',
 	'django_otp.plugins.otp_static',
 	'django_otp.plugins.otp_totp',
-	'otp_yubikey',
-	'two_factor',
 	'django_q',
 	'corsheaders',
 	'hcaptcha',
@@ -181,11 +178,7 @@ REST_FRAMEWORK = {
 
 
 AUTH_USER_MODEL = 'diary.DiaryUser'
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = 'two_factor:login'
 
-TWO_FACTOR_CALL_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
-TWO_FACTOR_SMS_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
 TWILIO_ACCOUNT_SID = None
 TWILIO_AUTH_TOKEN = None
 TWILIO_CALLER_ID = None
