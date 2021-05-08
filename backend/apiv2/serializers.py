@@ -83,7 +83,6 @@ class PublicPostSerializer(PostSerializer):
 			'location_lon',
 			'location_verbose',
 			'public',
-			'part_of',
 			'natural_language'
 		]
 
