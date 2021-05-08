@@ -9,11 +9,13 @@
 
 <script>
 import Post from '~/components/Post'
+import Map from '~/components/Map'
 
 export default {
 	auth: 'guest',
 	components: {
-		Post
+		Post,
+		Map
 	},
 
 	data() {
