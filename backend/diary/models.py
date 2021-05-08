@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
 from django.db.models.functions import Length, Coalesce
-from django.db.models import Sum, Avg
+from django.db.models import Sum, Avg, IntegerField
 from django.conf import settings
 from django_q.tasks import async_task
 from django.core.cache import cache
@@ -56,10 +56,12 @@ class DiaryUser(AbstractUser):
 		return grid
 
 	def get_post_characters(self):
-		return self.posts.aggregate(sum=Coalesce(Sum(Length('text')), 0))['sum']
+		return self.posts.aggregate(sum=Coalesce(Sum(Length('text')), 0,
+			output_field=IntegerField()))['sum']
 
 	def get_average_post_length(self):
-		return int(self.posts.aggregate(avg=Coalesce(Avg(Length('text')), 0))['avg'])
+		return self.posts.aggregate(avg=Coalesce(Avg(Length('text')), 0,
+			output_field=IntegerField()))['avg']
 
 	def get_mention_toplist(self):
 		'''
