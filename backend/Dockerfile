@@ -4,9 +4,6 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /code
 
-RUN wget "https://caddyserver.com/api/download?os=linux&arch=amd64" -O /usr/local/bin/caddy
-RUN chmod +x /usr/local/bin/caddy
-
 RUN apt update && apt install -y supervisor redis-server git
 
 COPY pyproject.toml .

@@ -120,7 +120,6 @@ INSTALLED_APPS = (
 	'django.contrib.staticfiles',
 	'django.contrib.humanize',
 	'django.contrib.admin',
-	'django.contrib.admindocs',
 	'rest_framework',
 	'rest_framework.authtoken',
 	'rest_auth',
