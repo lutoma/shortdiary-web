@@ -119,17 +119,16 @@ INSTALLED_APPS = (
 	'django.contrib.staticfiles',
 	'django.contrib.humanize',
 	'django.contrib.admin',
-	'rest_framework',
-	'rest_framework.authtoken',
-	'rest_auth',
-	'diary',
-	'apiv2',
-	'django_otp',
-	'django_otp.plugins.otp_static',
-	'django_otp.plugins.otp_totp',
 	'django_q',
 	'corsheaders',
 	'hcaptcha',
+	'rest_framework',
+	'django_otp',
+	'django_otp.plugins.otp_static',
+	'django_otp.plugins.otp_totp',
+	'trench',
+	'diary',
+	'apiv2',
 )
 
 LOGGING = {
@@ -167,9 +166,7 @@ REST_FRAMEWORK = {
 		'rest_framework.permissions.IsAuthenticated',
 	],
 	'DEFAULT_AUTHENTICATION_CLASSES': (
-		# 'rest_framework.authentication.OAuth2Authentication',
-		'rest_framework.authentication.TokenAuthentication',
-		'rest_framework.authentication.SessionAuthentication',
+		'rest_framework_simplejwt.authentication.JWTAuthentication',
 	),
 	'DEFAULT_RENDERER_CLASSES': (
 		'rest_framework.renderers.JSONRenderer',
@@ -179,9 +176,29 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'diary.DiaryUser'
 
-TWILIO_ACCOUNT_SID = None
-TWILIO_AUTH_TOKEN = None
-TWILIO_CALLER_ID = None
+
+TRENCH_AUTH = {
+	'SECRET_KEY_LENGTH': 32,
+	'APPLICATION_ISSUER_NAME': 'shortdiary',
+
+	'MFA_METHODS': {
+		'sms': {
+			'VERBOSE_NAME': 'Text message',
+			'VALIDITY_PERIOD': 60 * 10,
+			'HANDLER': 'trench.backends.twilio.TwilioBackend',
+			'SOURCE_FIELD': 'phone_number',
+			'TWILIO_ACCOUNT_SID': None,
+			'TWILIO_AUTH_TOKEN': None,
+			'TWILIO_VERIFIED_FROM_NUMBER': None,
+		},
+		'app': {
+			'VERBOSE_NAME': 'Authenticator app',
+			'VALIDITY_PERIOD': 60 * 10,
+			'USES_THIRD_PARTY_CLIENT': True,
+			'HANDLER': 'trench.backends.application.ApplicationBackend',
+		}
+	},
+}
 
 POSTMARK_KEY = None
 

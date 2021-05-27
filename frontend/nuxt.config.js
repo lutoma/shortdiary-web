@@ -94,16 +94,15 @@ export default {
 		strategies: {
 			local: {
 				token: {
-					property: 'key',
-					type: 'Token'
+					property: 'access'
 				},
 				user: {
 					property: false,
 					autoFetch: true
 				},
 				endpoints: {
-					login: { url: '/auth/login/', method: 'post' },
-					logout: { url: '/auth/logout/', method: 'post' },
+					login: { url: '/token/', method: 'post' },
+					logout: { url: '/logout/', method: 'post' },
 					user: { url: '/user/', method: 'get' }
 				}
 			}

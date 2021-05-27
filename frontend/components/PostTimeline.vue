@@ -56,7 +56,7 @@
 				<h2>Filters</h2>
 				<el-form label-position="top" label-width="100px" :model="filter">
 					<el-form-item>
-						<el-input placeholder="Text" v-model="filter.text" />
+						<el-input placeholder="Text" v-model="filter.text" clearable />
 					</el-form-item>
 
 					<el-form-item>

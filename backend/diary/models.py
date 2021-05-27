@@ -12,6 +12,7 @@ from django.dispatch import receiver
 from shortdiary.email import send_email
 from collections import Counter
 from functools import reduce
+import phonenumbers
 import diary.tasks as tasks
 import hashlib
 import babel
@@ -20,9 +21,16 @@ import re
 
 
 class DiaryUser(AbstractUser):
+	def validate_phone_number(value):
+		try:
+			phonenumbers.parse(value, None)
+		except phonenumbers.phonenumberutil.NumberParseException as e:
+			raise ValidationError(e)
+
 	last_seen_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Last seen at'))
 	email_verified = models.BooleanField(default=False, verbose_name=_('Email verified?'))
 	language = models.CharField(default='en_US', max_length=5, verbose_name=_('Language'))
+	phone_number = models.CharField(max_length=50, blank=True, validators=[validate_phone_number])
 
 	# Privacy settings
 	include_in_leaderboard = models.BooleanField(verbose_name=_('Include in leaderboard'),

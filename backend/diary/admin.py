@@ -32,9 +32,22 @@ class PostAdmin(admin.ModelAdmin):
 
 
 class UserAdmin(DjangoUserAdmin):
+	fieldsets = [
+		(None, {'fields': ('username', 'password')}),
+		('Personal info', {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
+		(
+			'Permissions',
+			{'fields': (
+				'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'
+			)}
+		),
+
+		('Important dates', {'fields': ('last_seen_at', 'last_login', 'date_joined')})
+	]
+
 	list_display = ['username', 'email', 'last_seen_at', 'language']
 	list_filter = ['email_verified', 'last_seen_at', 'geolocation_enabled', 'include_in_leaderboard']
-	readonly_fields = ('last_seen_at',)
+	readonly_fields = ('last_seen_at', 'last_login', 'date_joined')
 	date_hierarchy = 'last_seen_at'
 
 

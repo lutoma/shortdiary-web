@@ -23,13 +23,14 @@ pystmark = "^0.5.0"
 django-otp-yubikey = "^1.0.0"
 pycrypto = "^2.6.1"
 django-redis = "^4.12.1"
-django-rest-auth = "^0.9.5"
 django-cors-headers = "^3.7.0"
 django-storages = "^1.11.1"
 boto3 = "^1.17.45"
 django-hCaptcha = "^0.1.0"
 Babel = "^2.9.1"
 qrcode = "^6.1"
+django-trench = "^0.2.3"
+djangorestframework-simplejwt = "^4.6.0"
 
 
 [tool.poetry.dev-dependencies]

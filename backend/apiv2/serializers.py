@@ -14,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
 			'username',
 			'email',
 			'email_verified',
+			'phone_number',
 			'language',
 			'is_staff',
 			'post_chars',
