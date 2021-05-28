@@ -1,6 +1,5 @@
 <template>
 	<div class="new-post">
-		<h1>New entry</h1>
 		<PostEditor />
 	</div>
 </template>

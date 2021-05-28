@@ -1,21 +1,19 @@
 <template>
 	<div class="post-detail">
 		<Post :post="post" v-if="post" v-loading="!post" />
-		<div id="map-background" v-if="post && post.location_lon && post.location_lat">
-			<Map class="map" :center="[post.location_lon, post.location_lat]" :zoom="11" :controls="false" />
-		</div>
+		<MapBackground v-if="post && post.location_lon && post.location_lat" :center="[post.location_lon, post.location_lat]" />
 	</div>
 </template>
 
 <script>
 import Post from '~/components/Post'
-import Map from '~/components/Map'
+import MapBackground from '~/components/MapBackground'
 
 export default {
 	auth: false,
 	components: {
 		Post,
-		Map
+		MapBackground
 	},
 
 	data() {
@@ -56,23 +54,3 @@ export default {
 	}
 }
 </script>
-
-<style lang="scss">
-.post-detail {
-	#map-background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		height: 100%;
-		width: 100%;
-
-		z-index: -1;
-		pointer-events: none;
-
-		.map {
-			height: 100%;
-			width: 100%;
-		}
-	}
-}
-</style>

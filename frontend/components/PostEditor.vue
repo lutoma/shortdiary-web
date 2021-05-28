@@ -1,87 +1,74 @@
 <template>
-	<el-row :gutter="50" class="post-editor">
-		<el-col :span="19" class="main-area">
-			<Mentionable :keys="['@']" :items="items" offset="6" insert-space>
+	<div class="post-editor">
+		<div class="editor-grid">
+			<div class="main-area">
+				<Mentionable :keys="['@']" :items="items" offset="6" insert-space>
 
-				<el-input
-					ref="text"
-					type="textarea"
-					:autosize="{ minRows: 15 }"
-					placeholder="Jot down your adventures here"
-					v-model="post.text"
-					autofocus
-					@input="updateLengthCounter()" />
-			</Mentionable>
+					<el-input
+						ref="text"
+						type="textarea"
+						:autosize="{ minRows: 15 }"
+						placeholder="Jot down your adventures here"
+						v-model="post.text"
+						autofocus />
+				</Mentionable>
 
-			<div class="length-counter">
-				<template v-if="text_length.chars > 800">Wow, what an eventful day!</template>
-				{{ text_length.sentences}} sentences, {{ text_length.words }} words, {{ text_length.chars }} characters
+				<el-button type="primary" :disabled="!this.post.text.length" @click="savePost">
+					<template v-if="!post.public">Save private entry</template>
+					<template v-if="post.public">Save public entry</template>
+				</el-button>
 			</div>
 
-			<h2>Images</h2>
-			<el-upload
-				action="https://jsonplaceholder.typicode.com/posts/"
-				list-type="picture-card"
-				:thumbnail-mode="true"
-				:auto-upload="false">
+			<div class="sidebar">
+				<el-card>
+					<el-form ref="form" :model="post" label-position="left" label-width="100px" @submit="savePost">
+						<el-form-item label="Date">
+							<el-select v-model="post.date" placeholder="Date">
+								<el-option v-for="option of dateOptions" :label="option.label" :value="option.date"/>
+							</el-select>
+						</el-form-item>
 
-				<i class="el-icon-plus"></i>
-			</el-upload>
-		</el-col>
+						<el-form-item label="Visibility">
+							<el-radio-group v-model="post.visibility" size="small">
+								<el-radio-button label="public"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
+								<el-radio-button label="private"><fa :icon="['far', 'lock']" /> Private</el-radio-button>
+							</el-radio-group>
+						</el-form-item>
 
-		<el-col :span="5" class="index-sidebar">
-			<el-form ref="form" :model="post" label-position="top" label-width="60px" @submit="savePost">
-				<el-form-item label="Date">
-					<el-select v-model="post.date" placeholder="Date">
-						<el-option v-for="option of dateOptions" :label="option.label" :value="option.date"/>
-					</el-select>
-				</el-form-item>
+						<el-form-item label="Mood">
+							<el-slider v-model="post.mood" :step="1" :min="1" :max="10" show-stops />
+						</el-form-item>
 
-				<el-form-item label="Visibility">
-					<el-radio-group v-model="post.visibility" size="small">
-						<el-radio-button label="public"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
-						<el-radio-button label="private"><fa :icon="['far', 'lock']" /> Private</el-radio-button>
-					</el-radio-group>
-				</el-form-item>
+						<el-form-item label="Location">
+							<span v-loading="!this.location_name">{{ this.location_name }}</span>
+						</el-form-item>
+						<el-form-item label="Images">
+							<el-upload
+								action="https://jsonplaceholder.typicode.com/posts/"
+								list-type="picture-card"
+								:thumbnail-mode="true"
+								:auto-upload="false">
 
-				<el-form-item label="Mood">
-					<el-slider v-model="post.mood" :step="1" :min="1" :max="10" show-stops />
-				</el-form-item>
-
-				<el-form-item label="Location">
-					<span v-loading="!this.location_name">{{ this.location_name }}</span>
-				</el-form-item>
-
-				<div class="post-map-container" v-loading="!this.post.location">
-					<Map
-						v-if="this.post.location"
-						:zoom="11"
-						:center="this.post.location"
-						:controls="false"
-						:markers="this.post.location ? [this.post.location] : []"
-						style="height: 100%" />
-				</div>
-
-				<el-form-item>
-					<el-button type="primary" :disabled="!this.post.text.length" @click="savePost">
-						<template v-if="!post.public">Save private entry</template>
-						<template v-if="post.public">Save public entry</template>
-					</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-	</el-row>
+								<i class="el-icon-plus"></i>
+							</el-upload>
+						</el-form-item>
+					</el-form>
+				</el-card>
+			</div>
+		</div>
+		<MapBackground v-if="post.location" :center="post.location" />
+	</div>
 </template>
 
 <script>
 import { Mentionable } from 'vue-mention'
 import { keyBy } from 'lodash'
-import Map from '~/components/Map'
+import MapBackground from '~/components/MapBackground'
 
 export default {
 	components: {
 		Mentionable,
-		Map
+		MapBackground
 	},
 	data() {
 		return {
@@ -93,13 +80,7 @@ export default {
 				location: null
 			},
 
-			location_name: null,
-
-			text_length: {
-				sentences: 0,
-				words: 0,
-				chars: 0
-			}
+			location_name: null
 		}
 	},
 
@@ -125,15 +106,6 @@ export default {
 	},
 
 	methods: {
-		updateLengthCounter() {
-			// FIXME Should probably be a computed property
-			this.text_length = {
-				chars: this.post.text.length,
-				words: this.post.text.split(' ').length - 1,
-				sentences: this.post.text.split(/[.?!:;…‽⸮"«“]+/).length - 1
-			}
-		},
-
 		geoLocationCallback(position) {
 			this.post.location = [position.coords.longitude, position.coords.latitude]
 
@@ -174,35 +146,59 @@ export default {
 
 <style lang="scss">
 .post-editor {
-	.main-area, .mentionable {
-		height: 100%;
+	padding-bottom: 30px;
+
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+
+	.editor-grid {
+		width: 100%;
+		flex-grow: 1;
 		display: flex;
-		flex-direction: column;
 
 	}
+	.main-area, .mentionable {
+		height: 100%;
+		flex: 1 1 100%;
+		display: flex;
+		flex-direction: column;
+	}
 
-	.el-textarea {
-		flex-grow: 1;
+	.main-area {
+		margin-right: 30px;
 
-		.el-textarea__inner {
-			height: 100% !important;
-			font-size: 1.05rem;
+		.el-button {
+			width: 250px;
+			max-width: 100%;
+			margin-top: 15px;
+			align-self: flex-end;
+		}
+
+		.el-textarea {
+			flex-grow: 1;
+
+			.el-textarea__inner {
+				height: 100% !important;
+				font-size: 1rem;
+			}
 		}
 	}
 
-	.length-counter {
-		font-size: 14px;
-		color: #606266;
-		text-align: right;
-		margin-top: .5rem;
-	}
+	.sidebar {
+		flex: 0.1 0 350px;
 
-	.el-button {
-		margin-top: .5rem;
-	}
+		.el-upload--picture-card, .el-upload-list--picture-card .el-upload-list__item {
+			width: 72px;
+			height: 72px;
+		}
 
-	.post-map-container {
-		height: 200px;
+		.el-upload--picture-card {
+			line-height: initial;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+		}
 	}
 }
 </style>
