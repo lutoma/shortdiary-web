@@ -98,3 +98,7 @@ input, textarea {
 	// Push message boxes below top header
 	top: 65px !important;
 }
+
+.cool-lightbox {
+	backdrop-filter: blur(6px);
+}
