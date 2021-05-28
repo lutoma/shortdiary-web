@@ -144,7 +144,10 @@ export default {
 				'faImages',
 				'faEmptySet',
 				'faLock',
-				'faLockOpen'
+				'faLockOpen',
+				'faBars',
+				'faFileContract',
+				'faShieldCheck'
 			],
 			light: [
 				'faLock',
@@ -160,6 +163,11 @@ export default {
 				'faUsers',
 				'faChartLine',
 				'faLanguage'
+			]
+		},
+		icons: {
+			brands: [
+				'faGithub'
 			]
 		}
 	}

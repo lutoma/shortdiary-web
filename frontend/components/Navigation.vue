@@ -8,17 +8,36 @@
 				</el-menu-item>
 			</el-menu>
 			<el-menu mode="horizontal" @select="navSelect" v-if="$auth.loggedIn">
-				<el-menu-item index="/settings"><fa :icon="['far', 'wrench']" /></el-menu-item>
-				<el-menu-item index="logout"><fa :icon="['far', 'sign-out']" /></el-menu-item>
+				<el-submenu popper-class="submenu-right">
+					<template slot="title"><GravatarImg :email="$auth.user.email" :size="25" class="nav-avatar" /> lutoma</template>
+					<el-menu-item index="/settings"><fa :icon="['far', 'wrench']" /> <span>Settings</span></el-menu-item>
+					<el-menu-item index="logout"><fa :icon="['far', 'sign-out']" /> <span>Sign out</span></el-menu-item>
+
+					<el-menu-item-group>
+						<el-menu-item><fa :icon="['fab', 'github']" /> <a href="https://github.com/lutoma/shortdiary" target="_blank" rel="noopener">Source code</a></el-menu-item>
+						<el-menu-item><fa :icon="['far', 'file-contract']" /> <a href="https://fnordserver.eu/en/imprint/" target="_blank" rel="noopener">Legal notice</a></el-menu-item>
+						<el-menu-item><fa :icon="['far', 'shield-check']" /> <a href="https://fnordserver.eu/en/privacy-policy/" target="_blank" rel="noopener">Privacy</a></el-menu-item>
+					</el-menu-item-group>
+				</el-submenu>
 			</el-menu>
 		</nav>
 	</div>
 </template>
 
 <script>
+import GravatarImg from '~/components/GravatarImg'
+
 export default {
+	components: {
+		GravatarImg
+	},
+
 	methods: {
 		navSelect(path, _) {
+			if (!path) {
+				return
+			}
+
 			// Bit hacky
 			if (path === 'logout') {
 				this.$auth.logout()
@@ -113,5 +132,28 @@ export default {
 			}
 		}
 	}
+}
+
+.submenu-right {
+	.el-menu-item {
+		svg {
+			min-width: 20px;
+		}
+
+		a, span {
+			color: #036564 !important;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
+.nav-avatar {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	margin-right: 5px;
 }
 </style>

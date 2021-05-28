@@ -1,22 +1,18 @@
 <template>
-  <div id="default-layout-container">
-    <Navigation />
-    <div id="main-container">
-      <nuxt/>
-    </div>
-    <Footer />
-  </div>
+	<div id="default-layout-container">
+		<Navigation />
+		<div id="main-container">
+			<nuxt/>
+		</div>
+	</div>
 </template>
-
 
 <script>
 import Navigation from '~/components/Navigation'
-import Footer from '~/components/Footer'
 
 export default {
 	components: {
-		Navigation,
-		Footer
+		Navigation
 	}
 }
 </script>
@@ -24,5 +20,3 @@ export default {
 <style lang='scss'>
 @import "~assets/main.scss";
 </style>
-
-
