@@ -22,9 +22,6 @@ export default {
 			// Bit hacky
 			if (path === 'logout') {
 				this.$auth.logout()
-				this.$router.push('/', () => {
-					this.$message({ type: 'success', message: 'You have been logged out.' })
-				})
 			} else {
 				this.$router.push({ path })
 			}

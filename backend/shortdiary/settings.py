@@ -3,6 +3,7 @@
 # Instead, create a file called settings_local.py and override stuff you want to change there.
 
 import os
+from datetime import timedelta
 
 SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
@@ -198,6 +199,12 @@ TRENCH_AUTH = {
 			'HANDLER': 'trench.backends.application.ApplicationBackend',
 		}
 	},
+}
+
+SIMPLE_JWT = {
+	'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+	'REFRESH_TOKEN_LIFETIME': timedelta(days=21),
+	'ISSUER': 'shortdiary'
 }
 
 POSTMARK_KEY = None

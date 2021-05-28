@@ -89,7 +89,6 @@ export default {
 							this.$refs.code.$el.children[0].focus()
 						} else {
 							this.$auth.setUserToken(res.access, res.refresh)
-							this.$router.go('/dashboard')
 						}
 					} catch (err) {
 						this.error = err.response.data.non_field_errors[0]

@@ -87,23 +87,32 @@ export default {
 	},
 
 	axios: {
-		baseURL: 'https://api.shortdiary.com/v2'
+		//baseURL: 'https://api.shortdiary.com/v2'
+		baseURL: 'http://localhost:8000/api/v2'
 	},
 
 	auth: {
 		strategies: {
 			local: {
+				scheme: 'refresh',
 				token: {
 					property: 'access'
+				},
+				refreshToken: {
+					property: 'refresh',
+					data: 'refresh'
 				},
 				user: {
 					property: false,
 					autoFetch: true
 				},
 				endpoints: {
-					login: { url: '/token/', method: 'post' },
-					logout: { url: '/logout/', method: 'post' },
-					user: { url: '/user/', method: 'get' }
+					user: { url: '/user/', method: 'get' },
+					refresh: { url: '/auth/refresh/', method: 'post' },
+
+					// Login is handled manually in login.vue due to 2fa
+					login: false,
+					logout: false
 				}
 			}
 		},
