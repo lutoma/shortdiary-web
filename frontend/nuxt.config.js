@@ -87,8 +87,7 @@ export default {
 	},
 
 	axios: {
-		//baseURL: 'https://api.shortdiary.com/v2'
-		baseURL: 'http://localhost:8000/api/v2'
+		baseURL: 'https://api.shortdiary.com/v2'
 	},
 
 	auth: {
