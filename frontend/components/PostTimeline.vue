@@ -242,8 +242,11 @@ export default {
 
 	.right {
 		.timeline-options {
-			position: sticky;
-			top: 80px;
+			// This was originally position: sticky, but Firefox has
+			// performance issues/flickering with that. See:
+			// https://bugzilla.mozilla.org/show_bug.cgi?id=1585378
+			position: fixed;
+			top: 90px;
 		}
 
 		.el-radio-group {

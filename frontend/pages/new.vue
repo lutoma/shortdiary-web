@@ -26,7 +26,6 @@ export default {
 	flex-direction: column;
 	padding-bottom: 30px;
 
-
 	.post-editor {
 		width: 100%;
 		flex-grow: 1;
