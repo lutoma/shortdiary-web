@@ -151,7 +151,7 @@ export default {
 	methods: {
 		getMonthName(num) {
 			const date = new Date()
-			date.setMonth(num)
+			date.setMonth(num - 1)
 			return date.toLocaleString('en', { month: 'long' })
 		},
 
