@@ -9,7 +9,7 @@
 			</el-menu>
 			<el-menu mode="horizontal" @select="navSelect" v-if="$auth.loggedIn">
 				<el-submenu popper-class="submenu-right">
-					<template slot="title"><GravatarImg :email="$auth.user.email" :size="25" class="nav-avatar" /> lutoma</template>
+					<template slot="title"><div v-loading="!$auth.user"><GravatarImg :email="$auth.user.email" :size="25" class="nav-avatar" /> {{ $auth.user.username }}</div></template>
 					<el-menu-item index="/settings"><fa :icon="['far', 'wrench']" /> <span>Settings</span></el-menu-item>
 					<el-menu-item index="logout"><fa :icon="['far', 'sign-out']" /> <span>Sign out</span></el-menu-item>
 
