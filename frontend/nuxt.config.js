@@ -162,7 +162,10 @@ export default {
 				'faMapMarkedAlt',
 				'faUsers',
 				'faChartLine',
-				'faLanguage'
+				'faLanguage',
+				'faCalendarAlt',
+				'faImages',
+				'faShieldCheck'
 			]
 		},
 		icons: {

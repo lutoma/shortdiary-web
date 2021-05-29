@@ -1,5 +1,6 @@
 <template>
 	<div class="new-post">
+		<h1>Create a new entry</h1>
 		<PostEditor />
 	</div>
 </template>
@@ -23,6 +24,8 @@ export default {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	padding-bottom: 30px;
+
 
 	.post-editor {
 		width: 100%;

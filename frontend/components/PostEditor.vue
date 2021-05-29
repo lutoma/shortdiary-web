@@ -3,7 +3,6 @@
 		<div class="editor-grid">
 			<div class="main-area">
 				<Mentionable :keys="['@']" :items="items" offset="6" insert-space>
-
 					<el-input
 						ref="text"
 						type="textarea"
@@ -22,27 +21,47 @@
 			<div class="sidebar">
 				<el-card>
 					<el-form ref="form" :model="post" label-position="left" label-width="100px" @submit="savePost">
-						<el-form-item label="Date">
-							<el-select v-model="post.date" placeholder="Date">
-								<el-option v-for="option of dateOptions" :label="option.label" :value="option.date"/>
-							</el-select>
+						<el-form-item>
+							<template slot="label">
+								<fa :icon="['fal', 'calendar-alt']" /> Date
+							</template>
+							<el-date-picker
+								v-model="post.date"
+								type="date"
+								placeholder="Pick a date"
+								:picker-options="datePickerOptions"
+								format="MMMM dd, yyyy"
+								value-format="yyyy-MM-dd" />
 						</el-form-item>
 
-						<el-form-item label="Visibility">
-							<el-radio-group v-model="post.visibility" size="small">
-								<el-radio-button label="public"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
-								<el-radio-button label="private"><fa :icon="['far', 'lock']" /> Private</el-radio-button>
+						<el-form-item>
+							<template slot="label">
+								<fa :icon="['fal', 'shield-check']" /> Visibility
+							</template>
+							<el-radio-group v-model="post.public" size="small">
+								<el-radio-button :label="true"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
+								<el-radio-button :label="false"><fa :icon="['far', 'lock']" /> Private</el-radio-button>
 							</el-radio-group>
 						</el-form-item>
 
-						<el-form-item label="Mood">
+						<el-form-item>
+							<template slot="label">
+								<MoodIndicatorIcon :mood="post.mood === null ? 10 : post.mood" /> Mood
+							</template>
 							<el-slider v-model="post.mood" :step="1" :min="1" :max="10" show-stops />
 						</el-form-item>
 
-						<el-form-item label="Location">
-							<span v-loading="!this.location_name">{{ this.location_name }}</span>
+						<el-form-item>
+							<template slot="label">
+								<fa :icon="['fal', 'map-marked-alt']" /> Location
+							</template>
+							<span v-loading="!post.location_verbose">{{ post.location_verbose }}</span>
 						</el-form-item>
-						<el-form-item label="Images">
+
+						<el-form-item>
+							<template slot="label">
+								<fa :icon="['fal', 'images']" /> Images
+							</template>
 							<el-upload
 								action="https://jsonplaceholder.typicode.com/posts/"
 								list-type="picture-card"
@@ -64,36 +83,38 @@
 import { Mentionable } from 'vue-mention'
 import { keyBy } from 'lodash'
 import MapBackground from '~/components/MapBackground'
+import MoodIndicatorIcon from '~/components/MoodIndicatorIcon'
 
 export default {
 	components: {
 		Mentionable,
-		MapBackground
+		MapBackground,
+		MoodIndicatorIcon
 	},
+
+	async fetch() {
+		await this.$store.dispatch('updatePosts')
+	},
+
 	data() {
 		return {
-			post: {
-				visibility: 'private',
-				text: '',
-				date: '2021-04-26',
-				mood: null,
-				location: null
+			datePickerOptions: {
+				firstDayOfWeek: 1,
+				disabledDate(time) {
+					return time.getTime() > Date.now()
+				}
 			},
 
-			location_name: null
-		}
-	},
+			post: {
+				public: false,
+				text: '',
 
-	computed: {
-		dateOptions() {
-			const today = new Date()
-			const yesterday = today
-			yesterday.setDate(yesterday.getDate() - 1)
-
-			return [
-				{ label: 'Yesterday', date: yesterday.toISOString().slice(0, 10) },
-				{ label: 'Today', date: today.toISOString().slice(0, 10) }
-			]
+				// Super hacky and not timezone-aware
+				date: new Date().toISOString().slice(0, 10),
+				mood: 6,
+				location: null,
+				location_verbose: ''
+			}
 		}
 	},
 
@@ -119,11 +140,11 @@ export default {
 				const feat = keyBy(data.features, 'place_type.0')
 
 				if ('place' in feat) {
-					this.location_name = `${feat.place.text}, ${feat.country.text}`
+					this.post.location_verbose = `${feat.place.text}, ${feat.country.text}`
 				} else if ('region' in feat) {
-					this.location_name = `${feat.region.text}, ${feat.country.text}`
+					this.post.location_verbose = `${feat.region.text}, ${feat.country.text}`
 				} else if ('country' in feat) {
-					this.location_name = feat.country.text
+					this.post.location_verbose = feat.country.text
 				}
 			})
 		},
@@ -146,8 +167,6 @@ export default {
 
 <style lang="scss">
 .post-editor {
-	padding-bottom: 30px;
-
 	height: 100%;
 	display: flex;
 	flex-direction: column;

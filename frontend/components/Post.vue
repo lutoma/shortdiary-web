@@ -21,7 +21,7 @@
 
 			<template v-if="post.mood">
 				<el-divider direction="vertical" />
-				<fa :icon="['fal', moodIcon]" /> Mood: {{ post.mood }}
+				<MoodIndicatorIcon :mood="post.mood" /> Mood: {{ post.mood }}
 			</template>
 
 			<div class="right">
@@ -38,11 +38,13 @@
 </template>
 
 <script>
+import MoodIndicatorIcon from '~/components/MoodIndicatorIcon'
 import CoolLightBox from 'vue-cool-lightbox'
 import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css'
 
 export default {
 	components: {
+		MoodIndicatorIcon,
 		CoolLightBox
 	},
 
@@ -72,22 +74,6 @@ export default {
 
 		date() {
 			return new Date(this.post.date)
-		},
-
-		moodIcon() {
-			if (this.post.mood <= 3) {
-				return 'frown'
-			}
-
-			if (this.post.mood >= 6 && this.post.mood <= 8) {
-				return 'smile'
-			}
-
-			if (this.post.mood >= 9) {
-				return 'laugh'
-			}
-
-			return 'meh'
 		}
 	},
 
