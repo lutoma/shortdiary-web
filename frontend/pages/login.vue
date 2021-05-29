@@ -82,6 +82,11 @@ export default {
 					this.loading = true
 
 					try {
+						// Reset auth - This is needed to make sure we don't
+						// send an (outdated) Authorization header during the
+						// login request
+						this.$auth.reset({ resetInterceptor: false })
+
 						const res = await this.$axios.$post('/auth/login/', this.credentials)
 
 						if ('ephemeral_token' in res) {
