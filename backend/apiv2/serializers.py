@@ -1,4 +1,4 @@
-from diary.models import DiaryUser, Post
+from diary.models import DiaryUser, Post, PostImage
 from rest_framework import serializers
 
 
@@ -35,7 +35,16 @@ class UserSerializer(serializers.ModelSerializer):
 		]
 
 
+class PostImageSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = PostImage
+		fields = ['id', 'post', 'image', 'thumbnail']
+		read_only_fields = ['thumbnail']
+
+
 class PostSerializer(serializers.ModelSerializer):
+	images = PostImageSerializer(many=True, read_only=True)
+
 	class Meta:
 		model = Post
 		fields = [
@@ -43,7 +52,7 @@ class PostSerializer(serializers.ModelSerializer):
 			'date',
 			'text',
 			'mood',
-			'image',
+			'images',
 			'location_lat',
 			'location_lon',
 			'location_verbose',

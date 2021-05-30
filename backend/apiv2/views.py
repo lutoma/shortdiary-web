@@ -1,6 +1,8 @@
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 from rest_framework import viewsets
-from diary.models import Post
+from rest_framework.parsers import MultiPartParser
+from diary.models import Post, PostImage
 from django.core.cache import cache
 from django.db.models import Q
 from rest_framework.permissions import BasePermission, AllowAny
@@ -12,7 +14,7 @@ from rest_framework.generics import (
 
 from .serializers import (
 	UserSerializer, PostSerializer, PublicPostSerializer,
-	LeaderboardSerializer
+	LeaderboardSerializer, PostImageSerializer
 )
 
 
@@ -62,6 +64,21 @@ class PostViewSet(viewsets.ModelViewSet):
 
 		serializer = serializer_class(post, context=self.get_serializer_context())
 		return Response(serializer.data)
+
+
+class PostImageViewSet(viewsets.ModelViewSet):
+	serializer_class = PostImageSerializer
+	permission_classes = [AuthenticatedOnlyExceptRetrieve]
+	parser_classes = [MultiPartParser]
+
+	def get_queryset(self):
+		return PostImage.objects.filter(post__author=self.request.user)
+
+	def perform_create(self, serializer):
+		if serializer.validated_data['post'].author != self.request.user:
+			raise PermissionDenied('Images can only be added to your own posts.')
+
+		serializer.save()
 
 
 class RandomPublicPostView(ListAPIView):

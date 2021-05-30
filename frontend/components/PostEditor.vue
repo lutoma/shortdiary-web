@@ -63,10 +63,12 @@
 								<fa :icon="['fal', 'images']" /> Images
 							</template>
 							<el-upload
-								action="https://jsonplaceholder.typicode.com/posts/"
+								ref="images"
+								:http-request="uploadImage"
 								list-type="picture-card"
 								:thumbnail-mode="true"
-								:auto-upload="false">
+								:auto-upload="false"
+								multiple>
 
 								<i class="el-icon-plus"></i>
 							</el-upload>
@@ -106,6 +108,7 @@ export default {
 			},
 
 			post: {
+				id: null,
 				public: false,
 				text: '',
 
@@ -154,12 +157,29 @@ export default {
 				return
 			}
 
-			// FIXME error handling
-			await this.$axios.$post('/posts/', this.post)
+			// FIXME Better error handling
+			this.post = await this.$axios.$post('/posts/', this.post)
+			await this.$refs.images.submit()
 
+			this.$store.dispatch('updatePosts')
 			this.$router.push('/dashboard', () => {
-				this.$message({ type: 'success', message: 'Your post has been added.' })
+				this.$message({ type: 'success', message: 'The entry has been added.' })
 			})
+		},
+
+		uploadImage(req) {
+			const data = new FormData()
+			data.append('post', this.post.id)
+			data.append('image', req.file)
+
+			const config = {
+				headers: { 'Content-Type': 'multipart/form-data' },
+				onUploadProgress: ev => {
+					req.onProgress({ percent: Math.floor((ev.loaded * 100) / ev.total) })
+				}
+			}
+
+			this.$axios.$post('/post_images/', data, config).then(res => req.onSuccess(res))
 		}
 	}
 }

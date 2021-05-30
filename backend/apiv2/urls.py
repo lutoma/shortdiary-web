@@ -2,13 +2,15 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenRefreshView
 from .views import (
-	CurrentUserView, PostViewSet, RandomPublicPostView, LeaderboardView
+	CurrentUserView, PostViewSet, PostImageViewSet, RandomPublicPostView,
+	LeaderboardView
 )
 
 app_name = 'apiv2'
 
 router = routers.DefaultRouter()
 router.register(r'posts', PostViewSet, basename='posts')
+router.register(r'post_images', PostImageViewSet, basename='post_images')
 
 urlpatterns = [
 	path('auth/', include('trench.urls')),

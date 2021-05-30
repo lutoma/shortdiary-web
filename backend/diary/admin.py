@@ -1,7 +1,12 @@
 from django.utils.translation import ugettext_lazy as _
-from diary.models import Post, DiaryUser
+from diary.models import Post, PostImage, DiaryUser
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+
+
+class PostImageInline(admin.TabularInline):
+	model = PostImage
+	extra = 0
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -25,6 +30,7 @@ class PostAdmin(admin.ModelAdmin):
 		),
 	]
 
+	inlines = [PostImageInline]
 	list_display = ['author', 'date', 'public', 'natural_language', 'sent', 'is_editable']
 	list_filter = ['sent', 'created_at', 'public', 'natural_language']
 	search_fields = ('author__username',)

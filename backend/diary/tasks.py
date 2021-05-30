@@ -5,6 +5,11 @@ from django.core.mail import mail_managers
 from django.contrib.humanize.templatetags.humanize import apnumber
 from shortdiary.email import send_email
 from guess_language import guess_language
+from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from pathlib import Path
+from io import BytesIO
+from PIL import Image
 
 
 def process_mails(searched_date):
@@ -132,3 +137,20 @@ Last 30 days:
 	'''.format(active_24h, active_7d, active_30d)
 
 	mail_managers('Current active users statistics', message)
+
+
+def create_post_image_thumbnail(post_image):
+	image = Image.open(post_image.image)
+	image.thumbnail((300, 300))
+	buffer = BytesIO()
+	image.save(fp=buffer, format='WEBP')
+	cf = ContentFile(buffer.getvalue())
+
+	name = Path(post_image.image.name).stem
+	name = f'{name}_thumb.webp'
+
+	post_image.thumbnail.save(name,
+		InMemoryUploadedFile(cf, None, name, 'image/webp', cf.tell, None),
+		save=False)
+
+	post_image.save(update_fields=['thumbnail'])

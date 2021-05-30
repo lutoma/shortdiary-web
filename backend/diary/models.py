@@ -219,3 +219,22 @@ def update_post_signal(sender, instance, **kwargs):
 	# language were updated. Otherwise, this would result in recursion.
 	if not ('update_fields' in kwargs and kwargs['update_fields'] == frozenset(['natural_language'])):
 		async_task('diary.tasks.guess_post_language', instance)
+
+
+def get_image_name(image, name):
+	return f'images/{image.post.author.id}/{name}'
+
+
+class PostImage(models.Model):
+	post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images',
+		verbose_name=_('Post'))
+
+	image = models.ImageField(upload_to=get_image_name, verbose_name=_('image'))
+	thumbnail = models.ImageField(upload_to=get_image_name, blank=True,
+		verbose_name=_('image thumbnail'))
+
+
+@receiver(post_save, sender=PostImage)
+def update_post_image_signal(sender, instance, **kwargs):
+	if not ('update_fields' in kwargs and kwargs['update_fields'] == frozenset(['thumbnail'])):
+		async_task('diary.tasks.create_post_image_thumbnail', instance)

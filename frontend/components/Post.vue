@@ -32,8 +32,20 @@
 
 		<component class="text" v-bind:is="PostTextComponent" />
 
-		<CoolLightBox :items="[{src: this.post.image}]" :index="lightboxIndex" @close="lightboxIndex = null" :slideshow="false" />
-		<el-image v-if="post.image" :src="post.image" fit="cover" @click="lightboxIndex = 0" />
+		<CoolLightBox
+			v-if="this.post.images"
+			:items="this.post.images.map(i => ({ src: i.image }))"
+			:index="lightboxIndex"
+			@close="lightboxIndex = null"
+			:slideshow="false" />
+
+		<el-image
+			v-for="[index, image] of (post.images || []).entries()"
+			:src="image.thumbnail || image.image"
+			:key="image.id"
+			@click="lightboxIndex = index"
+			fit="cover" />
+
 	</el-card>
 </template>
 
@@ -131,7 +143,10 @@ export default {
 	.el-image {
 		width: 125px;
 		height: 125px;
+
 		margin-top: 2rem;
+		margin-right: .5rem;
+
 		cursor: pointer;
 		border: 1px solid #c0ccda;
 		background-color: #fff;
