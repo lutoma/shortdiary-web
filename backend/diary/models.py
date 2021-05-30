@@ -101,7 +101,6 @@ class Post(models.Model):
 	date = models.DateField(verbose_name=('date'), validators=[validate_date])
 	text = models.TextField(verbose_name=_('text'))
 	mood = models.IntegerField(verbose_name=_('mood'))
-	image = models.ImageField(upload_to='postimages/%d%m%y/', blank=True, verbose_name=_('image'))
 	public = models.BooleanField(verbose_name=_('public'), default=False)
 	part_of = models.CharField(blank=True, null=True, max_length=600, verbose_name=_('part of'))
 
@@ -168,7 +167,7 @@ class Post(models.Model):
 			'date': self.date.strftime("%B %d, %Y"),
 			'post_id': self.id,
 			'post_is_public': self.public,
-			'post_has_image': self.image is not None,
+			'post_has_image': self.images.exists(),
 		})
 
 		self.sent = True

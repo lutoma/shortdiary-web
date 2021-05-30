@@ -17,12 +17,11 @@ class PostAdmin(admin.ModelAdmin):
 	fieldsets = [
 		(None, {'fields': ['author', 'date', 'sent', 'public', 'natural_language']}),
 		(
-			_('Privacy section. Only open if absolutely needed (Mood, Text, Image)'),
+			_('Private section'),
 			{'fields': [
 				'mood',
 				'text',
 				'part_of',
-				'image',
 				'location_verbose',
 				'location_lat',
 				'location_lon'

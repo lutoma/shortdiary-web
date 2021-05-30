@@ -80,6 +80,7 @@ class PublicPostSerializer(PostSerializer):
 	text = serializers.CharField(source='get_public_text')
 	location_lat = FuzzedCoordinateField()
 	location_lon = FuzzedCoordinateField()
+	images = PostImageSerializer(many=True, read_only=True)
 
 	class Meta:
 		model = Post
@@ -88,7 +89,7 @@ class PublicPostSerializer(PostSerializer):
 			'date',
 			'text',
 			'mood',
-			'image',
+			'images',
 			'location_lat',
 			'location_lon',
 			'location_verbose',
