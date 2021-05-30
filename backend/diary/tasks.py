@@ -9,7 +9,7 @@ from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from pathlib import Path
 from io import BytesIO
-from PIL import Image
+from PIL import Image, ImageOps
 
 
 def process_mails(searched_date):
@@ -141,6 +141,7 @@ Last 30 days:
 
 def create_post_image_thumbnail(post_image):
 	image = Image.open(post_image.image)
+	image = ImageOps.exif_transpose(image)
 	image.thumbnail((300, 300))
 	buffer = BytesIO()
 	image.save(fp=buffer, format='WEBP')
