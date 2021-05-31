@@ -3,9 +3,8 @@ from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
-	post_chars = serializers.CharField(source='get_post_characters', read_only=True)
-	posts_avg_chars = serializers.CharField(source='get_average_post_length', read_only=True)
-	streak = serializers.CharField(source='get_streak', read_only=True)
+	posts_avg_chars = serializers.IntegerField(source='get_average_post_length', read_only=True)
+	streak = serializers.IntegerField(source='get_streak', read_only=True)
 	posts_count = serializers.IntegerField(source='posts.count', read_only=True)
 
 	class Meta:
@@ -16,8 +15,6 @@ class UserSerializer(serializers.ModelSerializer):
 			'email_verified',
 			'phone_number',
 			'language',
-			'is_staff',
-			'post_chars',
 			'posts_avg_chars',
 			'posts_count',
 			'streak',
