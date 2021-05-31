@@ -34,6 +34,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='post',
             name='date',
-            field=models.DateField(validators=[diary.models.Post.validate_date], verbose_name='date'),
+            field=models.DateField(verbose_name='date'),
         ),
     ]

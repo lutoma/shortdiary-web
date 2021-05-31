@@ -4,14 +4,12 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
 from django.db.models.functions import Length, Coalesce
-from django.db.models import Sum, Avg, IntegerField
+from django.db.models import Avg, IntegerField
 from django.conf import settings
 from django_q.tasks import async_task
 from django.core.cache import cache
 from django.dispatch import receiver
 from shortdiary.email import send_email
-from collections import Counter
-from functools import reduce
 import phonenumbers
 import diary.tasks as tasks
 import hashlib
@@ -51,54 +49,18 @@ class DiaryUser(AbstractUser):
 			return cached_streak
 		return tasks.update_streak(self)
 
-	def get_year_history(self):
-		"""
-		Returns the length of posts for a user for the last 356 days.
-		"""
-
-		grid = [None] * 365
-
-		for post in Post.objects.filter(author=self, date__year=datetime.date.today().year):
-			grid[post.date.timetuple().tm_yday] = post
-
-		return grid
-
-	def get_post_characters(self):
-		return self.posts.aggregate(sum=Coalesce(Sum(Length('text')), 0,
-			output_field=IntegerField()))['sum']
-
 	def get_average_post_length(self):
 		return self.posts.aggregate(avg=Coalesce(Avg(Length('text')), 0,
 			output_field=IntegerField()))['avg']
-
-	def get_mention_toplist(self):
-		'''
-		Returns the most frequently mentioned nicknames of this user
-		'''
-
-		names = list(map(lambda post: post.get_mentions(), self.posts.all()))
-
-		if len(names) < 1:
-			return
-
-		names = reduce(lambda names, name: names + name, names)
-		names = list(map(lambda name: name[1:].lower(), names))
-		return Counter(names).most_common()
 
 
 class Post(models.Model):
 	MENTION_REGEX = re.compile(r'@\w+', re.UNICODE)
 
-	def validate_date(value):
-		delta = datetime.date.today() - value
-		if delta.days > 4:
-			pass
-#			raise ValidationError(_('Post date cannot be older than 4 days'))
-
 	author = models.ForeignKey(DiaryUser, verbose_name=_('author'), related_name='posts',
 		on_delete=models.CASCADE)
 
-	date = models.DateField(verbose_name=('date'), validators=[validate_date])
+	date = models.DateField(verbose_name=('date'))
 	text = models.TextField(verbose_name=_('text'))
 	mood = models.IntegerField(verbose_name=_('mood'))
 	public = models.BooleanField(verbose_name=_('public'), default=False)
@@ -141,20 +103,6 @@ class Post(models.Model):
 	is_editable.boolean = True
 	is_editable.short_description = 'Still editable by user?'
 
-	def get_activity_color(self):
-		length = len(self.text)
-
-		if(length <= 50):
-			return '#d6e685'
-
-		if(length <= 150):
-			return '#8cc665'
-
-		if(length <= 250):
-			return '#44a340'
-
-		return '#1e6823'
-
 	def send_mail(self):
 		"""
 		Sends out the mail for this post
@@ -172,13 +120,6 @@ class Post(models.Model):
 
 		self.sent = True
 		self.save()
-
-	def get_mentions(self):
-		'''
-		Get list of people mentioned in this post
-		'''
-
-		return self.MENTION_REGEX.findall(self.text)
 
 	def get_public_text(self):
 		"""
