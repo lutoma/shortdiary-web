@@ -148,7 +148,6 @@ export default {
 	.text {
 		line-height: 1.5;
 		font-size: 1.05rem;
-		font-family: "Fira Sans";
 	}
 
 	.tags {
