@@ -70,9 +70,9 @@
 
 								<el-option
 									v-for="item in existing_tags"
-									:key="item"
-									:label="item"
-									:value="item" />
+									:key="item[0]"
+									:label="item[0]"
+									:value="item[0]" />
 							</el-select>
 						</el-form-item>
 
@@ -131,7 +131,7 @@ export default {
 		},
 
 		existing_tags() {
-			return []
+			return this.$store.state.top_tags
 		}
 	},
 

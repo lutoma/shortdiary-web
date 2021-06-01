@@ -77,13 +77,7 @@ export default {
 		},
 
 		top_locations() {
-			return _(this.posts)
-				.filter('location_verbose')
-				.countBy('location_verbose')
-				.toPairs()
-				.sortBy(1)
-				.reverse()
-				.value()
+			return this.$store.state.top_locations
 		},
 
 		top_mood_locations() {

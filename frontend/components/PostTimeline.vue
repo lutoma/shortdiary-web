@@ -53,29 +53,64 @@
 				</ul>
 
 				<h2>Filters</h2>
-				<el-form label-position="top" label-width="100px" :model="filter">
+				<el-form label-position="left" label-width="100px" :model="filter">
 					<el-form-item>
+						<template slot="label">
+							<fa :icon="['fal', 'align-left']" /> Text
+						</template>
+
 						<el-input placeholder="Text" v-model="filter.text" clearable />
 					</el-form-item>
 
 					<el-form-item>
+						<template slot="label">
+							<fa :icon="['fal', 'shield-check']" /> Visibility
+						</template>
+
+						<el-radio-group v-model="filter.public" size="small">
+							<el-radio-button :label="null">Any</el-radio-button>
+							<el-radio-button :label="true"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
+							<el-radio-button :label="false"><fa :icon="['far', 'lock']" /> Private</el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+
+					<el-form-item>
+						<template slot="label">
+							<fa :icon="['fal', 'smile']" /> Mood
+						</template>
+
+						<el-slider v-model="filter.mood" range show-stops :min="1" :max="10" :step="1" />
+					</el-form-item>
+
+					<el-form-item>
+						<template slot="label">
+							<fa :icon="['fal', 'tags']" /> Tags
+						</template>
+						<el-select v-model="filter.tags" multiple filterable default-first-option placeholder="Choose tags">
+							<el-option v-for="item in tags_filter_options" :key="item[0]" :label="item[0]" :value="item[0]" />
+						</el-select>
+					</el-form-item>
+
+					<el-form-item>
+						<template slot="label">
+							<fa :icon="['fal', 'map-marked-alt']" /> Location
+						</template>
+
+						<el-select v-model="filter.location" placeholder="Select location" filterable clearable>
+							<el-option v-for="item in location_filter_options" :key="item[0]" :label="item[0]" :value="item[0]" />
+						</el-select>
+					</el-form-item>
+
+					<el-form-item>
+						<template slot="label">
+							<fa :icon="['fal', 'images']" /> Images
+						</template>
+
 						<el-radio-group v-model="filter.images" size="small">
 							<el-radio-button :label="null">Any</el-radio-button>
 							<el-radio-button :label="true"><fa :icon="['far', 'images']" /> Has images</el-radio-button>
 							<el-radio-button :label="false"><fa :icon="['far', 'empty-set']" /> No image</el-radio-button>
 						</el-radio-group>
-					</el-form-item>
-
-					<el-form-item>
-						<el-radio-group v-model="filter.visibility" size="small">
-							<el-radio-button :label="null">Any</el-radio-button>
-							<el-radio-button label="public"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
-							<el-radio-button label="private"><fa :icon="['far', 'lock']" /> Private</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-
-					<el-form-item label="Mood">
-						<el-slider v-model="filter.mood" range show-stops :min="1" :max="10" :step="1" />
 					</el-form-item>
 				</el-form>
 			</div>
@@ -102,9 +137,11 @@ export default {
 
 			filter: {
 				text: this.$route.query.filter || '',
-				images: null,
-				visibility: null,
-				mood: [1, 10]
+				public: null,
+				mood: [1, 10],
+				tags: [],
+				location: null,
+				images: null
 			}
 		}
 	},
@@ -114,19 +151,39 @@ export default {
 			return this.$store.state.posts
 		},
 
+		location_filter_options() {
+			return this.$store.state.top_locations
+		},
+
+		tags_filter_options() {
+			return this.$store.state.top_tags
+		},
+
 		sorted_posts() {
+			// Filter definitions. The object key defines the field in
+			// this.filter that will be checked to see if filtering is
+			// necessary, the value contains the function or object that gets
+			// passed to .filter
+			const filters = {
+				text: post => post.text.toLowerCase().includes(this.filter.text.toLowerCase()),
+				public: { public: this.filter.public },
+				tags: post => post.tags.some(tag => this.filter.tags.includes(tag)),
+				location: { location_verbose: this.filter.location },
+				images: post => !!post.images.length === this.filter.images
+			}
+
 			let filtered = _(this.posts)
-				.filter(x => x.text.toLowerCase().includes(this.filter.text.toLowerCase()))
 				.filter(x => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1])
 
-			if (this.filter.images !== null) {
-				filtered = filtered.filter(x => !!x.images.length === this.filter.images)
+			for (const [cond, filter] of Object.entries(filters)) {
+				const value = this.filter[cond]
+
+				if (value !== null && value !== '' && (typeof value !== 'object' || value.length)) {
+					filtered = filtered.filter(filter)
+				}
 			}
 
-			if (this.filter.visibility !== null) {
-				filtered = filtered.filter({ public: this.filter.visibility === 'public' })
-			}
-
+			// Now, group the filtered posts into years and months for display
 			return filtered
 				.groupBy(x => x.date.split('-')[0])
 				.toPairs()
@@ -207,6 +264,9 @@ export default {
 	},
 
 	watch: {
+		// Watch for route changes since the component query parameters can
+		// change when a user clicks on a @mention in a post (appending
+		// ?filter=@mention etc. to the URL).
 		$route (to, from) {
 			this.filter.text = to.query.filter || ''
 		}
@@ -260,6 +320,10 @@ export default {
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=1585378
 			position: fixed;
 			top: 90px;
+		}
+
+		.el-select {
+			width: 100%;
 		}
 
 		.el-radio-group {

@@ -3,7 +3,9 @@ import _ from 'lodash'
 export const state = () => ({
 	posts: [],
 	posts_update: null,
-	top_mentions: []
+	top_mentions: [],
+	top_locations: [],
+	top_tags: []
 })
 
 export const mutations = {
@@ -14,6 +16,14 @@ export const mutations = {
 
 	setTopMentions(state, data) {
 		state.top_mentions = data
+	},
+
+	setTopLocations(state, data) {
+		state.top_locations = data
+	},
+
+	setTopTags(state, data) {
+		state.top_tags = data
 	}
 }
 
@@ -45,5 +55,25 @@ export const actions = {
 			.value()
 
 		commit('setTopMentions', top_mentions)
+
+		const top_locations = _(data)
+			.filter('location_verbose')
+			.countBy('location_verbose')
+			.toPairs()
+			.sortBy(1)
+			.reverse()
+			.value()
+
+		commit('setTopLocations', top_locations)
+
+		const top_tags = _(data)
+			.filter(x => x.tags.length)
+			.countBy('tags')
+			.toPairs()
+			.sortBy(1)
+			.reverse()
+			.value()
+
+		commit('setTopTags', top_tags)
 	}
 }

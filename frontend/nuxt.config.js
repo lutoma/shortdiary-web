@@ -169,7 +169,8 @@ export default {
 				'faTrophyAlt',
 				'faTally',
 				'faRuler',
-				'faTags'
+				'faTags',
+				'faAlignLeft'
 			]
 		},
 		icons: {
