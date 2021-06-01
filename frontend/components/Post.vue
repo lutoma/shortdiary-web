@@ -77,12 +77,7 @@ export default {
 	},
 
 	data() {
-		let text_html = this.post.text || this.post.public_text
-		text_html = text_html.replace(/(?:\r\n|\r|\n)/g, '<br>')
-		text_html = text_html.replace(/@\w+\b/g, '<n-link to="/dashboard?filter=$&">$&</n-link>')
-
 		return {
-			text_html,
 			lightboxIndex: null
 		}
 	},
@@ -92,7 +87,11 @@ export default {
 	// rendered markup, which would not be possible with v-html.
 	computed: {
 		PostTextComponent() {
-			return { template: `<div>${this.text_html}</div>` }
+			let text_html = this.post.text || this.post.public_text
+			text_html = text_html.replace(/(?:\r\n|\r|\n)/g, '<br>')
+			text_html = text_html.replace(/@\w+\b/g, '<n-link to="/dashboard?filter=$&">$&</n-link>')
+
+			return { template: `<div>${text_html}</div>` }
 		},
 
 		date() {

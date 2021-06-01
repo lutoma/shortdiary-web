@@ -204,6 +204,12 @@ export default {
 				observer.observe(el)
 			}
 		})
+	},
+
+	watch: {
+		$route (to, from) {
+			this.filter.text = to.query.filter || ''
+		}
 	}
 }
 </script>
