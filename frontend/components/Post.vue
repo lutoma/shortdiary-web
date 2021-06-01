@@ -46,7 +46,7 @@
 			@click="lightboxIndex = index"
 			fit="cover" />
 
-		<div class="tags" v-if="post.tags.length">
+		<div class="tags" v-if="post.tags && post.tags.length">
 			<el-tag
 				v-for="tag of post.tags"
 				:key="tag"
