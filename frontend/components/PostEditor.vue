@@ -12,13 +12,12 @@
 					<el-input
 						ref="text"
 						type="textarea"
-						:autosize="{ minRows: 15 }"
 						placeholder="Jot down your adventures here"
 						v-model="post.text"
 						autofocus />
 				</Mentionable>
 
-				<el-button type="primary" :disabled="!this.post.text.length" @click="savePost">
+				<el-button type="primary" :disabled="!this.post.text" @click="savePost">
 					<template v-if="post.public">Save public entry</template>
 					<template v-else>Save private entry</template>
 				</el-button>
