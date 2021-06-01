@@ -24,8 +24,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 		read_only_fields = [
 			'email_verified',
-			'is_staff',
-			'post_chars',
 			'post_avg_chars',
 			'posts_count'
 			'streak'
@@ -40,12 +38,16 @@ class PostImageSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+	# Must be true since for other people's (public) posts,
+	# PublicPostSerializer is used.
+	is_own = serializers.ReadOnlyField(default=True)
 	images = PostImageSerializer(many=True, read_only=True)
 
 	class Meta:
 		model = Post
 		fields = [
 			'id',
+			'is_own',
 			'date',
 			'text',
 			'mood',
@@ -56,7 +58,6 @@ class PostSerializer(serializers.ModelSerializer):
 			'public',
 			'part_of',
 			'natural_language',
-			'is_editable'
 		]
 
 
@@ -74,6 +75,10 @@ class FuzzedCoordinateField(serializers.ReadOnlyField):
 
 
 class PublicPostSerializer(PostSerializer):
+	# Technically could be true since this is also used for a user's own posts
+	# in the random_public endpoint, but don't bother with that.
+	is_own = serializers.ReadOnlyField(default=False)
+
 	text = serializers.CharField(source='get_public_text')
 	location_lat = FuzzedCoordinateField()
 	location_lon = FuzzedCoordinateField()
@@ -83,6 +88,7 @@ class PublicPostSerializer(PostSerializer):
 		model = Post
 		fields = [
 			'id',
+			'is_own',
 			'date',
 			'text',
 			'mood',

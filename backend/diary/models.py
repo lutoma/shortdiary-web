@@ -92,17 +92,6 @@ class Post(models.Model):
 	def __str__(self):
 		return f'{self.author} on {self.date}'
 
-	def is_editable(self):
-		"""
-		Should this post still be editable by the user?
-		"""
-
-		return (self.date > datetime.date.today() - datetime.timedelta(days=3))
-
-	is_editable.admin_order_field = 'date'
-	is_editable.boolean = True
-	is_editable.short_description = 'Still editable by user?'
-
 	def send_mail(self):
 		"""
 		Sends out the mail for this post

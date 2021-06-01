@@ -24,9 +24,9 @@
 				<MoodIndicatorIcon :mood="post.mood" /> Mood: {{ post.mood }}
 			</template>
 
-			<div class="right">
-				<el-button v-if="post.is_editable" class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button>
-				<el-button v-if="post.is_editable" class="delete-button" type="text" @click="deletePost"><fa :icon="['fal', 'trash']" /> Delete</el-button>
+			<div class="right" v-if="post.is_own">
+				<el-button class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button>
+				<el-button class="delete-button" type="text" @click="deletePost"><fa :icon="['fal', 'trash']" /> Delete</el-button>
 			</div>
 		</div>
 

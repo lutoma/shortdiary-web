@@ -30,7 +30,7 @@ class PostAdmin(admin.ModelAdmin):
 	]
 
 	inlines = [PostImageInline]
-	list_display = ['author', 'date', 'public', 'natural_language', 'sent', 'is_editable']
+	list_display = ['author', 'date', 'public', 'natural_language', 'sent']
 	list_filter = ['sent', 'created_at', 'public', 'natural_language']
 	search_fields = ('author__username',)
 	date_hierarchy = 'date'
