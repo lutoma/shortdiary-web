@@ -26,7 +26,7 @@
 
 					<h2 class="month-header">{{ getMonthName(month) }} <span>{{ year }}</span></h2>
 					<div class="post-container" v-for="post in posts" :key="post.id">
-						<Post :post="post" />
+						<Post :post="post" @deleted="loadPosts()" />
 					</div>
 				</div>
 			</div>
@@ -92,10 +92,6 @@ export default {
 		Post
 	},
 
-	async fetch() {
-		await this.$store.dispatch('updatePosts')
-	},
-
 	data() {
 		return {
 			scroll_state: {
@@ -148,6 +144,10 @@ export default {
 	},
 
 	methods: {
+		async loadPosts() {
+			await this.$store.dispatch('updatePosts')
+		},
+
 		getMonthName(num) {
 			const date = new Date()
 			date.setMonth(num - 1)
@@ -182,6 +182,10 @@ export default {
 				this.scroll_state.month = entries[0].target.dataset.month
 			}
 		}
+	},
+
+	async fetch() {
+		await this.loadPosts()
 	},
 
 	updated() {

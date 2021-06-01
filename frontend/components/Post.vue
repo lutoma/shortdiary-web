@@ -109,6 +109,7 @@ export default {
 				type: 'warning'
 			}).then(() => {
 				this.$axios.$delete(`/posts/${this.post.id}`).then(() => {
+					this.$emit('deleted')
 					this.$message({
 						type: 'success',
 						message: 'Post deleted'
