@@ -22,6 +22,7 @@ class PostAdmin(admin.ModelAdmin):
 				'mood',
 				'text',
 				'part_of',
+				'tags',
 				'location_verbose',
 				'location_lat',
 				'location_lon'

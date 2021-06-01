@@ -168,7 +168,8 @@ export default {
 				'faShieldCheck',
 				'faTrophyAlt',
 				'faTally',
-				'faRuler'
+				'faRuler',
+				'faTags'
 			]
 		},
 		icons: {

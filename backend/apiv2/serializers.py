@@ -51,6 +51,7 @@ class PostSerializer(serializers.ModelSerializer):
 			'date',
 			'text',
 			'mood',
+			'tags',
 			'images',
 			'location_lat',
 			'location_lon',

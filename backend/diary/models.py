@@ -14,7 +14,6 @@ import phonenumbers
 import diary.tasks as tasks
 import hashlib
 import babel
-import datetime
 import re
 
 
@@ -65,6 +64,7 @@ class Post(models.Model):
 	mood = models.IntegerField(verbose_name=_('mood'))
 	public = models.BooleanField(verbose_name=_('public'), default=False)
 	part_of = models.CharField(blank=True, null=True, max_length=600, verbose_name=_('part of'))
+	tags = models.JSONField(default=list, blank=True)
 
 	created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
 	last_changed_at = models.DateTimeField(auto_now=True, verbose_name=_('last changed at'))

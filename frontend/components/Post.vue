@@ -46,6 +46,17 @@
 			@click="lightboxIndex = index"
 			fit="cover" />
 
+		<div class="tags" v-if="post.tags.length">
+			<el-tag
+				v-for="tag of post.tags"
+				:key="tag"
+				size="medium"
+				effect="dark"
+				type="info">
+
+				{{ tag }}
+			</el-tag>
+		</div>
 	</el-card>
 </template>
 
@@ -138,6 +149,14 @@ export default {
 		line-height: 1.5;
 		font-size: 1.05rem;
 		font-family: "Fira Sans";
+	}
+
+	.tags {
+		margin-top: 1rem;
+
+		.el-tag {
+			margin-right: .3rem;
+		}
 	}
 
 	.el-image {

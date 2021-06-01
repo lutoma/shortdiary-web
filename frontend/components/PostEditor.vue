@@ -58,6 +58,26 @@
 
 						<el-form-item>
 							<template slot="label">
+								<fa :icon="['fal', 'tags']" /> Tags
+							</template>
+							<el-select
+								v-model="post.tags"
+								multiple
+								filterable
+								allow-create
+								default-first-option
+								placeholder="Choose tags">
+
+								<el-option
+									v-for="item in existing_tags"
+									:key="item"
+									:label="item"
+									:value="item" />
+							</el-select>
+						</el-form-item>
+
+						<el-form-item>
+							<template slot="label">
 								<fa :icon="['fal', 'map-marked-alt']" /> Location
 							</template>
 							<span v-loading="!post.location_verbose">{{ post.location_verbose }}</span>
@@ -108,6 +128,10 @@ export default {
 			const mentions = this.$store.state.top_mentions.map(
 				([mention, _]) => mention.substring(1))
 			return mentions.map(value => ({ value, label: value }))
+		},
+
+		existing_tags() {
+			return []
 		}
 	},
 
@@ -128,6 +152,7 @@ export default {
 				// Super hacky and not timezone-aware
 				date: new Date().toISOString().slice(0, 10),
 				mood: 6,
+				tags: [],
 				location: null,
 				location_verbose: ''
 			}
