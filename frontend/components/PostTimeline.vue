@@ -1,6 +1,6 @@
 <template>
-	<el-row class="post-timeline" :gutter="50">
-		<el-col :span="19" class="left" v-loading="!posts.length">
+	<div class="post-timeline">
+		<div class="left" v-loading="!posts.length">
 			<template v-if="!posts.length">
 				&nbsp;
 			</template>
@@ -30,10 +30,9 @@
 					</div>
 				</div>
 			</div>
-		</el-col>
+		</div>
 
-		<el-col :span="5" class="right">
-			<slot name="sidebar"></slot>
+		<div class="right">
 			<div class="timeline-options">
 				<ul class="datepicker">
 					<li v-for="[year, months] of sorted_posts" :class="year == scroll_state.year ? 'active': ''" :key="Number(year)">
@@ -80,8 +79,8 @@
 					</el-form-item>
 				</el-form>
 			</div>
-		</el-col>
-	</el-row>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -216,6 +215,8 @@ export default {
 
 	.left {
 		height: 100%;
+		flex: 1 1 100%;
+		margin-right: 40px;
 
 		.year-header {
 			margin-bottom: 1rem;
@@ -241,6 +242,8 @@ export default {
 	}
 
 	.right {
+		flex: 0.1 0 350px;
+
 		.timeline-options {
 			// This was originally position: sticky, but Firefox has
 			// performance issues/flickering with that. See:
