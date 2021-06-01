@@ -72,28 +72,14 @@ export default {
 			return this.$store.state.posts
 		},
 
+		top_mentions() {
+			return this.$store.state.top_mentions
+		},
+
 		top_locations() {
 			return _(this.posts)
 				.filter('location_verbose')
 				.countBy('location_verbose')
-				.toPairs()
-				.sortBy(1)
-				.reverse()
-				.value()
-		},
-
-		top_mentions() {
-			// FIXME Mentions should probably be extracted from text upon creation
-			// and then stored with the post
-			const mentions = []
-			for (const post of this.posts) {
-				// FIXME Should deduplicate/DRYfy regex with Post.vue
-				// Temporarily cast to Set to deduplicate mentions within a post
-				mentions.push(...[...new Set(post.text.toLowerCase().match(/@\w+\b/g))])
-			}
-
-			return _(mentions)
-				.countBy()
 				.toPairs()
 				.sortBy(1)
 				.reverse()

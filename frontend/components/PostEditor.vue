@@ -2,7 +2,13 @@
 	<div class="post-editor">
 		<div class="editor-grid">
 			<div class="main-area">
-				<Mentionable :keys="['@']" :items="items" offset="6" insert-space>
+				<Mentionable
+					:keys="['@']"
+					:items="mention_items"
+					placement="bottom-end"
+					offset="6"
+					insert-space>
+
 					<el-input
 						ref="text"
 						type="textarea"
@@ -13,8 +19,8 @@
 				</Mentionable>
 
 				<el-button type="primary" :disabled="!this.post.text.length" @click="savePost">
-					<template v-if="!post.public">Save private entry</template>
 					<template v-if="post.public">Save public entry</template>
+					<template v-else>Save private entry</template>
 				</el-button>
 			</div>
 
@@ -96,6 +102,14 @@ export default {
 
 	async fetch() {
 		await this.$store.dispatch('updatePosts')
+	},
+
+	computed: {
+		mention_items() {
+			const mentions = this.$store.state.top_mentions.map(
+				([mention, _]) => mention.substring(1))
+			return mentions.map(value => ({ value, label: value }))
+		}
 	},
 
 	data() {
@@ -237,6 +251,29 @@ export default {
 			display: inline-flex;
 			justify-content: center;
 			align-items: center;
+		}
+	}
+}
+
+// FIXME Need to properly scope this to not affect other potential popvers?
+.tooltip.popover {
+	background: white;
+	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+	border-radius: 4px;
+	overflow: hidden;
+
+	.tooltip-inner {
+		min-width: 80px;
+		color: #606266;
+		font-size: 14px;
+
+		div > * {
+			padding: 4px 8px;
+		}
+
+		.mention-selected {
+			background: #CDB380;
+			color: white;
 		}
 	}
 }
