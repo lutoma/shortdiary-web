@@ -57,7 +57,6 @@ class PostSerializer(serializers.ModelSerializer):
 			'location_lon',
 			'location_verbose',
 			'public',
-			'part_of',
 			'natural_language',
 		]
 

@@ -21,7 +21,6 @@ class PostAdmin(admin.ModelAdmin):
 			{'fields': [
 				'mood',
 				'text',
-				'part_of',
 				'tags',
 				'location_verbose',
 				'location_lat',
