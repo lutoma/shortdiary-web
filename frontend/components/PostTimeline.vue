@@ -59,7 +59,7 @@
 					</el-form-item>
 
 					<el-form-item>
-						<el-radio-group v-model="filter.image" size="small">
+						<el-radio-group v-model="filter.images" size="small">
 							<el-radio-button :label="null">Any</el-radio-button>
 							<el-radio-button :label="true"><fa :icon="['far', 'images']" /> Has images</el-radio-button>
 							<el-radio-button :label="false"><fa :icon="['far', 'empty-set']" /> No image</el-radio-button>
@@ -106,7 +106,7 @@ export default {
 
 			filter: {
 				text: this.$route.query.filter || '',
-				image: null,
+				images: null,
 				visibility: null,
 				mood: [1, 10]
 			}
@@ -123,8 +123,8 @@ export default {
 				.filter(x => x.text.toLowerCase().includes(this.filter.text.toLowerCase()))
 				.filter(x => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1])
 
-			if (this.filter.image !== null) {
-				filtered = filtered.filter({ image: this.filter.image })
+			if (this.filter.images !== null) {
+				filtered = filtered.filter(x => !!x.images.length === this.filter.images)
 			}
 
 			if (this.filter.visibility !== null) {
