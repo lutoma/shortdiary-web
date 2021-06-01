@@ -5,7 +5,7 @@
 		<EqualHeightRow>
 			<el-col :span="8">
 				<el-card>
-					<h2>Longest current streak</h2>
+					<h2><fa :icon="['fal', 'trophy-alt']" /> Longest current streak</h2>
 					<el-table
 						v-loading="!leaderboard.longest_current_streak.length"
 						:data="leaderboard.longest_current_streak"
@@ -20,7 +20,7 @@
 
 			<el-col :span="8">
 				<el-card>
-					<h2>Number of posts</h2>
+					<h2><fa :icon="['fal', 'tally']" /> Number of posts</h2>
 					<el-table
 						v-loading="!leaderboard.number_of_posts.length"
 						:data="leaderboard.number_of_posts"
@@ -35,7 +35,7 @@
 
 			<el-col :span="8">
 				<el-card>
-					<h2>Average post length</h2>
+					<h2><fa :icon="['fal', 'ruler']" /> Average post length</h2>
 					<el-table
 						v-loading="!leaderboard.average_post_length.length"
 						:data="leaderboard.average_post_length"

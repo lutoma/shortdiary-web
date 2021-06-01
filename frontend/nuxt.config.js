@@ -165,7 +165,10 @@ export default {
 				'faLanguage',
 				'faCalendarAlt',
 				'faImages',
-				'faShieldCheck'
+				'faShieldCheck',
+				'faTrophyAlt',
+				'faTally',
+				'faRuler'
 			]
 		},
 		icons: {
