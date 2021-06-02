@@ -13,25 +13,25 @@
 						ref="text"
 						type="textarea"
 						placeholder="Jot down your adventures here"
-						v-model="post.text"
+						v-model="pdata.text"
 						autofocus />
 				</Mentionable>
 
-				<el-button type="primary" :disabled="!this.post.text" @click="savePost">
-					<template v-if="post.public">Save public entry</template>
+				<el-button type="primary" :disabled="!this.pdata.text" @click="save">
+					<template v-if="pdata.public">Save public entry</template>
 					<template v-else>Save private entry</template>
 				</el-button>
 			</div>
 
 			<div class="sidebar">
 				<el-card>
-					<el-form ref="form" :model="post" label-position="left" label-width="100px" @submit="savePost">
+					<el-form ref="form" :model="pdata" label-position="left" label-width="100px" @submit="save">
 						<el-form-item>
 							<template slot="label">
 								<fa :icon="['fal', 'calendar-alt']" /> Date
 							</template>
 							<el-date-picker
-								v-model="post.date"
+								v-model="pdata.date"
 								type="date"
 								placeholder="Pick a date"
 								:picker-options="datePickerOptions"
@@ -43,7 +43,7 @@
 							<template slot="label">
 								<fa :icon="['fal', 'shield-check']" /> Visibility
 							</template>
-							<el-radio-group v-model="post.public" size="small">
+							<el-radio-group v-model="pdata.public" size="small">
 								<el-radio-button :label="true"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
 								<el-radio-button :label="false"><fa :icon="['far', 'lock']" /> Private</el-radio-button>
 							</el-radio-group>
@@ -51,9 +51,9 @@
 
 						<el-form-item>
 							<template slot="label">
-								<MoodIndicatorIcon :mood="post.mood === null ? 10 : post.mood" /> Mood
+								<MoodIndicatorIcon :mood="pdata.mood === null ? 10 : pdata.mood" /> Mood
 							</template>
-							<el-slider v-model="post.mood" :step="1" :min="1" :max="10" show-stops />
+							<el-slider v-model="pdata.mood" :step="1" :min="1" :max="10" show-stops />
 						</el-form-item>
 
 						<el-form-item>
@@ -61,7 +61,7 @@
 								<fa :icon="['fal', 'tags']" /> Tags
 							</template>
 							<el-select
-								v-model="post.tags"
+								v-model="pdata.tags"
 								multiple
 								filterable
 								allow-create
@@ -69,7 +69,7 @@
 								placeholder="Choose tags">
 
 								<el-option
-									v-for="item in existing_tags"
+									v-for="item in top_tags"
 									:key="item[0]"
 									:label="item[0]"
 									:value="item[0]" />
@@ -80,7 +80,13 @@
 							<template slot="label">
 								<fa :icon="['fal', 'map-marked-alt']" /> Location
 							</template>
-							<span v-loading="!post.location_verbose">{{ post.location_verbose }}</span>
+							<div v-loading="!pdata.location_verbose">
+								{{ pdata.location_verbose }}
+
+								<el-button type="text" v-if="post && post.id && pdata.location_verbose" @click="getGeoLocation()">
+									<fa :icon="['far', 'sync']" />
+								</el-button>
+							</div>
 						</el-form-item>
 
 						<el-form-item>
@@ -89,7 +95,10 @@
 							</template>
 							<el-upload
 								ref="images"
+								action="#"
 								:http-request="uploadImage"
+								:on-remove="removeImage"
+								:file-list="existing_images"
 								list-type="picture-card"
 								:thumbnail-mode="true"
 								:auto-upload="false"
@@ -102,15 +111,30 @@
 				</el-card>
 			</div>
 		</div>
-		<MapBackground v-if="post.location" :center="post.location" />
+		<MapBackground v-if="pdata.location_lat && pdata.location_lon" :center="[pdata.location_lon, pdata.location_lat]" />
 	</div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Mentionable } from 'vue-mention'
 import { keyBy } from 'lodash'
 import MapBackground from '~/components/MapBackground'
 import MoodIndicatorIcon from '~/components/MoodIndicatorIcon'
+
+// Default data for newly created posts
+const default_pdata = {
+	public: false,
+	text: '',
+
+	// Super hacky and not timezone-aware
+	date: new Date().toISOString().slice(0, 10),
+	mood: 6,
+	tags: [],
+	location_lat: null,
+	location_lon: null,
+	location_verbose: ''
+}
 
 export default {
 	components: {
@@ -119,20 +143,12 @@ export default {
 		MoodIndicatorIcon
 	},
 
-	async fetch() {
-		await this.$store.dispatch('updatePosts')
+	props: {
+		post: { type: Object, default: null }
 	},
 
-	computed: {
-		mention_items() {
-			const mentions = this.$store.state.top_mentions.map(
-				([mention, _]) => mention.substring(1))
-			return mentions.map(value => ({ value, label: value }))
-		},
-
-		existing_tags() {
-			return this.$store.state.top_tags
-		}
+	async fetch() {
+		await this.$store.dispatch('updatePosts')
 	},
 
 	data() {
@@ -144,32 +160,38 @@ export default {
 				}
 			},
 
-			post: {
-				id: null,
-				public: false,
-				text: '',
+			// Main post data object. This is what will be sent to the server
+			// in  the API request. Filled with either the post we want to edit
+			// (passed in through the prop), or the default post template
+			pdata: this.post || default_pdata,
 
-				// Super hacky and not timezone-aware
-				date: new Date().toISOString().slice(0, 10),
-				mood: 6,
-				tags: [],
-				location: null,
-				location_verbose: ''
-			}
+			// When editing a post, IDs of images to delete upon save
+			images_to_delete: []
 		}
 	},
 
-	mounted() {
-		this.$refs.text.$el.children[0].focus()
+	computed: {
+		...mapState(['top_tags']),
 
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(this.geoLocationCallback)
+		mention_items() {
+			const mentions = this.$store.state.top_mentions.map(
+				([mention, _]) => mention.substring(1))
+			return mentions.map(value => ({ value, label: value }))
+		},
+
+		existing_images() {
+			if (!this.post) {
+				return []
+			}
+
+			return this.post.images.map(x => ({ id: x.id, url: x.thumbnail }))
 		}
 	},
 
 	methods: {
 		geoLocationCallback(position) {
-			this.post.location = [position.coords.longitude, position.coords.latitude]
+			this.pdata.location_lat = position.coords.latitude
+			this.pdata.location_lon = position.coords.longitude
 
 			const url = `/map/geocoding/v5/mapbox.places/${position.coords.longitude}%2C%20${position.coords.latitude}.json?access_token=pk.eyJ1IjoibHV0b21hIiwiYSI6ImxEWUZyYTAifQ.pTzQYyVqJUgcojuuIDchbQ`
 
@@ -181,27 +203,44 @@ export default {
 				const feat = keyBy(data.features, 'place_type.0')
 
 				if ('place' in feat) {
-					this.post.location_verbose = `${feat.place.text}, ${feat.country.text}`
+					this.pdata.location_verbose = `${feat.place.text}, ${feat.country.text}`
 				} else if ('region' in feat) {
-					this.post.location_verbose = `${feat.region.text}, ${feat.country.text}`
+					this.pdata.location_verbose = `${feat.region.text}, ${feat.country.text}`
 				} else if ('country' in feat) {
-					this.post.location_verbose = feat.country.text
+					this.pdata.location_verbose = feat.country.text
 				}
 			})
 		},
 
-		async savePost() {
-			if (!this.post.text.length) {
+		getGeoLocation() {
+			// FIXME Display some nice message if geolocation fails
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(this.geoLocationCallback)
+			}
+		},
+
+		async save() {
+			if (!this.pdata.text.length) {
 				return
 			}
 
+			// Delete removed images for existing posts
+			for (const id of this.images_to_delete) {
+				await this.$axios.$delete(`/post_images/${id}/`)
+			}
+
 			// FIXME Better error handling
-			this.post = await this.$axios.$post('/posts/', this.post)
+			if (this.post && this.post.id) {
+				this.post = await this.$axios.$put(`/posts/${this.post.id}/`, this.pdata)
+			} else {
+				this.post = await this.$axios.$post('/posts/', this.pdata)
+			}
+
+			// Upload new images
 			await this.$refs.images.submit()
 
-			this.$store.dispatch('updatePosts')
 			this.$router.push('/dashboard', () => {
-				this.$message({ type: 'success', message: 'The entry has been added.' })
+				this.$message({ type: 'success', message: 'The entry has been saved' })
 			})
 		},
 
@@ -218,6 +257,22 @@ export default {
 			}
 
 			this.$axios.$post('/post_images/', data, config).then(res => req.onSuccess(res))
+		},
+
+		removeImage(file, list) {
+			// If we're editing a post and this image has already been
+			// uploaded, mark it for deletion on save.
+			if ('id' in file) {
+				this.images_to_delete.push(file.id)
+			}
+		}
+	},
+
+	mounted() {
+		this.$refs.text.$el.children[0].focus()
+
+		if (!(this.post && this.post.id)) {
+			this.getGeoLocation()
 		}
 	}
 }

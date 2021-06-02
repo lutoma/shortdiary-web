@@ -147,7 +147,8 @@ export default {
 				'faLockOpen',
 				'faBars',
 				'faFileContract',
-				'faShieldCheck'
+				'faShieldCheck',
+				'faSync'
 			],
 			light: [
 				'faLock',

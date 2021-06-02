@@ -14,11 +14,17 @@ export default {
 		controls: { type: Boolean, default: true }
 	},
 
+	data() {
+		return {
+			map: null
+		}
+	},
+
 	mounted() {
 		mapboxgl.accessToken = 'pk.eyJ1IjoibHV0b21hIiwiYSI6ImVkbzF4MG8ifQ.pIpC2pu9savl1ZZLl8TGrA'
 		mapboxgl.baseApiUrl = 'https://beta.shortdiary.com/map'
 
-		const map = new mapboxgl.Map({
+		this.map = new mapboxgl.Map({
 			container: 'map-wrapper',
 			style: 'mapbox://styles/lutoma/cko3qggqm0cce17o6itr6j044?optimize=true',
 			center: this.center,
@@ -29,13 +35,19 @@ export default {
 
 		if (this.controls) {
 			const nav = new mapboxgl.NavigationControl()
-			map.addControl(nav, 'top-right')
+			this.map.addControl(nav, 'top-right')
 		}
 
 		for (const marker of this.markers) {
 			new mapboxgl.Marker({ color: '#CDB380' })
 				.setLngLat(marker)
-				.addTo(map)
+				.addTo(this.map)
+		}
+	},
+
+	watch: {
+		center() {
+			this.map.jumpTo({ center: this.center })
 		}
 	}
 }

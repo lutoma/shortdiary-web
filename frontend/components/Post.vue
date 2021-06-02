@@ -25,7 +25,7 @@
 			</template>
 
 			<div class="right" v-if="post.is_own">
-				<el-button class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button>
+				<n-link :to="`/posts/${post.id}/edit`"><el-button class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button></n-link>
 				<el-button class="delete-button" type="text" @click="deletePost"><fa :icon="['fal', 'trash']" /> Delete</el-button>
 			</div>
 		</div>
