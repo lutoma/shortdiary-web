@@ -1,12 +1,14 @@
 <template>
 	<div id="index">
 		<div class="background-container">
-			<div />
+			<video autoplay loop>
+				<source src="~assets/frontpage-video/background_av1.mp4" type="video/mp4">
+				<source src="~assets/frontpage-video/background.mp4" type="video/mp4">
+				<source src="~assets/frontpage-video/background.webm" type="video/webm">
+			</video>
 		</div>
 		<div id="main-container">
 			<h1 id="tagline">A diary for the 21st century</h1>
-
-			<img class="screenshot" src="https://fnordserver.eu/images/pageheader/xwordpress-2a9c2494.png.pagespeed.ic.V8x0r10WER.png" />
 		</div>
 	</div>
 </template>
@@ -26,25 +28,15 @@ export default {
 		position: absolute;
 		top: 0;
 		left: 0;
-		height: 100%;
-		width: 100%;
+		height: 100vh;
+		width: 100vw;
 		overflow: hidden;
 		z-index: -10;
+		pointer-events: none;
 
-		background-image: linear-gradient(35deg, #036564, #008282);
-
-		>div {
-			height: 100vh;
-			width: 100%;
-			margin-top: -50vh;
-			transform: skew(0,-12deg);
-
-
-			background-image: linear-gradient(35deg,#CDB380 20%,#CDAD80 50%, #CDBA80);
-			background-attachment: fixed;
-			background-repeat: no-repeat;
-			background-size: auto;
-
+		video {
+			min-width: 100vw;
+			min-height: 100vh;
 		}
 	}
 
@@ -56,7 +48,7 @@ export default {
 		#tagline {
 			text-align: center;
 			font-size: 120px;
-			font-weight: 200;
+			//font-weight: 200;
 			color: #fff;
 			line-height: 1.2;
 			text-shadow: 0 -1px 1px #888, 0 1px 1px #FFFFFF;
