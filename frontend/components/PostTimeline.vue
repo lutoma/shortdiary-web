@@ -87,7 +87,7 @@
 							<fa :icon="['fal', 'tags']" /> Tags
 						</template>
 						<el-select v-model="filter.tags" multiple filterable default-first-option placeholder="Choose tags">
-							<el-option v-for="item in tags_filter_options" :key="item[0]" :label="item[0]" :value="item[0]" />
+							<el-option v-for="item in top_tags" :key="item[0]" :label="item[0]" :value="item[0]" />
 						</el-select>
 					</el-form-item>
 
@@ -97,7 +97,7 @@
 						</template>
 
 						<el-select v-model="filter.location" placeholder="Select location" filterable clearable>
-							<el-option v-for="item in location_filter_options" :key="item[0]" :label="item[0]" :value="item[0]" />
+							<el-option v-for="item in top_locations" :key="item[0]" :label="item[0]" :value="item[0]" />
 						</el-select>
 					</el-form-item>
 
@@ -119,6 +119,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Post from '~/components/Post'
 import _ from 'lodash'
 
@@ -147,17 +148,7 @@ export default {
 	},
 
 	computed: {
-		posts() {
-			return this.$store.state.posts
-		},
-
-		location_filter_options() {
-			return this.$store.state.top_locations
-		},
-
-		tags_filter_options() {
-			return this.$store.state.top_tags
-		},
+		...mapState(['posts', 'top_locations', 'top_tags']),
 
 		sorted_posts() {
 			// Filter definitions. The object key defines the field in

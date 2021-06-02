@@ -55,8 +55,8 @@ export default {
 			}
 		},
 
-		// Needed for dynamic template in Post.vue
 		extend(config) {
+			// Needed for dynamic template in Post.vue
 			config.resolve.alias.vue = 'vue/dist/vue.common'
 		}
 	},
