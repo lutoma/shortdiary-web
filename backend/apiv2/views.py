@@ -6,10 +6,11 @@ from diary.models import Post, PostImage
 from django.core.cache import cache
 from django.db.models import Q
 from rest_framework.permissions import BasePermission, AllowAny
+from diary.models import DiaryUser
 
 from rest_framework.generics import (
 	RetrieveUpdateAPIView, ListAPIView, RetrieveAPIView,
-	get_object_or_404
+	CreateAPIView, get_object_or_404
 )
 
 from .serializers import (
@@ -23,6 +24,12 @@ class CurrentUserView(RetrieveUpdateAPIView):
 
 	def get_object(self):
 		return self.request.user
+
+
+class SignupView(CreateAPIView):
+	serializer_class = UserSerializer
+	permission_classes = [AllowAny]
+	queryset = DiaryUser.objects.all()
 
 
 class AuthenticatedOnlyExceptRetrieve(BasePermission):

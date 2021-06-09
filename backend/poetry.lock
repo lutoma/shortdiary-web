@@ -134,14 +134,6 @@ python-versions = ">=3.6"
 Django = ">=2.2"
 
 [[package]]
-name = "django-hcaptcha"
-version = "0.1.0"
-description = "Django hCaptcha provides a simple way to protect your django forms using hCaptcha"
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "django-otp"
 version = "1.0.4"
 description = "A pluggable framework for adding two-factor authentication to Django using one-time passwords."
@@ -573,7 +565,7 @@ pycryptodome = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.5"
-content-hash = "8db38943703c98427f8cddec694db7f3d52e493c43a43bf3d42ea979f1a9e629"
+content-hash = "9709f51f9864c7044e40254353a85134602787089bc875479056adb6818479d9"
 
 [metadata.files]
 ansicon = [
@@ -623,9 +615,6 @@ django = [
 django-cors-headers = [
     {file = "django-cors-headers-3.7.0.tar.gz", hash = "sha256:96069c4aaacace786a34ee7894ff680780ec2644e4268b31181044410fecd12e"},
     {file = "django_cors_headers-3.7.0-py3-none-any.whl", hash = "sha256:1ac2b1213de75a251e2ba04448da15f99bcfcbe164288ae6b5ff929dc49b372f"},
-]
-django-hcaptcha = [
-    {file = "django-hCaptcha-0.1.0.tar.gz", hash = "sha256:2b80197c07bb8444249bcce3758b0472d369cca309fb02d7abcd0a856431b76b"},
 ]
 django-otp = [
     {file = "django-otp-1.0.4.tar.gz", hash = "sha256:04852c5301befb02d1d8ba4a31d375eb08d7c2cb6fe86b5f840867435ab1309c"},

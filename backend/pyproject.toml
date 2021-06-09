@@ -26,11 +26,11 @@ django-redis = "^4.12.1"
 django-cors-headers = "^3.7.0"
 django-storages = "^1.11.1"
 boto3 = "^1.17.45"
-django-hCaptcha = "^0.1.0"
 Babel = "^2.9.1"
 qrcode = "^6.1"
 django-trench = "^0.2.3"
 djangorestframework-simplejwt = "^4.6.0"
+requests = "^2.25.1"
 
 
 [tool.poetry.dev-dependencies]

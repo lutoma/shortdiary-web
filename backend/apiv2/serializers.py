@@ -1,11 +1,39 @@
 from diary.models import DiaryUser, Post, PostImage
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+from django.conf import settings
+import requests
 
 
 class UserSerializer(serializers.ModelSerializer):
 	posts_avg_chars = serializers.IntegerField(source='get_average_post_length', read_only=True)
 	streak = serializers.IntegerField(source='get_streak', read_only=True)
 	posts_count = serializers.IntegerField(source='posts.count', read_only=True)
+	captcha = serializers.CharField(write_only=True)
+
+	def validate_captcha(self, value):
+		try:
+			req = requests.post('https://hcaptcha.com/siteverify', data={
+				'response': value,
+				'secret': settings.HCAPTCHA_SECRET,
+				'sitekey': settings.HCAPTCHA_SITEKEY
+			})
+
+			req.raise_for_status()
+			response = req.json()
+			if not response['success']:
+				raise ValidationError(f"Captcha verification failed: {', '.join(response['error-codes'])}")
+
+		# Fail open if hcaptcha is down or something
+		except requests.exceptions.RequestException:
+			pass
+
+	def create(self, validated_data):
+		validated_data.pop('captcha', None)
+		user = super().create(validated_data)
+		user.set_password(validated_data['password'])
+		user.save(update_fields=['password'])
+		return user
 
 	class Meta:
 		model = DiaryUser
@@ -19,15 +47,22 @@ class UserSerializer(serializers.ModelSerializer):
 			'posts_count',
 			'streak',
 			'geolocation_enabled',
-			'include_in_leaderboard'
+			'include_in_leaderboard',
+			'password',
+			'captcha'
 		]
 
 		read_only_fields = [
+			'id',
 			'email_verified',
 			'post_avg_chars',
-			'posts_count'
+			'posts_count',
 			'streak'
 		]
+
+		extra_kwargs = {
+			'password': {'write_only': True}
+		}
 
 
 class PostImageSerializer(serializers.ModelSerializer):

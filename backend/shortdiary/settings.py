@@ -122,7 +122,6 @@ INSTALLED_APPS = (
 	'django.contrib.admin',
 	'django_q',
 	'corsheaders',
-	'hcaptcha',
 	'rest_framework',
 	'django_otp',
 	'django_otp.plugins.otp_static',
