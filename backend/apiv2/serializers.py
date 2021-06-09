@@ -1,4 +1,5 @@
 from diary.models import DiaryUser, Post, PostImage
+from rest_framework.validators import UniqueTogetherValidator
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.conf import settings
@@ -38,6 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = DiaryUser
 		fields = [
+			'id',
 			'username',
 			'email',
 			'email_verified',
@@ -77,10 +79,12 @@ class PostSerializer(serializers.ModelSerializer):
 	# PublicPostSerializer is used.
 	is_own = serializers.ReadOnlyField(default=True)
 	images = PostImageSerializer(many=True, read_only=True)
+	author = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
 	class Meta:
 		model = Post
 		fields = [
+			'author',
 			'id',
 			'is_own',
 			'date',
@@ -93,6 +97,14 @@ class PostSerializer(serializers.ModelSerializer):
 			'location_verbose',
 			'public',
 			'natural_language',
+		]
+
+		validators = [
+			UniqueTogetherValidator(
+				queryset=Post.objects.all(),
+				fields=['author', 'date'],
+				message='A post for that date already exists'
+			)
 		]
 
 

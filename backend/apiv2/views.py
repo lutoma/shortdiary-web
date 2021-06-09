@@ -50,9 +50,6 @@ class PostViewSet(viewsets.ModelViewSet):
 	def get_queryset(self):
 		return self.request.user.posts
 
-	def perform_create(self, serializer):
-		serializer.save(author=self.request.user)
-
 	def retrieve(self, request, *args, **kwargs):
 		"""
 		Custom retrieve function that allows retrieval of other users posts if
