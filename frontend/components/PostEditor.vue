@@ -1,5 +1,7 @@
 <template>
 	<div class="post-editor">
+		<el-alert v-if="get_error('non_field_errors')" :title="get_error('non_field_errors')" :closable="false" type="error" />
+
 		<div class="editor-grid">
 			<div class="main-area">
 				<Mentionable
@@ -17,7 +19,7 @@
 						autofocus />
 				</Mentionable>
 
-				<el-button type="primary" :disabled="!this.pdata.text" @click="save">
+				<el-button type="primary" :disabled="!pdata.text" :loading.sync="loading" @click="save">
 					<template v-if="pdata.public">Save public entry</template>
 					<template v-else>Save private entry</template>
 				</el-button>
@@ -26,7 +28,7 @@
 			<div class="sidebar">
 				<el-card>
 					<el-form ref="form" :model="pdata" label-position="left" label-width="100px" @submit="save">
-						<el-form-item>
+						<el-form-item :error="get_error('date')">
 							<template slot="label">
 								<fa :icon="['fal', 'calendar-alt']" /> Date
 							</template>
@@ -39,7 +41,7 @@
 								value-format="yyyy-MM-dd" />
 						</el-form-item>
 
-						<el-form-item>
+						<el-form-item :error="get_error('public')">
 							<template slot="label">
 								<fa :icon="['fal', 'shield-check']" /> Visibility
 							</template>
@@ -49,14 +51,14 @@
 							</el-radio-group>
 						</el-form-item>
 
-						<el-form-item>
+						<el-form-item :error="get_error('mood')">
 							<template slot="label">
 								<MoodIndicatorIcon :mood="pdata.mood === null ? 10 : pdata.mood" /> Mood
 							</template>
 							<el-slider v-model="pdata.mood" :step="1" :min="1" :max="10" show-stops />
 						</el-form-item>
 
-						<el-form-item>
+						<el-form-item :error="get_error('tags')">
 							<template slot="label">
 								<fa :icon="['fal', 'tags']" /> Tags
 							</template>
@@ -76,7 +78,7 @@
 							</el-select>
 						</el-form-item>
 
-						<el-form-item>
+						<el-form-item :error="get_error('location_verbose') || get_error('location_lat') || get_error('location_lon')">
 							<template slot="label">
 								<fa :icon="['fal', 'map-marked-alt']" /> Location
 							</template>
@@ -119,6 +121,8 @@
 import { mapState } from 'vuex'
 import { Mentionable } from 'vue-mention'
 import { keyBy, cloneDeep } from 'lodash'
+import { get_error } from '~/assets/utils'
+
 import MapBackground from '~/components/MapBackground'
 import MoodIndicatorIcon from '~/components/MoodIndicatorIcon'
 
@@ -160,6 +164,12 @@ export default {
 				}
 			},
 
+			// true if the save operation is loading
+			loading: false,
+
+			// Errors returned from API
+			error: {},
+
 			// Main post data object. This is what will be sent to the server
 			// in the API request. Filled with either the post we want to edit
 			// (passed in through the prop), or the default post template
@@ -189,6 +199,8 @@ export default {
 	},
 
 	methods: {
+		get_error,
+
 		geoLocationCallback(position) {
 			this.pdata.location_lat = position.coords.latitude
 			this.pdata.location_lon = position.coords.longitude
@@ -224,24 +236,32 @@ export default {
 				return
 			}
 
-			// Delete removed images for existing posts
-			for (const id of this.images_to_delete) {
-				await this.$axios.$delete(`/post_images/${id}/`)
+			this.error = {}
+			this.loading = true
+
+			try {
+				// Delete removed images for existing posts
+				for (const id of this.images_to_delete) {
+					await this.$axios.$delete(`/post_images/${id}/`)
+				}
+
+				if (this.post && this.post.id) {
+					this.post = await this.$axios.$put(`/posts/${this.post.id}/`, this.pdata)
+				} else {
+					this.post = await this.$axios.$post('/posts/', this.pdata)
+				}
+
+				// Upload new images
+				await this.$refs.images.submit()
+
+				this.$router.push('/dashboard', () => {
+					this.$message({ type: 'success', message: 'The entry has been saved' })
+				})
+			} catch (err) {
+				this.error = err.response.data
+			} finally {
+				this.loading = false
 			}
-
-			// FIXME Better error handling
-			if (this.post && this.post.id) {
-				this.post = await this.$axios.$put(`/posts/${this.post.id}/`, this.pdata)
-			} else {
-				this.post = await this.$axios.$post('/posts/', this.pdata)
-			}
-
-			// Upload new images
-			await this.$refs.images.submit()
-
-			this.$router.push('/dashboard', () => {
-				this.$message({ type: 'success', message: 'The entry has been saved' })
-			})
 		},
 
 		uploadImage(req) {
@@ -284,12 +304,17 @@ export default {
 	display: flex;
 	flex-direction: column;
 
+	> .el-alert {
+		margin-bottom: 1rem;
+	}
+
 	.editor-grid {
 		width: 100%;
 		flex-grow: 1;
 		display: flex;
 
 	}
+
 	.main-area, .mentionable {
 		height: 100%;
 		flex: 1 1 100%;
