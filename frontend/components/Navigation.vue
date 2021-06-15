@@ -9,7 +9,7 @@
 			</el-menu>
 			<el-menu mode="horizontal" @select="navSelect" v-if="$auth.loggedIn">
 				<el-submenu popper-class="submenu-right">
-					<template slot="title"><div v-loading="!$auth.user"><GravatarImg :email="$auth.user.email" :size="25" class="nav-avatar" /> {{ $auth.user.username }}</div></template>
+					<template slot="title"><GravatarImg :email="$auth.user.email" :size="25" class="nav-avatar" /> {{ $auth.user.username }}</template>
 					<el-menu-item index="/settings"><fa :icon="['far', 'wrench']" /> <span>Settings</span></el-menu-item>
 					<el-menu-item index="logout"><fa :icon="['far', 'sign-out']" /> <span>Sign out</span></el-menu-item>
 
@@ -73,6 +73,9 @@ export default {
 </script>
 
 <style lang="scss">
+// This CSS is a bit incoherent as we mostly have to override a whole lot of
+// Element-UI shenanigans
+
 .main-nav-container {
 	position: fixed;
 	top: 0;
@@ -119,15 +122,20 @@ export default {
 				height: 50px;
 				line-height: 50px;
 				font-size: .9rem;
+				border-bottom: none !important;
 
 				&:first-of-type {
 					border-left: solid #025554 1px;
 				}
 			}
 
-			.el-menu-item.is-active, .el-menu-item:not(.is-disabled):focus, .el-menu-item:not(.is-disabled):hover {
+			.el-submenu__title {
+				background: transparent !important;
+			}
+
+			.el-menu-item.is-active, .el-menu-item:not(.is-disabled):focus, .el-menu-item:not(.is-disabled):hover, .el-submenu.is-opened .el-submenu__title {
 				border-bottom: none;
-				background-color: rgba(0, 0, 0, 0.1);
+				background-color: rgba(0, 0, 0, 0.1) !important;
 				color: white;
 			}
 		}
