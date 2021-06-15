@@ -7,11 +7,21 @@
 					<fa v-if="item.icon" :icon="['far', item.icon]" /> {{ item.label }}
 				</el-menu-item>
 			</el-menu>
-			<el-menu mode="horizontal" @select="navSelect" v-if="$auth.loggedIn">
+			<el-menu mode="horizontal" @select="navSelect">
 				<el-submenu popper-class="submenu-right">
-					<template slot="title"><GravatarImg :email="$auth.user.email" :size="25" class="nav-avatar" /> {{ $auth.user.username }}</template>
-					<el-menu-item index="/settings"><fa :icon="['far', 'wrench']" /> <span>Settings</span></el-menu-item>
-					<el-menu-item index="logout"><fa :icon="['far', 'sign-out']" /> <span>Sign out</span></el-menu-item>
+					<template slot="title">
+						<template v-if="$auth.loggedIn">
+							<GravatarImg :email="$auth.user.email" :size="25" class="nav-avatar" /> {{ $auth.user.username }}
+						</template>
+						<template v-else>
+							Legal
+						</template>
+					</template>
+
+					<template v-if="$auth.loggedIn">
+						<el-menu-item index="/settings"><fa :icon="['far', 'wrench']" /> <span>Settings</span></el-menu-item>
+						<el-menu-item index="logout"><fa :icon="['far', 'sign-out']" /> <span>Sign out</span></el-menu-item>
+					</template>
 
 					<el-menu-item-group>
 						<el-menu-item><fa :icon="['fab', 'github']" /> <a href="https://github.com/lutoma/shortdiary" target="_blank" rel="noopener">Source code</a></el-menu-item>
