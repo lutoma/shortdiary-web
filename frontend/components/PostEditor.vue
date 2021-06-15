@@ -118,7 +118,7 @@
 <script>
 import { mapState } from 'vuex'
 import { Mentionable } from 'vue-mention'
-import { keyBy } from 'lodash'
+import { keyBy, cloneDeep } from 'lodash'
 import MapBackground from '~/components/MapBackground'
 import MoodIndicatorIcon from '~/components/MoodIndicatorIcon'
 
@@ -161,9 +161,9 @@ export default {
 			},
 
 			// Main post data object. This is what will be sent to the server
-			// in  the API request. Filled with either the post we want to edit
+			// in the API request. Filled with either the post we want to edit
 			// (passed in through the prop), or the default post template
-			pdata: this.post || default_pdata,
+			pdata: this.post || cloneDeep(default_pdata),
 
 			// When editing a post, IDs of images to delete upon save
 			images_to_delete: []
