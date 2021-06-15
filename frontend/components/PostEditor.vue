@@ -202,8 +202,8 @@ export default {
 		get_error,
 
 		geoLocationCallback(position) {
-			this.pdata.location_lat = position.coords.latitude
-			this.pdata.location_lon = position.coords.longitude
+			this.pdata.location_lat = String(position.coords.latitude).substr(0, 16)
+			this.pdata.location_lon = String(position.coords.longitude).substr(0, 16)
 
 			const url = `/map/geocoding/v5/mapbox.places/${position.coords.longitude}%2C%20${position.coords.latitude}.json?access_token=pk.eyJ1IjoibHV0b21hIiwiYSI6ImxEWUZyYTAifQ.pTzQYyVqJUgcojuuIDchbQ`
 
