@@ -138,7 +138,6 @@ class PublicPostSerializer(PostSerializer):
 			'is_own',
 			'date',
 			'text',
-			'mood',
 			'images',
 			'location_lat',
 			'location_lon',
