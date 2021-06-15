@@ -1,6 +1,6 @@
 <template>
 	<div class="stats">
-		<Map class="stats-map" :zoom="4" :markers="this.markers" />
+		<Map class="stats-map" :zoom="4" :geojson-cluster="posts_geojson" />
 
 		<div id="main-container">
 			<h1>Stats</h1>
@@ -92,11 +92,29 @@ export default {
 				.value()
 		},
 
-		markers() {
-			return _(this.posts)
-				.filter('location_lat')
-				.filter('location_lon')
-				.map(x => [x.location_lon, x.location_lat])
+		posts_geojson() {
+			const geojson = {
+				name: 'markers',
+				type: 'FeatureCollection',
+				features: []
+			}
+
+			for (const post of this.posts) {
+				if (!post.location_lon || !post.location_lat) {
+					continue
+				}
+
+				geojson.features.push({
+					type: 'Feature',
+					properties: { label: `<a href="/posts/${post.id}">${post.date}</a>` },
+					geometry: {
+						type: 'Point',
+						coordinates: [post.location_lon, post.location_lat]
+					}
+				})
+			}
+
+			return geojson
 		},
 
 		heatmap() {
