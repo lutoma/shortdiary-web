@@ -67,8 +67,9 @@ export const actions = {
 		commit('setTopLocations', top_locations)
 
 		const top_tags = _(data)
-			.filter(x => x.tags.length)
-			.countBy('tags')
+			.map('tags')
+			.flatten()
+			.countBy()
 			.toPairs()
 			.sortBy(1)
 			.reverse()
