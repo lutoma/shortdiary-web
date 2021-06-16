@@ -1,40 +1,91 @@
 <template>
 	<div class="post-timeline">
-		<div class="left" v-loading="!posts.length">
-			<template v-if="!posts.length">
-				&nbsp;
-			</template>
+		<div class="filters">
+			<h2>Filters</h2>
+			<div class="filter-group">
+				<el-popover placement="bottom" trigger="click">
+					<el-button slot="reference"><fa :icon="['fal', 'align-left']" /> Text</el-button>
+					<el-input placeholder="Text" v-model="filter.text" clearable />
+				</el-popover>
 
-			<template v-if="posts.length && !sorted_posts.length">
-				<h2>Could not find any posts matching your filters.</h2>
-			</template>
+				<el-popover placement="bottom" trigger="click">
+					<el-button slot="reference"><fa :icon="['fal', 'shield-check']" /> Visibility</el-button>
+					<el-radio-group v-model="filter.public" size="small">
+						<el-radio-button :label="null">Any</el-radio-button>
+						<el-radio-button :label="true"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
+						<el-radio-button :label="false"><fa :icon="['far', 'lock']" /> Private</el-radio-button>
+					</el-radio-group>
+				</el-popover>
 
-			<div
-				v-for="[year, months] of sorted_posts"
-				:key="Number(year)"
-				:id="`year-${year}`">
+				<el-popover placement="bottom" trigger="click">
+					<el-button slot="reference"><fa :icon="['fal', 'smile']" /> Mood</el-button>
+					<el-slider v-model="filter.mood" range show-stops :min="1" :max="10" :step="1" />
+				</el-popover>
 
-				<h1 class="year-header">{{ year }}</h1>
+				<el-popover placement="bottom" trigger="click">
+					<el-button slot="reference"><fa :icon="['fal', 'tags']" /> Tags</el-button>
+					<el-select v-model="filter.tags" multiple filterable default-first-option placeholder="Choose tags">
+						<el-option v-for="item in top_tags" :key="item[0]" :label="item[0]" :value="item[0]" />
+					</el-select>
+				</el-popover>
 
-				<div
-					ref="monthContainer"
-					v-for="[month, posts] of months"
-					:key="Number(`${year}${month}`)"
-					:id="`month-${year}-${month}`"
-					:data-year="year"
-					:data-month="month">
+				<el-popover placement="bottom" trigger="click">
+					<el-button slot="reference"><fa :icon="['fal', 'map-marked-alt']" /> Location</el-button>
+					<el-select v-model="filter.location" placeholder="Select location" filterable clearable>
+						<el-option v-for="item in top_locations" :key="item[0]" :label="item[0]" :value="item[0]" />
+					</el-select>
+				</el-popover>
 
-					<h2 class="month-header">{{ getMonthName(month) }} <span>{{ year }}</span></h2>
-					<div class="post-container" v-for="post in posts" :key="post.id">
-						<Post :post="post" @deleted="loadPosts()" />
-					</div>
-				</div>
+				<el-popover placement="bottom" trigger="click">
+					<el-button slot="reference"><fa :icon="['fal', 'images']" /> Images</el-button>
+					<el-radio-group v-model="filter.images" size="small">
+						<el-radio-button :label="null">Any</el-radio-button>
+						<el-radio-button :label="true"><fa :icon="['far', 'images']" /> Has images</el-radio-button>
+						<el-radio-button :label="false"><fa :icon="['far', 'empty-set']" /> No image</el-radio-button>
+					</el-radio-group>
+				</el-popover>
 			</div>
 		</div>
 
-		<div class="right">
-			<div class="timeline-options">
-				<ul class="datepicker">
+		<div class="timeline-main">
+			<div class="posts" v-loading="!posts.length">
+				<template v-if="!posts.length">
+					&nbsp;
+				</template>
+
+				<template v-if="posts.length && !sorted_posts.length">
+					<h2>Could not find any posts matching your filters.</h2>
+				</template>
+
+				<section
+					v-for="[year, months] of sorted_posts"
+					:key="Number(year)"
+					:id="`year-${year}`">
+
+					<h1 class="year-header">{{ year }}</h1>
+
+					<section
+						ref="monthContainer"
+						v-for="[month, posts] of months"
+						:key="Number(`${year}${month}`)"
+						:id="`month-${year}-${month}`"
+						:data-year="year"
+						:data-month="month">
+
+						<h2 class="month-header">{{ getMonthName(month) }}</span></h2>
+						<div class="post-container" v-for="post in posts" :key="post.id">
+							<div class="post-date">
+								<h3>{{ post.date.split('-')[2] }}</h3>
+								<div class="weekday">{{ new Date(post.date).toLocaleString('en',  { weekday: 'long' }) }}</div>
+							</div>
+							<Post :post="post" :show-date="false" @deleted="loadPosts()" />
+						</div>
+					</section>
+				</section>
+			</div>
+
+			<nav class="datepicker">
+				<ul>
 					<li v-for="[year, months] of sorted_posts" :class="year == scroll_state.year ? 'active': ''" :key="Number(year)">
 						<div @click="datePickerSelect" :data-scrolltarget="`#year-${year}`">{{ year }}</div>
 
@@ -51,69 +102,7 @@
 						</ul>
 					</li>
 				</ul>
-
-				<h2>Filters</h2>
-				<el-form label-position="left" label-width="100px" :model="filter">
-					<el-form-item>
-						<template slot="label">
-							<fa :icon="['fal', 'align-left']" /> Text
-						</template>
-
-						<el-input placeholder="Text" v-model="filter.text" clearable />
-					</el-form-item>
-
-					<el-form-item>
-						<template slot="label">
-							<fa :icon="['fal', 'shield-check']" /> Visibility
-						</template>
-
-						<el-radio-group v-model="filter.public" size="small">
-							<el-radio-button :label="null">Any</el-radio-button>
-							<el-radio-button :label="true"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
-							<el-radio-button :label="false"><fa :icon="['far', 'lock']" /> Private</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-
-					<el-form-item>
-						<template slot="label">
-							<fa :icon="['fal', 'smile']" /> Mood
-						</template>
-
-						<el-slider v-model="filter.mood" range show-stops :min="1" :max="10" :step="1" />
-					</el-form-item>
-
-					<el-form-item>
-						<template slot="label">
-							<fa :icon="['fal', 'tags']" /> Tags
-						</template>
-						<el-select v-model="filter.tags" multiple filterable default-first-option placeholder="Choose tags">
-							<el-option v-for="item in top_tags" :key="item[0]" :label="item[0]" :value="item[0]" />
-						</el-select>
-					</el-form-item>
-
-					<el-form-item>
-						<template slot="label">
-							<fa :icon="['fal', 'map-marked-alt']" /> Location
-						</template>
-
-						<el-select v-model="filter.location" placeholder="Select location" filterable clearable>
-							<el-option v-for="item in top_locations" :key="item[0]" :label="item[0]" :value="item[0]" />
-						</el-select>
-					</el-form-item>
-
-					<el-form-item>
-						<template slot="label">
-							<fa :icon="['fal', 'images']" /> Images
-						</template>
-
-						<el-radio-group v-model="filter.images" size="small">
-							<el-radio-button :label="null">Any</el-radio-button>
-							<el-radio-button :label="true"><fa :icon="['far', 'images']" /> Has images</el-radio-button>
-							<el-radio-button :label="false"><fa :icon="['far', 'empty-set']" /> No image</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-				</el-form>
-			</div>
+			</nav>
 		</div>
 	</div>
 </template>
@@ -266,29 +255,123 @@ export default {
 </script>
 
 <style lang="scss">
+$date-aside-margin: 30px;
+$date-aside-width: 130px;
+
 .post-timeline {
 	height: 100%;
-	display: flex;
 
 	.el-loading-mask {
 		background-color: transparent;
 	}
 
-	.left {
+	// Arrange filter buttons into a button-group of sorts.
+	// el-button-group is incompatible with el-popover
+	.filters {
+		margin-bottom: 2rem;
+		margin-left: $date-aside-width + $date-aside-margin;
+
+		display: flex;
+		flex-direction: row;
+
+		// Needs to be above .timeline-main which is pulled up by negative margin
+		//position: relative;
+		//z-index: 30;
+
+		h2 {
+			margin-right: 1rem;
+			margin-bottom: 0;
+		}
+
+		.filter-group {
+			display: flex;
+			flex-direction: row;
+
+			> span {
+				display: block;
+
+				&:not(:first-of-type) {
+					.el-button {
+						border-left: 0;
+						border-top-left-radius: 0;
+						border-bottom-left-radius: 0;
+					}
+				}
+
+				&:not(:last-of-type) {
+					.el-button {
+						border-top-right-radius: 0;
+						border-bottom-right-radius: 0;
+					}
+				}
+			}
+
+			.el-select {
+				width: 100%;
+			}
+
+			.el-radio-group {
+				width: 100%;
+				display: flex;
+				flex-direction: row;
+
+				.el-radio-button {
+					flex: 1 1 33%;
+
+					span {
+						width: 100%;
+					}
+				}
+			}
+		}
+	}
+
+	.timeline-main {
+		display: flex;
+		//margin-top: -80px;
+	}
+
+	.posts {
 		height: 100%;
 		flex: 1 1 100%;
 		margin-right: 40px;
 
 		.year-header {
-			margin-bottom: 1rem;
+			position: sticky;
+			top: 50px;
 
-			&:not(:first-of-type) {
-				margin-top: 4rem;
-			}
+			width: $date-aside-width;
+			text-align: right;
+
+			// To keep alignment consistent with absolute/sticky positioning
+			margin: 0;
+			height: 60px;
+
+			background: #F9F9F9;
+
+			// Position above month-header
+			z-index: 10;
+
+			padding-top: 20px;
+			margin-top: -30px;
 		}
 
-		.month-header span {
-			font-weight: 200;
+		.month-header {
+			position: sticky;
+			top: 110px;
+			margin: 0;
+
+			width: $date-aside-width;
+			text-align: right;
+
+			background: #F9F9F9;
+
+			// Position below year-header
+			z-index: 9;
+
+			padding-bottom: 15px;
+			margin-bottom: -15px;
+			//box-shadow: 0 30px 40px rgba(0,0,0,.1);
 		}
 
 		.post-container {
@@ -296,42 +379,39 @@ export default {
 			flex-direction: row;
 			margin: 35px 0;
 
+			.post-date {
+				flex: 0 0 $date-aside-width;
+				margin-right: $date-aside-margin;
+				text-align: right;
+				padding-top: 10px;
+
+				h3 {
+					font-size: 1.5rem;
+					font-weight: 700;
+					margin-bottom: .5rem;
+				}
+
+				.weekday {
+					font-weight: 200;
+				}
+			}
+
 			.post {
-				flex-grow: 1;
+				flex: 1 1 auto;
 			}
 		}
 	}
 
-	.right {
-		flex: 0.1 0 350px;
+	.datepicker {
+		flex: 0.1 0 150px;
 
-		.timeline-options {
+		> ul {
 			// This was originally position: sticky, but Firefox has
 			// performance issues/flickering with that. See:
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=1585378
 			position: fixed;
 			top: 90px;
-		}
 
-		.el-select {
-			width: 100%;
-		}
-
-		.el-radio-group {
-			width: 100%;
-			display: flex;
-			flex-direction: row;
-
-			.el-radio-button {
-				flex: 1 1 33%;
-
-				span {
-					width: 100%;
-				}
-			}
-		}
-
-		.datepicker {
 			margin: 0;
 			padding: 0;
 			margin-bottom: 2rem;

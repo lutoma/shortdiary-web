@@ -1,9 +1,9 @@
 <template>
 	<el-card class="post" v-if="post">
 		<div slot="header" class="post-header clearfix">
-			<n-link :to="`/posts/${post.id}`" class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</n-link>
+			<n-link v-if="showDate" :to="`/posts/${post.id}`" class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</n-link>
 
-			<template v-if="!compact">
+			<template v-if="!compact && showDate">
 				<el-divider direction="vertical" />
 				{{ date.toLocaleString('en',  { weekday: 'long' }) }}
 			</template>
@@ -11,7 +11,7 @@
 			<template v-if="!compact">
 				<el-divider direction="vertical" />
 				<template v-if="post.public"><fa :icon="['fal', 'lock-open']" /> Public</template>
-				<template v-if="!post.public"><fa :icon="['fal', 'lock']" /> Private</template>
+				<template v-else><fa :icon="['fal', 'lock']" /> Private</template>
 			</template>
 
 			<template v-if="post.location_verbose">
@@ -73,7 +73,8 @@ export default {
 
 	props: {
 		post: { type: Object, default: {} },
-		compact: { type: Boolean, default: false }
+		compact: { type: Boolean, default: false },
+		showDate: { type: Boolean, default: true }
 	},
 
 	data() {
