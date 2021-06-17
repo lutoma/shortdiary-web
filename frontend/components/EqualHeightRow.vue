@@ -1,5 +1,5 @@
 <template>
-	<el-row class="card-table-row" :gutter="gutter" :style="{ '--equal-height-row-gutter': `${gutter}px` }">
+	<el-row class="equal-height-row" :gutter="gutter" :style="{ '--equal-height-row-gutter': `${gutter}px` }">
 		<slot />
 	</el-row>
 </template>
@@ -13,7 +13,7 @@ export default {
 </script>
 
 <style lang="scss">
-.card-table-row {
+.equal-height-row {
 	display: flex;
 	flex-wrap: wrap;
 
