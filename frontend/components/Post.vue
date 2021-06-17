@@ -1,28 +1,16 @@
 <template>
 	<el-card class="post" v-if="post">
 		<div slot="header" class="post-header clearfix">
-			<n-link v-if="showDate" :to="`/posts/${post.id}`" class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</n-link>
-
-			<template v-if="!compact && showDate">
-				<el-divider direction="vertical" />
-				{{ date.toLocaleString('en',  { weekday: 'long' }) }}
-			</template>
-
-			<template v-if="!compact">
-				<el-divider direction="vertical" />
-				<template v-if="post.public"><fa :icon="['fal', 'lock-open']" /> Public</template>
-				<template v-else><fa :icon="['fal', 'lock']" /> Private</template>
-			</template>
-
-			<template v-if="post.location_verbose">
-				<el-divider direction="vertical" />
-				<fa :icon="['fal', 'map-marked-alt']" /> {{ post.location_verbose }}
-			</template>
-
-			<template v-if="post.mood">
-				<el-divider direction="vertical" />
-				<MoodIndicatorIcon :mood="post.mood" /> Mood: {{ post.mood }}
-			</template>
+			<ul>
+				<li v-if="showDate"><n-link :to="`/posts/${post.id}`" class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</n-link></li>
+				<li v-if="!compact && showDate">{{ date.toLocaleString('en',  { weekday: 'long' }) }}</li>
+				<li v-if="!compact">
+					<template v-if="post.public"><fa :icon="['fal', 'lock-open']" /> Public</template>
+					<template v-else><fa :icon="['fal', 'lock']" /> Private</template>
+				</li>
+				<li v-if="post.location_verbose"><fa :icon="['fal', 'map-marked-alt']" /> {{ post.location_verbose }}</li>
+				<li v-if="post.mood"><MoodIndicatorIcon :mood="post.mood" /> Mood: {{ post.mood }}</li>
+			</ul>
 
 			<div class="right" v-if="post.is_own">
 				<n-link :to="`/posts/${post.id}/edit`"><el-button class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button></n-link>
@@ -125,20 +113,38 @@ export default {
 .post {
 	.post-header {
 		font-weight: 300;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 
-		.date {
-			font-weight: 400;
-		}
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			flex-grow: 1;
 
-		.el-rate {
-			display: inline-block;
-			margin-left: 2rem;
+			li {
+				display: inline-block;
+
+				&:not(:first-of-type) {
+					border-left: 1px solid #DCDFE6;
+					margin-left: 8px;
+					padding-left: 14px;
+
+				}
+			}
+
+			.date {
+				font-weight: 400;
+			}
+
+			.el-rate {
+				display: inline-block;
+				margin-left: 2rem;
+			}
 		}
 
 		.right {
-			float: right;
-			padding: 3px 0;
-
 			.el-button {
 				padding: 0;
 				margin-left: .5rem;
