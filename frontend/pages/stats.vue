@@ -43,6 +43,7 @@ import PostLengthChart from '~/components/PostLengthChart'
 import EqualHeightRow from '~/components/EqualHeightRow'
 import PaginatedTableCard from '~/components/PaginatedTableCard'
 import Map from '~/components/Map'
+import { mapState } from 'vuex'
 import _ from 'lodash'
 
 export default {
@@ -63,22 +64,13 @@ export default {
 		return {
 			top_locations_page: 1,
 			top_mentions_page: 1,
-			top_mood_locations_page: 1
+			top_mood_locations_page: 1,
+			time_frame: 'all'
 		}
 	},
 
 	computed: {
-		posts() {
-			return this.$store.state.posts
-		},
-
-		top_mentions() {
-			return this.$store.state.top_mentions
-		},
-
-		top_locations() {
-			return this.$store.state.top_locations
-		},
+		...mapState(['posts', 'top_mentions', 'top_locations', 'top_tags']),
 
 		top_mood_locations() {
 			return _(this.posts)
