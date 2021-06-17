@@ -1,17 +1,16 @@
 <template>
 	<div class="dashboard">
+		<el-backtop />
 		<PostTimeline />
 	</div>
 </template>
 
 <script>
 import PostTimeline from '~/components/PostTimeline'
-import GravatarImg from '~/components/GravatarImg'
 
 export default {
 	components: {
-		PostTimeline,
-		GravatarImg
+		PostTimeline
 	}
 }
 </script>

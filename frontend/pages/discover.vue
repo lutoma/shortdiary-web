@@ -2,6 +2,7 @@
 	<div class="discover">
 		<h1>Discover public posts</h1>
 
+		<el-backtop />
 		<vue-masonry-wall :items="posts" :options="{width: 600, padding: 16}" :ssr="{columns: 2}" @append="loadMore">
 			<template v-slot:default="{item}">
 				<Post :post="item" :compact="true" />

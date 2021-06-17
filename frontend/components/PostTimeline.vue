@@ -1,95 +1,48 @@
 <template>
 	<div class="post-timeline">
-		<div class="filters">
-			<h2>Filters</h2>
-			<div class="filter-group">
-				<el-popover placement="bottom" trigger="click">
-					<el-button slot="reference"><fa :icon="['fal', 'align-left']" /> Text</el-button>
-					<el-input placeholder="Text" v-model="filter.text" clearable />
-				</el-popover>
+		<div class="posts" v-loading="!posts.length">
+			<template v-if="!posts.length">
+				&nbsp;
+			</template>
 
-				<el-popover placement="bottom" trigger="click">
-					<el-button slot="reference"><fa :icon="['fal', 'shield-check']" /> Visibility</el-button>
-					<el-radio-group v-model="filter.public" size="small">
-						<el-radio-button :label="null">Any</el-radio-button>
-						<el-radio-button :label="true"><fa :icon="['far', 'lock-open']" /> Public</el-radio-button>
-						<el-radio-button :label="false"><fa :icon="['far', 'lock']" /> Private</el-radio-button>
-					</el-radio-group>
-				</el-popover>
+			<template v-if="posts.length && !sorted_posts.length">
+				<h2>Could not find any posts matching your filters.</h2>
+			</template>
 
-				<el-popover placement="bottom" trigger="click">
-					<el-button slot="reference"><fa :icon="['fal', 'smile']" /> Mood</el-button>
-					<el-slider v-model="filter.mood" range show-stops :min="1" :max="10" :step="1" />
-				</el-popover>
+			<section
+				v-for="[year, months] of sorted_posts"
+				:key="Number(year)"
+				:id="`year-${year}`">
 
-				<el-popover placement="bottom" trigger="click">
-					<el-button slot="reference"><fa :icon="['fal', 'tags']" /> Tags</el-button>
-					<el-select v-model="filter.tags" multiple filterable default-first-option placeholder="Choose tags">
-						<el-option v-for="item in top_tags" :key="item[0]" :label="item[0]" :value="item[0]" />
-					</el-select>
-				</el-popover>
-
-				<el-popover placement="bottom" trigger="click">
-					<el-button slot="reference"><fa :icon="['fal', 'map-marked-alt']" /> Location</el-button>
-					<el-select v-model="filter.location" placeholder="Select location" filterable clearable>
-						<el-option v-for="item in top_locations" :key="item[0]" :label="item[0]" :value="item[0]" />
-					</el-select>
-				</el-popover>
-
-				<el-popover placement="bottom" trigger="click">
-					<el-button slot="reference"><fa :icon="['fal', 'images']" /> Images</el-button>
-					<el-radio-group v-model="filter.images" size="small">
-						<el-radio-button :label="null">Any</el-radio-button>
-						<el-radio-button :label="true"><fa :icon="['far', 'images']" /> Has images</el-radio-button>
-						<el-radio-button :label="false"><fa :icon="['far', 'empty-set']" /> No image</el-radio-button>
-					</el-radio-group>
-				</el-popover>
-			</div>
-		</div>
-
-		<div class="timeline-main">
-			<div class="posts" v-loading="!posts.length">
-				<template v-if="!posts.length">
-					&nbsp;
-				</template>
-
-				<template v-if="posts.length && !sorted_posts.length">
-					<h2>Could not find any posts matching your filters.</h2>
-				</template>
+				<h1 class="year-header">{{ year }}</h1>
 
 				<section
-					v-for="[year, months] of sorted_posts"
-					:key="Number(year)"
-					:id="`year-${year}`">
+					ref="monthContainer"
+					v-for="[month, posts] of months"
+					:key="Number(`${year}${month}`)"
+					:id="`month-${year}-${month}`"
+					:data-year="year"
+					:data-month="month">
 
-					<h1 class="year-header">{{ year }}</h1>
-
-					<section
-						ref="monthContainer"
-						v-for="[month, posts] of months"
-						:key="Number(`${year}${month}`)"
-						:id="`month-${year}-${month}`"
-						:data-year="year"
-						:data-month="month">
-
-						<h2 class="month-header">{{ getMonthName(month) }}</span></h2>
-						<div class="post-container" v-for="post in posts" :key="post.id">
-							<div class="post-date">
-								<h3>{{ post.date.split('-')[2] }}</h3>
-								<div class="weekday">{{ new Date(post.date).toLocaleString('en',  { weekday: 'long' }) }}</div>
-							</div>
-							<Post :post="post" :show-date="false" @deleted="loadPosts()" />
+					<h2 class="month-header">{{ getMonthName(month) }}</span></h2>
+					<div class="post-container" v-for="post in posts" :key="post.id">
+						<div class="post-date">
+							<h3>{{ post.date.split('-')[2] }}</h3>
+							<div class="weekday">{{ new Date(post.date).toLocaleString('en',  { weekday: 'long' }) }}</div>
 						</div>
-					</section>
+						<Post :post="post" :show-date="false" @deleted="loadPosts()" />
+					</div>
 				</section>
-			</div>
+			</section>
+		</div>
 
-			<nav class="datepicker">
-				<ul>
+		<nav>
+			<div>
+				<ol class="datepicker">
 					<li v-for="[year, months] of sorted_posts" :class="year == scroll_state.year ? 'active': ''" :key="Number(year)">
 						<div @click="datePickerSelect" :data-scrolltarget="`#year-${year}`">{{ year }}</div>
 
-						<ul v-show="year == scroll_state.year">
+						<ol v-show="year == scroll_state.year">
 							<li
 								v-for="[month, _] of months"
 								:class="month == scroll_state.month ? 'active': ''"
@@ -99,11 +52,57 @@
 
 								{{ getMonthName(month) }}
 							</li>
-						</ul>
+						</ol>
 					</li>
-				</ul>
-			</nav>
-		</div>
+				</ol>
+
+				<h2>Filters</h2>
+				<ol class="filters">
+					<li>
+						<fa :icon="['fal', 'align-left']" />
+						<el-input placeholder="Text" v-model="filter.text" clearable />
+					</li>
+
+					<li>
+						<fa :icon="['fal', 'shield-check']" />
+						<el-select v-model="filter.public" placeholder="Visibility" filterable clearable>
+							<el-option label="" :value="null">Any</el-option>
+							<el-option label="Private" :value="false" />
+							<el-option label="Public" :value="true" />
+						</el-select>
+					</li>
+
+					<li>
+						<fa :icon="['fal', 'smile']" />
+						<el-slider v-model="filter.mood" range show-stops :min="1" :max="10" :step="1" />
+					</li>
+
+					<li>
+						<fa :icon="['fal', 'tags']" />
+						<el-select v-model="filter.tags" multiple filterable default-first-option placeholder="Choose tags">
+							<el-option v-for="item in top_tags" :key="item[0]" :label="item[0]" :value="item[0]" />
+						</el-select>
+					</li>
+
+					<li>
+						<fa :icon="['fal', 'map-marked-alt']" />
+						<el-select v-model="filter.location" placeholder="Select location" filterable clearable>
+							<el-option label="" :value="null">Any</el-option>
+							<el-option v-for="item in top_locations" :key="item[0]" :label="item[0]" :value="item[0]" />
+						</el-select>
+					</li>
+
+					<li>
+						<fa :icon="['fal', 'images']" />
+						<el-select v-model="filter.images" placeholder="Images" filterable clearable>
+							<el-option label="" :value="null">Any</el-option>
+							<el-option label="No images" :value="true" />
+							<el-option label="Has images" :value="false" />
+						</el-select>
+					</li>
+				</ol>
+			</div>
+		</nav>
 	</div>
 </template>
 
@@ -260,75 +259,10 @@ $date-aside-width: 130px;
 
 .post-timeline {
 	height: 100%;
+	display: flex;
 
 	.el-loading-mask {
 		background-color: transparent;
-	}
-
-	// Arrange filter buttons into a button-group of sorts.
-	// el-button-group is incompatible with el-popover
-	.filters {
-		margin-bottom: 2rem;
-		margin-left: $date-aside-width + $date-aside-margin;
-
-		display: flex;
-		flex-direction: row;
-
-		// Needs to be above .timeline-main which is pulled up by negative margin
-		//position: relative;
-		//z-index: 30;
-
-		h2 {
-			margin-right: 1rem;
-			margin-bottom: 0;
-		}
-
-		.filter-group {
-			display: flex;
-			flex-direction: row;
-
-			> span {
-				display: block;
-
-				&:not(:first-of-type) {
-					.el-button {
-						border-left: 0;
-						border-top-left-radius: 0;
-						border-bottom-left-radius: 0;
-					}
-				}
-
-				&:not(:last-of-type) {
-					.el-button {
-						border-top-right-radius: 0;
-						border-bottom-right-radius: 0;
-					}
-				}
-			}
-
-			.el-select {
-				width: 100%;
-			}
-
-			.el-radio-group {
-				width: 100%;
-				display: flex;
-				flex-direction: row;
-
-				.el-radio-button {
-					flex: 1 1 33%;
-
-					span {
-						width: 100%;
-					}
-				}
-			}
-		}
-	}
-
-	.timeline-main {
-		display: flex;
-		//margin-top: -80px;
 	}
 
 	.posts {
@@ -402,19 +336,22 @@ $date-aside-width: 130px;
 		}
 	}
 
-	.datepicker {
-		flex: 0.1 0 150px;
+	nav {
+		flex: 0.1 0 275px;
 
-		> ul {
+		> div {
 			// This was originally position: sticky, but Firefox has
 			// performance issues/flickering with that. See:
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=1585378
 			position: fixed;
 			top: 90px;
+			width: 275px;
+		}
 
+		ol.datepicker {
 			margin: 0;
 			padding: 0;
-			margin-bottom: 2rem;
+			margin-bottom: 3rem;
 
 			> li {
 				padding-left: 8px;
@@ -436,7 +373,7 @@ $date-aside-width: 130px;
 				}
 
 				// Sub-menu (months)
-				ul {
+				ol {
 					padding: 0;
 					padding-left: 1rem;
 					font-size: .95em;
@@ -456,6 +393,34 @@ $date-aside-width: 130px;
 						border-left-color: #CDB380;
 						font-weight: 700;
 					}
+				}
+			}
+		}
+
+		.filters {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			margin-top: 1rem;
+
+			> li {
+				margin-bottom: 1rem;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+
+				svg {
+					flex: 0 0 20px;
+					min-width: 20px;
+					margin-right: .75rem;
+				}
+
+				.el-select, .el-radio-group, .el-input, .el-slider {
+					width: 100%;
+				}
+
+				.el-slider {
+					padding: 0 8px;
 				}
 			}
 		}
