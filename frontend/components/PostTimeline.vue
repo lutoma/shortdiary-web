@@ -5,12 +5,12 @@
 				&nbsp;
 			</template>
 
-			<template v-if="posts.length && !sorted_posts.length">
+			<template v-if="posts.length && !grouped_posts.length">
 				<h2>Could not find any posts matching your filters.</h2>
 			</template>
 
 			<section
-				v-for="[year, months] of sorted_posts"
+				v-for="[year, months] of grouped_posts"
 				:key="Number(year)"
 				:id="`year-${year}`">
 
@@ -30,7 +30,7 @@
 							<h3>{{ post.date.split('-')[2] }}</h3>
 							<div class="weekday">{{ new Date(post.date).toLocaleString('en',  { weekday: 'long' }) }}</div>
 						</div>
-						<Post :post="post" :show-date="false" @deleted="loadPosts()" />
+						<Post ref="posts" :post="post" :show-date="false" @deleted="loadPosts()" />
 					</div>
 				</section>
 			</section>
@@ -39,7 +39,10 @@
 		<nav>
 			<div>
 				<ol class="datepicker">
-					<li v-for="[year, months] of sorted_posts" :class="year == scroll_state.year ? 'active': ''" :key="Number(year)">
+					<li
+						v-for="[year, months] of datepicker_values"
+						:class="year == scroll_state.year ? 'active': ''" :key="Number(year)">
+
 						<div @click="datePickerSelect" :data-scrolltarget="`#year-${year}`">{{ year }}</div>
 
 						<ol v-show="year == scroll_state.year">
@@ -118,6 +121,11 @@ export default {
 
 	data() {
 		return {
+			infinite_scroll: {
+				observer: null,
+				state: false
+			},
+
 			scroll_state: {
 				observer_els: {},
 				year: null,
@@ -131,14 +139,16 @@ export default {
 				tags: [],
 				location: null,
 				images: null
-			}
+			},
+
+			visible_posts: 10
 		}
 	},
 
 	computed: {
 		...mapState(['posts', 'top_locations', 'top_tags']),
 
-		sorted_posts() {
+		filtered_posts() {
 			// Filter definitions. The object key defines the field in
 			// this.filter that will be checked to see if filtering is
 			// necessary, the value contains the function or object that gets
@@ -162,8 +172,33 @@ export default {
 				}
 			}
 
-			// Now, group the filtered posts into years and months for display
 			return filtered
+		},
+
+		grouped_posts() {
+			// Group the filtered posts into years and months for display
+			return this.filtered_posts
+				.slice(0, this.visible_posts)
+				.groupBy(x => x.date.split('-')[0])
+				.toPairs()
+				.reverse()
+				.map(x => {
+					const mposts = _(x[1])
+						.groupBy(y => y.date.split('-')[1])
+						.toPairs()
+						.value()
+
+					return [x[0], mposts]
+				})
+				.value()
+		},
+
+		datepicker_values() {
+			// Essentially the same as grouped_posts, but without the slicing
+			// for infinite loading. It would be much nicer to deduplicate
+			// this somehow, but slicing after grouping is nontrivial.
+
+			return this.filtered_posts
 				.groupBy(x => x.date.split('-')[0])
 				.toPairs()
 				.reverse()
@@ -200,6 +235,22 @@ export default {
 			}
 		},
 
+		updateInfiniteScrollObserver() {
+			this.infinite_scroll.observer.disconnect()
+			this.infinite_scroll.observer.observe(this.$refs.posts.slice(-1)[0].$el)
+		},
+
+		infiniteScrollCallback(update, observer) {
+			const new_state = update[0].isIntersecting
+			if (!this.infinite_scroll.state && new_state) {
+				this.infinite_scroll.state = true
+				this.visible_posts += 10
+				this.updateInfiniteScrollObserver()
+			} else {
+				this.infinite_scroll.state = new_state
+			}
+		},
+
 		intersectionCallback(update, observer) {
 			// Handle IntersectionObserver callbacks. We need to store state
 			// here to account for situations where two elements are visible at
@@ -226,6 +277,11 @@ export default {
 
 	updated() {
 		this.$nextTick(() => {
+			// Set up IntersectionObserver for infinite scrolling
+			this.infinite_scroll.observer = new IntersectionObserver(this.infiniteScrollCallback)
+			this.updateInfiniteScrollObserver()
+
+			// Set up IntersectionObserver for datepicker
 			const elements = this.$refs.monthContainer
 			if (!elements) {
 				return
@@ -248,6 +304,16 @@ export default {
 		// ?filter=@mention etc. to the URL).
 		$route (to, from) {
 			this.filter.text = to.query.filter || ''
+		},
+
+		// Reset infinite scrolling and scroll back to top on filter
+		filter: {
+			deep: true,
+
+			handler(val) {
+				window.scrollTo({ top: 0, left: 0 })
+				this.visible_posts = 10
+			}
 		}
 	}
 }
