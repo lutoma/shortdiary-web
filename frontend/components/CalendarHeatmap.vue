@@ -81,7 +81,7 @@ const DEFAULT_LOCALE = {
 	more: 'More'
 }
 
-const DEFAULT_RANGE_COLOR = ['#ebedf0', '#dae2ef', '#c0ddf9', '#73b3f3', '#3886e1', '#17459e']
+const DEFAULT_RANGE_COLOR = ['#ebedf0', '#f5f0e6', '#ebe1cd', '#e1d2b3', '#d7c29a', '#cdb380']
 const DEFAULT_TOOLTIP_UNIT = 'chars'
 const DAYS_IN_WEEK = 7
 const SQUARE_SIZE = 10
