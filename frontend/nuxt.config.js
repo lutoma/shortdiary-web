@@ -83,7 +83,8 @@ export default {
 			target: 'https://api.mapbox.com',
 			pathRewrite: { '^/map/': '' }
 		},
-		'/avatar/': 'https://www.gravatar.com/'
+		'/avatar/': 'https://www.gravatar.com/',
+		'/geocode/': 'https://api.opencagedata.com'
 	},
 
 	axios: {

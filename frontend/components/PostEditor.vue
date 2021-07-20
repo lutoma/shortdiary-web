@@ -120,7 +120,7 @@
 <script>
 import { mapState } from 'vuex'
 import { Mentionable } from 'vue-mention'
-import { keyBy, cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash'
 import { get_error } from '~/assets/utils'
 
 import MapBackground from '~/components/MapBackground'
@@ -205,21 +205,28 @@ export default {
 			this.pdata.location_lat = String(position.coords.latitude).substr(0, 14)
 			this.pdata.location_lon = String(position.coords.longitude).substr(0, 14)
 
-			const url = `/map/geocoding/v5/mapbox.places/${position.coords.longitude}%2C%20${position.coords.latitude}.json?access_token=pk.eyJ1IjoibHV0b21hIiwiYSI6ImxEWUZyYTAifQ.pTzQYyVqJUgcojuuIDchbQ`
+			const url = `/geocode/v1/json?q=${this.pdata.location_lat}%2C%20${this.pdata.location_lon}&language=en&no_annotations=1&no_record=1&key=849a36fca0e949fc91000924584ac0c4`
 
 			this.$axios({ url, baseURL: '' }).then(({ data }) => {
-				if (!data || !data.features) {
+				if (!data || data.total_results < 1) {
 					return
 				}
 
-				const feat = keyBy(data.features, 'place_type.0')
+				if (!('components' in data.results[0])) {
+					return
+				}
 
-				if ('place' in feat) {
-					this.pdata.location_verbose = `${feat.place.text}, ${feat.country.text}`
-				} else if ('region' in feat) {
-					this.pdata.location_verbose = `${feat.region.text}, ${feat.country.text}`
-				} else if ('country' in feat) {
-					this.pdata.location_verbose = feat.country.text
+				const res = data.results[0].components
+				if ('city' in res) {
+					this.pdata.location_verbose = `${res.city}, ${res.country}`
+				} else if ('town' in res) {
+					this.pdata.location_verbose = `${res.town}, ${res.country}`
+				} else if ('county' in res) {
+					this.pdata.location_verbose = `${res.county}, ${res.country}`
+				} else if ('state' in res) {
+					this.pdata.location_verbose = `${res.state}, ${res.country}`
+				} else if ('country' in res) {
+					this.pdata.location_verbose = res.country
 				}
 			})
 		},
