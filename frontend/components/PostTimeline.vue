@@ -99,8 +99,8 @@
 						<fa :icon="['fal', 'images']" />
 						<el-select v-model="filter.images" placeholder="Images" filterable clearable>
 							<el-option label="" :value="null">Any</el-option>
-							<el-option label="No images" :value="true" />
-							<el-option label="Has images" :value="false" />
+							<el-option label="No images" :value="false" />
+							<el-option label="Has images" :value="true" />
 						</el-select>
 					</li>
 				</ol>
