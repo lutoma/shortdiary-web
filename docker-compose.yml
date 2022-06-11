@@ -1,0 +1,68 @@
+version: "2.4"
+
+services:
+  frontend:
+    image:  ghcr.io/lutoma/shortdiary/shortdiary-frontend:latest
+    restart: unless-stopped
+    pids_limit: 200
+    ports:
+      - 8009:3000
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+    networks:
+      shortdiary_net:
+
+  api:
+    image:  ghcr.io/lutoma/shortdiary/shortdiary-api:latest
+    restart: unless-stopped
+    ports:
+      - 8010:8000
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+    volumes:
+      - data:/data
+    networks:
+      shortdiary_net:
+
+  worker:
+    image:  ghcr.io/lutoma/shortdiary/shortdiary-worker:latest
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+    volumes:
+      - data:/data
+    networks:
+      shortdiary_net:
+
+  admin:
+    image:  ghcr.io/lutoma/shortdiary/shortdiary-admin:latest
+    restart: unless-stopped
+    ports:
+      - 8011:8000
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+    volumes:
+      - data:/data
+    networks:
+      shortdiary_net:
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - redis:/data
+    networks:
+      shortdiary_net:
+
+volumes:
+  data:
+  redis:
+
+networks:
+  shortdiary_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/16
