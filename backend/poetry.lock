@@ -353,14 +353,6 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
-name = "pycrypto"
-version = "2.6.1"
-description = "Cryptographic modules for Python."
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "pycryptodome"
 version = "3.14.1"
 description = "Cryptographic library for Python"
@@ -578,7 +570,7 @@ pycryptodome = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.13"
-content-hash = "1823aea4c5625bdbafc8560500aee7dfb348f7cd61cf23f26665c72526815dc6"
+content-hash = "d7681fd821ee7dd3b0505015065ccd62b782c68a7e4316960dda285598785333"
 
 [metadata.files]
 ansicon = [
@@ -784,9 +776,6 @@ psycopg2-binary = [
     {file = "psycopg2_binary-2.9.3-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:99485cab9ba0fa9b84f1f9e1fef106f44a46ef6afdeec8885e0b88d0772b49e8"},
     {file = "psycopg2_binary-2.9.3-cp39-cp39-win32.whl", hash = "sha256:46f0e0a6b5fa5851bbd9ab1bc805eef362d3a230fbdfbc209f4a236d0a7a990d"},
     {file = "psycopg2_binary-2.9.3-cp39-cp39-win_amd64.whl", hash = "sha256:accfe7e982411da3178ec690baaceaad3c278652998b2c45828aaac66cd8285f"},
-]
-pycrypto = [
-    {file = "pycrypto-2.6.1.tar.gz", hash = "sha256:f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c"},
 ]
 pycryptodome = [
     {file = "pycryptodome-3.14.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:75a3a364fee153e77ed889c957f6f94ec6d234b82e7195b117180dcc9fc16f96"},
