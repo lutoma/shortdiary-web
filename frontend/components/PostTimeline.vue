@@ -186,6 +186,7 @@ export default {
 					const mposts = _(x[1])
 						.groupBy(y => y.date.split('-')[1])
 						.toPairs()
+						.orderBy((p) => p[0], 'desc')
 						.value()
 
 					return [x[0], mposts]
@@ -206,6 +207,7 @@ export default {
 					const mposts = _(x[1])
 						.groupBy(y => y.date.split('-')[1])
 						.toPairs()
+						.orderBy((p) => p[0], 'desc')
 						.value()
 
 					return [x[0], mposts]
