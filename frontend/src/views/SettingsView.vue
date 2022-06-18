@@ -19,7 +19,7 @@
 					</el-form>
 				</el-card>
 
-				<el-dialog title="Two-factor authentication setup" width="550px" :visible.sync="mfa_setup_visible">
+				<el-dialog title="Two-factor authentication setup" width="550px" v-model:visible="mfa_setup_visible">
 					<MfaSetup :config="mfa_config" :active_methods="mfa_methods" @success="mfaSetupDone" />
 				</el-dialog>
 
@@ -31,12 +31,12 @@
 					<template v-if="mfa_methods && mfa_methods.length">
 						<el-table :data="mfa_methods" :show-header="false" style="width: 100%">
 							<el-table-column prop="name" label="Method">
-								<template slot-scope="scope">
+								<template v-slot="scope">
 									{{ mfaMethodName(scope.row.name) }} <template v-if="scope.row.is_primary">(Primary)</template>
 								</template>
 							</el-table-column>
 							<el-table-column label="Actions" align="right">
-								<template slot-scope="scope">
+								<template v-slot="scope">
 									<!--<el-button size="small" v-if="!scope.row.is_primary" @click="mfaSwitchPrimary(scope.row.name)">Make primary</el-button>-->
 									<el-button size="small" type="danger" @click="mfaDelete(scope.row.name)">Delete</el-button>
 								</template>
@@ -68,54 +68,54 @@
 </template>
 
 <script>
-import MfaSetup from '@/components/MfaSetup.vue'
+import MfaSetup from '@/components/MfaSetup.vue';
 
 export default {
 	components: {
-		MfaSetup
+		MfaSetup,
 	},
 	data() {
 		return {
 			user: 'dummyuser',
 			mfa_config: {
-				methods: []
+				methods: [],
 			},
 
 			mfa_methods: null,
-			mfa_setup_visible: false
-		}
+			mfa_setup_visible: false,
+		};
 	},
 
 	computed: {
 		mfa_can_add() {
-			return this.mfa_methods.length < this.mfa_config.methods.length
-		}
+			return this.mfa_methods.length < this.mfa_config.methods.length;
+		},
 	},
 
 	methods: {
 		async loadMfaMethods() {
-			this.mfa_methods = await this.$axios.$get('/auth/mfa/user-active-methods/')
+			this.mfa_methods = await this.$axios.$get('/auth/mfa/user-active-methods/');
 		},
 
 		async saveSettings() {
 			// FIXME error handling
-			await this.$axios.$patch('/user/', this.user)
-			await this.$auth.fetchUser()
-			this.$message({ type: 'success', message: 'Your settings have been saved.' })
+			await this.$axios.$patch('/user/', this.user);
+			await this.$auth.fetchUser();
+			this.$message({ type: 'success', message: 'Your settings have been saved.' });
 		},
 
 		mfaMethodName(name) {
-			const names = Object.fromEntries(this.mfa_config.methods)
+			const names = Object.fromEntries(this.mfa_config.methods);
 			if (!(name in names)) {
-				return '?'
+				return '?';
 			}
 
-			return names[name]
+			return names[name];
 		},
 
 		async mfaDelete(name) {
-			await this.$axios.$post(`/auth/${name}/deactivate/`)
-			this.loadMfaMethods()
+			await this.$axios.$post(`/auth/${name}/deactivate/`);
+			this.loadMfaMethods();
 		},
 
 		/*
@@ -131,21 +131,21 @@ export default {
 		*/
 
 		mfaSetupDone() {
-			this.loadMfaMethods()
-			this.mfa_setup_visible = false
-			this.$message({ type: 'success', message: 'Authentication method has been added' })
-		}
+			this.loadMfaMethods();
+			this.mfa_setup_visible = false;
+			this.$message({ type: 'success', message: 'Authentication method has been added' });
+		},
 	},
 
 	async fetch() {
-		this.mfa_config = await this.$axios.$get('/auth/mfa/config/')
-		await this.loadMfaMethods()
+		this.mfa_config = await this.$axios.$get('/auth/mfa/config/');
+		await this.loadMfaMethods();
 	},
 
-	head () {
-		return { title: 'Settings – shortdiary' }
-	}
-}
+	head() {
+		return { title: 'Settings – shortdiary' };
+	},
+};
 </script>
 
 <style>

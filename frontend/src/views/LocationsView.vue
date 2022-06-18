@@ -5,21 +5,21 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
+import { mapState } from 'pinia';
 import { usePosts } from '@/stores/posts';
-import PostLengthChart from '@/components/PostLengthChart.js'
-import EqualHeightRow from '@/components/EqualHeightRow.vue'
-import PaginatedTableCard from '@/components/PaginatedTableCard.vue'
-import Map from '@/components/Map'
-import _ from 'lodash'
+import PostLengthChart from '@/components/PostLengthChart.js';
+import EqualHeightRow from '@/components/EqualHeightRow.vue';
+import PaginatedTableCard from '@/components/PaginatedTableCard.vue';
+import Map from '@/components/Map';
+import _ from 'lodash';
 
 export default {
-	//layout: 'no-container',
+	// layout: 'no-container',
 	components: {
 		PostLengthChart,
 		EqualHeightRow,
 		PaginatedTableCard,
-		Map
+		Map,
 	},
 
 	setup() {
@@ -32,8 +32,8 @@ export default {
 			top_locations_page: 1,
 			top_mentions_page: 1,
 			top_mood_locations_page: 1,
-			time_frame: 'all'
-		}
+			time_frame: 'all',
+		};
 	},
 
 	computed: {
@@ -45,22 +45,22 @@ export default {
 				.filter('mood')
 				.groupBy('location_verbose')
 				.pickBy((entries, _) => entries.length >= 5)
-				.map((entries, location) => [location, _.meanBy(entries, entry => entry.mood).toPrecision(3)])
+				.map((entries, location) => [location, _.meanBy(entries, (entry) => entry.mood).toPrecision(3)])
 				.sortBy(1)
 				.reverse()
-				.value()
+				.value();
 		},
 
 		posts_geojson() {
 			const geojson = {
 				name: 'markers',
 				type: 'FeatureCollection',
-				features: []
-			}
+				features: [],
+			};
 
 			for (const post of this.posts) {
 				if (!post.location_lon || !post.location_lat) {
-					continue
+					continue;
 				}
 
 				geojson.features.push({
@@ -68,20 +68,20 @@ export default {
 					properties: { label: `<a href="/posts/${post.id}">${post.date}</a>` },
 					geometry: {
 						type: 'Point',
-						coordinates: [post.location_lon, post.location_lat]
-					}
-				})
+						coordinates: [post.location_lon, post.location_lat],
+					},
+				});
 			}
 
-			return geojson
+			return geojson;
 		},
 
 	},
 
-	head () {
-		return { title: 'Stats – shortdiary' }
-	}
-}
+	head() {
+		return { title: 'Stats – shortdiary' };
+	},
+};
 </script>
 
 <style lang="scss">

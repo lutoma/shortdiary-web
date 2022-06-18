@@ -10,80 +10,80 @@
 </template>
 
 <script>
-	// Adapted from https://github.com/JiriChara/vue-gravatar to use local loading
-	import md5 from 'md5';
+// Adapted from https://github.com/JiriChara/vue-gravatar to use local loading
+import md5 from 'md5';
 
-	export default {
-		name: 'gravatar-img',
+export default {
+	name: 'gravatar-img',
 
-		inheritAttrs: false,
+	inheritAttrs: false,
 
-		props: {
-			email: {
-				type: String,
-				default: ''
-			},
-
-			hash: {
-				type: String,
-				default: ''
-			},
-
-			size: {
-				type: Number,
-				default: 80
-			},
-
-			defaultImg: {
-				type: String,
-				default: 'mp'
-			},
-
-			rating: {
-				type: String,
-				default: 'g'
-			},
-
-			alt: {
-				type: String,
-				default: 'Avatar'
-			},
+	props: {
+		email: {
+			type: String,
+			default: '',
 		},
 
-		computed: {
-			url() {
-				const img = [
-					'/avatar/',
-					this.hash || md5(this.email.trim().toLowerCase()),
-					`?s=${this.size}`,
-					`&d=${this.defaultImg}`,
-					`&r=${this.rating}`
-				];
+		hash: {
+			type: String,
+			default: '',
+		},
 
-				return img.join('');
-			},
-/*
+		size: {
+			type: Number,
+			default: 80,
+		},
+
+		defaultImg: {
+			type: String,
+			default: 'mp',
+		},
+
+		rating: {
+			type: String,
+			default: 'g',
+		},
+
+		alt: {
+			type: String,
+			default: 'Avatar',
+		},
+	},
+
+	computed: {
+		url() {
+			const img = [
+				'/avatar/',
+				this.hash || md5(this.email.trim().toLowerCase()),
+				`?s=${this.size}`,
+				`&d=${this.defaultImg}`,
+				`&r=${this.rating}`,
+			];
+
+			return img.join('');
+		},
+		/*
 			listeners() {
 				const { load, error, ...listeners } = this.$listeners;
 
 				return listeners;
 			},
 */
-			attrs() {
-				const { src, alt, ...attrs } = this.$attrs;
+		attrs() {
+			const { src, alt, ...attrs } = this.$attrs;
 
-				return attrs;
-			}
+			return attrs;
+		},
+	},
+
+	methods: {
+		onLoad(...args) {
+			this.$emit('load', ...args);
 		},
 
-		methods: {
-			onLoad(...args) {
-				this.$emit('load', ...args);
-			},
-
-			onError(...args) {
-				this.$emit('error', ...args);
-			}
-		}
-	};
+		onError(...args) {
+			this.$emit('error', ...args);
+		},
+	},
+};
 </script>

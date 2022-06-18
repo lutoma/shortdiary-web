@@ -1,19 +1,18 @@
 import { defineStore } from 'pinia';
-import { useAuth } from './auth';
 import api from '@/api';
-import _ from 'lodash'
-import { encrypt, decrypt } from '@/crypto'
-import sodium from 'libsodium-wrappers'
-import { ElNotification } from 'element-plus'
-
+import _ from 'lodash';
+import { encrypt, decrypt } from '@/crypto';
+import sodium from 'libsodium-wrappers';
+import { ElNotification } from 'element-plus';
+import { useAuth } from './auth';
 
 export const usePosts = defineStore('post', {
 	state: () => {
 		return {
-			posts: new Map,
+			posts: new Map(),
 			top_mentions: [],
 			top_locations: [],
-			top_tags: []
+			top_tags: [],
 		};
 	},
 
@@ -23,55 +22,55 @@ export const usePosts = defineStore('post', {
 
 	actions: {
 		async load() {
-			const auth_store = useAuth();
-			if (!auth_store.master_key) {
-				return
+			const authStore = useAuth();
+			if (!authStore.master_key) {
+				return;
 			}
 
 			const res = await api.get('/posts');
-			const posts = new Map
+			const posts = new Map();
 			for (const cpost of res.data) {
-				let post_data = null
+				let postData = null;
 
 				switch (cpost.format_version) {
 				case 0:
 					// Unencrypted legacy posts
-					post_data = cpost.data
-					break
+					postData = cpost.data;
+					break;
 				case 1:
 					try {
-						post_data = sodium.to_string(decrypt(auth_store.master_key, cpost.nonce, cpost.data));
-					} catch(err) {
+						postData = sodium.to_string(decrypt(authStore.master_key, cpost.nonce, cpost.data));
+					} catch (err) {
 						console.error(`Could not decrypt post ${cpost.id}: ${err.toString()}`);
 						ElNotification({
 							title: 'Decryption error',
 							message: `Could not decrypt post ${cpost.id}: ${err.toString()}`,
-						})
+						});
 						continue;
 					}
-					break
+					break;
 				default:
-					console.error('Unknown post format version', cpost.format_version)
-					continue
+					console.error('Unknown post format version', cpost.format_version);
+					continue;
 				}
 
-				const data = JSON.parse(post_data)
+				const data = JSON.parse(postData);
 				data.id = cpost.id;
 				data.format_version = cpost.format_version;
 
 				// FIXME
 				data.images = null;
-				posts.set(data.id, data)
+				posts.set(data.id, data);
 			}
 
-			this.posts = posts
+			this.posts = posts;
 
 			// Extract top mentions for use in stats.vue and PostEditor component
-			const mentions = []
-			for (const [id, post] of posts) {
+			const mentions = [];
+			for (const [_, post] of posts) {
 				// FIXME Should deduplicate/DRYfy regex with Post.vue
 				// Temporarily cast to Set to deduplicate mentions within a post
-				mentions.push(...[...new Set(post.text.toLowerCase().match(/@\w+\b/g))])
+				mentions.push(...[...new Set(post.text.toLowerCase().match(/@\w+\b/g))]);
 			}
 
 			this.top_mentions = _(mentions)
@@ -79,25 +78,25 @@ export const usePosts = defineStore('post', {
 				.toPairs()
 				.sortBy(1)
 				.reverse()
-				.value()
+				.value();
 
-			const posts_list = [...posts.values()]
-			this.top_locations = _(posts_list)
+			const postsList = [...posts.values()];
+			this.top_locations = _(postsList)
 				.filter('location_verbose')
 				.countBy('location_verbose')
 				.toPairs()
 				.sortBy(1)
 				.reverse()
-				.value()
+				.value();
 
-			this.top_tags = _(posts_list)
+			this.top_tags = _(postsList)
 				.map('tags')
 				.flatten()
 				.countBy()
 				.toPairs()
 				.sortBy(1)
 				.reverse()
-				.value()
+				.value();
 		},
 
 		async delete_post(id) {
@@ -111,21 +110,22 @@ export const usePosts = defineStore('post', {
 		},
 
 		async store_post(post) {
-			const json_data = JSON.stringify(post);
-			const auth_store = useAuth();
-			const [nonce, data] = encrypt(auth_store.master_key, sodium.from_string(json_data))
+			const jsonData = JSON.stringify(post);
+			const authStore = useAuth();
+			const [nonce, data] = encrypt(authStore.master_key, sodium.from_string(jsonData));
 
 			const envelope = {
-				nonce, data,
+				nonce,
+				data,
 				date: post.date,
 				format_version: 1,
-			}
+			};
 
 			let res;
 			if (post.id) {
-				res = await api.put(`/posts/${post.id}`, envelope)
+				res = await api.put(`/posts/${post.id}`, envelope);
 			} else {
-				res = await api.post('/posts', envelope)
+				res = await api.post('/posts', envelope);
 			}
 
 			this.posts.set(post.id, post);
@@ -133,7 +133,7 @@ export const usePosts = defineStore('post', {
 			ElNotification({
 				title: 'Entry saved',
 				message: post.id ? 'The changes to your entry have been saved.' : 'Your entry has been saved.',
-			})
-		}
+			});
+		},
 	},
 });

@@ -30,7 +30,7 @@
 			</el-form-item>
 
 			<el-form-item>
-				<el-button type="primary" @click="signup" :loading.sync="loading"><fa :icon="['far', 'sign-in']" /> Sign in</el-button>
+				<el-button type="primary" @click="signup" v-model:loading="loading"><fa :icon="['far', 'sign-in']" /> Sign in</el-button>
 			</el-form-item>
 		</el-form>
 
@@ -39,17 +39,17 @@
 </template>
 
 <script>
-import VueHcaptcha from '@hcaptcha/vue-hcaptcha'
+import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
 import { useAuth } from '@/stores/auth';
-import { get_error } from '@/utils.js'
+import { get_error } from '@/utils.js';
 
 export default {
 	components: {
-		VueHcaptcha
+		VueHcaptcha,
 	},
 
 	mounted() {
-		this.$refs.name.$el.children[0].focus()
+		this.$refs.name.$el.children[0].focus();
 	},
 
 	data() {
@@ -60,26 +60,28 @@ export default {
 				name: '',
 				email: '',
 				password: '',
-				captcha: ''
+				captcha: '',
 			},
 			rules: {
 				name: [{ required: true, message: 'Please enter a username', trigger: 'change' }],
-				email: [{ required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'change' }],
-				password: [{ required: true, message: 'Please enter a password', trigger: 'change' }]
-			}
-		}
+				email: [{
+					required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'change',
+				}],
+				password: [{ required: true, message: 'Please enter a password', trigger: 'change' }],
+			},
+		};
 	},
 
 	methods: {
 		get_error,
 
 		async captcha_verified(token, ekey) {
-			this.user.captcha = token
-			this.loading = true
+			this.user.captcha = token;
+			this.loading = true;
 			const auth_store = useAuth();
 
 			await auth_store.signup(this.user);
-			this.loading = false
+			this.loading = false;
 
 			/*
 			try {
@@ -93,21 +95,21 @@ export default {
 		},
 
 		signup() {
-			this.error = null
+			this.error = null;
 
-			this.$refs.signup_form.validate(valid => {
+			this.$refs.signup_form.validate((valid) => {
 				if (valid) {
-					this.captcha_verified()
-					//this.$refs.captcha.execute()
+					this.captcha_verified();
+					// this.$refs.captcha.execute()
 				}
-			})
-		}
+			});
+		},
 	},
 
-	head () {
-		return { title: 'Join – shortdiary' }
-	}
-}
+	head() {
+		return { title: 'Join – shortdiary' };
+	},
+};
 </script>
 
 <style lang="scss">

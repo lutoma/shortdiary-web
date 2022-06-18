@@ -8,15 +8,15 @@
 <script>
 export default {
 	async mounted() {
-		await this.$auth.logout()
-		this.loading = false
-		this.$router.go('/')
+		await this.$auth.logout();
+		this.loading = false;
+		this.$router.go('/');
 	},
 
 	data() {
 		return {
 			loading: true,
-		}
+		};
 	},
-}
+};
 </script>

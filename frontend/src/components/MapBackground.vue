@@ -5,17 +5,17 @@
 </template>
 
 <script>
-import Map from '@/components/Map.js'
+import Map from '@/components/Map.js';
 
 export default {
 	components: {
-		Map
+		Map,
 	},
 
 	props: {
-		center: { type: Array, default: () => [8.4320361, 49.5001306] }
-	}
-}
+		center: { type: Array, default: () => [8.4320361, 49.5001306] },
+	},
+};
 </script>
 
 <style lang="scss">

@@ -16,8 +16,8 @@
 <script>
 export default {
 	layout: 'no-container',
-	auth: 'guest'
-}
+	auth: 'guest',
+};
 </script>
 
 <style lang="scss">

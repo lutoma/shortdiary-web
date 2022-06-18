@@ -6,25 +6,25 @@
 export default {
 	props: {
 		weight: { type: String, default: 'fal' },
-		mood: { type: Number, required: true }
+		mood: { type: Number, required: true },
 	},
 
 	computed: {
 		icon() {
 			if (this.mood <= 3) {
-				return 'frown'
+				return 'frown';
 			}
 
 			if (this.mood >= 6 && this.mood <= 8) {
-				return 'smile'
+				return 'smile';
 			}
 
 			if (this.mood >= 9) {
-				return 'laugh'
+				return 'laugh';
 			}
 
-			return 'meh'
-		}
-	}
-}
+			return 'meh';
+		},
+	},
+};
 </script>

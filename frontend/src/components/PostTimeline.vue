@@ -101,14 +101,14 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
+import { mapState } from 'pinia';
 import { usePosts } from '@/stores/posts';
-import Post from '@/components/Post.vue'
-import _ from 'lodash'
+import Post from '@/components/Post.vue';
+import _ from 'lodash';
 
 export default {
 	components: {
-		Post
+		Post,
 	},
 
 	setup() {
@@ -120,13 +120,13 @@ export default {
 		return {
 			infinite_scroll: {
 				observer: null,
-				state: false
+				state: false,
 			},
 
 			scroll_state: {
 				observer_els: {},
 				year: null,
-				month: null
+				month: null,
 			},
 
 			filter: {
@@ -135,11 +135,11 @@ export default {
 				mood: [1, 10],
 				tags: [],
 				location: null,
-				images: null
+				images: null,
 			},
 
-			visible_posts: 10
-		}
+			visible_posts: 10,
+		};
 	},
 
 	computed: {
@@ -151,44 +151,44 @@ export default {
 			// necessary, the value contains the function or object that gets
 			// passed to .filter
 			const filters = {
-				text: post => post.text.toLowerCase().includes(this.filter.text.toLowerCase()),
+				text: (post) => post.text.toLowerCase().includes(this.filter.text.toLowerCase()),
 				public: { public: this.filter.public },
-				tags: post => post.tags.some(tag => this.filter.tags.includes(tag)),
+				tags: (post) => post.tags.some((tag) => this.filter.tags.includes(tag)),
 				location: { location_verbose: this.filter.location },
-				images: post => !!post.images.length === this.filter.images
-			}
+				images: (post) => !!post.images.length === this.filter.images,
+			};
 
 			let filtered = _(this.posts_list)
-				.filter(x => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1])
+				.filter((x) => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1]);
 
 			for (const [cond, filter] of Object.entries(filters)) {
-				const value = this.filter[cond]
+				const value = this.filter[cond];
 
 				if (value !== null && value !== '' && (typeof value !== 'object' || value.length)) {
-					filtered = filtered.filter(filter)
+					filtered = filtered.filter(filter);
 				}
 			}
 
-			return filtered
+			return filtered;
 		},
 
 		grouped_posts() {
 			// Group the filtered posts into years and months for display
 			return this.filtered_posts
 				.slice(0, this.visible_posts)
-				.groupBy(x => x.date.split('-')[0])
+				.groupBy((x) => x.date.split('-')[0])
 				.toPairs()
 				.reverse()
-				.map(x => {
+				.map((x) => {
 					const mposts = _(x[1])
-						.groupBy(y => y.date.split('-')[1])
+						.groupBy((y) => y.date.split('-')[1])
 						.toPairs()
 						.orderBy((p) => p[0], 'desc')
-						.value()
+						.value();
 
-					return [x[0], mposts]
+					return [x[0], mposts];
 				})
-				.value()
+				.value();
 		},
 
 		datepicker_values() {
@@ -197,20 +197,20 @@ export default {
 			// this somehow, but slicing after grouping is nontrivial.
 
 			return this.filtered_posts
-				.groupBy(x => x.date.split('-')[0])
+				.groupBy((x) => x.date.split('-')[0])
 				.toPairs()
 				.reverse()
-				.map(x => {
+				.map((x) => {
 					const mposts = _(x[1])
-						.groupBy(y => y.date.split('-')[1])
+						.groupBy((y) => y.date.split('-')[1])
 						.toPairs()
 						.orderBy((p) => p[0], 'desc')
-						.value()
+						.value();
 
-					return [x[0], mposts]
+					return [x[0], mposts];
 				})
-				.value()
-		}
+				.value();
+		},
 	},
 
 	methods: {
@@ -220,38 +220,38 @@ export default {
 		},
 
 		getMonthName(num) {
-			const date = new Date()
-			date.setMonth(num - 1)
-			return date.toLocaleString('en', { month: 'long' })
+			const date = new Date();
+			date.setMonth(num - 1);
+			return date.toLocaleString('en', { month: 'long' });
 		},
 
 		datePickerSelect(event) {
-			const dest = document.querySelector(event.target.dataset.scrolltarget)
+			const dest = document.querySelector(event.target.dataset.scrolltarget);
 
 			// Cannot use ScrollIntoView here due to the abolute positioned
 			// navbar that would cover up the heading
 			if (dest) {
-				window.scrollTo({ top: dest.offsetTop, left: 0, behavior: 'smooth' })
+				window.scrollTo({ top: dest.offsetTop, left: 0, behavior: 'smooth' });
 			}
 		},
 
 		updateInfiniteScrollObserver() {
-			this.infinite_scroll.observer.disconnect()
-			this.infinite_scroll.observer.observe(this.$refs.posts.slice(-1)[0].$el)
+			this.infinite_scroll.observer.disconnect();
+			this.infinite_scroll.observer.observe(this.$refs.posts.slice(-1)[0].$el);
 		},
 
-		infiniteScrollCallback(update, observer) {
-			const new_state = update[0].isIntersecting
-			if (!this.infinite_scroll.state && new_state) {
-				this.infinite_scroll.state = true
-				this.visible_posts += 10
-				this.updateInfiniteScrollObserver()
+		infiniteScrollCallback(update, _) {
+			const newState = update[0].isIntersecting;
+			if (!this.infinite_scroll.state && newState) {
+				this.infinite_scroll.state = true;
+				this.visible_posts += 10;
+				this.updateInfiniteScrollObserver();
 			} else {
-				this.infinite_scroll.state = new_state
+				this.infinite_scroll.state = newState;
 			}
 		},
 
-		intersectionCallback(update, observer) {
+		intersectionCallback(update, _) {
 			// Handle IntersectionObserver callbacks. We need to store state
 			// here to account for situations where two elements are visible at
 			// once, and then later one of those goes out of view. The update
@@ -259,60 +259,60 @@ export default {
 			// out of view, but not the one that remains visible.
 
 			// Turn into an Object for easier deduplication
-			Object.assign(this.scroll_state.observer_els, _.keyBy(update, 'target.id'))
+			Object.assign(this.scroll_state.observer_els, _.keyBy(update, 'target.id'));
 
 			const entries = Object.values(this.scroll_state.observer_els)
-				.filter(x => x.isIntersecting)
+				.filter((x) => x.isIntersecting);
 
 			if (entries && entries.length) {
-				this.scroll_state.year = entries[0].target.dataset.year
-				this.scroll_state.month = entries[0].target.dataset.month
+				this.scroll_state.year = entries[0].target.dataset.year;
+				this.scroll_state.month = entries[0].target.dataset.month;
 			}
-		}
+		},
 	},
 
 	updated() {
 		this.$nextTick(() => {
 			// Set up IntersectionObserver for infinite scrolling
-			this.infinite_scroll.observer = new IntersectionObserver(this.infiniteScrollCallback)
-			this.updateInfiniteScrollObserver()
+			this.infinite_scroll.observer = new IntersectionObserver(this.infiniteScrollCallback);
+			this.updateInfiniteScrollObserver();
 
 			// Set up IntersectionObserver for datepicker
-			const elements = this.$refs.monthContainer
+			const elements = this.$refs.monthContainer;
 			if (!elements) {
-				return
+				return;
 			}
 
 			const observer = new IntersectionObserver(this.intersectionCallback, {
-				rootMargin: '-20% 0px 0px 0px'
+				rootMargin: '-20% 0px 0px 0px',
 				// threshold: [0, 0.25, 0.5, 0.75, 1]
-			})
+			});
 
 			for (const el of elements) {
-				observer.observe(el)
+				observer.observe(el);
 			}
-		})
+		});
 	},
 
 	watch: {
 		// Watch for route changes since the component query parameters can
 		// change when a user clicks on a @mention in a post (appending
 		// ?filter=@mention etc. to the URL).
-		$route (to, from) {
-			this.filter.text = to.query.filter || ''
+		$route(to, _) {
+			this.filter.text = to.query.filter || '';
 		},
 
 		// Reset infinite scrolling and scroll back to top on filter
 		filter: {
 			deep: true,
 
-			handler(val) {
-				window.scrollTo({ top: 0, left: 0 })
-				this.visible_posts = 10
-			}
-		}
-	}
-}
+			handler(_) {
+				window.scrollTo({ top: 0, left: 0 });
+				this.visible_posts = 10;
+			},
+		},
+	},
+};
 </script>
 
 <style lang="scss">

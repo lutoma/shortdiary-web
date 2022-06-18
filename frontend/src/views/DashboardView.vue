@@ -10,7 +10,7 @@
 			<el-col :span="8">
 				<PaginatedTableCard title="Frequent mentions" icon="users" :data="top_mentions">
 					<el-table-column prop="0" label="Name">
-						<template slot-scope="scope">
+						<template v-slot="scope">
 							<n-link :to="`/dashboard?filter=${scope.row[0]}`">{{ scope.row[0] }}</n-link>
 						</template>
 					</el-table-column>
@@ -32,25 +32,25 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
+import { mapState } from 'pinia';
 import { usePosts } from '@/stores/posts';
-import { CalendarHeatmap } from 'vue3-calendar-heatmap'
-import PostLengthChart from '@/components/PostLengthChart.js'
-import EqualHeightRow from '@/components/EqualHeightRow.vue'
-import PaginatedTableCard from '@/components/PaginatedTableCard.vue'
-import PostTimeline from '@/components/PostTimeline.vue'
-import Map from '@/components/Map'
-import _ from 'lodash'
+import { CalendarHeatmap } from 'vue3-calendar-heatmap';
+import PostLengthChart from '@/components/PostLengthChart.js';
+import EqualHeightRow from '@/components/EqualHeightRow.vue';
+import PaginatedTableCard from '@/components/PaginatedTableCard.vue';
+import PostTimeline from '@/components/PostTimeline.vue';
+import Map from '@/components/Map';
+import _ from 'lodash';
 
 export default {
-	//layout: 'no-container',
+	// layout: 'no-container',
 	components: {
 		CalendarHeatmap,
 		PostLengthChart,
 		EqualHeightRow,
 		PaginatedTableCard,
 		Map,
-		PostTimeline
+		PostTimeline,
 	},
 
 	setup() {
@@ -63,8 +63,8 @@ export default {
 			top_locations_page: 1,
 			top_mentions_page: 1,
 			top_mood_locations_page: 1,
-			time_frame: 'all'
-		}
+			time_frame: 'all',
+		};
 	},
 
 	computed: {
@@ -76,22 +76,22 @@ export default {
 				.filter('mood')
 				.groupBy('location_verbose')
 				.pickBy((entries, _) => entries.length >= 5)
-				.map((entries, location) => [location, _.meanBy(entries, entry => entry.mood).toPrecision(3)])
+				.map((entries, location) => [location, _.meanBy(entries, (entry) => entry.mood).toPrecision(3)])
 				.sortBy(1)
 				.reverse()
-				.value()
+				.value();
 		},
 
 		posts_geojson() {
 			const geojson = {
 				name: 'markers',
 				type: 'FeatureCollection',
-				features: []
-			}
+				features: [],
+			};
 
 			for (const post of this.posts) {
 				if (!post.location_lon || !post.location_lat) {
-					continue
+					continue;
 				}
 
 				geojson.features.push({
@@ -99,34 +99,34 @@ export default {
 					properties: { label: `<a href="/posts/${post.id}">${post.date}</a>` },
 					geometry: {
 						type: 'Point',
-						coordinates: [post.location_lon, post.location_lat]
-					}
-				})
+						coordinates: [post.location_lon, post.location_lat],
+					},
+				});
 			}
 
-			return geojson
+			return geojson;
 		},
 
 		heatmap() {
-			const now = new Date()
-			const year = String(now.getFullYear())
+			const now = new Date();
+			const year = String(now.getFullYear());
 
 			const values = _(this.posts)
-				.filter(x => x.date.slice(0, 4) === year)
-				.map(x => ({ date: x.date, count: x.text.length }))
-				.value()
+				.filter((x) => x.date.slice(0, 4) === year)
+				.map((x) => ({ date: x.date, count: x.text.length }))
+				.value();
 
 			return {
 				endDate: now.toISOString().slice(0, 10),
-				values
-			}
-		}
+				values,
+			};
+		},
 	},
 
-	head () {
-		return { title: 'Stats – shortdiary' }
-	}
-}
+	head() {
+		return { title: 'Stats – shortdiary' };
+	},
+};
 </script>
 
 <style lang="scss">

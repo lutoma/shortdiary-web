@@ -7,9 +7,9 @@
 <script>
 export default {
 	props: {
-		gutter: { type: Number, default: 50 }
-	}
-}
+		gutter: { type: Number, default: 50 },
+	},
+};
 </script>
 
 <style lang="scss">

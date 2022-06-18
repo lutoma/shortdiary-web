@@ -51,34 +51,33 @@
 </template>
 
 <script>
-import MoodIndicatorIcon from '@/components/MoodIndicatorIcon.vue'
-import CoolLightBox from 'vue-cool-lightbox'
-import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css'
-import { defineAsyncComponent } from 'vue'
+import MoodIndicatorIcon from '@/components/MoodIndicatorIcon.vue';
+import CoolLightBox from 'vue-cool-lightbox';
+import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css';
+import { defineAsyncComponent } from 'vue';
 import { usePosts } from '@/stores/posts';
 
 const LocalComponent = defineAsyncComponent(
-  () =>
-	new Promise((resolve) => {
-	  resolve({
-		template: `
-		  <h2>
+	() => new Promise((resolve) => {
+		resolve({
+			template: `
+			<h2>
 			This is a local component defined as async!
-		  </h2>
-		`
-	  });
-	})
+			</h2>
+		`,
+		});
+	}),
 );
 
 export default {
 	components: {
 		MoodIndicatorIcon,
 		CoolLightBox,
-		LocalComponent
+		LocalComponent,
 	},
 
 	props: {
-		post: { type: Object, default: {} },
+		post: { type: Object, default: () => {} },
 		compact: { type: Boolean, default: false },
 		showDate: { type: Boolean, default: true },
 		editable: { type: Boolean, default: true },
@@ -86,8 +85,8 @@ export default {
 
 	data() {
 		return {
-			lightboxIndex: null
-		}
+			lightboxIndex: null,
+		};
 	},
 
 	// Render post text using a dynamically generated component. This is needed
@@ -95,25 +94,25 @@ export default {
 	// rendered markup, which would not be possible with v-html.
 	computed: {
 		PostTextComponent() {
-			let text_html = this.post.text || this.post.public_text
-			text_html = text_html.replace(/(?:\r\n|\r|\n)/g, '<br>')
-			text_html = text_html.replace(/@\w+\b/g, '<router-link to="/dashboard?filter=$&">$&</router-link>')
+			let html = this.post.text || this.post.public_text;
+			html = html.replace(/(?:\r\n|\r|\n)/g, '<br>');
+			html = html.replace(/@\w+\b/g, '<router-link to="/dashboard?filter=$&">$&</router-link>');
 
-			return { template: `<div>${text_html}</div>` }
+			return { template: `<div>${html}</div>` };
 		},
 
 		date() {
-			return new Date(this.post.date)
-		}
+			return new Date(this.post.date);
+		},
 	},
 
 	methods: {
 		do_delete() {
-			const store = usePosts()
-			store.delete_post(this.post.id)
-		}
-	}
-}
+			const store = usePosts();
+			store.delete_post(this.post.id);
+		},
+	},
+};
 </script>
 
 <style lang="scss">

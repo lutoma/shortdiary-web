@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { enrol as crypto_enrol, unlock as crypto_unlock } from '@/crypto'
+import { enrol as crypto_enrol, unlock as crypto_unlock } from '@/crypto';
 import api from '@/api';
 
 export const useAuth = defineStore('auth', {
@@ -42,10 +42,10 @@ export const useAuth = defineStore('auth', {
 				ephemeral_key_salt,
 				master_key_nonce,
 				master_key,
-			}
+			};
 
 			const res = await api.post('/auth/signup', data);
-		}
+		},
 	},
 
 	persist: {

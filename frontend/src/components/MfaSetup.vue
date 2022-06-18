@@ -40,16 +40,16 @@
 </template>
 
 <script>
-import QrcodeVue from 'qrcode.vue'
+import QrcodeVue from 'qrcode.vue';
 
 export default {
 	components: {
-		QrcodeVue
+		QrcodeVue,
 	},
 
 	props: {
 		config: { type: Object, default: { methods: [] } },
-		active_methods: { type: Array, default: [] }
+		active_methods: { type: Array, default: [] },
 	},
 
 	data() {
@@ -59,15 +59,15 @@ export default {
 			confirmation: null,
 			phone_number: '',
 			code: '',
-			error: null
-		}
+			error: null,
+		};
 	},
 
 	computed: {
 		available_methods() {
-			const active_names = this.active_methods.map(a => a.name)
-			return this.config.methods.filter(el => !active_names.includes(el[0]))
-		}
+			const active_names = this.active_methods.map((a) => a.name);
+			return this.config.methods.filter((el) => !active_names.includes(el[0]));
+		},
 	},
 
 	methods: {
@@ -75,49 +75,49 @@ export default {
 			// Continue directly to activation when method is 'app',
 			// show phone number input for 'sms'
 			if (this.selected_method === 'app') {
-				this.activateMethod()
+				this.activateMethod();
 			} else {
-				this.step = 'phone_number'
+				this.step = 'phone_number';
 			}
 		},
 
 		async addPhoneNumber() {
-			await this.$axios.$patch('/user/', { phone_number: this.phone_number })
-			this.activateMethod()
+			await this.$axios.$patch('/user/', { phone_number: this.phone_number });
+			this.activateMethod();
 		},
 
 		async activateMethod() {
-			this.error = null
+			this.error = null;
 
 			try {
 				this.confirmation = await this.$axios.$post(
 					`/auth/${this.selected_method}/activate/`,
-					{ method: this.selected_method }
-				)
+					{ method: this.selected_method },
+				);
 
-				this.step = 'confirmation'
+				this.step = 'confirmation';
 			} catch (err) {
-				this.error = err.response.data.error
+				this.error = err.response.data.error;
 			}
 		},
 
 		async confirmMethod() {
-			this.error = null
+			this.error = null;
 
 			try {
 				await this.$axios.$post(
 					`/auth/${this.selected_method}/activate/confirm/`,
-					{ method: this.selected_method, code: this.code }
-				)
+					{ method: this.selected_method, code: this.code },
+				);
 
-				this.step = 'method_select'
-				this.$emit('success')
+				this.step = 'method_select';
+				this.$emit('success');
 			} catch (err) {
-				this.error = err.response.data.non_field_errors[0]
+				this.error = err.response.data.non_field_errors[0];
 			}
-		}
-	}
-}
+		},
+	},
+};
 </script>
 
 <style lang="scss">

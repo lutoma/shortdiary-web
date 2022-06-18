@@ -6,13 +6,13 @@
 </template>
 
 <script setup>
-import PostEditor from '@/components/PostEditor.vue'
+import PostEditor from '@/components/PostEditor.vue';
 import { usePosts } from '@/stores/posts';
-import { useRoute } from 'vue-router'
+import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const store = usePosts();
-const id = route.params.id;
+const { id } = route.params;
 const post = store.posts.get(id);
 </script>
 

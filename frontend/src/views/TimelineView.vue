@@ -10,8 +10,8 @@
 </template>
 
 <script setup>
-import PostTimeline from '@/components/PostTimeline.vue'
-import PostEditor from '@/components/PostEditor.vue'
+import PostTimeline from '@/components/PostTimeline.vue';
+import PostEditor from '@/components/PostEditor.vue';
 </script>
 
 <style lang="scss">

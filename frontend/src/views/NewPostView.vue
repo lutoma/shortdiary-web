@@ -6,17 +6,17 @@
 </template>
 
 <script>
-import PostEditor from '@/components/PostEditor.vue'
+import PostEditor from '@/components/PostEditor.vue';
 
 export default {
 	components: {
-		PostEditor
+		PostEditor,
 	},
 
-	head () {
-		return { title: 'New entry – shortdiary' }
-	}
-}
+	head() {
+		return { title: 'New entry – shortdiary' };
+	},
+};
 </script>
 
 <style lang="scss">

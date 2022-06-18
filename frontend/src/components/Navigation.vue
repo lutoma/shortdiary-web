@@ -36,36 +36,36 @@
 </template>
 
 <script>
-import GravatarImg from '@/components/GravatarImg.vue'
-import { mapState } from 'pinia'
+import GravatarImg from '@/components/GravatarImg.vue';
+import { mapState } from 'pinia';
 import { useAuth } from '@/stores/auth';
 
 export default {
 	components: {
-		GravatarImg
+		GravatarImg,
 	},
 
 	methods: {
 		navSelect(name, _) {
 			if (!name) {
-				return
+				return;
 			}
 
 			if (name === 'logout') {
 				const store = useAuth();
-				store.logout()
-				this.$router.push({ name: 'login' })
+				store.logout();
+				this.$router.push({ name: 'login' });
 			} else {
-				this.$router.push({ name })
+				this.$router.push({ name });
 			}
-		}
+		},
 
 	},
 	computed: {
 		...mapState(useAuth, ['logged_in', 'name', 'email']),
 
 		nav_items() {
-			let items
+			let items;
 
 			if (this.logged_in) {
 				items = [
@@ -74,18 +74,18 @@ export default {
 					{ name: 'new-post', label: 'New entry', icon: 'pencil' },
 					{ name: 'people', label: 'People', icon: 'users' },
 					{ name: 'locations', label: 'Locations', icon: 'map-marked-alt' },
-				]
+				];
 			} else {
 				items = [
 					{ name: 'login', label: 'Sign in', icon: 'sign-in' },
-					{ name: 'join', label: 'Join', icon: 'user-friends' }
-				]
+					{ name: 'join', label: 'Join', icon: 'user-friends' },
+				];
 			}
 
-			return items
-		}
-	}
-}
+			return items;
+		},
+	},
+};
 </script>
 
 <style lang="scss">
