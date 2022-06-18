@@ -1,7 +1,5 @@
 <template>
 	<div class="post-editor">
-		<el-alert v-if="get_error('non_field_errors')" :title="get_error('non_field_errors')" :closable="false" type="error" />
-
 		<div class="editor-grid">
 			<div class="main-area">
 				<Mentionable
@@ -27,7 +25,7 @@
 			<div class="sidebar">
 				<el-card>
 					<el-form ref="form" :model="pdata" label-position="left" label-width="100px" @submit="save">
-						<el-form-item :error="get_error('date')">
+						<el-form-item>
 							<template #label>
 								<fa :icon="['fal', 'calendar-alt']" /> Date
 							</template>
@@ -40,14 +38,14 @@
 								value-format="YYYY-MM-DD" />
 						</el-form-item>
 
-						<el-form-item :error="get_error('mood')">
+						<el-form-item>
 							<template #label>
 								<MoodIndicatorIcon :mood="pdata.mood === null ? 10 : pdata.mood" /> Mood
 							</template>
 							<el-slider v-model="pdata.mood" :step="1" :min="1" :max="10" show-stops />
 						</el-form-item>
 
-						<el-form-item :error="get_error('tags')">
+						<el-form-item>
 							<template #label>
 								<fa :icon="['fal', 'tags']" /> Tags
 							</template>
@@ -60,14 +58,14 @@
 								placeholder="Choose tags">
 
 								<el-option
-									v-for="item in store.top_tags"
+									v-for="item in top_tags"
 									:key="item[0]"
 									:label="item[0]"
 									:value="item[0]" />
 							</el-select>
 						</el-form-item>
 
-						<el-form-item :error="get_error('location_verbose') || get_error('location_lat') || get_error('location_lon')">
+						<el-form-item>
 							<template #label>
 								<fa :icon="['fal', 'map-marked-alt']" /> Location
 							</template>
@@ -120,20 +118,18 @@
 				</el-card>
 			</div>
 		</div>
-		<!--<MapBackground v-if="pdata.location_lat && pdata.location_lon" :center="[pdata.location_lon, pdata.location_lat]" />-->
+		<MapBackground v-if="pdata.location_lat && pdata.location_lon" :center="[pdata.location_lon, pdata.location_lat]" />
 	</div>
 </template>
 
 <script>
+import { mapState } from 'pinia'
 import { usePosts } from '@/stores/posts';
-import { useAuth } from '@/stores/auth';
 
 import api from '@/api';
 import { Mentionable } from 'vue-mention'
 import { cloneDeep } from 'lodash'
 import { get_error } from '@/utils'
-import { encrypt } from '@/crypto'
-import sodium from 'libsodium-wrappers'
 import { ElNotification } from 'element-plus'
 
 import MapBackground from '@/components/MapBackground.vue'
@@ -163,15 +159,6 @@ export default {
 		post: { type: Object, default: null }
 	},
 
-	setup() {
-		const store = usePosts();
-		store.load();
-
-		return {
-			store,
-		}
-	},
-
 	data() {
 		return {
 			datePickerOptions: {
@@ -198,8 +185,10 @@ export default {
 	},
 
 	computed: {
+		...mapState(usePosts, ['top_mentions', 'top_tags']),
+
 		mention_items() {
-			const mentions = this.store.top_mentions.map(
+			const mentions = this.top_mentions.map(
 				([mention, _]) => mention.substring(1))
 			return mentions.map(value => ({ value, label: value }))
 		},
@@ -261,43 +250,20 @@ export default {
 			this.error = {}
 			this.loading = true
 
-			const auth_store = useAuth();
-			const [nonce, cdata] = encrypt(auth_store.master_key, sodium.from_string(JSON.stringify(this.pdata)))
-
-			const post_data = {
-				nonce,
-				data: cdata,
-				date: this.pdata.date,
-				format_version: 1,
+			// Delete removed images for existing posts
+			for (const id of this.images_to_delete) {
+				await api.$delete(`/post_images/${id}/`)
 			}
 
-			try {
-				// Delete removed images for existing posts
-				for (const id of this.images_to_delete) {
-					await api.$delete(`/post_images/${id}/`)
-				}
+			const store = usePosts();
+			await store.store_post(this.pdata);
 
-				if (this.post && this.post.id) {
-					this.post = await api.put(`/posts/${this.post.id}`, post_data)
-				} else {
-					this.post = await api.post('/posts', post_data)
-				}
+			// Upload new images
+			await this.$refs.images.submit()
 
-				// Upload new images
-				await this.$refs.images.submit()
-
-				this.$router.push('/dashboard', () => {
-					ElNotification({
-						title: 'Entry saved',
-						message: 'Your entry has been saved.',
-					})
-				})
-			} catch (err) {
-				this.error = err.response.data
-			} finally {
-				this.loading = false
-			}
-		},
+			this.loading = false
+			this.$router.push({ name: 'timeline' })
+	},
 
 		uploadImage(req) {
 			const data = new FormData()

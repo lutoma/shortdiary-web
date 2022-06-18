@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { useAuth } from './auth';
 import api from '@/api';
 import _ from 'lodash'
-import { decrypt } from '@/crypto'
+import { encrypt, decrypt } from '@/crypto'
 import sodium from 'libsodium-wrappers'
 import { ElNotification } from 'element-plus'
 
@@ -29,8 +29,6 @@ export const usePosts = defineStore('post', {
 			}
 
 			const res = await api.get('/posts');
-
-			await sodium.ready
 			const posts = new Map
 			for (const cpost of res.data) {
 				let post_data = null
@@ -110,6 +108,32 @@ export const usePosts = defineStore('post', {
 			});
 
 			this.posts.delete(id);
+		},
+
+		async store_post(post) {
+			const json_data = JSON.stringify(post);
+			const auth_store = useAuth();
+			const [nonce, data] = encrypt(auth_store.master_key, sodium.from_string(json_data))
+
+			const envelope = {
+				nonce, data,
+				date: post.date,
+				format_version: 1,
+			}
+
+			let res;
+			if (post.id) {
+				res = await api.put(`/posts/${post.id}`, envelope)
+			} else {
+				res = await api.post('/posts', envelope)
+			}
+
+			this.posts.set(post.id, post);
+
+			ElNotification({
+				title: 'Entry saved',
+				message: 'Your entry has been saved.',
+			})
 		}
 	},
 });
