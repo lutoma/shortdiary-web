@@ -6,7 +6,7 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 class User(Model):
 	id = fields.UUIDField(pk=True)
 	name = fields.CharField(max_length=255)
-	email = fields.CharField(max_length=255)
+	email = fields.CharField(max_length=255, unique=True)
 
 	# Salt used during derivation of ephemeral key from login password
 	ephemeral_key_salt = fields.CharField(max_length=22, null=True)
