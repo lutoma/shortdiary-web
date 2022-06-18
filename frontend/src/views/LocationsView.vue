@@ -76,11 +76,7 @@ export default {
 			return geojson;
 		},
 
-	},
-
-	head() {
-		return { title: 'Stats – shortdiary' };
-	},
+	}
 };
 </script>
 

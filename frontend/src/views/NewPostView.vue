@@ -12,10 +12,6 @@ export default {
 	components: {
 		PostEditor,
 	},
-
-	head() {
-		return { title: 'New entry – shortdiary' };
-	},
 };
 </script>
 

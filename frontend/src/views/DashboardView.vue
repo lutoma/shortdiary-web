@@ -122,10 +122,6 @@ export default {
 			};
 		},
 	},
-
-	head() {
-		return { title: 'Stats – shortdiary' };
-	},
 };
 </script>
 

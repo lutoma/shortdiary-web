@@ -102,10 +102,6 @@ export default {
 			});
 		},
 	},
-
-	head() {
-		return { title: 'Join – shortdiary' };
-	},
 };
 </script>
 

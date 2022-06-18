@@ -141,10 +141,6 @@ export default {
 		this.mfa_config = await this.$axios.$get('/auth/mfa/config/');
 		await this.loadMfaMethods();
 	},
-
-	head() {
-		return { title: 'Settings – shortdiary' };
-	},
 };
 </script>
 

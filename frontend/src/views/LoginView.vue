@@ -113,11 +113,6 @@ export default {
 			});
 		},
 	},
-
-	head() {
-		return { title: 'Login – shortdiary' };
-	},
-
 };
 </script>
 
