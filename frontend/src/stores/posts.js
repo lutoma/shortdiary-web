@@ -4,6 +4,8 @@ import api from '@/api';
 import _ from 'lodash'
 import { decrypt } from '@/crypto'
 import sodium from 'libsodium-wrappers'
+import { ElNotification } from 'element-plus'
+
 
 export const usePosts = defineStore('post', {
 	state: () => {
@@ -36,9 +38,13 @@ export const usePosts = defineStore('post', {
 					break
 				case 1:
 					try {
-						post_data = sodium.to_string(decrypt(auth_store.master_key, cpost.nonce, cpost.data))
+						post_data = sodium.to_string(decrypt(auth_store.master_key, cpost.nonce, cpost.data));
 					} catch(err) {
 						console.error(`Could not decrypt post ${cpost.id}: ${err.toString()}`);
+						ElNotification({
+							title: 'Decryption error',
+							message: `Could not decrypt post ${cpost.id}: ${err.toString()}`,
+						})
 						continue;
 					}
 					break
@@ -47,7 +53,12 @@ export const usePosts = defineStore('post', {
 					continue
 				}
 
-				posts.push(JSON.parse(post_data))
+				const data = JSON.parse(post_data)
+				data.id = cpost.id;
+
+				// FIXME
+				data.images = null;
+				posts.push(data)
 			}
 
 			this.posts = posts

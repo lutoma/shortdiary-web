@@ -102,7 +102,7 @@
 				</el-card>
 			</div>
 		</div>
-		<MapBackground v-if="pdata.location_lat && pdata.location_lon" :center="[pdata.location_lon, pdata.location_lat]" />
+		<!--<MapBackground v-if="pdata.location_lat && pdata.location_lon" :center="[pdata.location_lon, pdata.location_lat]" />-->
 	</div>
 </template>
 
@@ -187,7 +187,7 @@ export default {
 		},
 
 		existing_images() {
-			if (!this.post) {
+			if (!this.post || !this.post.images) {
 				return []
 			}
 

@@ -80,7 +80,12 @@ export default {
 			this.$refs.login_form.validate(async valid => {
 				if (valid) {
 					this.loading = true
+					const store = useAuth();
+					store.login(this.credentials.username, this.credentials.password);
+					this.$router.push({ name: 'dashboard' });
+					this.loading = false
 
+					/*
 					try {
 						// Reset auth - This is needed to make sure we don't
 						// send an (outdated) Authorization header during the
@@ -94,6 +99,7 @@ export default {
 					} finally {
 						this.loading = false
 					}
+					*/
 				}
 			})
 		},
@@ -108,7 +114,7 @@ export default {
 					try {
 						const res = await this.$axios.$post('/auth/login/code/', this.mfa_request)
 						this.$auth.setUserToken(res.access, res.refresh)
-						this.$router.go('/dashboard')
+						this.$router.push({ name: 'dashboard' })
 					} catch (err) {
 						this.error = err.response.data.non_field_errors[0]
 					} finally {

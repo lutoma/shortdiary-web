@@ -2,14 +2,14 @@
 	<el-card class="post" v-if="post">
 		<template #header>
 			<ul>
-				<li v-if="showDate"><n-link :to="`/posts/${post.id}`" class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</n-link></li>
+				<li v-if="showDate"><router-link :to="`/posts/${post.id}`" class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</router-link></li>
 				<li v-if="!compact && showDate">{{ date.toLocaleString('en',  { weekday: 'long' }) }}</li>
 				<li v-if="post.location_verbose"><fa :icon="['fal', 'map-marked-alt']" /> {{ post.location_verbose }}</li>
 				<li v-if="post.mood"><MoodIndicatorIcon :mood="post.mood" /> Mood: {{ post.mood }}</li>
 			</ul>
 
-			<div class="right" v-if="post.is_own">
-				<n-link :to="`/posts/${post.id}/edit`"><el-button class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button></n-link>
+			<div class="right" v-if="editable">
+				<router-link :to="{ name: 'edit-post', params: { id: post.id } }"><el-button class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button></router-link>
 				<el-button class="delete-button" type="text" @click="deletePost"><fa :icon="['fal', 'trash']" /> Delete</el-button>
 			</div>
 		</template>
@@ -74,7 +74,8 @@ export default {
 	props: {
 		post: { type: Object, default: {} },
 		compact: { type: Boolean, default: false },
-		showDate: { type: Boolean, default: true }
+		showDate: { type: Boolean, default: true },
+		editable: { type: Boolean, default: true },
 	},
 
 	data() {

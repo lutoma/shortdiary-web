@@ -26,6 +26,7 @@
     "mapbox-gl": "^2.8.2",
     "md5": "^2.3.0",
     "pinia": "^2.0.14",
+    "pinia-plugin-persistedstate": "^1.6.1",
     "qrcode.vue": "^3.3.3",
     "sass": "^1.52.3",
     "unplugin-auto-import": "^0.8.8",

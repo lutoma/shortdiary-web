@@ -1,7 +1,5 @@
 <template>
 	<div class="stats">
-		<h1>Welcome back, dummyuser</h1>
-
 		<EqualHeightRow>
 			<el-col :span="8">
 				<PaginatedTableCard title="Frequent locations" icon="map-marked-alt" :data="top_locations">
@@ -40,6 +38,7 @@ import { CalendarHeatmap } from 'vue3-calendar-heatmap'
 import PostLengthChart from '@/components/PostLengthChart.js'
 import EqualHeightRow from '@/components/EqualHeightRow.vue'
 import PaginatedTableCard from '@/components/PaginatedTableCard.vue'
+import PostTimeline from '@/components/PostTimeline.vue'
 import Map from '@/components/Map'
 import _ from 'lodash'
 
@@ -50,7 +49,8 @@ export default {
 		PostLengthChart,
 		EqualHeightRow,
 		PaginatedTableCard,
-		Map
+		Map,
+		PostTimeline
 	},
 
 	setup() {

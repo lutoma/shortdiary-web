@@ -27,8 +27,10 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import router from './router'
+import sodium from 'libsodium-wrappers'
 
 library.add(faKeyRegular, faPencilRegular, faSignInRegular, faListRegular, faChartBarRegular,
 	faMedalRegular, faWrenchRegular, faSignOutRegular, faCompassRegular, faUserFriendsRegular,
@@ -42,8 +44,13 @@ library.add(faLockLight, faLockOpenLight, faLaughLight, faSmileLight, faMehLight
 
 library.add(faGithub)
 
+await sodium.ready
+
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
 const app = createApp(App)
 	.component('fa', FontAwesomeIcon)
-	.use(createPinia())
+	.use(pinia)
 	.use(router)
 	.mount('#app')

@@ -1,30 +1,24 @@
 <template>
-	<div class="edit-post" v-loading="!this.post">
+	<div class="edit-post">
 		<h1>Edit entry</h1>
 		<PostEditor :post="post" v-if="post" />
 	</div>
 </template>
 
-<script>
-import PostEditor from '~/components/PostEditor'
+<script setup>
+import PostEditor from '@/components/PostEditor.vue'
+import { usePosts } from '@/stores/posts';
+import { useRoute } from 'vue-router'
 
-export default {
-	components: {
-		PostEditor
-	},
+const route = useRoute();
+const store = usePosts();
+const id = route.params.id;
+let post = null;
 
-	data() {
-		return {
-			post: null
-		}
-	},
-
-	async fetch() {
-		this.post = await this.$axios.$get(`/posts/${this.$route.params.pathMatch}/`)
-	},
-
-	head () {
-		return { title: 'Edit entry – shortdiary' }
+// FIXME super inefficient
+for (const npost of store.posts) {
+	if (npost.id == id) {
+		post = npost;
 	}
 }
 </script>

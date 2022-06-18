@@ -2,8 +2,8 @@
 	<div class="main-nav-container">
 		<nav>
 			<div class="name"><router-link :to="logged_in ? '/dashboard' : '/'">shortdiary</router-link></div>
-			<el-menu :default-active="$route.path" mode="horizontal" class="main-nav" @select="navSelect" :ellipsis="false">
-				<el-menu-item v-for="item of nav_items" :key="item.path" :index="item.path">
+			<el-menu :default-active="$route.name" mode="horizontal" class="main-nav" @select="navSelect" :ellipsis="false">
+				<el-menu-item v-for="item of nav_items" :key="item.name" :index="item.name">
 					<fa v-if="item.icon" :icon="['far', item.icon]" /> {{ item.label }}
 				</el-menu-item>
 			</el-menu>
@@ -12,7 +12,7 @@
 				<el-sub-menu popper-class="sub-menu-right">
 					<template #title>
 						<template v-if="logged_in">
-							<GravatarImg email="hello@lutoma.org" :size="25" class="nav-avatar" /> dummyuser
+							<GravatarImg :email="email" :size="25" class="nav-avatar" /> {{ name }}
 						</template>
 						<template v-else>
 							Legal
@@ -20,7 +20,7 @@
 					</template>
 
 					<template v-if="logged_in">
-						<el-menu-item index="/settings"><fa :icon="['far', 'wrench']" /> <span>Settings</span></el-menu-item>
+						<el-menu-item index="settings"><fa :icon="['far', 'wrench']" /> <span>Settings</span></el-menu-item>
 						<el-menu-item index="logout"><fa :icon="['far', 'sign-out']" /> <span>Sign out</span></el-menu-item>
 					</template>
 
@@ -46,38 +46,39 @@ export default {
 	},
 
 	methods: {
-		navSelect(path, _) {
-			if (!path) {
+		navSelect(name, _) {
+			if (!name) {
 				return
 			}
 
-			// Bit hacky
-			if (path === 'logout') {
-				this.$auth.logout()
+			if (name === 'logout') {
+				const store = useAuth();
+				store.logout()
+				this.$router.push({ name: 'login' })
 			} else {
-				this.$router.push({ path })
+				this.$router.push({ name })
 			}
 		}
 
 	},
 	computed: {
-		...mapState(useAuth, ['logged_in']),
+		...mapState(useAuth, ['logged_in', 'name', 'email']),
 
 		nav_items() {
 			let items
 
 			if (this.logged_in) {
 				items = [
-					{ path: '/', label: 'Dashboard', icon: 'house' },
-					{ path: '/timeline', label: 'Entries', icon: 'list' },
-					{ path: '/new', label: 'New', icon: 'list' },
-					{ path: '/people', label: 'People', icon: 'users' },
-					{ path: '/locations', label: 'Locations', icon: 'map-marked-alt' },
+					{ name: 'dashboard', label: 'Dashboard', icon: 'house' },
+					{ name: 'timeline', label: 'Entries', icon: 'list' },
+					{ name: 'new-post', label: 'New entry', icon: 'pencil' },
+					{ name: 'people', label: 'People', icon: 'users' },
+					{ name: 'locations', label: 'Locations', icon: 'map-marked-alt' },
 				]
 			} else {
 				items = [
-					{ path: '/login', label: 'Sign in', icon: 'sign-in' },
-					{ path: '/join', label: 'Join', icon: 'user-friends' }
+					{ name: 'login', label: 'Sign in', icon: 'sign-in' },
+					{ name: 'join', label: 'Join', icon: 'user-friends' }
 				]
 			}
 

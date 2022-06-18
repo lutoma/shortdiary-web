@@ -1,8 +1,9 @@
 from typing import List
-from fastapi import APIRouter, HTTPException
-from models import Post_Pydantic, PostIn_Pydantic, Post
+from fastapi import APIRouter, HTTPException, Depends
+from models import User, Post_Pydantic, PostIn_Pydantic, Post
 from pydantic import BaseModel
 from tortoise.contrib.fastapi import HTTPNotFoundError
+from .auth import get_current_user
 
 router = APIRouter()
 
@@ -17,8 +18,8 @@ async def get_posts():
 
 
 @router.post("", response_model=Post_Pydantic)
-async def create_post(post: PostIn_Pydantic):
-	Post_obj = await Post.create(**post.dict(exclude_unset=True))
+async def create_post(post: PostIn_Pydantic, current_user: User = Depends(get_current_user)):
+	Post_obj = await Post.create(author=current_user, **post.dict(exclude_unset=True))
 	return await Post_Pydantic.from_tortoise_orm(Post_obj)
 
 
@@ -32,8 +33,8 @@ async def get_post(post_id: int):
 @router.put(
 	"/{post_id}", response_model=Post_Pydantic, responses={404: {"model": HTTPNotFoundError}}
 )
-async def update_post(post_id: int, post: PostIn_Pydantic):
-	await Post.filter(id=post_id).update(**post.dict(exclude_unset=True))
+async def update_post(post_id: int, post: PostIn_Pydantic, current_user: User = Depends(get_current_user)):
+	await Post.filter(id=post_id).update(author=current_user, **post.dict(exclude_unset=True))
 	return await Post_Pydantic.from_queryset_single(Post.get(id=post_id))
 
 

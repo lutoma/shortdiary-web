@@ -1,35 +1,6 @@
 <template>
 	<div class="locations">
-		<Map class="stats-map" :zoom="4" :geojson-cluster="posts_geojson" />
-
-		<div id="main-container">
-			<h1>Locations</h1>
-
-			<EqualHeightRow>
-				<el-col :span="8">
-					<PaginatedTableCard title="Frequent locations" icon="map-marked-alt" :data="top_locations">
-						<el-table-column prop="0" label="Location" />
-						<el-table-column prop="1" width="70" align="right" label="Posts" />
-					</PaginatedTableCard>
-				</el-col>
-				<el-col :span="8">
-					<PaginatedTableCard title="Frequent mentions" icon="users" :data="top_mentions">
-						<el-table-column prop="0" label="Name">
-							<template slot-scope="scope">
-								<n-link :to="`/dashboard?filter=${scope.row[0]}`">{{ scope.row[0] }}</n-link>
-							</template>
-						</el-table-column>
-						<el-table-column prop="1" width="70" align="right" label="Posts" />
-					</PaginatedTableCard>
-				</el-col>
-				<el-col :span="8">
-					<PaginatedTableCard title="Locations by mood" icon="chart-line" :data="top_mood_locations">
-						<el-table-column prop="0" label="Name" />
-						<el-table-column prop="1" width="70" align="right" label="Mood" />
-					</PaginatedTableCard>
-				</el-col>
-			</EqualHeightRow>
-		</div>
+		<Map class="locations-map" :zoom="4" :geojson-cluster="posts_geojson" />
 	</div>
 </template>
 
@@ -115,28 +86,17 @@ export default {
 
 <style lang="scss">
 .locations {
-	// Needed to push footer down. Usually done by main containerm, but we use
-	// the no-container layout here
-	flex-grow: 1;
+	// FIXME - Hacky. Should just use a different layout
+	position: fixed;
+	margin-top: 53px;
+	top: 0;
+	left: 0;
+	height: calc(100% - 53px);
+	width: 100%;
 
-	.stats-map {
-		min-height: 250px;
-		max-height: 400px;
-		height: 30vh;
-	}
-
-	.card-table-row {
-		margin-bottom: 3rem;
-	}
-
-	.el-pagination {
-		margin-top: 1rem;
-		display: flex;
-
-		.el-pager {
-			flex-grow: 1;
-			text-align: center;
-		}
+	.locations-map {
+		height: 100%;
+		width: 100%;
 	}
 }
 </style>

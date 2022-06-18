@@ -18,10 +18,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/login')
 router = APIRouter()
 
 
-class TokenData(BaseModel):
-	uuid: str | None = None
-
-
 async def get_current_user(token: str = Depends(oauth2_scheme)):
 	credentials_exception = HTTPException(
 		status_code=status.HTTP_401_UNAUTHORIZED,
@@ -33,11 +29,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 		uuid: str = payload.get('sub')
 		if uuid is None:
 			raise credentials_exception
-		token_data = TokenData(uuid=uuid)
 	except JWTError:
 		raise credentials_exception
 
-	user = User.get(id=token_data.uuid)
+	user = await User.get(id=uuid)
 	if user is None:
 		raise credentials_exception
 	return user
@@ -55,6 +50,8 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 class LoginResponse(BaseModel):
+	name: str
+	email: str
 	access_token: str
 	ephemeral_key_salt: str
 	master_key: str
@@ -81,6 +78,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 	)
 	return {
 		'access_token': access_token,
+		'name': user.name,
+		'email': user.email,
 		'ephemeral_key_salt': user.ephemeral_key_salt,
 		'master_key': user.master_key,
 		'master_key_nonce': user.master_key_nonce,

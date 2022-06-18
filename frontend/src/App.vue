@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="app-nav-wrapper">
     <Navigation />
     <div id="main-container">
       <RouterView />

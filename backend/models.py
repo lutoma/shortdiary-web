@@ -32,7 +32,7 @@ User_Pydantic = pydantic_model_creator(User, name='User')
 
 class Post(Model):
 	id = fields.UUIDField(pk=True)
-	#author = fields.ForeignKeyField('models.User', related_name='posts')
+	author = fields.ForeignKeyField('models.User', related_name='posts')
 	date = fields.DateField()
 
 	# Encryption format used by this post. 0 = unencrypted (legacy posts from
@@ -44,8 +44,8 @@ class Post(Model):
 	nonce = fields.CharField(max_length=32, null=True)
 	data = fields.BinaryField()
 
-#    class Meta:
-#		unique_together=(('author', 'date'), )
+	class Meta:
+		unique_together = (('author', 'date'), )
 
 	def __str__(self):
 		return self.name
