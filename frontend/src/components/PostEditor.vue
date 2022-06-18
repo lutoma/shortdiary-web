@@ -129,14 +129,13 @@ import { usePosts } from '@/stores/posts';
 import api from '@/api';
 import { Mentionable } from 'vue-mention';
 import { cloneDeep } from 'lodash';
-import { get_error } from '@/utils';
 import { ElNotification } from 'element-plus';
 
 import MapBackground from '@/components/MapBackground.vue';
 import MoodIndicatorIcon from '@/components/MoodIndicatorIcon.vue';
 
 // Default data for newly created posts
-const default_pdata = {
+const defaultPdata = {
 	text: '',
 
 	// Super hacky and not timezone-aware
@@ -177,7 +176,7 @@ export default {
 			// Main post data object. This is what will be sent to the server
 			// in the API request. Filled with either the post we want to edit
 			// (passed in through the prop), or the default post template
-			pdata: this.post || cloneDeep(default_pdata),
+			pdata: this.post || cloneDeep(defaultPdata),
 
 			// When editing a post, IDs of images to delete upon save
 			images_to_delete: [],
@@ -204,8 +203,6 @@ export default {
 	},
 
 	methods: {
-		get_error,
-
 		geoLocationCallback(position) {
 			this.pdata.location_lat = String(position.coords.latitude).substr(0, 14);
 			this.pdata.location_lon = String(position.coords.longitude).substr(0, 14);

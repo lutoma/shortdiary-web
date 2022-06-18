@@ -3,23 +3,23 @@
 		<h1>Join shortdiary</h1>
 
 		<el-form ref="signup_form" :model="user" :rules="rules" label-width="100px">
-			<el-form-item v-if="get_error('non_field_errors')">
-				<el-alert :title="get_error('non_field_errors')" :closable="false" type="error" />
+			<el-form-item v-if="error">
+				<el-alert :title="error" :closable="false" type="error" />
 			</el-form-item>
 
-			<el-form-item label="Username" prop="name" :error="get_error('username')">
-				<el-input ref="name" placeholder="Username" v-model="user.name" @keyup.enter.native="signup" required autofocus />
+			<el-form-item label="Username" prop="name">
+				<el-input ref="name" placeholder="Username" v-model="user.name" @keyup.enter="signup" required autofocus />
 			</el-form-item>
 
-			<el-form-item label="Email" prop="email" :error="get_error('email')">
-				<el-input placeholder="Email" v-model="user.email" @keyup.enter.native="signup" required autofocus />
+			<el-form-item label="Email" prop="email">
+				<el-input placeholder="Email" v-model="user.email" @keyup.enter="signup" required autofocus />
 			</el-form-item>
 
-			<el-form-item label="Password" prop="password" :error="get_error('password')">
-				<el-input placeholder="Password" v-model="user.password" @keyup.enter.native="signup" show-password required />
+			<el-form-item label="Password" prop="password">
+				<el-input placeholder="Password" v-model="user.password" @keyup.enter="signup" show-password required />
 			</el-form-item>
 
-			<el-form-item :error="get_error('captcha')">
+			<el-form-item>
 				<!--<vue-hcaptcha ref="captcha" :reCaptchaCompat="false" size="invisible" sitekey="9cdd09c8-ab67-4728-b301-8e957d5ef4d8" /> -->
 				<!--<vue-hcaptcha
 					ref="captcha"
@@ -41,7 +41,6 @@
 <script>
 import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
 import { useAuth } from '@/stores/auth';
-import { get_error } from '@/utils.js';
 
 export default {
 	components: {
@@ -55,7 +54,7 @@ export default {
 	data() {
 		return {
 			loading: false,
-			error: {},
+			error: null,
 			user: {
 				name: '',
 				email: '',
@@ -73,8 +72,6 @@ export default {
 	},
 
 	methods: {
-		get_error,
-
 		async captcha_verified(token, ekey) {
 			this.user.captcha = token;
 			this.loading = true;
