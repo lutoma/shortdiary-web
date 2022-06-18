@@ -96,5 +96,15 @@ export const usePosts = defineStore('post', {
 				.reverse()
 				.value()
 		},
+
+		async delete_post(id) {
+			const res = await api.delete(`/posts/${id}`);
+			ElNotification({
+				title: 'Post deleted',
+				message: 'The post has successfully been deleted.',
+			});
+
+			// FIXME remove from posts array
+		}
 	},
 });

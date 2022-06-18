@@ -49,7 +49,7 @@ export const useAuth = defineStore('auth', {
 	},
 
 	persist: {
-		key: 'shortdiary',
+		key: 'shortdiary-auth',
 		afterRestore: ({ store }) => {
 			// Store gets serialized as JSON in localStorage, which cannot deal with the Uint8Array
 			// and turns it into an Object instead. So we need to manually restore it

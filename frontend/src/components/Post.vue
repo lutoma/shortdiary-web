@@ -11,7 +11,7 @@
 
 			<div class="right" v-if="editable">
 				<router-link :to="{ name: 'edit-post', params: { id: post.id } }"><el-button class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button></router-link>
-				<el-popconfirm title="Are you sure you want to delete this entry?">
+				<el-popconfirm @confirm="do_delete" title="Are you sure you want to delete this entry?">
 					<template #reference>
 						<el-button class="delete-button" type="text"><fa :icon="['fal', 'trash']" /> Delete</el-button>
 					</template>
@@ -55,6 +55,7 @@ import MoodIndicatorIcon from '@/components/MoodIndicatorIcon.vue'
 import CoolLightBox from 'vue-cool-lightbox'
 import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css'
 import { defineAsyncComponent } from 'vue'
+import { usePosts } from '@/stores/posts';
 
 const LocalComponent = defineAsyncComponent(
   () =>
@@ -107,21 +108,9 @@ export default {
 	},
 
 	methods: {
-		// FIXME needs to emit event for timeline reload/redirect from post detail page
-		deletePost() {
-			this.$confirm('This will permanently delete the post. Continue?', 'Warning', {
-				confirmButtonText: 'OK',
-				cancelButtonText: 'Cancel',
-				type: 'warning'
-			}).then(() => {
-				this.$axios.$delete(`/posts/${this.post.id}`).then(() => {
-					this.$emit('deleted')
-					this.$message({
-						type: 'success',
-						message: 'Post deleted'
-					})
-				})
-			})
+		do_delete() {
+			const store = usePosts()
+			store.delete_post(this.post.id)
 		}
 	}
 }

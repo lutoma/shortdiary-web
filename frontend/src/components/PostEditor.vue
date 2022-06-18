@@ -260,7 +260,7 @@ export default {
 				}
 
 				if (this.post && this.post.id) {
-					this.post = await api.put(`/post/${this.post.id}/`, post_data)
+					this.post = await api.put(`/posts/${this.post.id}`, post_data)
 				} else {
 					this.post = await api.post('/posts', post_data)
 				}
