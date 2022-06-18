@@ -132,7 +132,7 @@ export const usePosts = defineStore('post', {
 
 			ElNotification({
 				title: 'Entry saved',
-				message: 'Your entry has been saved.',
+				message: post.id ? 'The changes to your entry have been saved.' : 'Your entry has been saved.',
 			})
 		}
 	},

@@ -27,7 +27,7 @@ async def create_post(post: PostIn_Pydantic, user: User = Depends(get_current_us
 	"/{post_id}", response_model=Post_Pydantic, responses={404: {"model": HTTPNotFoundError}}
 )
 async def get_post(post_id: str, user: User = Depends(get_current_user)):
-	return await Post_Pydantic.from_queryset_single(user.posts.get(id=post_id))
+	return await Post_Pydantic.from_queryset_single(Post.get(author=user, id=post_id))
 
 
 @router.put(
@@ -35,7 +35,7 @@ async def get_post(post_id: str, user: User = Depends(get_current_user)):
 )
 async def update_post(post_id: str, post: PostIn_Pydantic, user: User = Depends(get_current_user)):
 	await user.posts.filter(id=post_id).update(author=user, **post.dict(exclude_unset=True))
-	return await Post_Pydantic.from_queryset_single(user.posts.get(id=post_id))
+	return await Post_Pydantic.from_queryset_single(Post.get(author=user, id=post_id))
 
 
 @router.delete("/{post_id}", response_model=Status, responses={404: {"model": HTTPNotFoundError}})
