@@ -25,7 +25,10 @@ instance.interceptors.response.use((response) => {
 			const router = useRouter();
 
 			store.logout();
-			router.push({ name: 'login' });
+
+			if (router) {
+				router.push({ name: 'login' });
+			}
 		}
 	}
 

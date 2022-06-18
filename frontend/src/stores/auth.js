@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import { enrol as crypto_enrol, unlock as crypto_unlock } from '@/crypto';
+import { AxiosError } from 'axios';
+import { enrol, unlock } from '@/crypto';
 import api from '@/api';
 
 export const useAuth = defineStore('auth', {
@@ -22,12 +23,20 @@ export const useAuth = defineStore('auth', {
 			credentials.append('username', email);
 			credentials.append('password', password);
 
-			const res = await api.post('/auth/login', credentials);
-			this.master_key = crypto_unlock(password, res.data.ephemeral_key_salt, res.data.master_key_nonce, res.data.master_key);
+			try {
+				const res = await api.post('/auth/login', credentials);
+				this.master_key = unlock(password, res.data.ephemeral_key_salt, res.data.master_key_nonce, res.data.master_key);
 
-			this.jwt = res.data.access_token;
-			this.name = res.data.name;
-			this.email = res.data.email;
+				this.jwt = res.data.access_token;
+				this.name = res.data.name;
+				this.email = res.data.email;
+			} catch (err) {
+				if (err instanceof AxiosError && err.response) {
+					throw err.response.data.detail;
+				} else {
+					throw err;
+				}
+			}
 		},
 
 		async logout() {
@@ -35,7 +44,7 @@ export const useAuth = defineStore('auth', {
 		},
 
 		async signup(user) {
-			const [ephemeral_key_salt, master_key_nonce, master_key] = crypto_enrol(user.password);
+			const [ephemeral_key_salt, master_key_nonce, master_key] = enrol(user.password);
 
 			const data = {
 				...user,

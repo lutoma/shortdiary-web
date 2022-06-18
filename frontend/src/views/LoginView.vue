@@ -9,10 +9,10 @@
 				</el-form-item>
 
 				<el-form-item label="Username" prop="username">
-					<el-input ref="username" placeholder="Username" v-model="credentials.username" @keyup.enter.native="login" required autofocus />
+					<el-input ref="username" placeholder="Username" v-model="credentials.username" @keyup.enter="login" required autofocus />
 				</el-form-item>
 				<el-form-item label="Password" prop="password">
-					<el-input placeholder="Password" v-model="credentials.password" @keyup.enter.native="login" show-password required />
+					<el-input placeholder="Password" v-model="credentials.password" @keyup.enter="login" show-password required />
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="login" v-model:loading="loading"><fa :icon="['far', 'sign-in']" /> Sign in</el-button>
@@ -29,14 +29,13 @@
 					<el-alert v-if="error" :title="error" :closable="false" type="error" />
 				</el-form-item>
 				<el-form-item label="Code" prop="code">
-					<el-input ref="code" placeholder="Code" v-model="mfa_request.code" @keyup.enter.native="mfaConfirm" required autofocus />
+					<el-input ref="code" placeholder="Code" v-model="mfa_request.code" @keyup.enter="mfaConfirm" required autofocus />
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="mfaConfirm" v-model:loading="loading"><fa :icon="['far', 'sign-in']" /> Confirm sign-in</el-button>
 				</el-form-item>
 			</el-form>
 		</template>
-
 	</div>
 </template>
 
@@ -81,25 +80,15 @@ export default {
 				if (valid) {
 					this.loading = true;
 					const store = useAuth();
-					store.login(this.credentials.username, this.credentials.password);
-					this.$router.push({ name: 'dashboard' });
-					this.loading = false;
 
-					/*
 					try {
-						// Reset auth - This is needed to make sure we don't
-						// send an (outdated) Authorization header during the
-						// login request
-						//this.$auth.reset({ resetInterceptor: false })
-						const store = useAuth();
-						store.login(this.credentials.username, this.credentials.password);
+						await store.login(this.credentials.username, this.credentials.password);
 						this.$router.push({ name: 'dashboard' });
 					} catch (err) {
-						this.error = err.response.data.non_field_errors[0]
+						this.error = err.toString();
 					} finally {
-						this.loading = false
+						this.loading = false;
 					}
-					*/
 				}
 			});
 		},
