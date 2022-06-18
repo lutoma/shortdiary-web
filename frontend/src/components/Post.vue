@@ -2,6 +2,7 @@
 	<el-card class="post" v-if="post">
 		<template #header>
 			<ul>
+				<li v-if="post.format_version === 0"><el-tag type="danger" effect="dark" style="font-weight: 400;"><fa :icon="['fal', 'lock-open']" /> Unencrypted</el-tag></li>
 				<li v-if="showDate"><router-link :to="`/posts/${post.id}`" class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</router-link></li>
 				<li v-if="!compact && showDate">{{ date.toLocaleString('en',  { weekday: 'long' }) }}</li>
 				<li v-if="post.location_verbose"><fa :icon="['fal', 'map-marked-alt']" /> {{ post.location_verbose }}</li>
@@ -10,7 +11,11 @@
 
 			<div class="right" v-if="editable">
 				<router-link :to="{ name: 'edit-post', params: { id: post.id } }"><el-button class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button></router-link>
-				<el-button class="delete-button" type="text" @click="deletePost"><fa :icon="['fal', 'trash']" /> Delete</el-button>
+				<el-popconfirm title="Are you sure you want to delete this entry?">
+					<template #reference>
+						<el-button class="delete-button" type="text"><fa :icon="['fal', 'trash']" /> Delete</el-button>
+					</template>
+				</el-popconfirm>
 			</div>
 		</template>
 

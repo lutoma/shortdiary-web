@@ -55,6 +55,7 @@ export const usePosts = defineStore('post', {
 
 				const data = JSON.parse(post_data)
 				data.id = cpost.id;
+				data.format_version = cpost.format_version;
 
 				// FIXME
 				data.images = null;
