@@ -13,14 +13,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute();
 const store = usePosts();
 const id = route.params.id;
-let post = null;
-
-// FIXME super inefficient
-for (const npost of store.posts) {
-	if (npost.id == id) {
-		post = npost;
-	}
-}
+const post = store.posts.get(id);
 </script>
 
 <style lang="scss">

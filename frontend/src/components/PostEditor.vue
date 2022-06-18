@@ -86,6 +86,24 @@
 							</template>
 							<el-upload
 								ref="images"
+								v-model:file-list="existing_images"
+								action="#"
+								list-type="picture-card"
+								:on-preview="handlePictureCardPreview"
+								:on-remove="removeImage"
+								:auto-upload="false"
+								:http-request="uploadImage"
+								>
+
+								<el-icon><Plus /></el-icon>
+							</el-upload>
+
+							<el-dialog v-model="dialogVisible">
+								<img w-full :src="dialogImageUrl" alt="Preview Image" />
+							</el-dialog>
+
+							<el-upload
+								ref="images"
 								action="#"
 								:http-request="uploadImage"
 								:on-remove="removeImage"
@@ -245,12 +263,12 @@ export default {
 
 			const auth_store = useAuth();
 			const [nonce, cdata] = encrypt(auth_store.master_key, sodium.from_string(JSON.stringify(this.pdata)))
-			console.log('encrypted data', nonce, cdata)
 
 			const post_data = {
 				nonce,
 				data: cdata,
-				date: this.pdata.date
+				date: this.pdata.date,
+				format_version: 1,
 			}
 
 			try {

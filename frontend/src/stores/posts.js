@@ -10,11 +10,15 @@ import { ElNotification } from 'element-plus'
 export const usePosts = defineStore('post', {
 	state: () => {
 		return {
-			posts: [],
+			posts: new Map,
 			top_mentions: [],
 			top_locations: [],
 			top_tags: []
 		};
+	},
+
+	getters: {
+		posts_list: (state) => [...state.posts.values()],
 	},
 
 	actions: {
@@ -27,7 +31,7 @@ export const usePosts = defineStore('post', {
 			const res = await api.get('/posts');
 
 			await sodium.ready
-			const posts = []
+			const posts = new Map
 			for (const cpost of res.data) {
 				let post_data = null
 
@@ -59,14 +63,14 @@ export const usePosts = defineStore('post', {
 
 				// FIXME
 				data.images = null;
-				posts.push(data)
+				posts.set(data.id, data)
 			}
 
 			this.posts = posts
 
 			// Extract top mentions for use in stats.vue and PostEditor component
 			const mentions = []
-			for (const post of posts) {
+			for (const [id, post] of posts) {
 				// FIXME Should deduplicate/DRYfy regex with Post.vue
 				// Temporarily cast to Set to deduplicate mentions within a post
 				mentions.push(...[...new Set(post.text.toLowerCase().match(/@\w+\b/g))])
@@ -79,7 +83,8 @@ export const usePosts = defineStore('post', {
 				.reverse()
 				.value()
 
-			this.top_locations = _(posts)
+			const posts_list = [...posts.values()]
+			this.top_locations = _(posts_list)
 				.filter('location_verbose')
 				.countBy('location_verbose')
 				.toPairs()
@@ -87,7 +92,7 @@ export const usePosts = defineStore('post', {
 				.reverse()
 				.value()
 
-			this.top_tags = _(posts)
+			this.top_tags = _(posts_list)
 				.map('tags')
 				.flatten()
 				.countBy()
@@ -104,7 +109,7 @@ export const usePosts = defineStore('post', {
 				message: 'The post has successfully been deleted.',
 			});
 
-			// FIXME remove from posts array
+			this.posts.delete(id);
 		}
 	},
 });

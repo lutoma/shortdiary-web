@@ -1,11 +1,11 @@
 <template>
 	<div class="post-timeline">
-		<div class="posts" v-loading="!posts.length">
-			<template v-if="!posts.length">
+		<div class="posts" v-loading="!posts.size">
+			<template v-if="!posts.size">
 				&nbsp;
 			</template>
 
-			<template v-if="posts.length && !grouped_posts.length">
+			<template v-if="posts.size && !grouped_posts.length">
 				<h2>Could not find any posts matching your filters.</h2>
 			</template>
 
@@ -143,7 +143,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(usePosts, ['posts', 'top_tags', 'top_locations']),
+		...mapState(usePosts, ['posts', 'posts_list', 'top_tags', 'top_locations']),
 
 		filtered_posts() {
 			// Filter definitions. The object key defines the field in
@@ -158,7 +158,7 @@ export default {
 				images: post => !!post.images.length === this.filter.images
 			}
 
-			let filtered = _(this.posts)
+			let filtered = _(this.posts_list)
 				.filter(x => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1])
 
 			for (const [cond, filter] of Object.entries(filters)) {
