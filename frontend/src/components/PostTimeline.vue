@@ -251,7 +251,7 @@ export default {
 			}
 		},
 
-		intersectionCallback(update, _) {
+		intersectionCallback(update, _unused) {
 			// Handle IntersectionObserver callbacks. We need to store state
 			// here to account for situations where two elements are visible at
 			// once, and then later one of those goes out of view. The update
