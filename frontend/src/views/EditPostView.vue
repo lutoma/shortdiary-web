@@ -1,7 +1,7 @@
 <template>
 	<div class="edit-post">
 		<h1>Edit entry</h1>
-		<PostEditor :post="post" v-if="post" />
+		<PostEditor v-if="post" :post="post" />
 	</div>
 </template>
 

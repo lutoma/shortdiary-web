@@ -8,7 +8,9 @@
 			</video>
 		</div>
 		<div id="main-container">
-			<h1 id="tagline">A diary for the 21st century</h1>
+			<h1 id="tagline">
+				A diary for the 21st century
+			</h1>
 		</div>
 	</div>
 </template>

@@ -1,10 +1,10 @@
 <template>
-  <div id="app-nav-wrapper">
-    <Navigation />
-    <div id="main-container">
-      <RouterView />
-    </div>
-  </div>
+	<div id="app-nav-wrapper">
+		<Navigation />
+		<div id="main-container">
+			<RouterView />
+		</div>
+	</div>
 </template>
 
 <script setup>

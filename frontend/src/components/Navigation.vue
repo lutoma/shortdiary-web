@@ -1,14 +1,18 @@
 <template>
 	<div class="main-nav-container">
 		<nav>
-			<div class="name"><router-link :to="auth.logged_in ? '/dashboard' : '/'">shortdiary</router-link></div>
-			<el-menu :default-active="$route.name" mode="horizontal" class="main-nav" @select="navSelect" :ellipsis="false">
+			<div class="name">
+				<router-link :to="auth.logged_in ? '/dashboard' : '/'">
+					shortdiary
+				</router-link>
+			</div>
+			<el-menu :default-active="$route.name" mode="horizontal" class="main-nav" :ellipsis="false" @select="navSelect">
 				<el-menu-item v-for="item of navItems" :key="item.name" :index="item.name">
 					<fa v-if="item.icon" :icon="['far', item.icon]" /> {{ item.label }}
 				</el-menu-item>
 			</el-menu>
 
-			<el-menu mode="horizontal" @select="navSelect" :ellipsis="false">
+			<el-menu mode="horizontal" :ellipsis="false" @select="navSelect">
 				<el-sub-menu popper-class="sub-menu-right">
 					<template #title>
 						<template v-if="auth.logged_in">
@@ -20,8 +24,12 @@
 					</template>
 
 					<template v-if="auth.logged_in">
-						<el-menu-item index="settings"><fa :icon="['far', 'wrench']" /> <span>Settings</span></el-menu-item>
-						<el-menu-item index="logout"><fa :icon="['far', 'sign-out']" /> <span>Sign out</span></el-menu-item>
+						<el-menu-item index="settings">
+							<fa :icon="['far', 'wrench']" /> <span>Settings</span>
+						</el-menu-item>
+						<el-menu-item index="logout">
+							<fa :icon="['far', 'sign-out']" /> <span>Sign out</span>
+						</el-menu-item>
 					</template>
 
 					<el-menu-item-group>

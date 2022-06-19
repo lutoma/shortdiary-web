@@ -1,4 +1,4 @@
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { library } from '@fortawesome/fontawesome-svg-core';
 
 import {
 	faKey as faKeyRegular, faPencil as faPencilRegular, faSignIn as faSignInRegular,
@@ -8,8 +8,8 @@ import {
 	faEmptySet as faEmptySetRegular, faLock as faLockRegular, faLockOpen as faLockOpenRegular,
 	faBars as faBarsRegular, faFileContract as faFileContractRegular,
 	faShieldCheck as faShieldCheckRegular, faSync as faSyncRegular,
-	faMapMarkedAlt as faMapMarkedAltRegular, faUsers as faUsersRegular, faHouse as faHouseRegular
-} from '@fortawesome/pro-regular-svg-icons'
+	faMapMarkedAlt as faMapMarkedAltRegular, faUsers as faUsersRegular, faHouse as faHouseRegular,
+} from '@fortawesome/pro-regular-svg-icons';
 
 import {
 	faLock as faLockLight, faLockOpen as faLockOpenLight, faLaugh as faLaughLight,
@@ -19,38 +19,39 @@ import {
 	faChartLine as faChartLineLight, faLanguage as faLanguageLight,
 	faCalendarAlt as faCalendarAltLight, faImages as faImagesLight,
 	faShieldCheck as faShieldCheckLight, faTrophyAlt as faTrophyAltLight, faTally as faTallyLight,
-	faRuler as faRulerLight, faTags as faTagsLight, faAlignLeft as faAlignLeftLight
-} from '@fortawesome/pro-light-svg-icons'
+	faRuler as faRulerLight, faTags as faTagsLight, faAlignLeft as faAlignLeftLight,
+} from '@fortawesome/pro-light-svg-icons';
 
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-import App from './App.vue'
-import router from './router'
-import sodium from 'libsodium-wrappers'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import sodium from 'libsodium-wrappers';
+import App from './App.vue';
+import router from './router';
 
+/* eslint-disable function-paren-newline, function-call-argument-newline */
 library.add(faKeyRegular, faPencilRegular, faSignInRegular, faListRegular, faChartBarRegular,
 	faMedalRegular, faWrenchRegular, faSignOutRegular, faCompassRegular, faUserFriendsRegular,
 	faImagesRegular, faEmptySetRegular, faLockRegular, faLockOpenRegular, faBarsRegular,
-	faFileContractRegular, faShieldCheckRegular, faSyncRegular, faMapMarkedAltRegular, faHouseRegular)
+	faFileContractRegular, faShieldCheckRegular, faSyncRegular, faMapMarkedAltRegular, faHouseRegular);
 
 library.add(faLockLight, faLockOpenLight, faLaughLight, faSmileLight, faMehLight, faFrownLight,
 	faPencilLight, faLinkLight, faTrashLight, faMapMarkedAltLight, faUsersLight, faChartLineLight,
 	faLanguageLight, faCalendarAltLight, faImagesLight, faShieldCheckLight, faTrophyAltLight,
-	faTallyLight, faRulerLight, faTagsLight, faAlignLeftLight, faUsersRegular)
+	faTallyLight, faRulerLight, faTagsLight, faAlignLeftLight, faUsersRegular);
 
-library.add(faGithub)
+library.add(faGithub);
 
-await sodium.ready
+await sodium.ready;
 
-const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 
-const app = createApp(App)
+createApp(App)
 	.component('fa', FontAwesomeIcon)
 	.use(pinia)
 	.use(router)
-	.mount('#app')
+	.mount('#app');

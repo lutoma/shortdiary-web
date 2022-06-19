@@ -1,19 +1,39 @@
 <template>
-	<el-card class="post" v-if="post">
+	<el-card v-if="post" class="post">
 		<template #header>
 			<ul>
-				<li v-if="post.format_version === 0"><el-tag type="danger" effect="dark" style="font-weight: 400;"><fa :icon="['fal', 'lock-open']" /> Unencrypted</el-tag></li>
-				<li v-if="showDate"><router-link :to="`/posts/${post.id}`" class="date">{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}</router-link></li>
-				<li v-if="!compact && showDate">{{ date.toLocaleString('en',  { weekday: 'long' }) }}</li>
-				<li v-if="post.location_verbose"><fa :icon="['fal', 'map-marked-alt']" /> {{ post.location_verbose }}</li>
-				<li v-if="post.mood"><MoodIndicatorIcon :mood="post.mood" /> Mood: {{ post.mood }}</li>
+				<li v-if="post.format_version === 0">
+					<el-tag type="danger" effect="dark" style="font-weight: 400;">
+						<fa :icon="['fal', 'lock-open']" /> Unencrypted
+					</el-tag>
+				</li>
+				<li v-if="showDate">
+					<router-link :to="`/posts/${post.id}`" class="date">
+						{{ date.toLocaleString('en', { month: "long" }) }} {{ date.getDate() }}, {{ date.getFullYear() }}
+					</router-link>
+				</li>
+				<li v-if="!compact && showDate">
+					{{ date.toLocaleString('en', { weekday: 'long' }) }}
+				</li>
+				<li v-if="post.location_verbose">
+					<fa :icon="['fal', 'map-marked-alt']" /> {{ post.location_verbose }}
+				</li>
+				<li v-if="post.mood">
+					<MoodIndicatorIcon :mood="post.mood" /> Mood: {{ post.mood }}
+				</li>
 			</ul>
 
-			<div class="right" v-if="editable">
-				<router-link :to="{ name: 'edit-post', params: { id: post.id } }"><el-button class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button></router-link>
-				<el-popconfirm @confirm="doDelete" title="Are you sure you want to delete this entry?">
+			<div v-if="editable" class="right">
+				<router-link :to="{ name: 'edit-post', params: { id: post.id } }">
+					<el-button class="edit-button" type="text">
+						<fa :icon="['fal', 'pencil']" /> Edit
+					</el-button>
+				</router-link>
+				<el-popconfirm title="Are you sure you want to delete this entry?" @confirm="doDelete">
 					<template #reference>
-						<el-button class="delete-button" type="text"><fa :icon="['fal', 'trash']" /> Delete</el-button>
+						<el-button class="delete-button" type="text">
+							<fa :icon="['fal', 'trash']" /> Delete
+						</el-button>
 					</template>
 				</el-popconfirm>
 			</div>
@@ -22,27 +42,29 @@
 		<PostTextComponent class="text" :text="post.text" />
 
 		<CoolLightBox
-			v-if="this.post.images"
-			:items="this.post.images.map(i => ({ src: i.image }))"
+			v-if="post.images"
+			:items="post.images.map(i => ({ src: i.image }))"
 			:index="lightboxIndex"
+			:slideshow="false"
 			@close="lightboxIndex = null"
-			:slideshow="false" />
+		/>
 
 		<el-image
 			v-for="[index, image] of (post.images || []).entries()"
-			:src="image.thumbnail || image.image"
 			:key="image.id"
+			:src="image.thumbnail || image.image"
+			fit="cover"
 			@click="lightboxIndex = index"
-			fit="cover" />
+		/>
 
-		<div class="tags" v-if="post.tags && post.tags.length">
+		<div v-if="post.tags && post.tags.length" class="tags">
 			<el-tag
 				v-for="tag of post.tags"
 				:key="tag"
 				size="medium"
 				effect="dark"
-				type="info">
-
+				type="info"
+			>
 				{{ tag }}
 			</el-tag>
 		</div>

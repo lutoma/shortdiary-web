@@ -1,6 +1,6 @@
 <template>
 	<div class="post-detail">
-		<Post :post="post" v-if="post" v-loading="!post" />
+		<Post v-if="post" v-loading="!post" :post="post" />
 		<MapBackground v-if="post && post.location_lon && post.location_lat" :center="[post.location_lon, post.location_lat]" />
 	</div>
 </template>

@@ -1,12 +1,12 @@
 <template>
 	<img
 		v-bind="attrs"
-		v-on="listeners"
 		:src="url"
 		:alt="alt"
+		v-on="listeners"
 		@load="onLoad"
 		@error="onError"
-	/>
+	>
 </template>
 
 <script>
@@ -14,7 +14,7 @@
 import md5 from 'md5';
 
 export default {
-	name: 'gravatar-img',
+	name: 'GravatarImg',
 
 	inheritAttrs: false,
 

@@ -1,10 +1,12 @@
 <template>
 	<el-card class="paginated-table-card">
-		<h2 v-if="title"><fa v-if="icon" :icon="['fal', icon]" /> {{ title }}</h2>
+		<h2 v-if="title">
+			<fa v-if="icon" :icon="['fal', icon]" /> {{ title }}
+		</h2>
 		<el-table :data="data.slice((currentPage - 1) * pageSize, currentPage * pageSize)" stripe>
 			<slot />
 		</el-table>
-		<el-pagination layout="prev, pager, next" :total="data.length" :page-size="pageSize" v-model:current-page="currentPage" />
+		<el-pagination v-model:current-page="currentPage" layout="prev, pager, next" :total="data.length" :page-size="pageSize" />
 	</el-card>
 </template>
 

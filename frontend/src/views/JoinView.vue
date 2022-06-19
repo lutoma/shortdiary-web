@@ -8,15 +8,15 @@
 			</el-form-item>
 
 			<el-form-item label="Username" prop="name">
-				<el-input ref="nameElement" placeholder="Username" v-model="user.name" @keyup.enter="signup" required autofocus />
+				<el-input ref="nameElement" v-model="user.name" placeholder="Username" required autofocus @keyup.enter="signup" />
 			</el-form-item>
 
 			<el-form-item label="Email" prop="email">
-				<el-input placeholder="Email" v-model="user.email" @keyup.enter="signup" required />
+				<el-input v-model="user.email" placeholder="Email" required @keyup.enter="signup" />
 			</el-form-item>
 
 			<el-form-item label="Password" prop="password">
-				<el-input placeholder="Password" v-model="user.password" @keyup.enter="signup" show-password required />
+				<el-input v-model="user.password" placeholder="Password" show-password required @keyup.enter="signup" />
 			</el-form-item>
 
 			<el-form-item>
@@ -30,11 +30,15 @@
 			</el-form-item>
 
 			<el-form-item>
-				<el-button type="primary" @click="signup" v-model:loading="loading"><fa :icon="['far', 'sign-in']" /> Sign in</el-button>
+				<el-button v-model:loading="loading" type="primary" @click="signup">
+					<fa :icon="['far', 'sign-in']" /> Sign in
+				</el-button>
 			</el-form-item>
 		</el-form>
 
-		<p class="hcaptcha-info">This site is protected by hCaptcha and its <a href="https://hcaptcha.com/privacy" rel="nofollow noopener" target="_blank">Privacy Policy</a> and <a href="https://hcaptcha.com/terms" rel="nofollow noopener" target="_blank">Terms of Service</a> apply.</p>
+		<p class="hcaptcha-info">
+			This site is protected by hCaptcha and its <a href="https://hcaptcha.com/privacy" rel="nofollow noopener" target="_blank">Privacy Policy</a> and <a href="https://hcaptcha.com/terms" rel="nofollow noopener" target="_blank">Terms of Service</a> apply.
+		</p>
 	</div>
 </template>
 

@@ -14,35 +14,45 @@
 							<el-input v-model="user.email" />
 						</el-form-item>
 						<el-form-item label="Password">
-							<n-link to="/change-password">Change password</n-link>
+							<n-link to="/change-password">
+								Change password
+							</n-link>
 						</el-form-item>
 					</el-form>
 				</el-card>
 
-				<el-dialog title="Two-factor authentication setup" width="550px" v-model:visible="mfa_setup_visible">
+				<el-dialog v-model:visible="mfa_setup_visible" title="Two-factor authentication setup" width="550px">
 					<MfaSetup :config="mfa_config" :active_methods="mfa_methods" @success="mfaSetupDone" />
 				</el-dialog>
 
 				<el-card v-loading="mfa_methods === null">
 					<h2>Two-factor authentication</h2>
 					<template v-if="mfa_methods && !mfa_methods.length">
-						<el-button size="medium" @click="mfa_setup_visible = true">Enable two-factor authentication</el-button>
+						<el-button size="medium" @click="mfa_setup_visible = true">
+							Enable two-factor authentication
+						</el-button>
 					</template>
 					<template v-if="mfa_methods && mfa_methods.length">
 						<el-table :data="mfa_methods" :show-header="false" style="width: 100%">
 							<el-table-column prop="name" label="Method">
-								<template v-slot="scope">
-									{{ mfaMethodName(scope.row.name) }} <template v-if="scope.row.is_primary">(Primary)</template>
+								<template #default="scope">
+									{{ mfaMethodName(scope.row.name) }} <template v-if="scope.row.is_primary">
+										(Primary)
+									</template>
 								</template>
 							</el-table-column>
 							<el-table-column label="Actions" align="right">
-								<template v-slot="scope">
+								<template #default="scope">
 									<!--<el-button size="small" v-if="!scope.row.is_primary" @click="mfaSwitchPrimary(scope.row.name)">Make primary</el-button>-->
-									<el-button size="small" type="danger" @click="mfaDelete(scope.row.name)">Delete</el-button>
+									<el-button size="small" type="danger" @click="mfaDelete(scope.row.name)">
+										Delete
+									</el-button>
 								</template>
 							</el-table-column>
 						</el-table>
-						<el-button size="medium" v-if="mfa_can_add" @click="mfa_setup_visible = true" style="margin-top: 1rem">Add authentication method</el-button>
+						<el-button v-if="mfa_can_add" size="medium" style="margin-top: 1rem" @click="mfa_setup_visible = true">
+							Add authentication method
+						</el-button>
 					</template>
 				</el-card>
 			</el-col>
@@ -63,7 +73,9 @@
 			</el-col>
 		</el-row>
 
-		<el-button type="primary" @click="saveSettings">Save settings</el-button>
+		<el-button type="primary" @click="saveSettings">
+			Save settings
+		</el-button>
 	</div>
 </template>
 
@@ -84,6 +96,11 @@ export default {
 			mfa_methods: null,
 			mfa_setup_visible: false,
 		};
+	},
+
+	async fetch() {
+		this.mfa_config = await this.$axios.$get('/auth/mfa/config/');
+		await this.loadMfaMethods();
 	},
 
 	computed: {
@@ -135,11 +152,6 @@ export default {
 			this.mfa_setup_visible = false;
 			this.$message({ type: 'success', message: 'Authentication method has been added' });
 		},
-	},
-
-	async fetch() {
-		this.mfa_config = await this.$axios.$get('/auth/mfa/config/');
-		await this.loadMfaMethods();
 	},
 };
 </script>

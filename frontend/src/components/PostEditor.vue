@@ -7,17 +7,18 @@
 					:items="mention_items"
 					placement="bottom-end"
 					offset="6"
-					insert-space>
-
+					insert-space
+				>
 					<el-input
 						ref="text"
+						v-model="pdata.text"
 						type="textarea"
 						placeholder="Jot down your adventures here"
-						v-model="pdata.text"
-						autofocus />
+						autofocus
+					/>
 				</Mentionable>
 
-				<el-button type="primary" :disabled="!pdata.text" v-model:loading="loading" @click="save">
+				<el-button v-model:loading="loading" type="primary" :disabled="!pdata.text" @click="save">
 					Save entry
 				</el-button>
 			</div>
@@ -35,7 +36,8 @@
 								placeholder="Pick a date"
 								:picker-options="datePickerOptions"
 								format="MMMM DD, YYYY"
-								value-format="YYYY-MM-DD" />
+								value-format="YYYY-MM-DD"
+							/>
 						</el-form-item>
 
 						<el-form-item>
@@ -55,13 +57,14 @@
 								filterable
 								allow-create
 								default-first-option
-								placeholder="Choose tags">
-
+								placeholder="Choose tags"
+							>
 								<el-option
-									v-for="item in top_tags"
+									v-for="item in tags"
 									:key="item[0]"
 									:label="item[0]"
-									:value="item[0]" />
+									:value="item[0]"
+								/>
 							</el-select>
 						</el-form-item>
 
@@ -72,7 +75,7 @@
 							<div v-loading="!pdata.location_verbose">
 								{{ pdata.location_verbose }}
 
-								<el-button type="text" v-if="post && post.id && pdata.location_verbose" @click="getGeoLocation()">
+								<el-button v-if="post && post.id && pdata.location_verbose" type="text" @click="getGeoLocation()">
 									<fa :icon="['far', 'sync']" />
 								</el-button>
 							</div>
@@ -91,13 +94,12 @@
 								:on-remove="removeImage"
 								:auto-upload="false"
 								:http-request="uploadImage"
-								>
-
+							>
 								<el-icon><Plus /></el-icon>
 							</el-upload>
 
 							<el-dialog v-model="dialogVisible">
-								<img w-full :src="dialogImageUrl" alt="Preview Image" />
+								<img w-full :src="dialogImageUrl" alt="Preview Image">
 							</el-dialog>
 
 							<el-upload
@@ -109,9 +111,9 @@
 								list-type="picture-card"
 								:thumbnail-mode="true"
 								:auto-upload="false"
-								multiple>
-
-								<i class="el-icon-plus"></i>
+								multiple
+							>
+								<i class="el-icon-plus" />
 							</el-upload>
 						</el-form-item>
 					</el-form>
@@ -184,10 +186,10 @@ export default {
 	},
 
 	computed: {
-		...mapState(usePosts, ['top_mentions', 'top_tags']),
+		...mapState(usePosts, ['mentions', 'tags']),
 
 		mention_items() {
-			const mentions = this.top_mentions.map(
+			const mentions = this.mentions.map(
 				([mention, _]) => mention.substring(1),
 			);
 			return mentions.map((value) => ({ value, label: value }));
@@ -200,6 +202,14 @@ export default {
 
 			return this.post.images.map((x) => ({ id: x.id, url: x.thumbnail }));
 		},
+	},
+
+	mounted() {
+		this.$refs.text.$el.children[0].focus();
+
+		if (!(this.post && this.post.id)) {
+			this.getGeoLocation();
+		}
 	},
 
 	methods: {
@@ -285,14 +295,6 @@ export default {
 				this.images_to_delete.push(file.id);
 			}
 		},
-	},
-
-	mounted() {
-		this.$refs.text.$el.children[0].focus();
-
-		if (!(this.post && this.post.id)) {
-			this.getGeoLocation();
-		}
 	},
 };
 </script>

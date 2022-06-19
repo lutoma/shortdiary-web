@@ -3,19 +3,21 @@
 		<template v-if="!mfaRequest.method">
 			<h1>Sign in</h1>
 
-			<el-form ref="loginFormElement" :model="credentials" :rules="rules" label-width="100px" v-if="!mfaRequest.method">
+			<el-form v-if="!mfaRequest.method" ref="loginFormElement" :model="credentials" :rules="rules" label-width="100px">
 				<el-form-item>
 					<el-alert v-if="error" :title="error" :closable="false" type="error" />
 				</el-form-item>
 
 				<el-form-item label="Username" prop="username">
-					<el-input ref="nameElement" placeholder="Username" v-model="credentials.username" @keyup.enter="login" required autofocus />
+					<el-input ref="nameElement" v-model="credentials.username" placeholder="Username" required autofocus @keyup.enter="login" />
 				</el-form-item>
 				<el-form-item label="Password" prop="password">
-					<el-input placeholder="Password" v-model="credentials.password" @keyup.enter="login" show-password required />
+					<el-input v-model="credentials.password" placeholder="Password" show-password required @keyup.enter="login" />
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="login" v-model:loading="loading"><fa :icon="['far', 'sign-in']" /> Sign in</el-button>
+					<el-button v-model:loading="loading" type="primary" @click="login">
+						<fa :icon="['far', 'sign-in']" /> Sign in
+					</el-button>
 				</el-form-item>
 			</el-form>
 		</template>
@@ -23,16 +25,20 @@
 		<template v-if="mfaRequest.method">
 			<h1>Two-factor authentication</h1>
 
-			<p v-if="mfaRequest.method == 'app'">Please enter the code from your token generator.</p>
+			<p v-if="mfaRequest.method == 'app'">
+				Please enter the code from your token generator.
+			</p>
 			<el-form ref="mfa_form" :model="mfaRequest" :rules="mfaRules" label-width="100px">
 				<el-form-item>
 					<el-alert v-if="error" :title="error" :closable="false" type="error" />
 				</el-form-item>
 				<el-form-item label="Code" prop="code">
-					<el-input ref="code" placeholder="Code" v-model="mfaRequest.code" @keyup.enter="mfaConfirm" required autofocus />
+					<el-input ref="code" v-model="mfaRequest.code" placeholder="Code" required autofocus @keyup.enter="mfaConfirm" />
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="mfaConfirm" v-model:loading="loading"><fa :icon="['far', 'sign-in']" /> Confirm sign-in</el-button>
+					<el-button v-model:loading="loading" type="primary" @click="mfaConfirm">
+						<fa :icon="['far', 'sign-in']" /> Confirm sign-in
+					</el-button>
 				</el-form-item>
 			</el-form>
 		</template>

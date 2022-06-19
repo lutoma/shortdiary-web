@@ -62,12 +62,14 @@ const router = createRouter({
 	],
 });
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to, _from) => {
 	const store = useAuth();
 
 	if (!store.logged_in && !['login', 'join'].includes(to.name)) {
 		return { name: 'login' };
 	}
+
+	return true;
 });
 
 export default router;

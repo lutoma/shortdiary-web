@@ -1,6 +1,6 @@
 <template>
 	<div class="post-timeline">
-		<div class="posts" v-loading="!store.posts.size">
+		<div v-loading="!store.posts.size" class="posts">
 			<template v-if="!store.posts.size">
 				&nbsp;
 			</template>
@@ -11,24 +11,30 @@
 
 			<section
 				v-for="[year, months] of groupedPosts"
+				:id="`year-${year}`"
 				:key="Number(year)"
-				:id="`year-${year}`">
-
-				<h1 class="year-header">{{ year }}</h1>
+			>
+				<h1 class="year-header">
+					{{ year }}
+				</h1>
 
 				<section
-					ref="monthContainer"
 					v-for="[month, posts] of months"
-					:key="Number(`${year}${month}`)"
 					:id="`month-${year}-${month}`"
+					ref="monthContainer"
+					:key="Number(`${year}${month}`)"
 					:data-year="year"
-					:data-month="month">
-
-					<h2 class="month-header">{{ getMonthName(month) }}</h2>
-					<div class="post-container" v-for="post in posts" :key="post.id">
+					:data-month="month"
+				>
+					<h2 class="month-header">
+						{{ getMonthName(month) }}
+					</h2>
+					<div v-for="post in posts" :key="post.id" class="post-container">
 						<div class="post-date">
 							<h3>{{ post.date.split('-')[2] }}</h3>
-							<div class="weekday">{{ new Date(post.date).toLocaleString('en',  { weekday: 'long' }) }}</div>
+							<div class="weekday">
+								{{ new Date(post.date).toLocaleString('en', { weekday: 'long' }) }}
+							</div>
 						</div>
 						<Post ref="postElements" :post="post" :show-date="false" />
 					</div>
@@ -41,18 +47,20 @@
 				<ol class="datepicker">
 					<li
 						v-for="[year, months] of datepickerValues"
-						:class="year == scrollState.year ? 'active': ''" :key="Number(year)">
-
-						<div @click="datePickerSelect" :data-scrolltarget="`#year-${year}`">{{ year }}</div>
+						:key="Number(year)" :class="year == scrollState.year ? 'active': ''"
+					>
+						<div :data-scrolltarget="`#year-${year}`" @click="datePickerSelect">
+							{{ year }}
+						</div>
 
 						<ol v-show="year == scrollState.year">
 							<li
-								v-for="[month, _] of months"
+								v-for="[month, _unused] of months"
+								:key="Number(`${year}${month}`)"
 								:class="month == scrollState.month ? 'active': ''"
 								:data-scrolltarget="`#month-${year}-${month}`"
 								@click="datePickerSelect"
-								:key="Number(`${year}${month}`)">
-
+							>
 								{{ getMonthName(month) }}
 							</li>
 						</ol>
@@ -63,7 +71,7 @@
 				<ol class="filters">
 					<li>
 						<fa :icon="['fal', 'align-left']" />
-						<el-input placeholder="Text" v-model="filter.text" clearable />
+						<el-input v-model="filter.text" placeholder="Text" clearable />
 					</li>
 
 					<li>
@@ -74,22 +82,26 @@
 					<li>
 						<fa :icon="['fal', 'tags']" />
 						<el-select v-model="filter.tags" multiple filterable default-first-option placeholder="Choose tags">
-							<el-option v-for="item in store.top_tags" :key="item[0]" :label="item[0]" :value="item[0]" />
+							<el-option v-for="item in store.tags" :key="item[0]" :label="item[0]" :value="item[0]" />
 						</el-select>
 					</li>
 
 					<li>
 						<fa :icon="['fal', 'map-marked-alt']" />
 						<el-select v-model="filter.location" placeholder="Select location" filterable clearable>
-							<el-option label="" :value="null">Any</el-option>
-							<el-option v-for="item in store.top_locations" :key="item[0]" :label="item[0]" :value="item[0]" />
+							<el-option label="" :value="null">
+								Any
+							</el-option>
+							<el-option v-for="item in store.locations" :key="item[0]" :label="item[0]" :value="item[0]" />
 						</el-select>
 					</li>
 
 					<li>
 						<fa :icon="['fal', 'images']" />
 						<el-select v-model="filter.images" placeholder="Images" filterable clearable>
-							<el-option label="" :value="null">Any</el-option>
+							<el-option label="" :value="null">
+								Any
+							</el-option>
 							<el-option label="No images" :value="false" />
 							<el-option label="Has images" :value="true" />
 						</el-select>
@@ -149,7 +161,7 @@ const filteredPosts = computed(() => {
 		images: (post) => !!post.images.length === filter.images,
 	};
 
-	let filtered = _(store.posts_list)
+	let filtered = _(store.postsList)
 		.filter((x) => x.mood >= filter.mood[0] && x.mood <= filter.mood[1]);
 
 	for (const [cond, nfilter] of Object.entries(filters)) {

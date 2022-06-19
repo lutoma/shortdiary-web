@@ -2,23 +2,25 @@
 	<div class="stats">
 		<EqualHeightRow>
 			<el-col :span="8">
-				<PaginatedTableCard title="Frequent locations" icon="map-marked-alt" :data="top_locations">
+				<PaginatedTableCard title="Frequent locations" icon="map-marked-alt" :data="locations">
 					<el-table-column prop="0" label="Location" />
 					<el-table-column prop="1" width="70" align="right" label="Posts" />
 				</PaginatedTableCard>
 			</el-col>
 			<el-col :span="8">
-				<PaginatedTableCard title="Frequent mentions" icon="users" :data="top_mentions">
+				<PaginatedTableCard title="Frequent mentions" icon="users" :data="mentions">
 					<el-table-column prop="0" label="Name">
-						<template v-slot="scope">
-							<n-link :to="`/dashboard?filter=${scope.row[0]}`">{{ scope.row[0] }}</n-link>
+						<template #default="scope">
+							<n-link :to="`/dashboard?filter=${scope.row[0]}`">
+								{{ scope.row[0] }}
+							</n-link>
 						</template>
 					</el-table-column>
 					<el-table-column prop="1" width="70" align="right" label="Posts" />
 				</PaginatedTableCard>
 			</el-col>
 			<el-col :span="8">
-				<PaginatedTableCard title="Locations by mood" icon="chart-line" :data="top_mood_locations">
+				<PaginatedTableCard title="Locations by mood" icon="chart-line" :data="mood_locations">
 					<el-table-column prop="0" label="Name" />
 					<el-table-column prop="1" width="70" align="right" label="Mood" />
 				</PaginatedTableCard>
@@ -35,7 +37,7 @@
 import { mapState } from 'pinia';
 import { usePosts } from '@/stores/posts';
 import { CalendarHeatmap } from 'vue3-calendar-heatmap';
-import PostLengthChart from '@/components/PostLengthChart.js';
+import PostLengthChart from '@/components/PostLengthChart';
 import EqualHeightRow from '@/components/EqualHeightRow.vue';
 import PaginatedTableCard from '@/components/PaginatedTableCard.vue';
 import PostTimeline from '@/components/PostTimeline.vue';
@@ -58,19 +60,10 @@ export default {
 		store.load();
 	},
 
-	data() {
-		return {
-			top_locations_page: 1,
-			top_mentions_page: 1,
-			top_mood_locations_page: 1,
-			time_frame: 'all',
-		};
-	},
-
 	computed: {
-		...mapState(usePosts, ['posts', 'top_locations', 'top_mentions']),
+		...mapState(usePosts, ['posts', 'locations', 'mentions']),
 
-		top_mood_locations() {
+		mood_locations() {
 			return _(this.posts)
 				.filter('location_verbose')
 				.filter('mood')

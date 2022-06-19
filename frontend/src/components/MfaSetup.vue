@@ -1,6 +1,6 @@
 <template>
-	<div class="mfa-setup" v-loading="!config.methods.length">
-		<el-alert class="error" v-if="error" :title="error" :closable="false" type="error" />
+	<div v-loading="!config.methods.length" class="mfa-setup">
+		<el-alert v-if="error" class="error" :title="error" :closable="false" type="error" />
 
 		<template v-if="step === 'method_select'">
 			<p>Select a method:</p>
@@ -9,7 +9,9 @@
 				<el-select v-model="selected_method" placeholder="Select">
 					<el-option v-for="item in available_methods" :key="item[0]" :label="item[1]" :value="item[0]" />
 				</el-select>
-				<el-button type="primary" @click="selectMethod">Continue</el-button>
+				<el-button type="primary" @click="selectMethod">
+					Continue
+				</el-button>
 			</div>
 		</template>
 
@@ -17,23 +19,27 @@
 			<p>Please enter your phone number:</p>
 
 			<div class="input-group">
-				<el-input placeholder="Phone number" v-model="phone_number" />
-				<el-button type="primary" @click="addPhoneNumber">Confirm</el-button>
+				<el-input v-model="phone_number" placeholder="Phone number" />
+				<el-button type="primary" @click="addPhoneNumber">
+					Confirm
+				</el-button>
 			</div>
 		</template>
 
 		<div v-if="step === 'confirmation'">
 			<template v-if="selected_method == 'app'">
 				<p>Please scan the QR code with your mobile authenticator app, then enter the generated code below for confirmation.</p>
-				<qrcode-vue class="qr" :value="confirmation.qr_link" :size="175"></qrcode-vue>
+				<qrcode-vue class="qr" :value="confirmation.qr_link" :size="175" />
 			</template>
 			<template v-if="selected_method == 'sms'">
 				<p>Please enter the code you have received by text message</p>
 			</template>
 
 			<div class="input-group">
-				<el-input placeholder="Code" v-model="code" />
-				<el-button type="primary" @click="confirmMethod">Confirm</el-button>
+				<el-input v-model="code" placeholder="Code" />
+				<el-button type="primary" @click="confirmMethod">
+					Confirm
+				</el-button>
 			</div>
 		</div>
 	</div>

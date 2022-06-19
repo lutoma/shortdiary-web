@@ -1,6 +1,6 @@
 <template>
 	<div class="timeline">
-		<el-card id="new-post-overlay" v-if="editor_visible">
+		<el-card v-if="editor_visible" id="new-post-overlay">
 			<PostEditor />
 		</el-card>
 

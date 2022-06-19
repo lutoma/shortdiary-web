@@ -7,18 +7,12 @@
 <script>
 import { mapState } from 'pinia';
 import { usePosts } from '@/stores/posts';
-import PostLengthChart from '@/components/PostLengthChart.js';
-import EqualHeightRow from '@/components/EqualHeightRow.vue';
-import PaginatedTableCard from '@/components/PaginatedTableCard.vue';
 import Map from '@/components/Map';
 import _ from 'lodash';
 
 export default {
 	// layout: 'no-container',
 	components: {
-		PostLengthChart,
-		EqualHeightRow,
-		PaginatedTableCard,
 		Map,
 	},
 
@@ -27,17 +21,8 @@ export default {
 		store.load();
 	},
 
-	data() {
-		return {
-			top_locations_page: 1,
-			top_mentions_page: 1,
-			top_mood_locations_page: 1,
-			time_frame: 'all',
-		};
-	},
-
 	computed: {
-		...mapState(usePosts, ['posts', 'top_locations', 'top_mentions']),
+		...mapState(usePosts, ['posts', 'locations', 'mentions']),
 
 		top_mood_locations() {
 			return _(this.posts)
@@ -76,7 +61,7 @@ export default {
 			return geojson;
 		},
 
-	}
+	},
 };
 </script>
 

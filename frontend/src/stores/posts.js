@@ -10,20 +10,20 @@ export const usePosts = defineStore('post', {
 	state: () => {
 		return {
 			posts: new Map(),
-			top_mentions: [],
-			top_locations: [],
-			top_tags: [],
+			mentions: [],
+			locations: [],
+			tags: [],
 		};
 	},
 
 	getters: {
-		posts_list: (state) => [...state.posts.values()],
+		postsList: (state) => [...state.posts.values()],
 	},
 
 	actions: {
 		async load() {
 			const authStore = useAuth();
-			if (!authStore.master_key) {
+			if (!authStore.masterKey) {
 				return;
 			}
 
@@ -39,7 +39,7 @@ export const usePosts = defineStore('post', {
 					break;
 				case 1:
 					try {
-						postData = sodium.to_string(decrypt(authStore.master_key, cpost.nonce, cpost.data));
+						postData = sodium.to_string(decrypt(authStore.masterKey, cpost.nonce, cpost.data));
 					} catch (err) {
 						console.error(`Could not decrypt post ${cpost.id}: ${err.toString()}`);
 						ElNotification({
@@ -73,7 +73,7 @@ export const usePosts = defineStore('post', {
 				mentions.push(...[...new Set(post.text.toLowerCase().match(/@\w+\b/g))]);
 			}
 
-			this.top_mentions = _(mentions)
+			this.mentions = _(mentions)
 				.countBy()
 				.toPairs()
 				.sortBy(1)
@@ -81,7 +81,7 @@ export const usePosts = defineStore('post', {
 				.value();
 
 			const postsList = [...posts.values()];
-			this.top_locations = _(postsList)
+			this.locations = _(postsList)
 				.filter('location_verbose')
 				.countBy('location_verbose')
 				.toPairs()
@@ -89,7 +89,7 @@ export const usePosts = defineStore('post', {
 				.reverse()
 				.value();
 
-			this.top_tags = _(postsList)
+			this.tags = _(postsList)
 				.map('tags')
 				.flatten()
 				.countBy()
@@ -112,7 +112,7 @@ export const usePosts = defineStore('post', {
 		async store_post(post) {
 			const jsonData = JSON.stringify(post);
 			const authStore = useAuth();
-			const [nonce, data] = encrypt(authStore.master_key, sodium.from_string(jsonData));
+			const [nonce, data] = encrypt(authStore.masterKey, sodium.from_string(jsonData));
 
 			const envelope = {
 				nonce,
