@@ -114,40 +114,18 @@
 
 <script setup>
 import {
-	ref, reactive, computed, onUpdated, watch,
+	ref, reactive, computed, onUpdated,
 } from 'vue';
-import { useRoute } from 'vue-router';
 import { usePosts } from '@/stores/posts';
+import { useQuery } from '@oarepo/vue-query-synchronizer';
 import Post from '@/components/Post.vue';
 import _ from 'lodash';
 
 const store = usePosts();
-const route = useRoute();
+const filter = useQuery();
 store.load();
 
-const filter = reactive({
-	text: route.query.filter || '',
-	public: null,
-	mood: [1, 10],
-	tags: [],
-	location: null,
-	images: null,
-});
-
 const visiblePosts = ref(10);
-
-// Watch for route changes since the component query parameters can
-// change when a user clicks on a @mention in a post (appending
-// ?filter=@mention etc. to the URL).
-watch(route, async (to, _) => {
-	filter.text = to.query.filter || '';
-});
-
-watch(filter, async (_new, _old) => {
-	window.scrollTo({ top: 0, left: 0 });
-	visiblePosts.value = 10;
-});
-
 const filteredPosts = computed(() => {
 	// Filter definitions. The object key defines the field in
 	// filter that will be checked to see if filtering is
@@ -155,19 +133,18 @@ const filteredPosts = computed(() => {
 	// passed to .filter
 	const filters = {
 		text: (post) => post.text.toLowerCase().includes(filter.text.toLowerCase()),
-		public: { public: filter.public },
 		tags: (post) => post.tags.some((tag) => filter.tags.includes(tag)),
 		location: { location_verbose: filter.location },
 		images: (post) => !!post.images.length === filter.images,
 	};
 
 	let filtered = _(store.postsList)
-		.filter((x) => x.mood >= filter.mood[0] && x.mood <= filter.mood[1]);
+		.filter((x) => x.mood >= Number(filter.mood[0]) && x.mood <= Number(filter.mood[1]));
 
 	for (const [cond, nfilter] of Object.entries(filters)) {
 		const value = filter[cond];
 
-		if (value !== null && value !== '' && (typeof value !== 'object' || value.length)) {
+		if (value !== '' && value !== 'null' && (typeof value !== 'object' || value.length)) {
 			filtered = filtered.filter(nfilter);
 		}
 	}

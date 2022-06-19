@@ -28,6 +28,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import QuerySynchronizer from '@oarepo/vue-query-synchronizer';
 import sodium from 'libsodium-wrappers';
 import App from './App.vue';
 import router from './router';
@@ -50,8 +51,10 @@ await sodium.ready;
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
+
 createApp(App)
 	.component('fa', FontAwesomeIcon)
 	.use(pinia)
 	.use(router)
+	.use(QuerySynchronizer, { router: router })
 	.mount('#app');

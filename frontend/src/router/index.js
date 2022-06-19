@@ -23,6 +23,15 @@ const router = createRouter({
 			path: '/posts',
 			name: 'timeline',
 			component: TimelineView,
+			meta: {
+				query: {
+					text: 'string:',
+					mood: 'commaarray:1,10',
+					tags: 'commaarray:',
+					location: 'string:',
+					images: 'string:',
+				},
+			},
 		},
 		{
 			path: '/posts/:id/edit',

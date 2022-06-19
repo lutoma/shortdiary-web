@@ -96,7 +96,7 @@ function PostTextComponent() {
 	// Now replace mentions and newlines with html elements/router-link components
 	split = split.map((x) => {
 		if (x[0] === '@') {
-			return h(RouterLink, { to: { name: 'timeline', query: { filter: x } } }, x);
+			return h(RouterLink, { to: { name: 'timeline', query: { text: x } } }, x);
 		}
 
 		if (x === '\n') {
