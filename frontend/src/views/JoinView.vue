@@ -2,17 +2,17 @@
 	<div class="login">
 		<h1>Join shortdiary</h1>
 
-		<el-form ref="signup_form" :model="user" :rules="rules" label-width="100px">
+		<el-form ref="signupFormElement" :model="user" :rules="rules" label-width="100px">
 			<el-form-item v-if="error">
 				<el-alert :title="error" :closable="false" type="error" />
 			</el-form-item>
 
 			<el-form-item label="Username" prop="name">
-				<el-input ref="name" placeholder="Username" v-model="user.name" @keyup.enter="signup" required autofocus />
+				<el-input ref="nameElement" placeholder="Username" v-model="user.name" @keyup.enter="signup" required autofocus />
 			</el-form-item>
 
 			<el-form-item label="Email" prop="email">
-				<el-input placeholder="Email" v-model="user.email" @keyup.enter="signup" required autofocus />
+				<el-input placeholder="Email" v-model="user.email" @keyup.enter="signup" required />
 			</el-form-item>
 
 			<el-form-item label="Password" prop="password">
@@ -38,71 +38,63 @@
 	</div>
 </template>
 
-<script>
-import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
+<script setup>
+import { ref, reactive, onMounted } from 'vue';
 import { useAuth } from '@/stores/auth';
+import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
 
-export default {
-	components: {
-		VueHcaptcha,
-	},
+const nameElement = ref(null);
+onMounted(() => {
+	nameElement.value.$el.children[0].children[0].focus();
+});
 
-	mounted() {
-		this.$refs.name.$el.children[0].focus();
-	},
+const loading = ref(false);
+const error = ref(null);
+const user = reactive({
+	name: '',
+	email: '',
+	password: '',
+	captcha: '',
+});
 
-	data() {
-		return {
-			loading: false,
-			error: null,
-			user: {
-				name: '',
-				email: '',
-				password: '',
-				captcha: '',
-			},
-			rules: {
-				name: [{ required: true, message: 'Please enter a username', trigger: 'change' }],
-				email: [{
-					required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'change',
-				}],
-				password: [{ required: true, message: 'Please enter a password', trigger: 'change' }],
-			},
-		};
-	},
-
-	methods: {
-		async captcha_verified(token, ekey) {
-			this.user.captcha = token;
-			this.loading = true;
-			const auth_store = useAuth();
-
-			await auth_store.signup(this.user);
-			this.loading = false;
-
-			/*
-			try {
-				await auth_store.signup(this.user);
-			} catch (err) {
-				this.error = err.response.data
-			} finally {
-				this.loading = false
-			}
-			*/
-		},
-
-		signup() {
-			this.error = null;
-
-			this.$refs.signup_form.validate((valid) => {
-				if (valid) {
-					this.captcha_verified();
-					// this.$refs.captcha.execute()
-				}
-			});
-		},
-	},
+const rules = {
+	name: [{ required: true, message: 'Please enter a username', trigger: 'change' }],
+	password: [{ required: true, message: 'Please enter a password', trigger: 'change' }],
+	email: [{
+		required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'change',
+	}],
 };
+
+async function captchaVerified(token, _ekey) {
+	user.captcha = token;
+	loading.value = true;
+	const auth = useAuth();
+
+	await auth.signup(user);
+	loading.value = false;
+
+	/*
+	try {
+		await auth_store.signup(user);
+	} catch (err) {
+		error.value = err.response.data
+	} finally {
+		loading.value = false
+	}
+	*/
+}
+
+const signupFormElement = ref(null);
+function signup() {
+	error.value = null;
+
+	signupFormElement.value.validate((valid) => {
+		if (valid) {
+			captchaVerified();
+			// this.$refs.captcha.execute()
+		}
+	});
+}
 </script>
 
 <style lang="scss">

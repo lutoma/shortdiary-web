@@ -1,16 +1,16 @@
 <template>
 	<div class="post-timeline">
-		<div class="posts" v-loading="!posts.size">
-			<template v-if="!posts.size">
+		<div class="posts" v-loading="!store.posts.size">
+			<template v-if="!store.posts.size">
 				&nbsp;
 			</template>
 
-			<template v-if="posts.size && !grouped_posts.length">
+			<template v-if="store.posts.size && !groupedPosts.length">
 				<h2>Could not find any posts matching your filters.</h2>
 			</template>
 
 			<section
-				v-for="[year, months] of grouped_posts"
+				v-for="[year, months] of groupedPosts"
 				:key="Number(year)"
 				:id="`year-${year}`">
 
@@ -30,7 +30,7 @@
 							<h3>{{ post.date.split('-')[2] }}</h3>
 							<div class="weekday">{{ new Date(post.date).toLocaleString('en',  { weekday: 'long' }) }}</div>
 						</div>
-						<Post ref="posts" :post="post" :show-date="false" @deleted="loadPosts()" />
+						<Post ref="postElements" :post="post" :show-date="false" />
 					</div>
 				</section>
 			</section>
@@ -40,15 +40,15 @@
 			<div>
 				<ol class="datepicker">
 					<li
-						v-for="[year, months] of datepicker_values"
-						:class="year == scroll_state.year ? 'active': ''" :key="Number(year)">
+						v-for="[year, months] of datepickerValues"
+						:class="year == scrollState.year ? 'active': ''" :key="Number(year)">
 
 						<div @click="datePickerSelect" :data-scrolltarget="`#year-${year}`">{{ year }}</div>
 
-						<ol v-show="year == scroll_state.year">
+						<ol v-show="year == scrollState.year">
 							<li
 								v-for="[month, _] of months"
-								:class="month == scroll_state.month ? 'active': ''"
+								:class="month == scrollState.month ? 'active': ''"
 								:data-scrolltarget="`#month-${year}-${month}`"
 								@click="datePickerSelect"
 								:key="Number(`${year}${month}`)">
@@ -74,7 +74,7 @@
 					<li>
 						<fa :icon="['fal', 'tags']" />
 						<el-select v-model="filter.tags" multiple filterable default-first-option placeholder="Choose tags">
-							<el-option v-for="item in top_tags" :key="item[0]" :label="item[0]" :value="item[0]" />
+							<el-option v-for="item in store.top_tags" :key="item[0]" :label="item[0]" :value="item[0]" />
 						</el-select>
 					</li>
 
@@ -82,7 +82,7 @@
 						<fa :icon="['fal', 'map-marked-alt']" />
 						<el-select v-model="filter.location" placeholder="Select location" filterable clearable>
 							<el-option label="" :value="null">Any</el-option>
-							<el-option v-for="item in top_locations" :key="item[0]" :label="item[0]" :value="item[0]" />
+							<el-option v-for="item in store.top_locations" :key="item[0]" :label="item[0]" :value="item[0]" />
 						</el-select>
 					</li>
 
@@ -100,219 +100,197 @@
 	</div>
 </template>
 
-<script>
-import { mapState } from 'pinia';
+<script setup>
+import {
+	ref, reactive, computed, onUpdated, watch,
+} from 'vue';
+import { useRoute } from 'vue-router';
 import { usePosts } from '@/stores/posts';
 import Post from '@/components/Post.vue';
 import _ from 'lodash';
 
-export default {
-	components: {
-		Post,
-	},
+const store = usePosts();
+const route = useRoute();
+store.load();
 
-	setup() {
-		const store = usePosts();
-		store.load();
-	},
+const filter = reactive({
+	text: route.query.filter || '',
+	public: null,
+	mood: [1, 10],
+	tags: [],
+	location: null,
+	images: null,
+});
 
-	data() {
-		return {
-			infinite_scroll: {
-				observer: null,
-				state: false,
-			},
+const visiblePosts = ref(10);
 
-			scroll_state: {
-				observer_els: {},
-				year: null,
-				month: null,
-			},
+// Watch for route changes since the component query parameters can
+// change when a user clicks on a @mention in a post (appending
+// ?filter=@mention etc. to the URL).
+watch(route, async (to, _) => {
+	filter.text = to.query.filter || '';
+});
 
-			filter: {
-				text: this.$route.query.filter || '',
-				public: null,
-				mood: [1, 10],
-				tags: [],
-				location: null,
-				images: null,
-			},
+watch(filter, async (_new, _old) => {
+	window.scrollTo({ top: 0, left: 0 });
+	visiblePosts.value = 10;
+});
 
-			visible_posts: 10,
-		};
-	},
+const filteredPosts = computed(() => {
+	// Filter definitions. The object key defines the field in
+	// filter that will be checked to see if filtering is
+	// necessary, the value contains the function or object that gets
+	// passed to .filter
+	const filters = {
+		text: (post) => post.text.toLowerCase().includes(filter.text.toLowerCase()),
+		public: { public: filter.public },
+		tags: (post) => post.tags.some((tag) => filter.tags.includes(tag)),
+		location: { location_verbose: filter.location },
+		images: (post) => !!post.images.length === filter.images,
+	};
 
-	computed: {
-		...mapState(usePosts, ['posts', 'posts_list', 'top_tags', 'top_locations']),
+	let filtered = _(store.posts_list)
+		.filter((x) => x.mood >= filter.mood[0] && x.mood <= filter.mood[1]);
 
-		filtered_posts() {
-			// Filter definitions. The object key defines the field in
-			// this.filter that will be checked to see if filtering is
-			// necessary, the value contains the function or object that gets
-			// passed to .filter
-			const filters = {
-				text: (post) => post.text.toLowerCase().includes(this.filter.text.toLowerCase()),
-				public: { public: this.filter.public },
-				tags: (post) => post.tags.some((tag) => this.filter.tags.includes(tag)),
-				location: { location_verbose: this.filter.location },
-				images: (post) => !!post.images.length === this.filter.images,
-			};
+	for (const [cond, nfilter] of Object.entries(filters)) {
+		const value = filter[cond];
 
-			let filtered = _(this.posts_list)
-				.filter((x) => x.mood >= this.filter.mood[0] && x.mood <= this.filter.mood[1]);
+		if (value !== null && value !== '' && (typeof value !== 'object' || value.length)) {
+			filtered = filtered.filter(nfilter);
+		}
+	}
 
-			for (const [cond, filter] of Object.entries(filters)) {
-				const value = this.filter[cond];
+	return filtered;
+});
 
-				if (value !== null && value !== '' && (typeof value !== 'object' || value.length)) {
-					filtered = filtered.filter(filter);
-				}
-			}
-
-			return filtered;
-		},
-
-		grouped_posts() {
-			// Group the filtered posts into years and months for display
-			return this.filtered_posts
-				.slice(0, this.visible_posts)
-				.groupBy((x) => x.date.split('-')[0])
+const groupedPosts = computed(() => {
+	// Group the filtered posts into years and months for display
+	return filteredPosts.value
+		.slice(0, visiblePosts.value)
+		.groupBy((x) => x.date.split('-')[0])
+		.toPairs()
+		.reverse()
+		.map((x) => {
+			const mposts = _(x[1])
+				.groupBy((y) => y.date.split('-')[1])
 				.toPairs()
-				.reverse()
-				.map((x) => {
-					const mposts = _(x[1])
-						.groupBy((y) => y.date.split('-')[1])
-						.toPairs()
-						.orderBy((p) => p[0], 'desc')
-						.value();
-
-					return [x[0], mposts];
-				})
+				.orderBy((p) => p[0], 'desc')
 				.value();
-		},
 
-		datepicker_values() {
-			// Essentially the same as grouped_posts, but without the slicing
-			// for infinite loading. It would be much nicer to deduplicate
-			// this somehow, but slicing after grouping is nontrivial.
+			return [x[0], mposts];
+		})
+		.value();
+});
 
-			return this.filtered_posts
-				.groupBy((x) => x.date.split('-')[0])
+const datepickerValues = computed(() => {
+	// Essentially the same as groupedPosts, but without the slicing
+	// for infinite loading. It would be much nicer to deduplicate
+	// this somehow, but slicing after grouping is nontrivial.
+
+	return filteredPosts.value
+		.groupBy((x) => x.date.split('-')[0])
+		.toPairs()
+		.reverse()
+		.map((x) => {
+			const mposts = _(x[1])
+				.groupBy((y) => y.date.split('-')[1])
 				.toPairs()
-				.reverse()
-				.map((x) => {
-					const mposts = _(x[1])
-						.groupBy((y) => y.date.split('-')[1])
-						.toPairs()
-						.orderBy((p) => p[0], 'desc')
-						.value();
-
-					return [x[0], mposts];
-				})
+				.orderBy((p) => p[0], 'desc')
 				.value();
-		},
-	},
 
-	methods: {
-		async loadPosts() {
-			const store = usePosts();
-			store.load();
-		},
+			return [x[0], mposts];
+		})
+		.value();
+});
 
-		getMonthName(num) {
-			const date = new Date();
-			date.setMonth(num - 1);
-			return date.toLocaleString('en', { month: 'long' });
-		},
+const infiniteScroll = reactive({
+	observer: null,
+	state: false,
+});
 
-		datePickerSelect(event) {
-			const dest = document.querySelector(event.target.dataset.scrolltarget);
+const scrollState = reactive({
+	observer_els: {},
+	year: null,
+	month: null,
+});
 
-			// Cannot use ScrollIntoView here due to the abolute positioned
-			// navbar that would cover up the heading
-			if (dest) {
-				window.scrollTo({ top: dest.offsetTop, left: 0, behavior: 'smooth' });
-			}
-		},
+const postElements = ref();
+function updateInfiniteScrollObserver() {
+	infiniteScroll.observer.disconnect();
+	const els = postElements.value;
 
-		updateInfiniteScrollObserver() {
-			this.infinite_scroll.observer.disconnect();
-			this.infinite_scroll.observer.observe(this.$refs.posts.slice(-1)[0].$el);
-		},
+	if (els && els.length) {
+		infiniteScroll.observer.observe(els.slice(-1)[0].$el);
+	}
+}
 
-		infiniteScrollCallback(update, _) {
-			const newState = update[0].isIntersecting;
-			if (!this.infinite_scroll.state && newState) {
-				this.infinite_scroll.state = true;
-				this.visible_posts += 10;
-				this.updateInfiniteScrollObserver();
-			} else {
-				this.infinite_scroll.state = newState;
-			}
-		},
+function infiniteScrollCallback(update, _) {
+	const newState = update[0].isIntersecting;
+	if (!infiniteScroll.state && newState) {
+		infiniteScroll.state = true;
+		visiblePosts.value += 10;
+		updateInfiniteScrollObserver();
+	} else {
+		infiniteScroll.state = newState;
+	}
+}
 
-		intersectionCallback(update, _unused) {
-			// Handle IntersectionObserver callbacks. We need to store state
-			// here to account for situations where two elements are visible at
-			// once, and then later one of those goes out of view. The update
-			// event in these cases will only list the element that has gone
-			// out of view, but not the one that remains visible.
+function intersectionCallback(update, _unused) {
+	// Handle IntersectionObserver callbacks. We need to store state
+	// here to account for situations where two elements are visible at
+	// once, and then later one of those goes out of view. The update
+	// event in these cases will only list the element that has gone
+	// out of view, but not the one that remains visible.
 
-			// Turn into an Object for easier deduplication
-			Object.assign(this.scroll_state.observer_els, _.keyBy(update, 'target.id'));
+	// Turn into an Object for easier deduplication
+	Object.assign(scrollState.observer_els, _.keyBy(update, 'target.id'));
 
-			const entries = Object.values(this.scroll_state.observer_els)
-				.filter((x) => x.isIntersecting);
+	const entries = Object.values(scrollState.observer_els)
+		.filter((x) => x.isIntersecting);
 
-			if (entries && entries.length) {
-				this.scroll_state.year = entries[0].target.dataset.year;
-				this.scroll_state.month = entries[0].target.dataset.month;
-			}
-		},
-	},
+	if (entries && entries.length) {
+		scrollState.year = entries[0].target.dataset.year;
+		scrollState.month = entries[0].target.dataset.month;
+	}
+}
 
-	updated() {
-		this.$nextTick(() => {
-			// Set up IntersectionObserver for infinite scrolling
-			this.infinite_scroll.observer = new IntersectionObserver(this.infiniteScrollCallback);
-			this.updateInfiniteScrollObserver();
+const monthContainer = ref();
+onUpdated(() => {
+	// Set up IntersectionObserver for infinite scrolling
+	infiniteScroll.observer = new IntersectionObserver(infiniteScrollCallback);
+	updateInfiniteScrollObserver();
 
-			// Set up IntersectionObserver for datepicker
-			const elements = this.$refs.monthContainer;
-			if (!elements) {
-				return;
-			}
+	// Set up IntersectionObserver for datepicker
+	const elements = monthContainer.value;
+	if (!elements) {
+		return;
+	}
 
-			const observer = new IntersectionObserver(this.intersectionCallback, {
-				rootMargin: '-20% 0px 0px 0px',
-				// threshold: [0, 0.25, 0.5, 0.75, 1]
-			});
+	const observer = new IntersectionObserver(intersectionCallback, {
+		rootMargin: '-20% 0px 0px 0px',
+		// threshold: [0, 0.25, 0.5, 0.75, 1]
+	});
 
-			for (const el of elements) {
-				observer.observe(el);
-			}
-		});
-	},
+	for (const el of elements) {
+		observer.observe(el);
+	}
+});
 
-	watch: {
-		// Watch for route changes since the component query parameters can
-		// change when a user clicks on a @mention in a post (appending
-		// ?filter=@mention etc. to the URL).
-		$route(to, _) {
-			this.filter.text = to.query.filter || '';
-		},
+function getMonthName(num) {
+	const date = new Date();
+	date.setMonth(num - 1);
+	return date.toLocaleString('en', { month: 'long' });
+}
 
-		// Reset infinite scrolling and scroll back to top on filter
-		filter: {
-			deep: true,
+function datePickerSelect(event) {
+	const dest = document.querySelector(event.target.dataset.scrolltarget);
 
-			handler(_) {
-				window.scrollTo({ top: 0, left: 0 });
-				this.visible_posts = 10;
-			},
-		},
-	},
-};
+	// Cannot use ScrollIntoView here due to the abolute positioned
+	// navbar that would cover up the heading
+	if (dest) {
+		window.scrollTo({ top: dest.offsetTop, left: 0, behavior: 'smooth' });
+	}
+}
 </script>
 
 <style lang="scss">

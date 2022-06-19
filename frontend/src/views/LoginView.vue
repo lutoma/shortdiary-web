@@ -1,15 +1,15 @@
 <template>
 	<div class="login">
-		<template v-if="!mfa_request.method">
+		<template v-if="!mfaRequest.method">
 			<h1>Sign in</h1>
 
-			<el-form ref="login_form" :model="credentials" :rules="rules" label-width="100px" v-if="!mfa_request.method">
+			<el-form ref="loginFormElement" :model="credentials" :rules="rules" label-width="100px" v-if="!mfaRequest.method">
 				<el-form-item>
 					<el-alert v-if="error" :title="error" :closable="false" type="error" />
 				</el-form-item>
 
 				<el-form-item label="Username" prop="username">
-					<el-input ref="username" placeholder="Username" v-model="credentials.username" @keyup.enter="login" required autofocus />
+					<el-input ref="nameElement" placeholder="Username" v-model="credentials.username" @keyup.enter="login" required autofocus />
 				</el-form-item>
 				<el-form-item label="Password" prop="password">
 					<el-input placeholder="Password" v-model="credentials.password" @keyup.enter="login" show-password required />
@@ -20,16 +20,16 @@
 			</el-form>
 		</template>
 
-		<template v-if="mfa_request.method">
+		<template v-if="mfaRequest.method">
 			<h1>Two-factor authentication</h1>
 
-			<p v-if="mfa_request.method == 'app'">Please enter the code from your token generator.</p>
-			<el-form ref="mfa_form" :model="mfa_request" :rules="mfa_rules" label-width="100px">
+			<p v-if="mfaRequest.method == 'app'">Please enter the code from your token generator.</p>
+			<el-form ref="mfa_form" :model="mfaRequest" :rules="mfaRules" label-width="100px">
 				<el-form-item>
 					<el-alert v-if="error" :title="error" :closable="false" type="error" />
 				</el-form-item>
 				<el-form-item label="Code" prop="code">
-					<el-input ref="code" placeholder="Code" v-model="mfa_request.code" @keyup.enter="mfaConfirm" required autofocus />
+					<el-input ref="code" placeholder="Code" v-model="mfaRequest.code" @keyup.enter="mfaConfirm" required autofocus />
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="mfaConfirm" v-model:loading="loading"><fa :icon="['far', 'sign-in']" /> Confirm sign-in</el-button>
@@ -39,81 +39,81 @@
 	</div>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive, onMounted } from 'vue';
 import { useAuth } from '@/stores/auth';
+import { useRouter } from 'vue-router';
 
-export default {
-	mounted() {
-		this.$refs.username.$el.children[0].focus();
-	},
+const store = useAuth();
+const router = useRouter();
 
-	data() {
-		return {
-			loading: false,
-			error: null,
+const nameElement = ref(null);
+onMounted(() => {
+	nameElement.value.$el.children[0].children[0].focus();
+});
 
-			credentials: {
-				username: '',
-				password: '',
-			},
-			rules: {
-				username: [{ required: true, message: 'Please enter a username', trigger: 'change' }],
-				password: [{ required: true, message: 'Please enter a password', trigger: 'change' }],
-			},
+const loading = ref(false);
+const error = ref(null);
+const credentials = reactive({
+	username: '',
+	password: '',
+});
 
-			mfa_rules: {
-				code: [{ required: true, message: 'Please enter the authentication code', trigger: 'change' }],
-			},
-			mfa_request: {
-				code: '',
-				ephemeral_token: '',
-				method: '',
-			},
-		};
-	},
-
-	methods: {
-		login() {
-			this.error = null;
-
-			this.$refs.login_form.validate(async (valid) => {
-				if (valid) {
-					this.loading = true;
-					const store = useAuth();
-
-					try {
-						await store.login(this.credentials.username, this.credentials.password);
-						this.$router.push({ name: 'dashboard' });
-					} catch (err) {
-						this.error = err.toString();
-					} finally {
-						this.loading = false;
-					}
-				}
-			});
-		},
-
-		mfaConfirm() {
-			this.error = null;
-
-			this.$refs.mfa_form.validate(async (valid) => {
-				if (valid) {
-					this.loading = true;
-
-					try {
-						const res = await this.$axios.$post('/auth/login/code/', this.mfa_request);
-						this.$auth.setUserToken(res.access, res.refresh);
-						this.$router.push({ name: 'dashboard' });
-					} catch (err) {
-						this.error = err.response.data.non_field_errors[0];
-					} finally {
-						this.loading = false;
-					}
-				}
-			});
-		},
-	},
+const rules = {
+	username: [{ required: true, message: 'Please enter a username', trigger: 'change' }],
+	password: [{ required: true, message: 'Please enter a password', trigger: 'change' }],
 };
+
+const mfaRules = {
+	code: [{ required: true, message: 'Please enter the authentication code', trigger: 'change' }],
+};
+
+const mfaRequest = reactive({
+	code: '',
+	ephemeral_token: '',
+	method: '',
+});
+
+const loginFormElement = ref(null);
+function login() {
+	error.value = null;
+
+	loginFormElement.value.validate(async (valid) => {
+		if (valid) {
+			loading.value = true;
+
+			try {
+				await store.login(credentials.username, credentials.password);
+				router.push({ name: 'dashboard' });
+			} catch (err) {
+				error.value = err.toString();
+			} finally {
+				loading.value = false;
+			}
+		}
+	});
+}
+
+function mfaConfirm() {
+	error.value = null;
+/*
+	$refs.mfa_form.validate(async (valid) => {
+		if (valid) {
+			loading.value = true;
+
+			try {
+				const res = await $axios.$post('/auth/login/code/', mfaRequest);
+				$auth.setUserToken(res.access, res.refresh);
+				$router.push({ name: 'dashboard' });
+			} catch (err) {
+				error.value = err.response.data.non_field_errors[0];
+			} finally {
+				loading.value = false;
+			}
+		}
+	});
+*/
+}
 </script>
 
 <style lang="scss">

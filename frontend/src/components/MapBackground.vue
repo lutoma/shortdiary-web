@@ -4,18 +4,10 @@
 	</div>
 </template>
 
-<script>
-import Map from '@/components/Map.js';
+<script setup>
+import Map from '@/components/Map';
 
-export default {
-	components: {
-		Map,
-	},
-
-	props: {
-		center: { type: Array, default: () => [8.4320361, 49.5001306] },
-	},
-};
+defineProps({ center: { type: Array, default: () => [8.4320361, 49.5001306] } });
 </script>
 
 <style lang="scss">

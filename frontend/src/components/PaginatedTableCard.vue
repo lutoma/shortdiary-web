@@ -1,28 +1,24 @@
 <template>
 	<el-card class="paginated-table-card">
 		<h2 v-if="title"><fa v-if="icon" :icon="['fal', icon]" /> {{ title }}</h2>
-		<el-table :data="data.slice((current_page - 1) * pageSize, current_page * pageSize)" stripe>
+		<el-table :data="data.slice((currentPage - 1) * pageSize, currentPage * pageSize)" stripe>
 			<slot />
 		</el-table>
-		<el-pagination layout="prev, pager, next" :total="data.length" :page-size="pageSize" v-model:current-page="current_page" />
+		<el-pagination layout="prev, pager, next" :total="data.length" :page-size="pageSize" v-model:current-page="currentPage" />
 	</el-card>
 </template>
 
-<script>
-export default {
-	props: {
-		icon: { type: String, default: null },
-		title: { type: String, default: null },
-		data: { type: Array, required: true },
-		pageSize: { type: Number, default: 10 },
-	},
+<script setup>
+import { ref } from 'vue';
 
-	data() {
-		return {
-			current_page: 1,
-		};
-	},
-};
+defineProps({
+	icon: { type: String, default: null },
+	title: { type: String, default: null },
+	data: { type: Array, required: true },
+	pageSize: { type: Number, default: 10 },
+});
+
+const currentPage = ref(1);
 </script>
 
 <style lang="scss">

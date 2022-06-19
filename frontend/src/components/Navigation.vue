@@ -1,9 +1,9 @@
 <template>
 	<div class="main-nav-container">
 		<nav>
-			<div class="name"><router-link :to="logged_in ? '/dashboard' : '/'">shortdiary</router-link></div>
+			<div class="name"><router-link :to="auth.logged_in ? '/dashboard' : '/'">shortdiary</router-link></div>
 			<el-menu :default-active="$route.name" mode="horizontal" class="main-nav" @select="navSelect" :ellipsis="false">
-				<el-menu-item v-for="item of nav_items" :key="item.name" :index="item.name">
+				<el-menu-item v-for="item of navItems" :key="item.name" :index="item.name">
 					<fa v-if="item.icon" :icon="['far', item.icon]" /> {{ item.label }}
 				</el-menu-item>
 			</el-menu>
@@ -11,15 +11,15 @@
 			<el-menu mode="horizontal" @select="navSelect" :ellipsis="false">
 				<el-sub-menu popper-class="sub-menu-right">
 					<template #title>
-						<template v-if="logged_in">
-							<GravatarImg :email="email" :size="25" class="nav-avatar" /> {{ name }}
+						<template v-if="auth.logged_in">
+							<GravatarImg :email="auth.email" :size="25" class="nav-avatar" /> {{ auth.name }}
 						</template>
 						<template v-else>
 							Legal
 						</template>
 					</template>
 
-					<template v-if="logged_in">
+					<template v-if="auth.logged_in">
 						<el-menu-item index="settings"><fa :icon="['far', 'wrench']" /> <span>Settings</span></el-menu-item>
 						<el-menu-item index="logout"><fa :icon="['far', 'sign-out']" /> <span>Sign out</span></el-menu-item>
 					</template>
@@ -35,57 +35,48 @@
 	</div>
 </template>
 
-<script>
-import GravatarImg from '@/components/GravatarImg.vue';
-import { mapState } from 'pinia';
+<script setup>
+import { computed } from 'vue';
 import { useAuth } from '@/stores/auth';
+import { useRouter } from 'vue-router';
+import GravatarImg from '@/components/GravatarImg.vue';
 
-export default {
-	components: {
-		GravatarImg,
-	},
+const auth = useAuth();
+const router = useRouter();
 
-	methods: {
-		navSelect(name, _) {
-			if (!name) {
-				return;
-			}
+const navItems = computed(() => {
+	let items;
 
-			if (name === 'logout') {
-				const store = useAuth();
-				store.logout();
-				this.$router.push({ name: 'login' });
-			} else {
-				this.$router.push({ name });
-			}
-		},
+	if (auth.logged_in) {
+		items = [
+			{ name: 'dashboard', label: 'Dashboard', icon: 'house' },
+			{ name: 'timeline', label: 'Entries', icon: 'list' },
+			{ name: 'new-post', label: 'New entry', icon: 'pencil' },
+			{ name: 'people', label: 'People', icon: 'users' },
+			{ name: 'locations', label: 'Locations', icon: 'map-marked-alt' },
+		];
+	} else {
+		items = [
+			{ name: 'login', label: 'Sign in', icon: 'sign-in' },
+			{ name: 'join', label: 'Join', icon: 'user-friends' },
+		];
+	}
 
-	},
-	computed: {
-		...mapState(useAuth, ['logged_in', 'name', 'email']),
+	return items;
+});
 
-		nav_items() {
-			let items;
+function navSelect(name, _) {
+	if (!name) {
+		return;
+	}
 
-			if (this.logged_in) {
-				items = [
-					{ name: 'dashboard', label: 'Dashboard', icon: 'house' },
-					{ name: 'timeline', label: 'Entries', icon: 'list' },
-					{ name: 'new-post', label: 'New entry', icon: 'pencil' },
-					{ name: 'people', label: 'People', icon: 'users' },
-					{ name: 'locations', label: 'Locations', icon: 'map-marked-alt' },
-				];
-			} else {
-				items = [
-					{ name: 'login', label: 'Sign in', icon: 'sign-in' },
-					{ name: 'join', label: 'Join', icon: 'user-friends' },
-				];
-			}
-
-			return items;
-		},
-	},
-};
+	if (name === 'logout') {
+		auth.logout();
+		router.push({ name: 'login' });
+	} else {
+		router.push({ name });
+	}
+}
 </script>
 
 <style lang="scss">

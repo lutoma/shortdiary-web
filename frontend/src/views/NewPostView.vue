@@ -5,14 +5,8 @@
 	</div>
 </template>
 
-<script>
+<script setup>
 import PostEditor from '@/components/PostEditor.vue';
-
-export default {
-	components: {
-		PostEditor,
-	},
-};
 </script>
 
 <style lang="scss">
