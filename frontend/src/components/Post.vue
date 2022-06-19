@@ -11,7 +11,7 @@
 
 			<div class="right" v-if="editable">
 				<router-link :to="{ name: 'edit-post', params: { id: post.id } }"><el-button class="edit-button" type="text"><fa :icon="['fal', 'pencil']" /> Edit</el-button></router-link>
-				<el-popconfirm @confirm="do_delete" title="Are you sure you want to delete this entry?">
+				<el-popconfirm @confirm="doDelete" title="Are you sure you want to delete this entry?">
 					<template #reference>
 						<el-button class="delete-button" type="text"><fa :icon="['fal', 'trash']" /> Delete</el-button>
 					</template>
@@ -19,8 +19,7 @@
 			</div>
 		</template>
 
-		<!--<component class="text" v-bind:is="PostTextComponent" />-->
-		<div class="text">{{ post.text }}</div>
+		<PostTextComponent class="text" :text="post.text" />
 
 		<CoolLightBox
 			v-if="this.post.images"
@@ -50,69 +49,48 @@
 	</el-card>
 </template>
 
-<script>
+<script setup>
 import MoodIndicatorIcon from '@/components/MoodIndicatorIcon.vue';
 import CoolLightBox from 'vue-cool-lightbox';
 import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css';
-import { defineAsyncComponent } from 'vue';
 import { usePosts } from '@/stores/posts';
+import { reactive, computed, h } from 'vue';
+import { RouterLink } from 'vue-router';
 
-const LocalComponent = defineAsyncComponent(
-	() => new Promise((resolve) => {
-		resolve({
-			template: `
-			<h2>
-			This is a local component defined as async!
-			</h2>
-		`,
-		});
-	}),
-);
+const props = defineProps({
+	post: { type: Object, default: () => {} },
+	compact: { type: Boolean, default: false },
+	showDate: { type: Boolean, default: true },
+	editable: { type: Boolean, default: true },
+});
 
-export default {
-	components: {
-		MoodIndicatorIcon,
-		CoolLightBox,
-		LocalComponent,
-	},
+const lightboxIndex = reactive(null);
+const date = computed(() => new Date(props.post.date));
 
-	props: {
-		post: { type: Object, default: () => {} },
-		compact: { type: Boolean, default: false },
-		showDate: { type: Boolean, default: true },
-		editable: { type: Boolean, default: true },
-	},
+function PostTextComponent() {
+	// Split string along mentions and newlines
+	let split = props.post.text.split(/(@\w+|\r?\n)/g);
 
-	data() {
-		return {
-			lightboxIndex: null,
-		};
-	},
+	// Now replace mentions and newlines with html elements/router-link components
+	split = split.map((x) => {
+		if (x[0] === '@') {
+			return h(RouterLink, { to: { name: 'timeline', query: { filter: x } } }, x);
+		}
 
-	// Render post text using a dynamically generated component. This is needed
-	// so we can use other Vue components, most notably <nuxt-link>, inside the
-	// rendered markup, which would not be possible with v-html.
-	computed: {
-		PostTextComponent() {
-			let html = this.post.text || this.post.public_text;
-			html = html.replace(/(?:\r\n|\r|\n)/g, '<br>');
-			html = html.replace(/@\w+\b/g, '<router-link to="/dashboard?filter=$&">$&</router-link>');
+		if (x === '\n') {
+			return h('br');
+		}
 
-			return { template: `<div>${html}</div>` };
-		},
+		return x;
+	});
 
-		date() {
-			return new Date(this.post.date);
-		},
-	},
+	return h('div', split);
+}
 
-	methods: {
-		do_delete() {
-			const store = usePosts();
-			store.delete_post(this.post.id);
-		},
-	},
-};
+function doDelete() {
+	const store = usePosts();
+	store.delete_post(props.post.id);
+}
 </script>
 
 <style lang="scss">
