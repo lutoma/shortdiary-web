@@ -4,13 +4,13 @@
 			<div class="main-area">
 				<Mentionable
 					:keys="['@']"
-					:items="mention_items"
+					:items="mentionItems"
 					placement="bottom-end"
 					offset="6"
 					insert-space
 				>
 					<el-input
-						ref="text"
+						ref="textElement"
 						v-model="pdata.text"
 						type="textarea"
 						placeholder="Jot down your adventures here"
@@ -60,7 +60,7 @@
 								placeholder="Choose tags"
 							>
 								<el-option
-									v-for="item in tags"
+									v-for="item in store.tags"
 									:key="item[0]"
 									:label="item[0]"
 									:value="item[0]"
@@ -86,8 +86,8 @@
 								<fa :icon="['fal', 'images']" /> Images
 							</template>
 							<el-upload
-								ref="images"
-								v-model:file-list="existing_images"
+								ref="imagesElement"
+								v-model:file-list="existingImages"
 								action="#"
 								list-type="picture-card"
 								:on-preview="handlePictureCardPreview"
@@ -103,11 +103,11 @@
 							</el-dialog>
 
 							<el-upload
-								ref="images"
+								ref="imagesElement"
 								action="#"
 								:http-request="uploadImage"
 								:on-remove="removeImage"
-								:file-list="existing_images"
+								:file-list="existingImages"
 								list-type="picture-card"
 								:thumbnail-mode="true"
 								:auto-upload="false"
@@ -124,17 +124,21 @@
 	</div>
 </template>
 
-<script>
-import { mapState } from 'pinia';
+<script setup>
+import {
+	ref, reactive, computed, onMounted,
+} from 'vue';
+import { useRouter } from 'vue-router';
 import { usePosts } from '@/stores/posts';
-
 import api from '@/api';
 import { Mentionable } from 'vue-mention';
 import { cloneDeep } from 'lodash';
-import { ElNotification } from 'element-plus';
-
 import MapBackground from '@/components/MapBackground.vue';
 import MoodIndicatorIcon from '@/components/MoodIndicatorIcon.vue';
+
+const props = defineProps({
+	post: { type: Object, default: null },
+});
 
 // Default data for newly created posts
 const defaultPdata = {
@@ -149,154 +153,133 @@ const defaultPdata = {
 	location_verbose: '',
 };
 
-export default {
-	components: {
-		Mentionable,
-		MapBackground,
-		MoodIndicatorIcon,
-	},
-
-	props: {
-		post: { type: Object, default: null },
-	},
-
-	data() {
-		return {
-			datePickerOptions: {
-				firstDayOfWeek: 1,
-				disabledDate(time) {
-					return time.getTime() > Date.now();
-				},
-			},
-
-			// true if the save operation is loading
-			loading: false,
-
-			// Errors returned from API
-			error: {},
-
-			// Main post data object. This is what will be sent to the server
-			// in the API request. Filled with either the post we want to edit
-			// (passed in through the prop), or the default post template
-			pdata: this.post || cloneDeep(defaultPdata),
-
-			// When editing a post, IDs of images to delete upon save
-			images_to_delete: [],
-		};
-	},
-
-	computed: {
-		...mapState(usePosts, ['mentions', 'tags']),
-
-		mention_items() {
-			const mentions = this.mentions.map(
-				([mention, _]) => mention.substring(1),
-			);
-			return mentions.map((value) => ({ value, label: value }));
-		},
-
-		existing_images() {
-			if (!this.post || !this.post.images) {
-				return [];
-			}
-
-			return this.post.images.map((x) => ({ id: x.id, url: x.thumbnail }));
-		},
-	},
-
-	mounted() {
-		this.$refs.text.$el.children[0].focus();
-
-		if (!(this.post && this.post.id)) {
-			this.getGeoLocation();
-		}
-	},
-
-	methods: {
-		geoLocationCallback(position) {
-			this.pdata.location_lat = String(position.coords.latitude).substr(0, 14);
-			this.pdata.location_lon = String(position.coords.longitude).substr(0, 14);
-
-			const url = `/geocode/v1/json?q=${this.pdata.location_lat}%2C%20${this.pdata.location_lon}&language=en&no_annotations=1&no_record=1&key=849a36fca0e949fc91000924584ac0c4`;
-
-			api({ url, baseURL: '' }).then(({ data }) => {
-				if (!data || data.total_results < 1) {
-					return;
-				}
-
-				if (!('components' in data.results[0])) {
-					return;
-				}
-
-				const res = data.results[0].components;
-				if ('city' in res) {
-					this.pdata.location_verbose = `${res.city}, ${res.country}`;
-				} else if ('town' in res) {
-					this.pdata.location_verbose = `${res.town}, ${res.country}`;
-				} else if ('county' in res) {
-					this.pdata.location_verbose = `${res.county}, ${res.country}`;
-				} else if ('state' in res) {
-					this.pdata.location_verbose = `${res.state}, ${res.country}`;
-				} else if ('country' in res) {
-					this.pdata.location_verbose = res.country;
-				}
-			});
-		},
-
-		getGeoLocation() {
-			// FIXME Display some nice message if geolocation fails
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(this.geoLocationCallback);
-			}
-		},
-
-		async save() {
-			if (!this.pdata.text.length) {
-				return;
-			}
-
-			this.error = {};
-			this.loading = true;
-
-			// Delete removed images for existing posts
-			for (const id of this.images_to_delete) {
-				await api.$delete(`/post_images/${id}/`);
-			}
-
-			const store = usePosts();
-			await store.store_post(this.pdata);
-
-			// Upload new images
-			await this.$refs.images.submit();
-
-			this.loading = false;
-			this.$router.push({ name: 'timeline' });
-		},
-
-		uploadImage(req) {
-			const data = new FormData();
-			data.append('post', this.post.id);
-			data.append('image', req.file);
-
-			const config = {
-				headers: { 'Content-Type': 'multipart/form-data' },
-				onUploadProgress: (ev) => {
-					req.onProgress({ percent: Math.floor((ev.loaded * 100) / ev.total) });
-				},
-			};
-
-			api.post('/post_images/', data, config).then((res) => req.onSuccess(res));
-		},
-
-		removeImage(file, _) {
-			// If we're editing a post and this image has already been
-			// uploaded, mark it for deletion on save.
-			if ('id' in file) {
-				this.images_to_delete.push(file.id);
-			}
-		},
+const datePickerOptions = {
+	firstDayOfWeek: 1,
+	disabledDate(time) {
+		return time.getTime() > Date.now();
 	},
 };
+
+const store = usePosts();
+const router = useRouter();
+store.load();
+
+const loading = ref(false);
+const error = ref(null);
+
+// Main post data object. Filled with either the post we want to edit
+// (passed in through the prop), or the default post template
+const pdata = reactive(props.post || cloneDeep(defaultPdata));
+
+// When editing a post, IDs of images to delete upon save
+const imagesToDelete = reactive([]);
+
+const existingImages = computed(() => {
+	if (!props.post || !props.post.images) {
+		return [];
+	}
+
+	return props.post.images.map((x) => ({ id: x.id, url: x.thumbnail }));
+});
+
+const mentionItems = computed(() => {
+	const mentions = store.mentions.map(
+		([mention, _]) => mention.substring(1),
+	);
+	return mentions.map((value) => ({ value, label: value }));
+});
+
+function geoLocationCallback(position) {
+	pdata.location_lat = String(position.coords.latitude).substr(0, 14);
+	pdata.location_lon = String(position.coords.longitude).substr(0, 14);
+
+	const url = `/geocode/v1/json?q=${pdata.location_lat}%2C%20${pdata.location_lon}&language=en&no_annotations=1&no_record=1&key=849a36fca0e949fc91000924584ac0c4`;
+
+	api({ url, baseURL: '' }).then(({ data }) => {
+		if (!data || data.total_results < 1) {
+			return;
+		}
+
+		if (!('components' in data.results[0])) {
+			return;
+		}
+
+		const res = data.results[0].components;
+		if ('city' in res) {
+			pdata.location_verbose = `${res.city}, ${res.country}`;
+		} else if ('town' in res) {
+			pdata.location_verbose = `${res.town}, ${res.country}`;
+		} else if ('county' in res) {
+			pdata.location_verbose = `${res.county}, ${res.country}`;
+		} else if ('state' in res) {
+			pdata.location_verbose = `${res.state}, ${res.country}`;
+		} else if ('country' in res) {
+			pdata.location_verbose = res.country;
+		}
+	});
+}
+
+function getGeoLocation() {
+	// FIXME Display some nice message if geolocation fails
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(geoLocationCallback);
+	}
+}
+
+const imagesElement = ref(null);
+async function save() {
+	if (!pdata.text.length) {
+		return;
+	}
+
+	error.value = null;
+	loading.value = true;
+
+	// Delete removed images for existing posts
+	for (const id of imagesToDelete) {
+		await api.$delete(`/post_images/${id}/`);
+	}
+
+	await store.store_post(pdata);
+
+	// Upload new images
+	// await imagesElement.value.images.submit();
+
+	loading.value = false;
+	router.push({ name: 'timeline' });
+}
+
+function uploadImage(req) {
+	const data = new FormData();
+	data.append('post', props.post.id);
+	data.append('image', req.file);
+
+	const config = {
+		headers: { 'Content-Type': 'multipart/form-data' },
+		onUploadProgress: (ev) => {
+			req.onProgress({ percent: Math.floor((ev.loaded * 100) / ev.total) });
+		},
+	};
+
+	api.post('/post_images/', data, config).then((res) => req.onSuccess(res));
+}
+
+function removeImage(file, _) {
+	// If we're editing a post and this image has already been
+	// uploaded, mark it for deletion on save.
+	if ('id' in file) {
+		imagesToDelete.push(file.id);
+	}
+}
+
+const textElement = ref(null);
+onMounted(() => {
+	textElement.value.$el.children[0].focus();
+
+	if (!(props.post && props.post.id)) {
+		getGeoLocation();
+	}
+});
 </script>
 
 <style lang="scss">
