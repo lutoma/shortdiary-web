@@ -5,22 +5,31 @@
 		<el-row :gutter="30">
 			<el-col :span="12">
 				<el-card>
-					<h2>Account</h2>
 					<el-form ref="form" :model="user" label-position="left" label-width="200px">
-						<el-form-item label="Username">
-							<el-input v-model="user.username" />
-						</el-form-item>
+						<h2>Account</h2>
 						<el-form-item label="Email">
-							<el-input v-model="user.email" />
+							<el-input v-model="user.email" @keyup.enter="saveSettings" />
 						</el-form-item>
 						<el-form-item label="Password">
 							<n-link to="/change-password">
 								Change password
 							</n-link>
 						</el-form-item>
+
+						<h2>Profile</h2>
+						<el-form-item label="Name">
+							<el-input v-model="user.name" @keyup.enter="saveSettings" />
+						</el-form-item>
+
+						<el-form-item>
+							<el-button type="primary" @click="saveSettings">
+								Save changes
+							</el-button>
+						</el-form-item>
 					</el-form>
 				</el-card>
 
+<!--
 				<el-dialog v-model:visible="mfa_setup_visible" title="Two-factor authentication setup" width="550px">
 					<MfaSetup :config="mfa_config" :active_methods="mfa_methods" @success="mfaSetupDone" />
 				</el-dialog>
@@ -43,7 +52,7 @@
 							</el-table-column>
 							<el-table-column label="Actions" align="right">
 								<template #default="scope">
-									<!--<el-button size="small" v-if="!scope.row.is_primary" @click="mfaSwitchPrimary(scope.row.name)">Make primary</el-button>-->
+									<!- -<el-button size="small" v-if="!scope.row.is_primary" @click="mfaSwitchPrimary(scope.row.name)">Make primary</el-button>- ->
 									<el-button size="small" type="danger" @click="mfaDelete(scope.row.name)">
 										Delete
 									</el-button>
@@ -55,105 +64,69 @@
 						</el-button>
 					</template>
 				</el-card>
-			</el-col>
-
-			<el-col :span="12">
-				<el-card>
-					<h2>Privacy</h2>
-					<el-form ref="form" :model="user" label-position="left" label-width="200px">
-						<el-form-item label="Add location to posts">
-							<el-switch v-model="user.geolocation_enabled" />
-						</el-form-item>
-
-						<el-form-item label="Include me in leaderboard">
-							<el-switch v-model="user.include_in_leaderboard" />
-						</el-form-item>
-					</el-form>
-				</el-card>
+-->
 			</el-col>
 		</el-row>
-
-		<el-button type="primary" @click="saveSettings">
-			Save settings
-		</el-button>
 	</div>
 </template>
 
-<script>
-import MfaSetup from '@/components/MfaSetup.vue';
+<script setup>
+import { reactive } from 'vue';
+import { useAuth } from '@/stores/auth';
+import { pick } from 'lodash';
+//import MfaSetup from '@/components/MfaSetup.vue';
 
-export default {
-	components: {
-		MfaSetup,
-	},
-	data() {
-		return {
-			user: 'dummyuser',
-			mfa_config: {
-				methods: [],
-			},
+const auth = useAuth();
+const user = reactive(pick(auth.user, ['name', 'email']));
 
-			mfa_methods: null,
-			mfa_setup_visible: false,
-		};
-	},
+function saveSettings() {
+	auth.updateUser(user);
+}
 
-	async fetch() {
-		this.mfa_config = await this.$axios.$get('/auth/mfa/config/');
-		await this.loadMfaMethods();
+/*
+methods: {
+	async loadMfaMethods() {
+		this.mfa_methods = await this.$axios.$get('/auth/mfa/user-active-methods/');
 	},
 
-	computed: {
-		mfa_can_add() {
-			return this.mfa_methods.length < this.mfa_config.methods.length;
-		},
+	async saveSettings() {
+		// FIXME error handling
+		await this.$axios.$patch('/user/', this.user);
+		await this.$auth.fetchUser();
+		this.$message({ type: 'success', message: 'Your settings have been saved.' });
 	},
 
-	methods: {
-		async loadMfaMethods() {
-			this.mfa_methods = await this.$axios.$get('/auth/mfa/user-active-methods/');
-		},
+	mfaMethodName(name) {
+		const names = Object.fromEntries(this.mfa_config.methods);
+		if (!(name in names)) {
+			return '?';
+		}
 
-		async saveSettings() {
-			// FIXME error handling
-			await this.$axios.$patch('/user/', this.user);
-			await this.$auth.fetchUser();
-			this.$message({ type: 'success', message: 'Your settings have been saved.' });
-		},
+		return names[name];
+	},
 
-		mfaMethodName(name) {
-			const names = Object.fromEntries(this.mfa_config.methods);
-			if (!(name in names)) {
-				return '?';
-			}
+	async mfaDelete(name) {
+		await this.$axios.$post(`/auth/${name}/deactivate/`);
+		this.loadMfaMethods();
+	},
 
-			return names[name];
-		},
-
-		async mfaDelete(name) {
-			await this.$axios.$post(`/auth/${name}/deactivate/`);
-			this.loadMfaMethods();
-		},
-
-		/*
-		mfaSwitchPrimary(name) {
-			this.$axios.$post('/auth/code/request/').then(() => {
-				this.$prompt('Please enter a verification code').then(({ value }) => {
-					this.$axios.$post('/auth/mfa/change-primary-method/', { method: name, code: value })
-					this.$message({ type: 'success', message: 'Your primary two-factor authentication method has been changed.' })
-					this.loadMfaMethods()
-				})
+	/*
+	mfaSwitchPrimary(name) {
+		this.$axios.$post('/auth/code/request/').then(() => {
+			this.$prompt('Please enter a verification code').then(({ value }) => {
+				this.$axios.$post('/auth/mfa/change-primary-method/', { method: name, code: value })
+				this.$message({ type: 'success', message: 'Your primary two-factor authentication method has been changed.' })
+				this.loadMfaMethods()
 			})
-		},
-		*/
-
-		mfaSetupDone() {
-			this.loadMfaMethods();
-			this.mfa_setup_visible = false;
-			this.$message({ type: 'success', message: 'Authentication method has been added' });
-		},
+		})
 	},
-};
+
+	mfaSetupDone() {
+		this.loadMfaMethods();
+		this.mfa_setup_visible = false;
+		this.$message({ type: 'success', message: 'Authentication method has been added' });
+	},
+	*/
 </script>
 
 <style>

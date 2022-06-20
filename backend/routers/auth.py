@@ -4,7 +4,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from models import User, User_Pydantic
+from models import User, User_Pydantic, UserIn_Pydantic
 from tortoise.exceptions import DoesNotExist
 
 
@@ -24,6 +24,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 		detail='Could not validate credentials',
 		headers={'WWW-Authenticate': 'Bearer'},
 	)
+
 	try:
 		payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 		uuid: str = payload.get('sub')
@@ -50,18 +51,14 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 class LoginResponse(BaseModel):
-	name: str
-	email: str
 	access_token: str
-	ephemeral_key_salt: str
-	master_key: str
-	master_key_nonce: str
+	user: User_Pydantic
 
 
 @router.post('/login', response_model=LoginResponse)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 	try:
-		user = await User_Pydantic.from_queryset_single(User.get(name=form_data.username))
+		user = await User.get(email=form_data.username)
 	except DoesNotExist:
 		user = None
 
@@ -78,8 +75,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 	)
 	return {
 		'access_token': access_token,
-		'name': user.name,
-		'email': user.email,
+		'user': await User_Pydantic.from_tortoise_orm(user),
 		'ephemeral_key_salt': user.ephemeral_key_salt,
 		'master_key': user.master_key,
 		'master_key_nonce': user.master_key_nonce,
@@ -87,7 +83,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 
 class SignupData(BaseModel):
-	name: str
 	email: str
 	password: str
 	ephemeral_key_salt: str
@@ -96,7 +91,6 @@ class SignupData(BaseModel):
 
 
 class SignupResponse(BaseModel):
-	name: str
 	email: str
 
 
@@ -105,3 +99,14 @@ async def signup(user: SignupData):
 	user.password = pwd_context.hash(user.password)
 	user = await User.create(**user.dict(exclude_unset=True))
 	return await User_Pydantic.from_tortoise_orm(user)
+
+
+@router.get("/user", response_model=User_Pydantic)
+async def get_user(user: User = Depends(get_current_user)):
+	return await User_Pydantic.from_tortoise_orm(user)
+
+
+@router.put("/user", response_model=User_Pydantic)
+async def update_user(user_data: UserIn_Pydantic, user: User = Depends(get_current_user)):
+	await User.filter(id=user.id).update(**user_data.dict(exclude_unset=True))
+	return await User_Pydantic.from_queryset_single(User.get(id=user.id))

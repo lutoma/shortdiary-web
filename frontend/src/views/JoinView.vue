@@ -7,12 +7,8 @@
 				<el-alert :title="error" :closable="false" type="error" />
 			</el-form-item>
 
-			<el-form-item label="Username" prop="name">
-				<el-input ref="nameElement" v-model="user.name" placeholder="Username" required size="large" autofocus @keyup.enter="signup" />
-			</el-form-item>
-
 			<el-form-item label="Email" prop="email">
-				<el-input v-model="user.email" placeholder="Email" required size="large" @keyup.enter="signup" />
+				<el-input ref="emailElement" v-model="user.email" placeholder="Email" required size="large" @keyup.enter="signup" autofocus />
 			</el-form-item>
 
 			<el-form-item label="Password" prop="password">
@@ -49,22 +45,20 @@ import { ref, reactive, onMounted } from 'vue';
 import { useAuth } from '@/stores/auth';
 import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
 
-const nameElement = ref(null);
+const emailElement = ref(null);
 onMounted(() => {
-	nameElement.value.$el.children[0].children[0].focus();
+	emailElement.value.$el.children[0].children[0].focus();
 });
 
 const loading = ref(false);
 const error = ref(null);
 const user = reactive({
-	name: '',
 	email: '',
 	password: '',
 	captcha: '',
 });
 
 const rules = {
-	name: [{ required: true, message: 'Please enter a username', trigger: 'change' }],
 	password: [{ required: true, message: 'Please enter a password', trigger: 'change' }],
 	email: [{
 		required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'change',

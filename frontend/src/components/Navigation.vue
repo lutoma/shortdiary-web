@@ -15,7 +15,7 @@
 			<el-menu mode="horizontal" :ellipsis="false" @select="navSelect">
 				<el-sub-menu popper-class="sub-menu-right">
 					<template #title>
-						<GravatarImg :email="auth.email" :size="25" class="nav-avatar" /> {{ auth.name }}
+						<GravatarImg :email="auth.user.email" :size="25" class="nav-avatar" />
 					</template>
 
 					<el-menu-item index="settings">

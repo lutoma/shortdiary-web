@@ -5,7 +5,6 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 
 class User(Model):
 	id = fields.UUIDField(pk=True)
-	name = fields.CharField(max_length=255)
 	email = fields.CharField(max_length=255, unique=True)
 
 	# Salt used during derivation of ephemeral key from login password
@@ -23,11 +22,19 @@ class User(Model):
 	# Old Django password for users that have not logged in since the migration
 	legacy_password = fields.CharField(max_length=500, null=True)
 
+	# Profile name. Used to be the login name in Django times, unused
+	# currently, but might be used again for leaderboard when that returns
+	name = fields.CharField(max_length=255, null=True)
+
+	class PydanticMeta:
+		exclude = ('password', 'legacy_password')
+
 	def __str__(self):
 		return self.name
 
 
 User_Pydantic = pydantic_model_creator(User, name='User')
+UserIn_Pydantic = pydantic_model_creator(User, name='UserIn', exclude_readonly=True)
 
 
 class Post(Model):
@@ -46,6 +53,9 @@ class Post(Model):
 
 	class Meta:
 		unique_together = (('author', 'date'), )
+
+	class PydanticMeta:
+		exclude = ('author')
 
 	def __str__(self):
 		return self.name

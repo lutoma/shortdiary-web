@@ -9,8 +9,7 @@ export const useAuth = defineStore('auth', {
 		return {
 			masterKey: null,
 			jwt: null,
-			name: '',
-			email: '',
+			user: null,
 		};
 	},
 
@@ -26,11 +25,10 @@ export const useAuth = defineStore('auth', {
 
 			try {
 				const res = await api.post('/auth/login', credentials);
-				this.masterKey = unlock(password, res.data.ephemeral_key_salt, res.data.master_key_nonce, res.data.master_key);
-
 				this.jwt = res.data.access_token;
-				this.name = res.data.name;
-				this.email = res.data.email;
+				this.user = res.data.user;
+				this.masterKey = unlock(password, this.user.ephemeral_key_salt, this.user.master_key_nonce, this.user.master_key);
+				await api.get('/auth/user');
 			} catch (err) {
 				if (err instanceof AxiosError && err.response) {
 					throw err.response.data.detail;
@@ -68,6 +66,24 @@ export const useAuth = defineStore('auth', {
 					throw err;
 				}
 			}
+		},
+
+		async updateUser(user) {
+			try {
+				const res = await api.put('/auth/user', user);
+				this.user = res.data;
+			} catch (err) {
+				if (err instanceof AxiosError && err.response) {
+					throw err.response.data.detail;
+				} else {
+					throw err;
+				}
+			}
+
+			ElNotification({
+				title: 'Settings saved',
+				message: 'The changes to your settings have been saved.',
+			});
 		},
 	},
 

@@ -12,8 +12,8 @@
 					<el-alert v-if="error" :title="error" :closable="false" type="error" />
 				</el-form-item>
 
-				<el-form-item prop="username">
-					<el-input ref="nameElement" v-model="credentials.username" placeholder="Username" required size="large" autofocus @keyup.enter="login" />
+				<el-form-item prop="email">
+					<el-input ref="emailElement" v-model="credentials.email" placeholder="Email" required size="large" autofocus @keyup.enter="login" />
 				</el-form-item>
 				<el-form-item prop="password">
 					<el-input v-model="credentials.password" placeholder="Password" show-password size="large" required @keyup.enter="login" />
@@ -62,20 +62,22 @@ const route = useRoute();
 
 const wasAutoSignout = route.query?.auto_signout === 'true';
 
-const nameElement = ref(null);
+const emailElement = ref(null);
 onMounted(() => {
-	nameElement.value.$el.children[0].children[0].focus();
+	emailElement.value.$el.children[0].children[0].focus();
 });
 
 const loading = ref(false);
 const error = ref(null);
 const credentials = reactive({
-	username: '',
+	email: '',
 	password: '',
 });
 
 const rules = {
-	username: [{ required: true, message: 'Please enter a username', trigger: 'change' }],
+	email: [{
+		required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'change',
+	}],
 	password: [{ required: true, message: 'Please enter a password', trigger: 'change' }],
 };
 
@@ -98,7 +100,7 @@ function login() {
 			loading.value = true;
 
 			try {
-				await store.login(credentials.username, credentials.password);
+				await store.login(credentials.email, credentials.password);
 				router.push({ name: 'dashboard' });
 			} catch (err) {
 				error.value = err.toString();
