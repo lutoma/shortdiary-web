@@ -40,13 +40,15 @@ export const useAuth = defineStore('auth', {
 			}
 		},
 
-		async logout() {
+		async logout(notification = true) {
 			this.$reset();
 
-			ElNotification({
-				title: 'Signed out',
-				message: 'You have successfully been signed out.',
-			});
+			if (notification) {
+				ElNotification({
+					title: 'Signed out',
+					message: 'You have successfully been signed out.',
+				});
+			}
 		},
 
 		async signup(user) {
