@@ -23,6 +23,10 @@
 @use "@/assets/main.scss" as *;
 
 #public-layout-container {
+	// Needed for login animation to make sure this stays above el-card
+	// elements in dashboard
+	z-index: 10000;
+
 	background: #036564;
 
 	width: 100%;
