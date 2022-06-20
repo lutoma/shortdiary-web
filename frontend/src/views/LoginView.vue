@@ -3,6 +3,10 @@
 		<template v-if="!mfaRequest.method">
 			<h2>Sign in to shortdiary</h2>
 
+			<el-alert v-if="wasAutoSignout" type="warning" :closable="false">
+				You have been signed out automatically due to inactivity. Please sign in again.
+			</el-alert>
+
 			<el-form v-if="!mfaRequest.method" ref="loginFormElement" :model="credentials" :rules="rules" label-position="top">
 				<el-form-item>
 					<el-alert v-if="error" :title="error" :closable="false" type="error" />
@@ -50,10 +54,13 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import { useAuth } from '@/stores/auth';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const store = useAuth();
 const router = useRouter();
+const route = useRoute();
+
+const wasAutoSignout = route.query?.auto_signout === 'true';
 
 const nameElement = ref(null);
 onMounted(() => {
