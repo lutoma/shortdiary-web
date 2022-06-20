@@ -76,24 +76,24 @@
 				<ol class="filters">
 					<li>
 						<fa :icon="['fal', 'align-left']" />
-						<el-input v-model="filter.text" placeholder="Text" clearable />
+						<el-input v-model="setFilters.text" placeholder="Text" clearable />
 					</li>
 
 					<li>
 						<fa :icon="['fal', 'smile']" />
-						<el-slider v-model="filter.mood" range show-stops :min="1" :max="10" :step="1" />
+						<el-slider v-model="setFilters.mood" range show-stops :min="1" :max="10" :step="1" />
 					</li>
 
 					<li>
 						<fa :icon="['fal', 'tags']" />
-						<el-select v-model="filter.tags" multiple filterable default-first-option placeholder="Choose tags">
+						<el-select v-model="setFilters.tags" multiple filterable default-first-option placeholder="Choose tags">
 							<el-option v-for="item in store.tags" :key="item[0]" :label="item[0]" :value="item[0]" />
 						</el-select>
 					</li>
 
 					<li>
 						<fa :icon="['fal', 'map-marked-alt']" />
-						<el-select v-model="filter.location" placeholder="Select location" filterable clearable>
+						<el-select v-model="setFilters.location" placeholder="Select location" filterable clearable>
 							<el-option label="" :value="null">
 								Any
 							</el-option>
@@ -103,7 +103,7 @@
 
 					<li>
 						<fa :icon="['fal', 'images']" />
-						<el-select v-model="filter.images" placeholder="Images" filterable clearable>
+						<el-select v-model="setFilters.images" placeholder="Images" filterable clearable>
 							<el-option label="" :value="null">
 								Any
 							</el-option>
@@ -121,13 +121,23 @@
 import {
 	ref, reactive, computed, onUpdated,
 } from 'vue';
-import { usePosts } from '@/stores/posts';
+
+import flow from 'lodash/fp/flow';
+import filter from 'lodash/fp/filter';
+import slice from 'lodash/fp/slice';
+import groupBy from 'lodash/fp/groupBy';
+import toPairs from 'lodash/fp/toPairs';
+import reverse from 'lodash/fp/reverse';
+import map from 'lodash/fp/map';
+import orderBy from 'lodash/fp/orderBy';
+import keyBy from 'lodash/keyBy';
+
 import { useQuery } from '@oarepo/vue-query-synchronizer';
+import { usePosts } from '@/stores/posts';
 import Post from '@/components/Post.vue';
-import _ from 'lodash';
 
 const store = usePosts();
-const filter = useQuery();
+const setFilters = useQuery();
 store.load();
 
 const visiblePosts = ref(10);
@@ -137,43 +147,46 @@ const filteredPosts = computed(() => {
 	// necessary, the value contains the function or object that gets
 	// passed to .filter
 	const filters = {
-		text: (post) => post.text.toLowerCase().includes(filter.text.toLowerCase()),
-		tags: (post) => post.tags.some((tag) => filter.tags.includes(tag)),
-		location: { location_verbose: filter.location },
-		images: (post) => !!post.images.length === filter.images,
+		text: (post) => post.text.toLowerCase().includes(setFilters.text.toLowerCase()),
+		tags: (post) => post.tags.some((tag) => setFilters.tags.includes(tag)),
+		location: { location_verbose: setFilters.location },
+		images: (post) => !!post.images.length === setFilters.images,
 	};
 
-	let filtered = _(store.postsList)
-		.filter((x) => x.mood >= Number(filter.mood[0]) && x.mood <= Number(filter.mood[1]));
-
+	const flowFilters = [];
 	for (const [cond, nfilter] of Object.entries(filters)) {
-		const value = filter[cond];
+		const value = setFilters[cond];
 
-		if (value !== '' && value !== 'null' && (typeof value !== 'object' || value.length)) {
-			filtered = filtered.filter(nfilter);
+		if (value !== '' && value !== null && value !== 'null' && (typeof value !== 'object' || value.length)) {
+			flowFilters.push(filter(nfilter));
 		}
 	}
 
-	return filtered;
+	// FIXME return unprocessed flow
+	return flow(
+		filter((x) => x.mood >= Number(setFilters.mood[0]) && x.mood <= Number(setFilters.mood[1])),
+		...flowFilters,
+	)(store.postsList);
 });
 
 const groupedPosts = computed(() => {
 	// Group the filtered posts into years and months for display
-	return filteredPosts.value
-		.slice(0, visiblePosts.value)
-		.groupBy((x) => x.date.split('-')[0])
-		.toPairs()
-		.reverse()
-		.map((x) => {
-			const mposts = _(x[1])
-				.groupBy((y) => y.date.split('-')[1])
-				.toPairs()
-				.orderBy((p) => p[0], 'desc')
-				.value();
+
+	return flow(
+		slice(0, visiblePosts.value),
+		groupBy((x) => x.date.split('-')[0]),
+		toPairs,
+		reverse,
+		map((x) => {
+			const mposts = flow(
+				groupBy((y) => y.date.split('-')[1]),
+				toPairs,
+				orderBy((p) => p[0], 'desc'),
+			)(x[1]);
 
 			return [x[0], mposts];
-		})
-		.value();
+		}),
+	)(filteredPosts.value);
 });
 
 const datepickerValues = computed(() => {
@@ -181,20 +194,20 @@ const datepickerValues = computed(() => {
 	// for infinite loading. It would be much nicer to deduplicate
 	// this somehow, but slicing after grouping is nontrivial.
 
-	return filteredPosts.value
-		.groupBy((x) => x.date.split('-')[0])
-		.toPairs()
-		.reverse()
-		.map((x) => {
-			const mposts = _(x[1])
-				.groupBy((y) => y.date.split('-')[1])
-				.toPairs()
-				.orderBy((p) => p[0], 'desc')
-				.value();
+	return flow(
+		groupBy((x) => x.date.split('-')[0]),
+		toPairs,
+		reverse,
+		map((x) => {
+			const mposts = flow(
+				groupBy((y) => y.date.split('-')[1]),
+				toPairs,
+				orderBy((p) => p[0], 'desc'),
+			)(x[1]);
 
 			return [x[0], mposts];
-		})
-		.value();
+		}),
+	)(filteredPosts.value);
 });
 
 const infiniteScroll = reactive({
@@ -237,7 +250,7 @@ function intersectionCallback(update, _unused) {
 	// out of view, but not the one that remains visible.
 
 	// Turn into an Object for easier deduplication
-	Object.assign(scrollState.observer_els, _.keyBy(update, 'target.id'));
+	Object.assign(scrollState.observer_els, keyBy(update, 'target.id'));
 
 	const entries = Object.values(scrollState.observer_els)
 		.filter((x) => x.isIntersecting);

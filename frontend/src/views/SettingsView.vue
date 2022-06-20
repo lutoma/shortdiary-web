@@ -73,7 +73,7 @@
 <script setup>
 import { reactive } from 'vue';
 import { useAuth } from '@/stores/auth';
-import { pick } from 'lodash';
+import pick from 'lodash/pick';
 //import MfaSetup from '@/components/MfaSetup.vue';
 
 const auth = useAuth();

@@ -131,7 +131,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { usePosts } from '@/stores/posts';
 import api from '@/api';
 import { Mentionable } from 'vue-mention';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import MoodIndicatorIcon from '@/components/MoodIndicatorIcon.vue';
 
 // Default data for newly created posts

@@ -8,7 +8,15 @@
 import { mapState } from 'pinia';
 import { usePosts } from '@/stores/posts';
 import Map from '@/components/Map';
-import _ from 'lodash';
+
+import flow from 'lodash/fp/flow';
+import filter from 'lodash/fp/filter';
+import groupBy from 'lodash/fp/groupBy';
+import pickBy from 'lodash/fp/pickBy';
+import map from 'lodash/fp/map';
+import sortBy from 'lodash/fp/sortBy';
+import reverse from 'lodash/fp/reverse';
+import meanBy from 'lodash/meanBy';
 
 export default {
 	// layout: 'no-container',
@@ -22,20 +30,20 @@ export default {
 	},
 
 	computed: {
-		...mapState(usePosts, ['posts', 'locations', 'mentions']),
+		...mapState(usePosts, ['postsList', 'locations', 'mentions']),
 
-		top_mood_locations() {
-			return _(this.posts)
-				.filter('location_verbose')
-				.filter('mood')
-				.groupBy('location_verbose')
-				.pickBy((entries, _) => entries.length >= 5)
-				.map((entries, location) => [location, _.meanBy(entries, (entry) => entry.mood).toPrecision(3)])
-				.sortBy(1)
-				.reverse()
-				.value();
+		mood_locations() {
+			return flow(
+				filter('location_verbose'),
+				filter('mood'),
+				groupBy('location_verbose'),
+				pickBy((entries, _) => entries.length >= 5),
+				map((entries, location) => [location, meanBy(entries, (entry) => entry.mood).toPrecision(3)]),
+				sortBy(1),
+				reverse,
+			)(this.postsList);
 		},
-
+/*
 		posts_geojson() {
 			const geojson = {
 				name: 'markers',
@@ -60,6 +68,7 @@ export default {
 
 			return geojson;
 		},
+*/
 
 	},
 };
