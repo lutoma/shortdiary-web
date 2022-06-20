@@ -30,7 +30,6 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import QuerySynchronizer from '@oarepo/vue-query-synchronizer';
-import sodium from 'libsodium-wrappers';
 import App from './App.vue';
 import router from './router';
 
@@ -47,8 +46,6 @@ library.add(faLockLight, faLockOpenLight, faLaughLight, faSmileLight, faMehLight
 	faTallyLight, faRulerLight, faTagsLight, faAlignLeftLight);
 
 library.add(faGithub);
-
-await sodium.ready;
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);

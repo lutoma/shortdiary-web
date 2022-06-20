@@ -9,6 +9,7 @@ import { useAuth } from './auth';
 export const usePosts = defineStore('post', {
 	state: () => {
 		return {
+			loaded: false,
 			posts: new Map(),
 			mentions: [],
 			locations: [],
@@ -29,7 +30,8 @@ export const usePosts = defineStore('post', {
 
 			const res = await api.get('/posts');
 			const posts = new Map();
-			for (const cpost of res.data) {
+
+			for await (const cpost of res.data) {
 				let postData = null;
 
 				switch (cpost.format_version) {
@@ -39,7 +41,7 @@ export const usePosts = defineStore('post', {
 					break;
 				case 1:
 					try {
-						postData = sodium.to_string(decrypt(authStore.masterKey, cpost.nonce, cpost.data));
+						postData = sodium.to_string(await decrypt(authStore.masterKey, cpost.nonce, cpost.data));
 					} catch (err) {
 						console.error(`Could not decrypt post ${cpost.id}: ${err.toString()}`);
 						ElNotification({
@@ -97,6 +99,8 @@ export const usePosts = defineStore('post', {
 				.sortBy(1)
 				.reverse()
 				.value();
+
+			this.loaded = true;
 		},
 
 		async delete_post(id) {

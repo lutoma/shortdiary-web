@@ -21,29 +21,33 @@ function splitKey(key) {
 	return [key, key];
 }
 
-export function encrypt(key, data) {
-	const nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
-	const cryptData = sodium.crypto_secretbox_easy(data, nonce, key);
+export async function encrypt(key, data) {
+	await sodium.ready;
+	const nonce = await sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
+	const cryptData = await sodium.crypto_secretbox_easy(data, nonce, key);
 	return [sodium.to_base64(nonce), sodium.to_base64(cryptData)];
 }
 
-export function decrypt(key, b64Nonce, b64CryptData) {
-	const nonce = sodium.from_base64(b64Nonce);
-	const cryptData = sodium.from_base64(b64CryptData);
+export async function decrypt(key, b64Nonce, b64CryptData) {
+	await sodium.ready;
+	const nonce = await sodium.from_base64(b64Nonce);
+	const cryptData = await sodium.from_base64(b64CryptData);
 	return sodium.crypto_secretbox_open_easy(cryptData, nonce, key);
 }
 
-export function enrol(password) {
-	const salt = sodium.to_base64(sodium.randombytes_buf(sodium.crypto_pwhash_SALTBYTES));
-	const ephemeralKey = deriveKey(password, salt);
-	const key = sodium.crypto_secretbox_keygen();
-	const [passwordKey, authToken] = splitKey(ephemeralKey);
-	const [nonce, encryptedKey] = encrypt(passwordKey, key);
+export async function enrol(password) {
+	await sodium.ready;
+	const salt = await sodium.to_base64(sodium.randombytes_buf(sodium.crypto_pwhash_SALTBYTES));
+	const ephemeralKey = await deriveKey(password, salt);
+	const key = await sodium.crypto_secretbox_keygen();
+	const [passwordKey, authToken] = await splitKey(ephemeralKey);
+	const [nonce, encryptedKey] = await encrypt(passwordKey, key);
 	return [salt, nonce, encryptedKey];
 }
 
-export function unlock(password, salt, masterNonce, encryptedMaster) {
-	const ephemeralKey = deriveKey(password, salt);
-	const [passwordKey, authToken] = splitKey(ephemeralKey);
+export async function unlock(password, salt, masterNonce, encryptedMaster) {
+	await sodium.ready;
+	const ephemeralKey = await deriveKey(password, salt);
+	const [passwordKey, authToken] = await splitKey(ephemeralKey);
 	return decrypt(passwordKey, masterNonce, encryptedMaster);
 }

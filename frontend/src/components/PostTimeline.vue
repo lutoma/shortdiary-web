@@ -1,6 +1,6 @@
 <template>
 	<div class="post-timeline">
-		<div v-loading="!store.posts.size" class="posts">
+		<div v-loading="!store.loaded" class="posts">
 			<router-link class="new-entry-button" :to="{ name: 'new-post' }">
 				<el-button type="primary">
 					<fa :icon="['far', 'file-plus']" /> New entry

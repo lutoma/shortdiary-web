@@ -14,7 +14,7 @@ export const useAuth = defineStore('auth', {
 	},
 
 	getters: {
-		logged_in: (state) => state.jwt !== null && state.master_key !== null,
+		logged_in: (state) => state.jwt !== null && state.masterKey !== null,
 	},
 
 	actions: {
@@ -27,8 +27,7 @@ export const useAuth = defineStore('auth', {
 				const res = await api.post('/auth/login', credentials);
 				this.jwt = res.data.access_token;
 				this.user = res.data.user;
-				this.masterKey = unlock(password, this.user.ephemeral_key_salt, this.user.master_key_nonce, this.user.master_key);
-				await api.get('/auth/user');
+				this.masterKey = await unlock(password, this.user.ephemeral_key_salt, this.user.master_key_nonce, this.user.master_key);
 			} catch (err) {
 				if (err instanceof AxiosError && err.response) {
 					throw err.response.data.detail;
@@ -50,7 +49,7 @@ export const useAuth = defineStore('auth', {
 		},
 
 		async signup(user) {
-			const [ephemeralKeySalt, masterKeyNonce, masterKey] = enrol(user.password);
+			const [ephemeralKeySalt, masterKeyNonce, masterKey] = await enrol(user.password);
 
 			try {
 				await api.post('/auth/signup', {
