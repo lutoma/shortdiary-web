@@ -1,6 +1,11 @@
 <template>
 	<div class="post-timeline">
 		<div v-loading="!store.posts.size" class="posts">
+			<router-link class="new-entry-button" :to="{ name: 'new-post' }">
+				<el-button type="primary">
+					<fa :icon="['far', 'file-plus']" /> New entry
+				</el-button>
+			</router-link>
 			<template v-if="!store.posts.size">
 				&nbsp;
 			</template>
@@ -298,6 +303,10 @@ $date-aside-width: 130px;
 		height: 100%;
 		flex: 1 1 100%;
 		margin-right: 40px;
+
+		.new-entry-button {
+			float: right;
+		}
 
 		.year-header {
 			position: sticky;

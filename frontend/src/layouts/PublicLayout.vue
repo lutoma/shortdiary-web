@@ -1,7 +1,9 @@
 <template>
 	<div id="public-layout-container">
 		<div>
-			<h1 class="brand">shortdiary</h1>
+			<h1 class="brand">
+				shortdiary
+			</h1>
 			<el-card>
 				<RouterView />
 			</el-card>

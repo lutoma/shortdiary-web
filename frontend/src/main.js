@@ -9,6 +9,7 @@ import {
 	faBars as faBarsRegular, faFileContract as faFileContractRegular,
 	faShieldCheck as faShieldCheckRegular, faSync as faSyncRegular,
 	faMapMarkedAlt as faMapMarkedAltRegular, faUsers as faUsersRegular, faHouse as faHouseRegular,
+	faFilePlus as faFilePlusRegular
 } from '@fortawesome/pro-regular-svg-icons';
 
 import {
@@ -37,12 +38,13 @@ import router from './router';
 library.add(faKeyRegular, faPencilRegular, faSignInRegular, faListRegular, faChartBarRegular,
 	faMedalRegular, faWrenchRegular, faSignOutRegular, faCompassRegular, faUserFriendsRegular,
 	faImagesRegular, faEmptySetRegular, faLockRegular, faLockOpenRegular, faBarsRegular,
-	faFileContractRegular, faShieldCheckRegular, faSyncRegular, faMapMarkedAltRegular, faHouseRegular);
+	faFileContractRegular, faShieldCheckRegular, faSyncRegular, faMapMarkedAltRegular,
+	faHouseRegular, faUsersRegular, faFilePlusRegular);
 
 library.add(faLockLight, faLockOpenLight, faLaughLight, faSmileLight, faMehLight, faFrownLight,
 	faPencilLight, faLinkLight, faTrashLight, faMapMarkedAltLight, faUsersLight, faChartLineLight,
 	faLanguageLight, faCalendarAltLight, faImagesLight, faShieldCheckLight, faTrophyAltLight,
-	faTallyLight, faRulerLight, faTagsLight, faAlignLeftLight, faUsersRegular);
+	faTallyLight, faRulerLight, faTagsLight, faAlignLeftLight);
 
 library.add(faGithub);
 

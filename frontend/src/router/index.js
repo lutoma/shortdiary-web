@@ -6,13 +6,12 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue';
 
 import DashboardView from '@/views/DashboardView.vue';
 import TimelineView from '@/views/TimelineView.vue';
-import EditPostView from '@/views/EditPostView.vue';
-import NewPostView from '@/views/NewPostView.vue';
 import LocationsView from '@/views/LocationsView.vue';
 import PeopleView from '@/views/PeopleView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 import LoginView from '@/views/LoginView.vue';
 import JoinView from '@/views/JoinView.vue';
+import PostEditor from '@/components/PostEditor.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,7 +27,7 @@ const router = createRouter({
 					component: DashboardView,
 				},
 				{
-					path: '/posts',
+					path: 'posts',
 					name: 'timeline',
 					component: TimelineView,
 					meta: {
@@ -40,29 +39,31 @@ const router = createRouter({
 							images: 'string:',
 						},
 					},
+					children: [
+						{
+							path: 'new',
+							name: 'new-post',
+							component: PostEditor,
+						},
+						{
+							path: ':id/edit',
+							name: 'edit-post',
+							component: PostEditor,
+						},
+					],
 				},
 				{
-					path: '/posts/:id/edit',
-					name: 'edit-post',
-					component: EditPostView,
-				},
-				{
-					path: '/new',
-					name: 'new-post',
-					component: NewPostView,
-				},
-				{
-					path: '/people',
+					path: 'people',
 					name: 'people',
 					component: PeopleView,
 				},
 				{
-					path: '/locations',
+					path: 'locations',
 					name: 'locations',
 					component: LocationsView,
 				},
 				{
-					path: '/settings',
+					path: 'settings',
 					name: 'settings',
 					component: SettingsView,
 				},
@@ -74,12 +75,12 @@ const router = createRouter({
 			component: PublicLayout,
 			children: [
 				{
-					path: '/login',
+					path: 'login',
 					name: 'login',
 					component: LoginView,
 				},
 				{
-					path: '/join',
+					path: 'join',
 					name: 'join',
 					component: JoinView,
 				},

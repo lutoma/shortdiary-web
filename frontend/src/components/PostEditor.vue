@@ -13,7 +13,7 @@
 						ref="textElement"
 						v-model="pdata.text"
 						type="textarea"
-						placeholder="Jot down your adventures here"
+						placeholder="Jot down your adventures here. If you mention a person like this: @person, they will be listed in the 'People' tab."
 						autofocus
 					/>
 				</Mentionable>
@@ -120,7 +120,6 @@
 				</el-card>
 			</div>
 		</div>
-		<MapBackground v-if="pdata.location_lat && pdata.location_lon" :center="[pdata.location_lon, pdata.location_lat]" />
 	</div>
 </template>
 
@@ -128,17 +127,12 @@
 import {
 	ref, reactive, computed, onMounted,
 } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { usePosts } from '@/stores/posts';
 import api from '@/api';
 import { Mentionable } from 'vue-mention';
 import { cloneDeep } from 'lodash';
-import MapBackground from '@/components/MapBackground.vue';
 import MoodIndicatorIcon from '@/components/MoodIndicatorIcon.vue';
-
-const props = defineProps({
-	post: { type: Object, default: null },
-});
 
 // Default data for newly created posts
 const defaultPdata = {
@@ -162,24 +156,31 @@ const datePickerOptions = {
 
 const store = usePosts();
 const router = useRouter();
-store.load();
+const route = useRoute();
+
+// Bit hacky, but eh
+let editPost = null;
+if (route.name === 'edit-post') {
+	const postId = route.params.id;
+	editPost = store.posts.get(postId);
+}
 
 const loading = ref(false);
 const error = ref(null);
 
 // Main post data object. Filled with either the post we want to edit
 // (passed in through the prop), or the default post template
-const pdata = reactive(props.post || cloneDeep(defaultPdata));
+const pdata = reactive(editPost || cloneDeep(defaultPdata));
 
 // When editing a post, IDs of images to delete upon save
 const imagesToDelete = reactive([]);
 
 const existingImages = computed(() => {
-	if (!props.post || !props.post.images) {
+	if (!editPost || !editPost.images) {
 		return [];
 	}
 
-	return props.post.images.map((x) => ({ id: x.id, url: x.thumbnail }));
+	return editPost.images.map((x) => ({ id: x.id, url: x.thumbnail }));
 });
 
 const mentionItems = computed(() => {
@@ -251,7 +252,7 @@ async function save() {
 
 function uploadImage(req) {
 	const data = new FormData();
-	data.append('post', props.post.id);
+	data.append('post', editPost.id);
 	data.append('image', req.file);
 
 	const config = {
@@ -276,7 +277,7 @@ const textElement = ref(null);
 onMounted(() => {
 	textElement.value.$el.children[0].focus();
 
-	if (!(props.post && props.post.id)) {
+	if (!(editPost && editPost.id)) {
 		getGeoLocation();
 	}
 });
@@ -284,7 +285,7 @@ onMounted(() => {
 
 <style lang="scss">
 .post-editor {
-	height: 100%;
+	height: 70vh;
 	display: flex;
 	flex-direction: column;
 

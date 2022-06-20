@@ -47,7 +47,6 @@ const router = useRouter();
 const navItems = [
 	{ name: 'dashboard', label: 'Dashboard', icon: 'house' },
 	{ name: 'timeline', label: 'Entries', icon: 'list' },
-	{ name: 'new-post', label: 'New entry', icon: 'pencil' },
 	{ name: 'people', label: 'People', icon: 'users' },
 	{ name: 'locations', label: 'Locations', icon: 'map-marked-alt' },
 ];
