@@ -58,15 +58,19 @@
 		/>
 
 		<div v-if="post.tags && post.tags.length" class="tags">
-			<el-tag
+			<router-link
 				v-for="tag of post.tags"
 				:key="tag"
-				size="medium"
-				effect="dark"
-				type="info"
+				:to="{ name: 'timeline', query: { tags: tag } }"
 			>
-				{{ tag }}
-			</el-tag>
+				<el-tag
+					size="medium"
+					effect="dark"
+					type="info"
+				>
+					{{ tag }}
+				</el-tag>
+			</router-link>
 		</div>
 	</el-card>
 </template>
