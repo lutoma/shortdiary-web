@@ -16,14 +16,10 @@ $bg-color: #F9F9F9;
 @use "@fontsource/fira-sans/latin-300.css" as *;
 @use "@fontsource/fira-sans/latin-400.css" as *;
 @use "@fontsource/fira-sans/latin-600.css" as *;
-@use "@fontsource/fira-sans/latin-700.css" as *;
-@use "@fontsource/exo-2/latin-200.css" as *;
-@use "@fontsource/exo-2/latin-300.css" as *;
-@use "@fontsource/exo-2/latin-600.css" as *;
-@use "@fontsource/exo-2/latin-700.css" as *;
+@use "@fontsource/exo-2/latin-800.css" as *;
 @use "../../node_modules/floating-vue/dist/style.css" as *;
 
-html, body, #__nuxt, #__layout {
+html, body {
 	width: 100%;
 	height: 100%;
 }
@@ -43,9 +39,6 @@ html {
 
 body {
 	background: $bg-color;
-
-	// Fixed top menu
-	padding-top: 50px;
 }
 
 *, *:before, *:after {
@@ -53,13 +46,17 @@ body {
 	margin: 0;
 }
 
+.brand {
+	font-family: "Exo 2", "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	font-weight: 800;
+	user-select: none;
+}
+
 h1, h2, h3, h4, h5, h6 {
 	font-weight: 600;
-	font-family: "Exo 2", "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 h1 {
-	font-weight: 700;
 	margin-bottom: 2rem;
 }
 
@@ -87,22 +84,12 @@ input, textarea {
 	font-family: "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-#app, #app-nav-wrapper {
+#app, #default-layout-container {
 	height: 100%;
 	width: 100%;
 
 	display: flex;
 	flex-direction: column;
-}
-
-#main-container {
-	flex-grow: 1;
-	width: 100%;
-	max-width: 1600px;
-	min-width: 1200px;
-	margin: 0 auto;
-	margin-top: 30px;
-	padding: 0 1rem;
 }
 
 .el-message {

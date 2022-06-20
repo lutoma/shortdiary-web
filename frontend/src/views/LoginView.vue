@@ -1,25 +1,27 @@
 <template>
 	<div class="login">
 		<template v-if="!mfaRequest.method">
-			<h1>Sign in</h1>
+			<h2>Sign in to shortdiary</h2>
 
-			<el-form v-if="!mfaRequest.method" ref="loginFormElement" :model="credentials" :rules="rules" label-width="100px">
+			<el-form v-if="!mfaRequest.method" ref="loginFormElement" :model="credentials" :rules="rules" label-position="top">
 				<el-form-item>
 					<el-alert v-if="error" :title="error" :closable="false" type="error" />
 				</el-form-item>
 
-				<el-form-item label="Username" prop="username">
-					<el-input ref="nameElement" v-model="credentials.username" placeholder="Username" required autofocus @keyup.enter="login" />
+				<el-form-item prop="username">
+					<el-input ref="nameElement" v-model="credentials.username" placeholder="Username" required size="large" autofocus @keyup.enter="login" />
 				</el-form-item>
-				<el-form-item label="Password" prop="password">
-					<el-input v-model="credentials.password" placeholder="Password" show-password required @keyup.enter="login" />
+				<el-form-item prop="password">
+					<el-input v-model="credentials.password" placeholder="Password" show-password size="large" required @keyup.enter="login" />
 				</el-form-item>
 				<el-form-item>
-					<el-button v-model:loading="loading" type="primary" @click="login">
+					<el-button v-model:loading="loading" size="large" type="primary" @click="login">
 						<fa :icon="['far', 'sign-in']" /> Sign in
 					</el-button>
 				</el-form-item>
 			</el-form>
+
+			<p class="signup-prompt">Don't have an account? <router-link :to="{ name: 'join' }">Sign up</router-link></p>
 		</template>
 
 		<template v-if="mfaRequest.method">
@@ -33,10 +35,10 @@
 					<el-alert v-if="error" :title="error" :closable="false" type="error" />
 				</el-form-item>
 				<el-form-item label="Code" prop="code">
-					<el-input ref="code" v-model="mfaRequest.code" placeholder="Code" required autofocus @keyup.enter="mfaConfirm" />
+					<el-input ref="code" v-model="mfaRequest.code" placeholder="Code" required size="large" autofocus @keyup.enter="mfaConfirm" />
 				</el-form-item>
 				<el-form-item>
-					<el-button v-model:loading="loading" type="primary" @click="mfaConfirm">
+					<el-button v-model:loading="loading" size="large" type="primary" @click="mfaConfirm">
 						<fa :icon="['far', 'sign-in']" /> Confirm sign-in
 					</el-button>
 				</el-form-item>
@@ -123,7 +125,13 @@ function mfaConfirm() {
 </script>
 
 <style lang="scss">
-.login .el-form {
-	max-width: 600px;
+.login {
+	.el-button {
+		width: 100%;
+	}
+
+	.signup-prompt {
+		margin-top: 2rem;
+	}
 }
 </style>

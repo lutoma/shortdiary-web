@@ -1,8 +1,8 @@
 <template>
 	<div class="main-nav-container">
 		<nav>
-			<div class="name">
-				<router-link :to="auth.logged_in ? '/dashboard' : '/'">
+			<div class="name brand">
+				<router-link :to="{ name: 'dashboard' }">
 					shortdiary
 				</router-link>
 			</div>
@@ -15,22 +15,15 @@
 			<el-menu mode="horizontal" :ellipsis="false" @select="navSelect">
 				<el-sub-menu popper-class="sub-menu-right">
 					<template #title>
-						<template v-if="auth.logged_in">
-							<GravatarImg :email="auth.email" :size="25" class="nav-avatar" /> {{ auth.name }}
-						</template>
-						<template v-else>
-							Legal
-						</template>
+						<GravatarImg :email="auth.email" :size="25" class="nav-avatar" /> {{ auth.name }}
 					</template>
 
-					<template v-if="auth.logged_in">
-						<el-menu-item index="settings">
-							<fa :icon="['far', 'wrench']" /> <span>Settings</span>
-						</el-menu-item>
-						<el-menu-item index="logout">
-							<fa :icon="['far', 'sign-out']" /> <span>Sign out</span>
-						</el-menu-item>
-					</template>
+					<el-menu-item index="settings">
+						<fa :icon="['far', 'wrench']" /> <span>Settings</span>
+					</el-menu-item>
+					<el-menu-item index="logout">
+						<fa :icon="['far', 'sign-out']" /> <span>Sign out</span>
+					</el-menu-item>
 
 					<el-menu-item-group>
 						<el-menu-item><fa :icon="['fab', 'github']" /> <a href="https://github.com/lutoma/shortdiary" target="_blank" rel="noopener">Source code</a></el-menu-item>
@@ -44,7 +37,6 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import { useAuth } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import GravatarImg from '@/components/GravatarImg.vue';
@@ -52,26 +44,13 @@ import GravatarImg from '@/components/GravatarImg.vue';
 const auth = useAuth();
 const router = useRouter();
 
-const navItems = computed(() => {
-	let items;
-
-	if (auth.logged_in) {
-		items = [
-			{ name: 'dashboard', label: 'Dashboard', icon: 'house' },
-			{ name: 'timeline', label: 'Entries', icon: 'list' },
-			{ name: 'new-post', label: 'New entry', icon: 'pencil' },
-			{ name: 'people', label: 'People', icon: 'users' },
-			{ name: 'locations', label: 'Locations', icon: 'map-marked-alt' },
-		];
-	} else {
-		items = [
-			{ name: 'login', label: 'Sign in', icon: 'sign-in' },
-			{ name: 'join', label: 'Join', icon: 'user-friends' },
-		];
-	}
-
-	return items;
-});
+const navItems = [
+	{ name: 'dashboard', label: 'Dashboard', icon: 'house' },
+	{ name: 'timeline', label: 'Entries', icon: 'list' },
+	{ name: 'new-post', label: 'New entry', icon: 'pencil' },
+	{ name: 'people', label: 'People', icon: 'users' },
+	{ name: 'locations', label: 'Locations', icon: 'map-marked-alt' },
+];
 
 function navSelect(name, _) {
 	if (!name) {

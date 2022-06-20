@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { AxiosError } from 'axios';
 import { enrol, unlock } from '@/crypto';
+import { ElNotification } from 'element-plus';
 import api from '@/api';
 
 export const useAuth = defineStore('auth', {
@@ -41,6 +42,11 @@ export const useAuth = defineStore('auth', {
 
 		async logout() {
 			this.$reset();
+
+			ElNotification({
+				title: 'Signed out',
+				message: 'You have successfully been signed out.',
+			});
 		},
 
 		async signup(user) {

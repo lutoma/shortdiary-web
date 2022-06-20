@@ -1,22 +1,22 @@
 <template>
-	<div class="login">
-		<h1>Join shortdiary</h1>
+	<div class="join">
+		<h2>Join shortdiary</h2>
 
-		<el-form ref="signupFormElement" :model="user" :rules="rules" label-width="100px">
+		<el-form ref="signupFormElement" :model="user" :rules="rules" label-position="top">
 			<el-form-item v-if="error">
 				<el-alert :title="error" :closable="false" type="error" />
 			</el-form-item>
 
 			<el-form-item label="Username" prop="name">
-				<el-input ref="nameElement" v-model="user.name" placeholder="Username" required autofocus @keyup.enter="signup" />
+				<el-input ref="nameElement" v-model="user.name" placeholder="Username" required size="large" autofocus @keyup.enter="signup" />
 			</el-form-item>
 
 			<el-form-item label="Email" prop="email">
-				<el-input v-model="user.email" placeholder="Email" required @keyup.enter="signup" />
+				<el-input v-model="user.email" placeholder="Email" required size="large" @keyup.enter="signup" />
 			</el-form-item>
 
 			<el-form-item label="Password" prop="password">
-				<el-input v-model="user.password" placeholder="Password" show-password required @keyup.enter="signup" />
+				<el-input v-model="user.password" placeholder="Password" show-password required size="large" @keyup.enter="signup" />
 			</el-form-item>
 
 			<el-form-item>
@@ -30,11 +30,13 @@
 			</el-form-item>
 
 			<el-form-item>
-				<el-button v-model:loading="loading" type="primary" @click="signup">
-					<fa :icon="['far', 'sign-in']" /> Sign in
+				<el-button v-model:loading="loading" size="large" type="primary" @click="signup">
+					<fa :icon="['far', 'sign-in']" /> Sign up
 				</el-button>
 			</el-form-item>
 		</el-form>
+
+		<p class="signup-prompt">Already have an account? <router-link :to="{ name: 'login' }">Sign in</router-link></p>
 
 		<p class="hcaptcha-info">
 			This site is protected by hCaptcha and its <a href="https://hcaptcha.com/privacy" rel="nofollow noopener" target="_blank">Privacy Policy</a> and <a href="https://hcaptcha.com/terms" rel="nofollow noopener" target="_blank">Terms of Service</a> apply.
@@ -102,15 +104,20 @@ function signup() {
 </script>
 
 <style lang="scss">
-.login {
-	.el-form {
-		max-width: 600px;
+.join {
+	.el-button {
+		width: 100%;
+	}
+
+	.login-prompt {
+		margin-top: 2rem;
 	}
 
 	.hcaptcha-info {
 		font-size: 12px;
 		color: #909399;
 		margin-top: 4rem;
+		margin-bottom: 0;
 	}
 }
 </style>

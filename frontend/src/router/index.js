@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuth } from '@/stores/auth';
 
+import PublicLayout from '@/layouts/PublicLayout.vue';
+import DefaultLayout from '@/layouts/DefaultLayout.vue';
+
 import DashboardView from '@/views/DashboardView.vue';
 import TimelineView from '@/views/TimelineView.vue';
 import EditPostView from '@/views/EditPostView.vue';
@@ -15,58 +18,72 @@ const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
 		{
-			path: '/',
-			name: 'dashboard',
-			component: DashboardView,
-		},
-		{
-			path: '/posts',
-			name: 'timeline',
-			component: TimelineView,
-			meta: {
-				query: {
-					text: 'string:',
-					mood: 'commaarray:1,10',
-					tags: 'commaarray:',
-					location: 'string:',
-					images: 'string:',
+			path: '',
+			name: 'default-layout',
+			component: DefaultLayout,
+			children: [
+				{
+					path: '',
+					name: 'dashboard',
+					component: DashboardView,
 				},
-			},
+				{
+					path: '/posts',
+					name: 'timeline',
+					component: TimelineView,
+					meta: {
+						query: {
+							text: 'string:',
+							mood: 'commaarray:1,10',
+							tags: 'commaarray:',
+							location: 'string:',
+							images: 'string:',
+						},
+					},
+				},
+				{
+					path: '/posts/:id/edit',
+					name: 'edit-post',
+					component: EditPostView,
+				},
+				{
+					path: '/new',
+					name: 'new-post',
+					component: NewPostView,
+				},
+				{
+					path: '/people',
+					name: 'people',
+					component: PeopleView,
+				},
+				{
+					path: '/locations',
+					name: 'locations',
+					component: LocationsView,
+				},
+				{
+					path: '/settings',
+					name: 'settings',
+					component: SettingsView,
+				},
+			],
 		},
 		{
-			path: '/posts/:id/edit',
-			name: 'edit-post',
-			component: EditPostView,
-		},
-		{
-			path: '/new',
-			name: 'new-post',
-			component: NewPostView,
-		},
-		{
-			path: '/people',
-			name: 'people',
-			component: PeopleView,
-		},
-		{
-			path: '/locations',
-			name: 'locations',
-			component: LocationsView,
-		},
-		{
-			path: '/settings',
-			name: 'settings',
-			component: SettingsView,
-		},
-		{
-			path: '/login',
-			name: 'login',
-			component: LoginView,
-		},
-		{
-			path: '/join',
-			name: 'join',
-			component: JoinView,
+			path: '',
+			name: 'public-layout',
+			component: PublicLayout,
+			children: [
+				{
+					path: '/login',
+					name: 'login',
+					component: LoginView,
+				},
+				{
+					path: '/join',
+					name: 'join',
+					component: JoinView,
+				},
+			],
 		},
 	],
 });
