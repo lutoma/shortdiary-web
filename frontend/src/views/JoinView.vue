@@ -116,7 +116,7 @@ function signup() {
 	.hcaptcha-info {
 		font-size: 12px;
 		color: #909399;
-		margin-top: 4rem;
+		margin-top: 3rem;
 		margin-bottom: 0;
 	}
 }

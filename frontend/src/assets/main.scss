@@ -65,7 +65,7 @@ h2 {
 	font-weight: 300;
 }
 
-a, .el-button--text {
+a {
 	&, &:hover {
 		color: #036564;
 		text-decoration: none;
@@ -74,6 +74,10 @@ a, .el-button--text {
 	&:hover {
 		text-decoration: underline;
 	}
+}
+
+.el-button--text {
+	color: #036564 !important;
 }
 
 p {
