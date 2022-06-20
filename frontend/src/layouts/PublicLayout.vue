@@ -53,6 +53,7 @@
 		> footer {
 			margin-top: 1rem;
 			font-size: 12px;
+			user-select: none;
 
 			ul {
 				list-style-type: none;

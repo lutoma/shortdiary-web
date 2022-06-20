@@ -67,7 +67,7 @@
 					</li>
 				</ol>
 
-				<h2>Filters</h2>
+				<h2 class="filters-heading">Filters</h2>
 				<ol class="filters">
 					<li>
 						<fa :icon="['fal', 'align-left']" />
@@ -317,6 +317,8 @@ $date-aside-width: 130px;
 
 			padding-top: 20px;
 			margin-top: -30px;
+
+			user-select: none;
 		}
 
 		.month-header {
@@ -335,6 +337,8 @@ $date-aside-width: 130px;
 			padding-bottom: 15px;
 			margin-bottom: -15px;
 			//box-shadow: 0 30px 40px rgba(0,0,0,.1);
+
+			user-select: none;
 		}
 
 		.post-container {
@@ -347,6 +351,7 @@ $date-aside-width: 130px;
 				margin-right: $date-aside-margin;
 				text-align: right;
 				padding-top: 10px;
+				user-select: none;
 
 				h3 {
 					font-size: 1.5rem;
@@ -381,6 +386,7 @@ $date-aside-width: 130px;
 			margin: 0;
 			padding: 0;
 			margin-bottom: 3rem;
+			user-select: none;
 
 			> li {
 				padding-left: 8px;
@@ -424,6 +430,10 @@ $date-aside-width: 130px;
 					}
 				}
 			}
+		}
+
+		.filters-heading {
+			user-select: none;
 		}
 
 		.filters {

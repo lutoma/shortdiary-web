@@ -81,6 +81,8 @@ function navSelect(name, _) {
 	border-bottom: 3px solid #CDB380;
 	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 
+	user-select: none;
+
 	.main-nav {
 		flex-grow: 1;
 	}
