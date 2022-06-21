@@ -1,4 +1,5 @@
 FROM node:18
+ARG FONTAWESOME_AUTH_TOKEN
 
 WORKDIR /app
 COPY package.json ./
