@@ -85,6 +85,8 @@ class AccessTokenResponse(BaseModel):
 
 @router.post('/token', response_model=AccessTokenResponse)
 async def renew_token(user: User = Depends(get_current_user)):
+	user.last_seen = datetime.utcnow()
+	await user.save()
 	return {'access_token': create_access_token(user)}
 
 
