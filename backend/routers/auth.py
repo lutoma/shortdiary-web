@@ -6,9 +6,10 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from models import User, User_Pydantic, UserIn_Pydantic
 from tortoise.exceptions import DoesNotExist
+import os
 
 
-SECRET_KEY = '381ba6066c7387729b6c295834b220376058fe1d2ee6769cce7b0950935bda3b'
+SECRET_KEY = os.environ.get('SHORTDIARY_SECRET', 'insecure-changeme')
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -101,12 +102,12 @@ async def signup(user: SignupData):
 	return await User_Pydantic.from_tortoise_orm(user)
 
 
-@router.get("/user", response_model=User_Pydantic)
+@router.get('/user', response_model=User_Pydantic)
 async def get_user(user: User = Depends(get_current_user)):
 	return await User_Pydantic.from_tortoise_orm(user)
 
 
-@router.put("/user", response_model=User_Pydantic)
+@router.put('/user', response_model=User_Pydantic)
 async def update_user(user_data: UserIn_Pydantic, user: User = Depends(get_current_user)):
 	await User.filter(id=user.id).update(**user_data.dict(exclude_unset=True))
 	return await User_Pydantic.from_queryset_single(User.get(id=user.id))
