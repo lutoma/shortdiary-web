@@ -9,9 +9,9 @@ from tortoise.exceptions import DoesNotExist
 import os
 
 
-SECRET_KEY = os.environ.get('SHORTDIARY_SECRET', 'insecure-changeme')
-ALGORITHM = 'HS256'
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+JWT_SECRET_KEY = os.environ.get('SHORTDIARY_SECRET', 'insecure-changeme')
+JWT_ALGORITHM = 'HS256'
+JWT_TOKEN_LIFETIME = {'days': 4}
 
 
 pwd_context = CryptContext(schemes=['argon2'], deprecated='auto')
@@ -27,7 +27,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 	)
 
 	try:
-		payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+		payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
 		uuid: str = payload.get('sub')
 		if uuid is None:
 			raise credentials_exception
@@ -40,15 +40,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 	return user
 
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
-	to_encode = data.copy()
-	if expires_delta:
-		expire = datetime.utcnow() + expires_delta
-	else:
-		expire = datetime.utcnow() + timedelta(minutes=15)
-	to_encode.update({'exp': expire})
-	encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-	return encoded_jwt
+def create_access_token(user):
+	data = {
+		'sub': str(user.id),
+		'exp': datetime.utcnow() + timedelta(**JWT_TOKEN_LIFETIME)
+	}
+	return jwt.encode(data, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
 
 
 class LoginResponse(BaseModel):
@@ -73,17 +70,22 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 	user.last_seen = datetime.utcnow()
 	await user.save()
 
-	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-	access_token = create_access_token(
-		data={'sub': str(user.id)}, expires_delta=access_token_expires
-	)
 	return {
-		'access_token': access_token,
+		'access_token': create_access_token(user),
 		'user': await User_Pydantic.from_tortoise_orm(user),
 		'ephemeral_key_salt': user.ephemeral_key_salt,
 		'master_key': user.master_key,
 		'master_key_nonce': user.master_key_nonce,
 	}
+
+
+class AccessTokenResponse(BaseModel):
+	access_token: str
+
+
+@router.post('/token', response_model=AccessTokenResponse)
+async def renew_token(user: User = Depends(get_current_user)):
+	return {'access_token': create_access_token(user)}
 
 
 class SignupData(BaseModel):

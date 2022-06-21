@@ -9,6 +9,7 @@ export const useAuth = defineStore('auth', {
 		return {
 			masterKey: null,
 			jwt: null,
+			jwtExpiry: null,
 			user: null,
 		};
 	},
@@ -18,6 +19,12 @@ export const useAuth = defineStore('auth', {
 	},
 
 	actions: {
+		async updateToken(jwt) {
+			const jwtData = JSON.parse(atob(jwt.split('.')[1]));
+			this.jwtExpiry = new Date(jwtData.exp * 1000);
+			this.jwt = jwt;
+		},
+
 		async login(email, password) {
 			const credentials = new FormData();
 			credentials.append('username', email);
@@ -25,7 +32,7 @@ export const useAuth = defineStore('auth', {
 
 			try {
 				const res = await api.post('/auth/login', credentials);
-				this.jwt = res.data.access_token;
+				await this.updateToken(res.data.access_token);
 				this.user = res.data.user;
 				this.masterKey = await unlock(password, this.user.ephemeral_key_salt, this.user.master_key_nonce, this.user.master_key);
 			} catch (err) {
@@ -95,6 +102,10 @@ export const useAuth = defineStore('auth', {
 			// and turns it into an Object instead. So we need to manually restore it
 			if (store.masterKey) {
 				store.masterKey = Uint8Array.from(Object.values(store.masterKey));
+			}
+
+			if (store.jwtExpiry) {
+				store.jwtExpiry = new Date(store.jwtExpiry);
 			}
 		},
 	},

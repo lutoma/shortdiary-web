@@ -2,13 +2,27 @@ import axios from 'axios';
 import { useAuth } from '@/stores/auth';
 import router from './router';
 
-const instance = axios.create({ baseURL: 'https://api.beta.shortdiary.com' });
+const BASE_URL = 'http://127.0.0.1:8000';
+const instance = axios.create({ baseURL: BASE_URL });
 
 instance.interceptors.request.use((_config) => {
 	const config = _config;
 	const store = useAuth();
 
 	if (store.jwt) {
+		const expiryRemainder = store.jwtExpiry - new Date();
+
+		// Token expires in less than 3 days, get a new one
+		if (expiryRemainder < 259200) {
+			axios.post(
+				`${BASE_URL}/auth/token`,
+				{},
+				{ headers: { Authorization: `Bearer ${store.jwt}` } }
+			).then((res) => {
+				store.updateToken(res.data.access_token);
+			});
+		}
+
 		config.headers.Authorization = `Bearer ${store.jwt}`;
 	}
 
