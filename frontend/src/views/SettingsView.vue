@@ -16,11 +16,6 @@
 							</n-link>
 						</el-form-item>
 
-						<h2>Profile</h2>
-						<el-form-item label="Name">
-							<el-input v-model="user.name" @keyup.enter="saveSettings" />
-						</el-form-item>
-
 						<el-form-item>
 							<el-button type="primary" @click="saveSettings">
 								Save changes
@@ -77,7 +72,7 @@ import pick from 'lodash/pick';
 //import MfaSetup from '@/components/MfaSetup.vue';
 
 const auth = useAuth();
-const user = reactive(pick(auth.user, ['name', 'email']));
+const user = reactive(pick(auth.user, ['email']));
 
 function saveSettings() {
 	auth.updateUser(user);

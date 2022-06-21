@@ -70,6 +70,9 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 			headers={'WWW-Authenticate': 'Bearer'},
 		)
 
+	user.last_seen = datetime.utcnow()
+	await user.save()
+
 	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 	access_token = create_access_token(
 		data={'sub': str(user.id)}, expires_delta=access_token_expires
@@ -97,6 +100,12 @@ class SignupResponse(BaseModel):
 
 @router.post('/signup', response_model=SignupResponse)
 async def signup(user: SignupData):
+	if await User.get(email=user.email).exists():
+		raise HTTPException(
+			status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+			detail='An account with this email address already exists'
+		)
+
 	user.password = pwd_context.hash(user.password)
 	user = await User.create(**user.dict(exclude_unset=True))
 	return await User_Pydantic.from_tortoise_orm(user)

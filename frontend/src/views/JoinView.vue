@@ -16,46 +16,36 @@
 			</el-form-item>
 
 			<el-form-item>
-				<!--<vue-hcaptcha ref="captcha" :reCaptchaCompat="false" size="invisible" sitekey="9cdd09c8-ab67-4728-b301-8e957d5ef4d8" /> -->
-				<!--<vue-hcaptcha
-					ref="captcha"
-					:reCaptchaCompat="false"
-					size="invisible"
-					sitekey="9cdd09c8-ab67-4728-b301-8e957d5ef4d8"
-					@verify="captcha_verified" />-->
-			</el-form-item>
-
-			<el-form-item>
 				<el-button v-model:loading="loading" size="large" type="primary" @click="signup">
 					<fa :icon="['far', 'sign-in']" /> Sign up
 				</el-button>
 			</el-form-item>
 		</el-form>
 
-		<p class="signup-prompt">Already have an account? <router-link :to="{ name: 'login' }">Sign in</router-link></p>
-
-		<p class="hcaptcha-info">
-			This site is protected by hCaptcha and its <a href="https://hcaptcha.com/privacy" rel="nofollow noopener" target="_blank">Privacy Policy</a> and <a href="https://hcaptcha.com/terms" rel="nofollow noopener" target="_blank">Terms of Service</a> apply.
+		<p class="signup-prompt">
+			Already have an account? <router-link :to="{ name: 'login' }">Sign in</router-link>
 		</p>
 	</div>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAuth } from '@/stores/auth';
-import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
 
 const emailElement = ref(null);
 onMounted(() => {
 	emailElement.value.$el.children[0].children[0].focus();
 });
 
+const auth = useAuth();
+const router = useRouter();
+
 const loading = ref(false);
 const error = ref(null);
 const user = reactive({
 	email: '',
 	password: '',
-	captcha: '',
 });
 
 const rules = {
@@ -65,33 +55,23 @@ const rules = {
 	}],
 };
 
-async function captchaVerified(token, _ekey) {
-	user.captcha = token;
-	loading.value = true;
-	const auth = useAuth();
-
-	await auth.signup(user);
-	loading.value = false;
-
-	/*
-	try {
-		await auth_store.signup(user);
-	} catch (err) {
-		error.value = err.response.data
-	} finally {
-		loading.value = false
-	}
-	*/
-}
-
 const signupFormElement = ref(null);
 function signup() {
 	error.value = null;
 
-	signupFormElement.value.validate((valid) => {
+	signupFormElement.value.validate(async (valid) => {
 		if (valid) {
-			captchaVerified();
-			// this.$refs.captcha.execute()
+			loading.value = true;
+
+			try {
+				await auth.signup(user);
+				await auth.login(user.email, user.password);
+				router.push({ name: 'dashboard' });
+			} catch (err) {
+				error.value = err.toString();
+			} finally {
+				loading.value = false;
+			}
 		}
 	});
 }
@@ -105,13 +85,6 @@ function signup() {
 
 	.login-prompt {
 		margin-top: 2rem;
-	}
-
-	.hcaptcha-info {
-		font-size: 12px;
-		color: #909399;
-		margin-top: 3rem;
-		margin-bottom: 0;
 	}
 }
 </style>

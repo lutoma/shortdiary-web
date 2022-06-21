@@ -5,7 +5,11 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 
 class User(Model):
 	id = fields.UUIDField(pk=True)
-	email = fields.CharField(max_length=255, unique=True)
+	joined = fields.DatetimeField(auto_now_add=True)
+	last_seen = fields.DatetimeField(auto_now_add=True)
+
+	email = fields.CharField(max_length=255, unique=True, index=True)
+	email_verified = fields.BooleanField(default=False)
 
 	# Salt used during derivation of ephemeral key from login password
 	ephemeral_key_salt = fields.CharField(max_length=22, null=True)
@@ -16,18 +20,15 @@ class User(Model):
 	# Nonce used during encryption of master key
 	master_key_nonce = fields.CharField(max_length=32, null=True)
 
-	# Output of crypto_pwhash_str on second half of ephemeral key
+	# argon2id hash of password
 	password = fields.CharField(max_length=100)
 
-	# Old Django password for users that have not logged in since the migration
+	# Old Django credentials for users that have not logged in since the migration
+	legacy_username = fields.CharField(max_length=255, null=True, unique=True)
 	legacy_password = fields.CharField(max_length=500, null=True)
 
-	# Profile name. Used to be the login name in Django times, unused
-	# currently, but might be used again for leaderboard when that returns
-	name = fields.CharField(max_length=255, null=True)
-
 	class PydanticMeta:
-		exclude = ('password', 'legacy_password')
+		exclude = ('password', 'legacy_username', 'legacy_password')
 
 	def __str__(self):
 		return self.name
@@ -39,8 +40,12 @@ UserIn_Pydantic = pydantic_model_creator(User, name='UserIn', exclude_readonly=T
 
 class Post(Model):
 	id = fields.UUIDField(pk=True)
-	author = fields.ForeignKeyField('models.User', related_name='posts')
+	author = fields.ForeignKeyField('models.User', related_name='posts',
+		on_delete=fields.CASCADE, index=True)
+
 	date = fields.DateField()
+	last_changed = fields.DatetimeField(auto_now=True)
+	created = fields.DatetimeField(auto_now_add=True)
 
 	# Encryption format used by this post. 0 = unencrypted (legacy posts from
 	# before client-side encryption used to exist and use has not converted
