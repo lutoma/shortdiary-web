@@ -59,7 +59,7 @@ class LoginResponse(BaseModel):
 @router.post('/login', response_model=LoginResponse)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 	try:
-		user = await User.get(email=form_data.username)
+		user = await User.get(email=form_data.username.lower())
 	except DoesNotExist:
 		user = None
 
@@ -100,6 +100,7 @@ class SignupResponse(BaseModel):
 
 @router.post('/signup', response_model=SignupResponse)
 async def signup(user: SignupData):
+	user.email = user.email.lower()
 	if await User.get(email=user.email).exists():
 		raise HTTPException(
 			status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -118,5 +119,12 @@ async def get_user(user: User = Depends(get_current_user)):
 
 @router.put('/user', response_model=User_Pydantic)
 async def update_user(user_data: UserIn_Pydantic, user: User = Depends(get_current_user)):
+	user_data.email = user_data.email.lower()
+	if await User.get(email=user_data.email).exists():
+		raise HTTPException(
+			status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+			detail='An account with this email address already exists'
+		)
+
 	await User.filter(id=user.id).update(**user_data.dict(exclude_unset=True))
 	return await User_Pydantic.from_queryset_single(User.get(id=user.id))
