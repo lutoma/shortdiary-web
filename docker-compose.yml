@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     pids_limit: 200
     ports:
-      - 8009:80
+      - 8033:80
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
@@ -14,11 +14,15 @@ services:
     image: ghcr.io/lutoma/shortdiary/shortdiary-api:latest
     restart: unless-stopped
     ports:
-      - 8010:80
+      - 8034:80
     labels:
       - com.centurylinklabs.watchtower.enable=true
     volumes:
       - data:/data
+    environment:
+      - SHORTDIARY_DB
+      - SHORTDIARY_ORIGIN
+      - SHORTDIARY_SECRET
 
 volumes:
   data:

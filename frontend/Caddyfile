@@ -2,4 +2,17 @@
 	root * /srv
 	try_files {path} /index.html
 	file_server
+
+	route /map/* {
+		uri strip_prefix /map
+		reverse_proxy https://api.mapbox.com
+	}
+
+	reverse_proxy /avatar/* https://www.gravatar.com {
+		header_up Host {upstream_hostport}
+	}
+
+	reverse_proxy /geocode/* https://api.opencagedata.com {
+		header_up Host {upstream_hostport}
+	}
 }
