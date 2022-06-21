@@ -1,24 +1,13 @@
 # shortdiary
 
-Shortdiary consists of two parts: A Python/Django-based backend that exposes a REST API, and a Vue/Nuxt.js frontend that consumes that API.
+Shortdiary consists of two parts, an API written in Python using [FastAPI](https://fastapi.tiangolo.com/) and [Tortoise ORM](https://tortoise-orm.readthedocs.io/en/latest/), and an ES6 frontend using [Vue 3](https://vuejs.org/) + [Vite](https://vitejs.dev/) + [Pinia](https://pinia.vuejs.org/) + [Element-Plus](https://element-plus.org/).
 
 ## Backend
 
-
 ```
 poetry install
-poetry run ./manage.py migrate
-poetry run ./manage.py runserver
+poetry run uvicorn main:app --reload
 ```
-
-### Tasks
-
-In production, the following tasks need to be scheduled in the Django-Q settings:
-
-  * diary.tasks.process_mails_for_today: Once daily
-  * diary.leaderboard.update_leaderboard: Every five minutes
-  * diary.tasks.send_reminder_mails: Once daily
-  * diary.tasks.send_active_users_overview: Once a week or so
 
 ## Frontend
 
@@ -26,5 +15,3 @@ In production, the following tasks need to be scheduled in the Django-Q settings
 yarn install
 yarn dev
 ```
-
-More details can be found in frontend/README.md
