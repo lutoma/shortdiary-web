@@ -2,8 +2,7 @@ import axios from 'axios';
 import { useAuth } from '@/stores/auth';
 import router from './router';
 
-// const instance = axios.create({ baseURL: 'https://api.guardian.fnoco.eu/v1' });
-const instance = axios.create({ baseURL: 'http://127.0.0.1:8000' });
+const instance = axios.create({ baseURL: 'https://api.beta.shortdiary.com' });
 
 instance.interceptors.request.use((_config) => {
 	const config = _config;
