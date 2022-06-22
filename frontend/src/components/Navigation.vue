@@ -12,6 +12,12 @@
 				</el-menu-item>
 			</el-menu>
 
+			<router-link class="new-entry-button" :to="{ name: 'new-post' }">
+				<el-button type="primary">
+					<fa :icon="['far', 'file-plus']" /> New entry
+				</el-button>
+			</router-link>
+
 			<el-menu mode="horizontal" :ellipsis="false" @select="navSelect">
 				<el-sub-menu popper-class="sub-menu-right">
 					<template #title>
@@ -81,6 +87,10 @@ function navSelect(name, _) {
 	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 
 	user-select: none;
+
+	.new-entry-button {
+		margin-right: 1.5rem;
+	}
 
 	.main-nav {
 		flex-grow: 1;
