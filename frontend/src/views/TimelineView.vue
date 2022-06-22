@@ -54,7 +54,7 @@ const handleEditorClose = (done) => {
 		}
 
 		.el-dialog__body {
-			padding-top: 1rem;
+			padding-top: .5rem;
 		}
 	}
 }

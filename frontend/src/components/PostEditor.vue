@@ -16,108 +16,112 @@
 						placeholder="Jot down your adventures here. If you mention a person like this: @person, they will be listed in the 'People' tab."
 						autofocus
 					/>
+
+					<template #no-result>
+						<div class="mention-no-result">
+							No result
+						</div>
+					</template>
 				</Mentionable>
+			</div>
+
+			<div class="sidebar">
+				<el-form ref="form" :model="pdata" label-position="left" label-width="100px" @submit="save">
+					<el-form-item>
+						<template #label>
+							<fa :icon="['fal', 'calendar-alt']" /> Date
+						</template>
+						<el-date-picker
+							v-model="pdata.date"
+							type="date"
+							placeholder="Pick a date"
+							:picker-options="datePickerOptions"
+							format="MMMM DD, YYYY"
+							value-format="YYYY-MM-DD"
+						/>
+					</el-form-item>
+
+					<el-form-item>
+						<template #label>
+							<MoodIndicatorIcon :mood="pdata.mood === null ? 10 : pdata.mood" /> Mood
+						</template>
+						<el-slider v-model="pdata.mood" :step="1" :min="1" :max="10" show-stops />
+					</el-form-item>
+
+					<el-form-item>
+						<template #label>
+							<fa :icon="['fal', 'tags']" /> Tags
+						</template>
+						<el-select
+							v-model="pdata.tags"
+							multiple
+							filterable
+							allow-create
+							default-first-option
+							placeholder="Choose tags"
+						>
+							<el-option
+								v-for="item in store.tags"
+								:key="item[0]"
+								:label="item[0]"
+								:value="item[0]"
+							/>
+						</el-select>
+					</el-form-item>
+
+					<el-form-item>
+						<template #label>
+							<fa :icon="['fal', 'map-marked-alt']" /> Location
+						</template>
+						<div v-loading="!pdata.location_verbose">
+							{{ pdata.location_verbose }}
+
+							<el-button v-if="post && post.id && pdata.location_verbose" type="text" @click="getGeoLocation()">
+								<fa :icon="['far', 'sync']" />
+							</el-button>
+						</div>
+					</el-form-item>
+
+					<el-form-item>
+						<template #label>
+							<fa :icon="['fal', 'images']" /> Images
+						</template>
+						<el-upload
+							ref="imagesElement"
+							v-model:file-list="existingImages"
+							action="#"
+							list-type="picture-card"
+							:on-preview="handlePictureCardPreview"
+							:on-remove="removeImage"
+							:auto-upload="false"
+							:http-request="uploadImage"
+						>
+							<el-icon><Plus /></el-icon>
+						</el-upload>
+
+						<el-dialog v-model="dialogVisible">
+							<img w-full :src="dialogImageUrl" alt="Preview Image">
+						</el-dialog>
+
+						<el-upload
+							ref="imagesElement"
+							action="#"
+							:http-request="uploadImage"
+							:on-remove="removeImage"
+							:file-list="existingImages"
+							list-type="picture-card"
+							:thumbnail-mode="true"
+							:auto-upload="false"
+							multiple
+						>
+							<i class="el-icon-plus" />
+						</el-upload>
+					</el-form-item>
+				</el-form>
 
 				<el-button v-model:loading="loading" type="primary" :disabled="!pdata.text" @click="save">
 					Save entry
 				</el-button>
-			</div>
-
-			<div class="sidebar">
-				<el-card>
-					<el-form ref="form" :model="pdata" label-position="left" label-width="100px" @submit="save">
-						<el-form-item>
-							<template #label>
-								<fa :icon="['fal', 'calendar-alt']" /> Date
-							</template>
-							<el-date-picker
-								v-model="pdata.date"
-								type="date"
-								placeholder="Pick a date"
-								:picker-options="datePickerOptions"
-								format="MMMM DD, YYYY"
-								value-format="YYYY-MM-DD"
-							/>
-						</el-form-item>
-
-						<el-form-item>
-							<template #label>
-								<MoodIndicatorIcon :mood="pdata.mood === null ? 10 : pdata.mood" /> Mood
-							</template>
-							<el-slider v-model="pdata.mood" :step="1" :min="1" :max="10" show-stops />
-						</el-form-item>
-
-						<el-form-item>
-							<template #label>
-								<fa :icon="['fal', 'tags']" /> Tags
-							</template>
-							<el-select
-								v-model="pdata.tags"
-								multiple
-								filterable
-								allow-create
-								default-first-option
-								placeholder="Choose tags"
-							>
-								<el-option
-									v-for="item in store.tags"
-									:key="item[0]"
-									:label="item[0]"
-									:value="item[0]"
-								/>
-							</el-select>
-						</el-form-item>
-
-						<el-form-item>
-							<template #label>
-								<fa :icon="['fal', 'map-marked-alt']" /> Location
-							</template>
-							<div v-loading="!pdata.location_verbose">
-								{{ pdata.location_verbose }}
-
-								<el-button v-if="post && post.id && pdata.location_verbose" type="text" @click="getGeoLocation()">
-									<fa :icon="['far', 'sync']" />
-								</el-button>
-							</div>
-						</el-form-item>
-
-						<el-form-item>
-							<template #label>
-								<fa :icon="['fal', 'images']" /> Images
-							</template>
-							<el-upload
-								ref="imagesElement"
-								v-model:file-list="existingImages"
-								action="#"
-								list-type="picture-card"
-								:on-preview="handlePictureCardPreview"
-								:on-remove="removeImage"
-								:auto-upload="false"
-								:http-request="uploadImage"
-							>
-								<el-icon><Plus /></el-icon>
-							</el-upload>
-
-							<el-dialog v-model="dialogVisible">
-								<img w-full :src="dialogImageUrl" alt="Preview Image">
-							</el-dialog>
-
-							<el-upload
-								ref="imagesElement"
-								action="#"
-								:http-request="uploadImage"
-								:on-remove="removeImage"
-								:file-list="existingImages"
-								list-type="picture-card"
-								:thumbnail-mode="true"
-								:auto-upload="false"
-								multiple
-							>
-								<i class="el-icon-plus" />
-							</el-upload>
-						</el-form-item>
-					</el-form>
-				</el-card>
 			</div>
 		</div>
 	</div>
@@ -328,41 +332,52 @@ onMounted(() => {
 	}
 
 	.sidebar {
-		flex: 0.1 0 350px;
+		flex: 0.1 0 300px;
+		display: flex;
+		flex-direction: column;
 
-		.el-upload--picture-card, .el-upload-list--picture-card .el-upload-list__item {
-			width: 72px;
-			height: 72px;
-		}
+		.el-form {
+			margin-bottom: 2rem;
+//			flex-grow: 1;
 
-		.el-upload--picture-card {
-			line-height: initial;
-			display: inline-flex;
-			justify-content: center;
-			align-items: center;
+			.el-form-item {
+				.el-form-item__label {
+					// Make sure font-awesome icons properly align vertically
+					align-items: center;
+				}
+
+				.el-select, .el-input, .el-input__wrapper {
+					width: 100%;
+				}
+			}
+
+			.el-upload--picture-card, .el-upload-list--picture-card .el-upload-list__item {
+				width: 72px;
+				height: 72px;
+			}
+
+			.el-upload--picture-card {
+				line-height: initial;
+				display: inline-flex;
+				justify-content: center;
+				align-items: center;
+			}
 		}
 	}
 }
 
-// FIXME Need to properly scope this to not affect other potential popvers?
-.tooltip.popover {
-	background: white;
-	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-	border-radius: 4px;
-	overflow: hidden;
+.v-popper__popper {
+	// Rather hacky but for some reason the poppers end up to far left otherwise
+	margin-left: 27px;
 
-	.tooltip-inner {
-		min-width: 80px;
-		color: #606266;
-		font-size: 14px;
-
-		div > * {
-			padding: 4px 8px;
+	.v-popper__wrapper {
+		.mention-item, .mention-no-result {
+			font-size: .85rem;
+			padding: 4px 6px;
 		}
 
 		.mention-selected {
-			background: #CDB380;
-			color: white;
+			background: var(--el-color-primary);
 		}
 	}
 }
