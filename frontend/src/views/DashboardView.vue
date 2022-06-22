@@ -10,7 +10,7 @@
 							</router-link>
 						</template>
 					</el-table-column>
-					<el-table-column prop="1" width="70" align="right" label="Posts" />
+					<el-table-column prop="1" width="80" align="right" label="Posts" />
 				</PaginatedTableCard>
 			</el-col>
 			<el-col :span="8">
@@ -22,13 +22,19 @@
 							</router-link>
 						</template>
 					</el-table-column>
-					<el-table-column prop="1" width="70" align="right" label="Posts" />
+					<el-table-column prop="1" width="80" align="right" label="Posts" />
 				</PaginatedTableCard>
 			</el-col>
 			<el-col :span="8">
 				<PaginatedTableCard title="Locations by mood" icon="chart-line" :data="moodLocations">
-					<el-table-column prop="0" label="Name" />
-					<el-table-column prop="1" width="70" align="right" label="Mood" />
+					<el-table-column prop="0" label="Location">
+						<template #default="scope">
+							<router-link :to="{ name: 'timeline', query: { location: scope.row[0] } }">
+								{{ scope.row[0] }}
+							</router-link>
+						</template>
+					</el-table-column>
+					<el-table-column prop="1" width="80" align="right" label="Ø Mood" />
 				</PaginatedTableCard>
 			</el-col>
 		</EqualHeightRow>
