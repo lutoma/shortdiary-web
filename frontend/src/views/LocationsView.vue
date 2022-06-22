@@ -1,77 +1,41 @@
 <template>
 	<div class="locations">
-		<Map class="locations-map" :zoom="4" :geojson-cluster="posts_geojson" />
+		<Map class="locations-map" :zoom="4" :geojson-cluster="postsGeojson" />
 	</div>
 </template>
 
-<script>
-import { mapState } from 'pinia';
+<script setup>
+import { computed } from 'vue';
 import { usePosts } from '@/stores/posts';
 import Map from '@/components/Map';
 
-import flow from 'lodash/fp/flow';
-import filter from 'lodash/fp/filter';
-import groupBy from 'lodash/fp/groupBy';
-import pickBy from 'lodash/fp/pickBy';
-import map from 'lodash/fp/map';
-import sortBy from 'lodash/fp/sortBy';
-import reverse from 'lodash/fp/reverse';
-import meanBy from 'lodash/meanBy';
+const store = usePosts();
+store.load();
 
-export default {
-	// layout: 'no-container',
-	components: {
-		Map,
-	},
+const postsGeojson = computed(() => {
+	const geojson = {
+		name: 'markers',
+		type: 'FeatureCollection',
+		features: [],
+	};
 
-	setup() {
-		const store = usePosts();
-		store.load();
-	},
+	for (const post of store.postsList) {
+		if (!post.location_lon || !post.location_lat) {
+			continue;
+		}
 
-	computed: {
-		...mapState(usePosts, ['postsList', 'locations', 'mentions']),
+		geojson.features.push({
+			type: 'Feature',
+			properties: { label: `<a href="/posts/${post.id}">${post.date}</a>` },
+			geometry: {
+				type: 'Point',
+				coordinates: [post.location_lon, post.location_lat],
+			},
+		});
+	}
 
-		mood_locations() {
-			return flow(
-				filter('location_verbose'),
-				filter('mood'),
-				groupBy('location_verbose'),
-				pickBy((entries, _) => entries.length >= 5),
-				map((entries, location) => [location, meanBy(entries, (entry) => entry.mood).toPrecision(3)]),
-				sortBy(1),
-				reverse,
-			)(this.postsList);
-		},
-/*
-		posts_geojson() {
-			const geojson = {
-				name: 'markers',
-				type: 'FeatureCollection',
-				features: [],
-			};
-
-			for (const post of this.posts) {
-				if (!post.location_lon || !post.location_lat) {
-					continue;
-				}
-
-				geojson.features.push({
-					type: 'Feature',
-					properties: { label: `<a href="/posts/${post.id}">${post.date}</a>` },
-					geometry: {
-						type: 'Point',
-						coordinates: [post.location_lon, post.location_lat],
-					},
-				});
-			}
-
-			return geojson;
-		},
-*/
-
-	},
-};
+	return geojson;
+});
 </script>
 
 <style lang="scss">
