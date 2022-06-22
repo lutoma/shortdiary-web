@@ -49,9 +49,9 @@ const user = reactive({
 });
 
 const rules = {
-	password: [{ required: true, message: 'Please enter a password', trigger: 'change' }],
+	password: [{ required: true, message: 'Please enter a password', trigger: 'blur' }],
 	email: [{
-		required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'change',
+		required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'blur',
 	}],
 };
 

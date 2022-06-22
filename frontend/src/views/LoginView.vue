@@ -76,13 +76,13 @@ const credentials = reactive({
 
 const rules = {
 	email: [{
-		required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'change',
+		required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'blur',
 	}],
-	password: [{ required: true, message: 'Please enter a password', trigger: 'change' }],
+	password: [{ required: true, message: 'Please enter a password', trigger: 'blur' }],
 };
 
 const mfaRules = {
-	code: [{ required: true, message: 'Please enter the authentication code', trigger: 'change' }],
+	code: [{ required: true, message: 'Please enter the authentication code', trigger: 'blur' }],
 };
 
 const mfaRequest = reactive({
