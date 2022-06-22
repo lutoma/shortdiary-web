@@ -2,14 +2,14 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 
 import {
 	faKey as faKeyRegular, faPencil as faPencilRegular, faSignIn as faSignInRegular,
-	faList as faListRegular, faChartBar as faChartBarRegular, faMedal as faMedalRegular,
+	faList as faListRegular, faChartMixed as faChartMixedRegular, faMedal as faMedalRegular,
 	faWrench as faWrenchRegular, faSignOut as faSignOutRegular, faCompass as faCompassRegular,
 	faUserFriends as faUserFriendsRegular, faImages as faImagesRegular,
 	faEmptySet as faEmptySetRegular, faLock as faLockRegular, faLockOpen as faLockOpenRegular,
 	faBars as faBarsRegular, faFileContract as faFileContractRegular,
 	faShieldCheck as faShieldCheckRegular, faSync as faSyncRegular,
 	faMapMarkedAlt as faMapMarkedAltRegular, faUsers as faUsersRegular, faHouse as faHouseRegular,
-	faFilePlus as faFilePlusRegular
+	faFilePlus as faFilePlusRegular,
 } from '@fortawesome/pro-regular-svg-icons';
 
 import {
@@ -34,7 +34,7 @@ import App from './App.vue';
 import router from './router';
 
 /* eslint-disable function-paren-newline, function-call-argument-newline */
-library.add(faKeyRegular, faPencilRegular, faSignInRegular, faListRegular, faChartBarRegular,
+library.add(faKeyRegular, faPencilRegular, faSignInRegular, faListRegular, faChartMixedRegular,
 	faMedalRegular, faWrenchRegular, faSignOutRegular, faCompassRegular, faUserFriendsRegular,
 	faImagesRegular, faEmptySetRegular, faLockRegular, faLockOpenRegular, faBarsRegular,
 	faFileContractRegular, faShieldCheckRegular, faSyncRegular, faMapMarkedAltRegular,
@@ -50,10 +50,9 @@ library.add(faGithub);
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
-
 createApp(App)
 	.component('fa', FontAwesomeIcon)
 	.use(pinia)
 	.use(router)
-	.use(QuerySynchronizer, { router: router })
+	.use(QuerySynchronizer, { router })
 	.mount('#app');

@@ -2,7 +2,7 @@
 	<div class="main-nav-container">
 		<nav>
 			<div class="name brand">
-				<router-link :to="{ name: 'dashboard' }">
+				<router-link :to="{ name: 'timeline' }">
 					shortdiary
 				</router-link>
 			</div>
@@ -51,9 +51,10 @@ const auth = useAuth();
 const router = useRouter();
 
 const navItems = [
-	{ name: 'dashboard', label: 'Dashboard', icon: 'house' },
-	{ name: 'timeline', label: 'Entries', icon: 'list' },
-	{ name: 'people', label: 'People', icon: 'users' },
+	{ name: 'timeline', label: 'Dashboard', icon: 'house' },
+	// { name: 'timeline', label: 'Entries', icon: 'list' },
+	{ name: 'dashboard', label: 'Stats', icon: 'chart-mixed' },
+	// { name: 'people', label: 'People', icon: 'users' },
 	{ name: 'locations', label: 'Locations', icon: 'map-marked-alt' },
 ];
 

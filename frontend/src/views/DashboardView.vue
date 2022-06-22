@@ -2,25 +2,31 @@
 	<div class="stats">
 		<EqualHeightRow>
 			<el-col :span="8">
-				<PaginatedTableCard title="Frequent locations" icon="map-marked-alt" :data="locations">
-					<el-table-column prop="0" label="Location" />
-					<el-table-column prop="1" width="70" align="right" label="Posts" />
-				</PaginatedTableCard>
-			</el-col>
-			<el-col :span="8">
-				<PaginatedTableCard title="Frequent mentions" icon="users" :data="mentions">
-					<el-table-column prop="0" label="Name">
+				<PaginatedTableCard title="Frequent locations" icon="map-marked-alt" :data="store.locations">
+					<el-table-column prop="0" label="Location">
 						<template #default="scope">
-							<n-link :to="`/dashboard?filter=${scope.row[0]}`">
+							<router-link :to="{ name: 'timeline', query: { location: scope.row[0] } }">
 								{{ scope.row[0] }}
-							</n-link>
+							</router-link>
 						</template>
 					</el-table-column>
 					<el-table-column prop="1" width="70" align="right" label="Posts" />
 				</PaginatedTableCard>
 			</el-col>
 			<el-col :span="8">
-				<PaginatedTableCard title="Locations by mood" icon="chart-line" :data="mood_locations">
+				<PaginatedTableCard title="Frequent mentions" icon="users" :data="store.mentions">
+					<el-table-column prop="0" label="Name">
+						<template #default="scope">
+							<router-link :to="{ name: 'timeline', query: { text: scope.row[0] } }">
+								{{ scope.row[0] }}
+							</router-link>
+						</template>
+					</el-table-column>
+					<el-table-column prop="1" width="70" align="right" label="Posts" />
+				</PaginatedTableCard>
+			</el-col>
+			<el-col :span="8">
+				<PaginatedTableCard title="Locations by mood" icon="chart-line" :data="moodLocations">
 					<el-table-column prop="0" label="Name" />
 					<el-table-column prop="1" width="70" align="right" label="Mood" />
 				</PaginatedTableCard>
@@ -28,20 +34,23 @@
 		</EqualHeightRow>
 
 		<h2>Year to date</h2>
-		<!--<calendar-heatmap class="heatmap" :values="heatmap.values" :end-date="heatmap.endDate" />-->
-		<!--<PostLengthChart style="margin-top: 4rem;" :chart-data="{labels: ['January', 'February'], datasets: [{label: 'Data One', backgroundColor: '#f87979', data: [40, 20]}]}" :options="{responsive: true, maintainAspectRatio: false}" :height="200" />-->
+		<calendar-heatmap
+			class="heatmap"
+			:values="heatmap.values"
+			:end-date="heatmap.endDate"
+			tooltip-unit="chars"
+			no-data-text="No post for this day"
+			:range-color="['#f5f0e6', '#f5f0e6', '#e1d1b3', '#dccaa6', '#d7c299', '#d2bb8d', '#cdb380']"
+		/>
 	</div>
 </template>
 
-<script>
-import { mapState } from 'pinia';
+<script setup>
+import { computed } from 'vue';
 import { usePosts } from '@/stores/posts';
 import { CalendarHeatmap } from 'vue3-calendar-heatmap';
-import PostLengthChart from '@/components/PostLengthChart';
 import EqualHeightRow from '@/components/EqualHeightRow.vue';
 import PaginatedTableCard from '@/components/PaginatedTableCard.vue';
-import PostTimeline from '@/components/PostTimeline.vue';
-import Map from '@/components/Map';
 
 import flow from 'lodash/fp/flow';
 import filter from 'lodash/fp/filter';
@@ -50,80 +59,39 @@ import pickBy from 'lodash/fp/pickBy';
 import map from 'lodash/fp/map';
 import sortBy from 'lodash/fp/sortBy';
 import reverse from 'lodash/fp/reverse';
+import toPairs from 'lodash/fp/toPairs';
 import meanBy from 'lodash/meanBy';
 
-export default {
-	// layout: 'no-container',
-	components: {
-		CalendarHeatmap,
-		PostLengthChart,
-		EqualHeightRow,
-		PaginatedTableCard,
-		Map,
-	},
+const store = usePosts();
+store.load();
 
-	setup() {
-		const store = usePosts();
-		store.load();
-	},
+const moodLocations = computed(() => {
+	return flow(
+		filter('location_verbose'),
+		filter('mood'),
+		groupBy('location_verbose'),
+		pickBy((entries, _) => entries.length >= 5),
+		toPairs,
+		map(([location, entries]) => [location, meanBy(entries, (entry) => entry.mood).toPrecision(3)]),
+		sortBy(1),
+		reverse,
+	)(store.postsList);
+});
 
-	computed: {
-		...mapState(usePosts, ['postsList', 'locations', 'mentions']),
+const heatmap = computed(() => {
+	const now = new Date();
+	const year = String(now.getFullYear());
 
-		mood_locations() {
-			return flow(
-				filter('location_verbose'),
-				filter('mood'),
-				groupBy('location_verbose'),
-				pickBy((entries, _) => entries.length >= 5),
-				map((entries, location) => [location, meanBy(entries, (entry) => entry.mood).toPrecision(3)]),
-				sortBy(1),
-				reverse,
-			)(this.postsList);
-		},
-/*
-		posts_geojson() {
-			const geojson = {
-				name: 'markers',
-				type: 'FeatureCollection',
-				features: [],
-			};
+	const values = flow(
+		filter((x) => x.date.slice(0, 4) === year),
+		map((x) => ({ date: x.date, count: x.text.length })),
+	)(store.postsList);
 
-			for (const post of this.posts) {
-				if (!post.location_lon || !post.location_lat) {
-					continue;
-				}
-
-				geojson.features.push({
-					type: 'Feature',
-					properties: { label: `<a href="/posts/${post.id}">${post.date}</a>` },
-					geometry: {
-						type: 'Point',
-						coordinates: [post.location_lon, post.location_lat],
-					},
-				});
-			}
-
-			return geojson;
-		},
-
-		heatmap() {
-			const now = new Date();
-			const year = String(now.getFullYear());
-
-			const values = _(this.posts)
-				.filter((x) => x.date.slice(0, 4) === year)
-				.map((x) => ({ date: x.date, count: x.text.length }))
-				.value();
-
-			return {
-				endDate: now.toISOString().slice(0, 10),
-				values,
-			};
-		},
-*/
-	},
-};
+	return {
+		endDate: now.toISOString().slice(0, 10),
+		values,
+	};
+});
 </script>
 
 <style lang="scss">
@@ -141,6 +109,13 @@ export default {
 	.heatmap {
 		margin: 1rem;
 		margin-bottom: 3rem;
+		max-width: 1200px;
+
+		svg {
+			text {
+				font-size: 8px;
+			}
+		}
 	}
 
 	.card-table-row {
