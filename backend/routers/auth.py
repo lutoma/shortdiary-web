@@ -14,7 +14,9 @@ JWT_ALGORITHM = 'HS256'
 JWT_TOKEN_LIFETIME = {'days': 4}
 
 
-pwd_context = CryptContext(schemes=['argon2'], deprecated='auto')
+pwd_context = CryptContext(schemes=['argon2', 'django_pbkdf2_sha256'],
+	deprecated=['django_pbkdf2_sha256'])
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/login')
 router = APIRouter()
 
@@ -55,17 +57,27 @@ class LoginResponse(BaseModel):
 
 @router.post('/login', response_model=LoginResponse)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+	credentials_exception = HTTPException(
+		status_code=status.HTTP_401_UNAUTHORIZED,
+		detail='Incorrect username or password',
+		headers={'WWW-Authenticate': 'Bearer'},
+	)
+
 	try:
 		user = await User.get(email=form_data.username.lower())
 	except DoesNotExist:
-		user = None
+		try:
+			user = await User.get(legacy_username=form_data.username)
+		except DoesNotExist:
+			raise credentials_exception
 
-	if not user or not pwd_context.verify(form_data.password, user.password):
-		raise HTTPException(
-			status_code=status.HTTP_401_UNAUTHORIZED,
-			detail='Incorrect username or password',
-			headers={'WWW-Authenticate': 'Bearer'},
-		)
+	(verified, new_hash) = pwd_context.verify_and_update(form_data.password, user.password)
+
+	if not verified:
+		raise credentials_exception
+
+	if new_hash:
+		user.password = new_hash
 
 	user.last_seen = datetime.utcnow()
 	await user.save()

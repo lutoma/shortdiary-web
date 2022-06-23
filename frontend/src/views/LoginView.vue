@@ -13,7 +13,7 @@
 				</el-form-item>
 
 				<el-form-item prop="email">
-					<el-input ref="emailElement" v-model="credentials.email" placeholder="Email" required size="large" autofocus @keyup.enter="login" />
+					<el-input ref="emailElement" v-model="credentials.email" placeholder="Email (or username for old accounts)" required size="large" autofocus @keyup.enter="login" />
 				</el-form-item>
 				<el-form-item prop="password">
 					<el-input v-model="credentials.password" placeholder="Password" show-password size="large" required @keyup.enter="login" />
@@ -76,7 +76,7 @@ const credentials = reactive({
 
 const rules = {
 	email: [{
-		required: true, type: 'email', message: 'Please enter a valid email address', trigger: 'blur',
+		required: true, message: 'Please enter a valid email address or username', trigger: 'blur',
 	}],
 	password: [{ required: true, message: 'Please enter a password', trigger: 'blur' }],
 };

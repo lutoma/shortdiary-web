@@ -23,9 +23,8 @@ class User(Model):
 	# argon2id hash of password
 	password = fields.CharField(max_length=100)
 
-	# Old Django credentials for users that have not logged in since the migration
+	# Old Django username for users that have not logged in since the migration
 	legacy_username = fields.CharField(max_length=255, null=True, unique=True)
-	legacy_password = fields.CharField(max_length=500, null=True)
 
 	class PydanticMeta:
 		exclude = ('password', 'legacy_username', 'legacy_password')
