@@ -136,7 +136,7 @@ async def get_user(user: User = Depends(get_current_user)):
 @router.put('/user', response_model=User_Pydantic)
 async def update_user(user_data: UserIn_Pydantic, user: User = Depends(get_current_user)):
 	user_data.email = user_data.email.lower()
-	if await User.get(email=user_data.email).exists():
+	if user_data.email != user.email and await User.get(email=user_data.email).exists():
 		raise HTTPException(
 			status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
 			detail='An account with this email address already exists'

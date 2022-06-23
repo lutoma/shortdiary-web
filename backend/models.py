@@ -27,7 +27,7 @@ class User(Model):
 	legacy_username = fields.CharField(max_length=255, null=True, unique=True)
 
 	class PydanticMeta:
-		exclude = ('password', 'legacy_username', 'legacy_password')
+		exclude = ('password', 'legacy_username', 'joined', 'last_seen')
 
 	def __str__(self):
 		return self.name

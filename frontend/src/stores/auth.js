@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { AxiosError } from 'axios';
 import { enrol, unlock } from '@/crypto';
 import { ElNotification } from 'element-plus';
+import cloneDeep from 'lodash/cloneDeep';
 import api from '@/api';
 
 export const useAuth = defineStore('auth', {
@@ -34,7 +35,24 @@ export const useAuth = defineStore('auth', {
 				const res = await api.post('/auth/login', credentials);
 				await this.updateToken(res.data.access_token);
 				this.user = res.data.user;
-				this.masterKey = await unlock(password, this.user.ephemeral_key_salt, this.user.master_key_nonce, this.user.master_key);
+
+				if (this.user.master_key) {
+					this.masterKey = await unlock(password, this.user.ephemeral_key_salt, this.user.master_key_nonce, this.user.master_key);
+				} else {
+					const [ephemeralKeySalt, masterKeyNonce, masterKey] = await enrol(password);
+
+					const userData = cloneDeep(this.user);
+					delete userData.id;
+
+					await api.put('/auth/user', {
+						...userData,
+						ephemeral_key_salt: ephemeralKeySalt,
+						master_key_nonce: masterKeyNonce,
+						master_key: masterKey,
+					});
+
+					this.masterKey = await unlock(password, ephemeralKeySalt, masterKeyNonce, masterKey);
+				}
 			} catch (err) {
 				if (err instanceof AxiosError && err.response) {
 					throw err.response.data.detail;
