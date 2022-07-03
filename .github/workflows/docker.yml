@@ -9,7 +9,7 @@ on:
       - v*
 
 env:
-  IMAGE_NAME: shortdiary-frontend
+  IMAGE_NAME: shortdiary-web
 
 jobs:
   push:
