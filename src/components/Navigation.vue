@@ -32,7 +32,7 @@
 					</el-menu-item>
 
 					<el-menu-item-group>
-						<el-menu-item><fa :icon="['fab', 'github']" /> <a href="https://github.com/lutoma/shortdiary" target="_blank" rel="noopener">Source code</a></el-menu-item>
+						<el-menu-item><fa :icon="['fab', 'github']" /> <a href="https://github.com/lutoma/shortdiary-web" target="_blank" rel="noopener">Source code</a></el-menu-item>
 						<el-menu-item><fa :icon="['far', 'file-contract']" /> <a href="https://fnordserver.eu/en/imprint/" target="_blank" rel="noopener">Legal notice</a></el-menu-item>
 						<el-menu-item><fa :icon="['far', 'shield-check']" /> <a href="https://fnordserver.eu/en/privacy-policy/" target="_blank" rel="noopener">Privacy</a></el-menu-item>
 					</el-menu-item-group>

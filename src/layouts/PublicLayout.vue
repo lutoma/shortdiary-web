@@ -9,7 +9,7 @@
 			</el-card>
 			<footer>
 				<ul>
-					<li><a rel="noopener" target="_blank" href="https://github.com/lutoma/shortdiary">Source code</a></li>
+					<li><a rel="noopener" target="_blank" href="https://github.com/lutoma/shortdiary-web">Source code</a></li>
 					<li><a rel="noopener" target="_blank" href="https://fnordserver.eu/en/privacy-policy">Privacy</a></li>
 					<li><a rel="noopener" target="_blank" href="https://fnordserver.eu/en/imprint">Legal notice</a></li>
 					<li><a rel="noopener" target="_blank" href="https://fnordserver.eu/en/contact">Contact</a></li>
