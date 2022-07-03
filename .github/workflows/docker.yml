@@ -1,4 +1,4 @@
-name: Docker frontend
+name: Docker build
 
 on:
   push:
@@ -8,15 +8,8 @@ on:
     tags:
       - v*
 
-    paths:
-      - 'frontend/**'
-
 env:
   IMAGE_NAME: shortdiary-frontend
-
-defaults:
-  run:
-    working-directory: frontend
 
 jobs:
   push:
