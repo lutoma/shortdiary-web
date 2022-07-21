@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuth } from '@/stores/auth';
 import router from './router';
 
-const BASE_URL = 'https://api.shortdiary.com';
+const BASE_URL = import.meta.env.PROD ? 'https://api.beta.shortdiary.com' : 'http://127.0.0.1:8000';
 const instance = axios.create({ baseURL: BASE_URL });
 
 instance.interceptors.request.use((_config) => {
