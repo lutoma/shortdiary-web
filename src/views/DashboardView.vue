@@ -1,8 +1,9 @@
 <template>
 	<div class="stats">
+		<h1>Welcome back!</h1>
 		<EqualHeightRow>
 			<el-col :span="8">
-				<PaginatedTableCard title="Frequent locations" icon="map-marked-alt" :data="store.locations">
+				<PaginatedTable title="Frequent locations" icon="map-marked-alt" :data="store.locations">
 					<el-table-column prop="0" label="Location">
 						<template #default="scope">
 							<router-link :to="{ name: 'timeline', query: { location: scope.row[0] } }">
@@ -11,10 +12,10 @@
 						</template>
 					</el-table-column>
 					<el-table-column prop="1" width="80" align="right" label="Posts" />
-				</PaginatedTableCard>
+				</PaginatedTable>
 			</el-col>
 			<el-col :span="8">
-				<PaginatedTableCard title="Frequent mentions" icon="users" :data="store.mentions">
+				<PaginatedTable title="Frequent mentions" icon="users" :data="store.mentions">
 					<el-table-column prop="0" label="Name">
 						<template #default="scope">
 							<router-link :to="{ name: 'timeline', query: { text: scope.row[0] } }">
@@ -23,10 +24,10 @@
 						</template>
 					</el-table-column>
 					<el-table-column prop="1" width="80" align="right" label="Posts" />
-				</PaginatedTableCard>
+				</PaginatedTable>
 			</el-col>
 			<el-col :span="8">
-				<PaginatedTableCard title="Locations by mood" icon="chart-line" :data="moodLocations">
+				<PaginatedTable title="Locations by mood" icon="chart-line" :data="moodLocations">
 					<el-table-column prop="0" label="Location">
 						<template #default="scope">
 							<router-link :to="{ name: 'timeline', query: { location: scope.row[0] } }">
@@ -35,7 +36,7 @@
 						</template>
 					</el-table-column>
 					<el-table-column prop="1" width="80" align="right" label="Ø Mood" />
-				</PaginatedTableCard>
+				</PaginatedTable>
 			</el-col>
 		</EqualHeightRow>
 
@@ -56,7 +57,8 @@ import { computed } from 'vue';
 import { usePosts } from '@/stores/posts';
 import { CalendarHeatmap } from 'vue3-calendar-heatmap';
 import EqualHeightRow from '@/components/EqualHeightRow.vue';
-import PaginatedTableCard from '@/components/PaginatedTableCard.vue';
+import PaginatedTable from '@/components/PaginatedTable.vue';
+
 
 import flow from 'lodash/fp/flow';
 import filter from 'lodash/fp/filter';
@@ -105,6 +107,10 @@ const heatmap = computed(() => {
 	// Needed to push footer down. Usually done by main containerm, but we use
 	// the no-container layout here
 	flex-grow: 1;
+
+	// Needed for EqualHeightRow with gutter
+	overflow-x: hidden;
+	overflow-x: clip;
 
 	.stats-map {
 		min-height: 250px;

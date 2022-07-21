@@ -10,12 +10,13 @@
 	)
 );
 
-$bg-color: #F9F9F9;
+$bg-color: #fefefe;
 @use "element-plus/theme-chalk/src/index.scss" as *;
 
 @use "@fontsource/fira-sans/latin-300.css" as *;
 @use "@fontsource/fira-sans/latin-400.css" as *;
 @use "@fontsource/fira-sans/latin-600.css" as *;
+@use "@fontsource/fira-sans/latin-700.css" as *;
 @use "@fontsource/exo-2/latin-800.css" as *;
 @use "../../node_modules/floating-vue/dist/style.css" as *;
 
@@ -39,6 +40,8 @@ html {
 
 body {
 	background: $bg-color;
+	--fa-primary-color: #cdb380;
+	--fa-secondary-color: #cdb380;
 }
 
 *, *:before, *:after {

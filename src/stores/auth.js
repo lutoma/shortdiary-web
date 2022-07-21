@@ -47,6 +47,7 @@ export const useAuth = defineStore('auth', {
 
 					const userData = cloneDeep(this.user);
 					delete userData.id;
+					delete userData.subscription;
 
 					await api.put('/auth/user', {
 						...userData,

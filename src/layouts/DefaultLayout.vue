@@ -1,7 +1,6 @@
 <template>
 	<div id="default-layout-container">
 		<Navigation />
-
 		<div id="main-container">
 			<el-alert
 				v-if="!auth.haveSubscription"
@@ -27,17 +26,14 @@ auth.loadUser();
 @use "@/assets/main.scss" as *;
 
 #default-layout-container {
-	// Fixed top menu
-	padding-top: 50px;
+	// Fixed menu
+	padding-left: 240px;
 
 	#main-container {
 		flex-grow: 1;
-		width: 100%;
-		max-width: 1600px;
-		min-width: 1200px;
-		margin: 0 auto;
+		height: 100vh;
 		margin-top: 30px;
-		padding: 0 1rem;
+		padding: 0 2rem;
 
 		display: flex;
 		flex-direction: column;

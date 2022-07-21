@@ -3,7 +3,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
 	faKey as faKeyRegular, faPencil as faPencilRegular, faSignIn as faSignInRegular,
 	faList as faListRegular, faChartMixed as faChartMixedRegular, faMedal as faMedalRegular,
-	faWrench as faWrenchRegular, faSignOut as faSignOutRegular, faCompass as faCompassRegular,
+	faGear as faGearRegular, faSignOut as faSignOutRegular, faCompass as faCompassRegular,
 	faUserFriends as faUserFriendsRegular, faImages as faImagesRegular,
 	faEmptySet as faEmptySetRegular, faLock as faLockRegular, faLockOpen as faLockOpenRegular,
 	faBars as faBarsRegular, faFileContract as faFileContractRegular,
@@ -23,6 +23,10 @@ import {
 	faRuler as faRulerLight, faTags as faTagsLight, faAlignLeft as faAlignLeftLight,
 } from '@fortawesome/pro-light-svg-icons';
 
+import {
+	faMapMarkedAlt as faMapMarkedAltLDuotone, faUsers as faUsersDuotone, faChartLine as faChartLineDuotone,
+} from '@fortawesome/pro-duotone-svg-icons';
+
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -35,7 +39,7 @@ import router from './router';
 
 /* eslint-disable function-paren-newline, function-call-argument-newline */
 library.add(faKeyRegular, faPencilRegular, faSignInRegular, faListRegular, faChartMixedRegular,
-	faMedalRegular, faWrenchRegular, faSignOutRegular, faCompassRegular, faUserFriendsRegular,
+	faMedalRegular, faGearRegular, faSignOutRegular, faCompassRegular, faUserFriendsRegular,
 	faImagesRegular, faEmptySetRegular, faLockRegular, faLockOpenRegular, faBarsRegular,
 	faFileContractRegular, faShieldCheckRegular, faSyncRegular, faMapMarkedAltRegular,
 	faHouseRegular, faUsersRegular, faFilePlusRegular);
@@ -44,6 +48,8 @@ library.add(faLockLight, faLockOpenLight, faLaughLight, faSmileLight, faMehLight
 	faPencilLight, faLinkLight, faTrashLight, faMapMarkedAltLight, faUsersLight, faChartLineLight,
 	faLanguageLight, faCalendarAltLight, faImagesLight, faShieldCheckLight, faTrophyAltLight,
 	faTallyLight, faRulerLight, faTagsLight, faAlignLeftLight);
+
+library.add(faMapMarkedAltLDuotone, faUsersDuotone, faChartLineDuotone);
 
 library.add(faGithub);
 

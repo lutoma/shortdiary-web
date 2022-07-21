@@ -2,7 +2,7 @@
 	<div class="settings">
 		<h1>Settings</h1>
 
-		<el-tabs class="settings-tabs" tab-position="left">
+		<el-tabs class="settings-tabs" tab-position="top">
 			<el-tab-pane label="Account">
 				<el-form ref="form" :model="user" label-position="left" label-width="200px">
 					<el-form-item label="Email">
@@ -38,6 +38,9 @@
 					Choose a plan
 				</el-button>
 			</el-tab-pane>
+			<el-tab-pane label="Data export">
+				tbd
+			</el-tab-pane>
 		</el-tabs>
 	</div>
 </template>
@@ -71,12 +74,8 @@ const handlePortal = (async () => {
 <style lang="scss">
 .settings {
 	.settings-tabs {
-		height: 500px;
-
 		.el-tabs__content {
-			padding: 1rem 0.6rem;
-			padding-top: 0;
-			padding-left: 3rem;
+			padding-top: 1rem;
 		}
 	}
 }

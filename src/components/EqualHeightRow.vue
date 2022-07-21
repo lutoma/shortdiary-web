@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-defineProps({ gutter: { type: Number, default: 50 } });
+defineProps({ gutter: { type: Number, default: 80 } });
 </script>
 
 <style lang="scss">

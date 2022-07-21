@@ -64,7 +64,7 @@
 				:to="{ name: 'timeline', query: { tags: tag } }"
 			>
 				<el-tag
-					size="medium"
+					size="small"
 					effect="dark"
 					type="info"
 				>

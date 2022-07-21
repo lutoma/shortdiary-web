@@ -290,19 +290,32 @@ function getMonthName(num) {
 }
 
 function datePickerSelect(event) {
-	const dest = document.querySelector(event.target.dataset.scrolltarget);
+	let dest = document.querySelector(event.target.dataset.scrolltarget);
 
-	// Cannot use ScrollIntoView here due to the abolute positioned
-	// navbar that would cover up the heading
 	if (dest) {
 		window.scrollTo({ top: dest.offsetTop, left: 0, behavior: 'smooth' });
+	} else {
+		console.log('datepicker no dest, loading', visiblePosts.value, store.posts.size);
+		while (visiblePosts.value < store.posts.size && !document.querySelector(event.target.dataset.scrolltarget)) {
+			visiblePosts.value += 10;
+			console.log('visible', visiblePosts.value);
+		}
+
+		setTimeout(() => {
+			dest = document.querySelector(event.target.dataset.scrolltarget);
+			console.log('dest now', dest);
+
+			if (dest) {
+				window.scrollTo({ top: dest.offsetTop, left: 0, behavior: 'smooth' });
+			}
+		}, 1);
 	}
 }
 </script>
 
 <style lang="scss">
 $date-aside-margin: 30px;
-$date-aside-width: 130px;
+$date-aside-width: 100px;
 
 .post-timeline {
 	display: flex;
@@ -323,7 +336,7 @@ $date-aside-width: 130px;
 
 		.year-header {
 			position: sticky;
-			top: 50px;
+			top: 0px;
 
 			width: $date-aside-width;
 			text-align: right;
@@ -332,26 +345,28 @@ $date-aside-width: 130px;
 			margin: 0;
 			height: 60px;
 
-			background: #F9F9F9;
+			font-size: 1.4rem;
+			background: #ffffff;
 
 			// Position above month-header
 			z-index: 10;
 
 			padding-top: 20px;
-			margin-top: -30px;
+			//margin-top: -30px;
 
 			user-select: none;
 		}
 
 		.month-header {
 			position: sticky;
-			top: 110px;
+			top: 60px;
 			margin: 0;
 
 			width: $date-aside-width;
 			text-align: right;
 
-			background: #F9F9F9;
+			font-size: 1.2rem;
+			background: #ffffff;
 
 			// Position below year-header
 			z-index: 9;
@@ -401,7 +416,7 @@ $date-aside-width: 130px;
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=1585378
 			// Bug is fixed now, reenabled. -2022-07-21
 			position: sticky;
-			top: 90px;
+			top: 30px;
 			width: 275px;
 		}
 

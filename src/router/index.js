@@ -22,7 +22,7 @@ const router = createRouter({
 			component: DefaultLayout,
 			children: [
 				{
-					path: 'stats',
+					path: '',
 					name: 'dashboard',
 					component: DashboardView,
 				},
@@ -52,15 +52,13 @@ const router = createRouter({
 						},
 					],
 				},
-/*
 				{
 					path: 'people',
 					name: 'people',
 					component: PeopleView,
 				},
-*/
 				{
-					path: 'locations',
+					path: 'places',
 					name: 'locations',
 					component: LocationsView,
 				},
