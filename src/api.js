@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuth } from '@/stores/auth';
 import router from './router';
 
-const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = 'https://api.shortdiary.com';
 const instance = axios.create({ baseURL: BASE_URL });
 
 instance.interceptors.request.use((_config) => {
@@ -17,7 +17,7 @@ instance.interceptors.request.use((_config) => {
 			axios.post(
 				`${BASE_URL}/auth/token`,
 				{},
-				{ headers: { Authorization: `Bearer ${store.jwt}` } }
+				{ headers: { Authorization: `Bearer ${store.jwt}` } },
 			).then((res) => {
 				store.updateToken(res.data.access_token);
 			});

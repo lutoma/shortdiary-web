@@ -44,7 +44,9 @@ const handleEditorClose = (done) => {
 
 <style lang="scss">
 .timeline {
-	height: 100%;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
 
 	.post-editor-dialog {
 		.el-dialog__header {

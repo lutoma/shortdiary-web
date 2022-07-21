@@ -305,8 +305,8 @@ $date-aside-margin: 30px;
 $date-aside-width: 130px;
 
 .post-timeline {
-	height: 100%;
 	display: flex;
+	flex-grow: 1;
 
 	.el-loading-mask {
 		background-color: transparent;
@@ -399,7 +399,8 @@ $date-aside-width: 130px;
 			// This was originally position: sticky, but Firefox has
 			// performance issues/flickering with that. See:
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=1585378
-			position: fixed;
+			// Bug is fixed now, reenabled. -2022-07-21
+			position: sticky;
 			top: 90px;
 			width: 275px;
 		}

@@ -26,6 +26,13 @@ import Navigation from '@/components/Navigation.vue';
 		margin: 0 auto;
 		margin-top: 30px;
 		padding: 0 1rem;
+
+		display: flex;
+		flex-direction: column;
+	}
+
+	.subscription-alert {
+		margin-bottom: 2rem;
 	}
 }
 </style>
