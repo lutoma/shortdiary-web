@@ -17,6 +17,10 @@ export const useAuth = defineStore('auth', {
 
 	getters: {
 		logged_in: (state) => state.jwt !== null && state.masterKey !== null,
+		haveSubscription: (state) => {
+			const subStatus = state.user?.subscription?.status;
+			return subStatus === 'active';
+		},
 	},
 
 	actions: {
@@ -108,6 +112,19 @@ export const useAuth = defineStore('auth', {
 				title: 'Settings saved',
 				message: 'The changes to your settings have been saved.',
 			});
+		},
+
+		async loadUser() {
+			try {
+				const res = await api.get('/auth/user');
+				this.user = res.data;
+			} catch (err) {
+				if (err instanceof AxiosError && err.response) {
+					throw err.response.data.detail;
+				} else {
+					throw err;
+				}
+			}
 		},
 	},
 
