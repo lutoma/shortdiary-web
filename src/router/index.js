@@ -15,6 +15,7 @@ import PostEditor from '@/components/PostEditor.vue';
 import AccountSettings from '@/components/AccountSettings.vue';
 import BillingSettings from '@/components/BillingSettings.vue';
 import DataExport from '@/components/DataExport.vue';
+import PostsMigrateView from '@/views/PostsMigrateView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -86,6 +87,11 @@ const router = createRouter({
 							component: DataExport,
 						},
 					],
+				},
+				{
+					path: 'posts/migrate',
+					name: 'posts-migrate',
+					component: PostsMigrateView,
 				},
 			],
 		},

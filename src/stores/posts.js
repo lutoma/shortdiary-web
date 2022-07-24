@@ -19,10 +19,10 @@ export const usePosts = defineStore('post', {
 		return {
 			loaded: false,
 			posts: new Map(),
+			legacyPosts: [],
 			mentions: [],
 			locations: [],
 			tags: [],
-			unencryptedPostsNum: 0,
 		};
 	},
 
@@ -69,7 +69,8 @@ export const usePosts = defineStore('post', {
 	},
 
 	actions: {
-		async load() {
+		/* eslint-disable no-unused-vars */
+		async load(force = false) {
 			const authStore = useAuth();
 			if (!authStore.masterKey) {
 				return;
@@ -77,6 +78,7 @@ export const usePosts = defineStore('post', {
 
 			const res = await api.get('/posts');
 			const posts = new Map();
+			const legacyPosts = [];
 
 			for await (const cpost of res.data) {
 				let postData = null;
@@ -85,6 +87,7 @@ export const usePosts = defineStore('post', {
 				case 0:
 					// Unencrypted legacy posts
 					postData = cpost.data;
+					legacyPosts.push(cpost.id);
 					break;
 				case 1:
 					try {
@@ -113,6 +116,7 @@ export const usePosts = defineStore('post', {
 			}
 
 			this.posts = posts;
+			this.legacyPosts = legacyPosts;
 			this.loaded = true;
 		},
 
@@ -126,7 +130,7 @@ export const usePosts = defineStore('post', {
 			this.posts.delete(id);
 		},
 
-		async store_post(post) {
+		async store_post(post, notify = true) {
 			const jsonData = JSON.stringify(post);
 			const authStore = useAuth();
 			const [nonce, data] = await encrypt(authStore.masterKey, sodium.from_string(jsonData));
@@ -146,10 +150,12 @@ export const usePosts = defineStore('post', {
 
 			this.posts.set(post.id, post);
 
-			ElNotification({
-				title: 'Entry saved',
-				message: post.id ? 'The changes to your entry have been saved.' : 'Your entry has been saved.',
-			});
+			if (notify) {
+				ElNotification({
+					title: 'Entry saved',
+					message: post.id ? 'The changes to your entry have been saved.' : 'Your entry has been saved.',
+				});
+			}
 		},
 	},
 });
