@@ -1,30 +1,27 @@
 <template>
 	<el-menu
 		id="main-nav"
-		:default-active="$route.name"
+		:default-active="activeMainRoute"
 		background-color="#036564"
 		text-color="#ffffff"
 		class="primary-menu"
+		:router="true"
 		@select="navSelect"
 	>
-		<el-menu-item index="dashboard">
+		<el-menu-item :route="{ name: 'dashboard' }" index="dashboard">
 			<fa :icon="['far', 'house']" /> Home
 		</el-menu-item>
 
-		<el-menu-item index="timeline">
+		<el-menu-item :route="{ name: 'timeline' }" index="timeline">
 			<fa :icon="['far', 'list']" /> Entries
 		</el-menu-item>
 
-		<el-menu-item index="people">
+		<el-menu-item :route="{ name: 'people' }" index="people">
 			<fa :icon="['far', 'users']" /> People
 		</el-menu-item>
 
-		<el-menu-item index="locations">
+		<el-menu-item :route="{ name: 'locations' }" index="locations">
 			<fa :icon="['far', 'map-marked-alt']" /> Places
-		</el-menu-item>
-
-		<el-menu-item index="trackables">
-			<fa :icon="['far', 'chart-mixed']" /> Trackables
 		</el-menu-item>
 
 		<div style="flex-grow: 1;" />
@@ -32,7 +29,7 @@
 		<el-menu-item index="logout">
 			<fa :icon="['far', 'sign-out']" /> <span>Sign out</span>
 		</el-menu-item>
-		<el-menu-item index="account-settings">
+		<el-menu-item :route="{ name: 'account-settings' }" index="settings">
 			<fa :icon="['far', 'gear']" /> <span>Settings</span>
 		</el-menu-item>
 
@@ -45,18 +42,23 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { useAuth } from '@/stores/auth';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const auth = useAuth();
+const route = useRoute();
 const router = useRouter();
 
-const navSelect = (name, _) => {
+// For routes with parents (e.g. Settings -> AccountSettings), use main route
+const activeMainRoute = computed(() => {
+	return route.matched[1].name;
+});
+
+const navSelect = (name) => {
 	if (name === 'logout') {
 		auth.logout();
 		router.push({ name: 'login' });
-	} else {
-		router.push({ name });
 	}
 };
 </script>
