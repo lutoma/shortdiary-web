@@ -80,7 +80,7 @@ import MoodIndicatorIcon from '@/components/MoodIndicatorIcon.vue';
 import CoolLightBox from 'vue-cool-lightbox';
 import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css';
 import { usePosts } from '@/stores/posts';
-import { reactive, computed, h } from 'vue';
+import { ref, computed, h } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const props = defineProps({
@@ -90,7 +90,7 @@ const props = defineProps({
 	editable: { type: Boolean, default: true },
 });
 
-const lightboxIndex = reactive(null);
+const lightboxIndex = ref(null);
 const date = computed(() => new Date(props.post.date));
 
 function PostTextComponent() {
@@ -100,7 +100,7 @@ function PostTextComponent() {
 	// Now replace mentions and newlines with html elements/router-link components
 	split = split.map((x) => {
 		if (x[0] === '@') {
-			return h(RouterLink, { to: { name: 'timeline', query: { text: x } } }, x);
+			return h(RouterLink, { to: { name: 'timeline', query: { text: x } } }, () => x);
 		}
 
 		if (x === '\n') {
