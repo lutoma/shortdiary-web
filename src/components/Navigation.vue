@@ -27,12 +27,12 @@
 			<fa :icon="['far', 'chart-mixed']" /> Trackables
 		</el-menu-item>
 
-		<div style="flex-grow: 1;"></div>
+		<div style="flex-grow: 1;" />
 
 		<el-menu-item index="logout">
 			<fa :icon="['far', 'sign-out']" /> <span>Sign out</span>
 		</el-menu-item>
-		<el-menu-item index="settings">
+		<el-menu-item index="account-settings">
 			<fa :icon="['far', 'gear']" /> <span>Settings</span>
 		</el-menu-item>
 
@@ -47,31 +47,18 @@
 <script setup>
 import { useAuth } from '@/stores/auth';
 import { useRouter } from 'vue-router';
-import GravatarImg from '@/components/GravatarImg.vue';
 
 const auth = useAuth();
 const router = useRouter();
 
-const navItems = [
-	{ name: 'dashboard', label: 'Home', icon: 'house' },
-	{ name: 'timeline', label: 'Entries', icon: 'list' },
-	{ name: 'people', label: 'People', icon: 'users' },
-	{ name: 'locations', label: 'Places', icon: 'map-marked-alt' },
-	{ name: 'trackables', label: 'Trackables', icon: 'chart-mixed' },
-];
-
-function navSelect(name, _) {
-	if (!name) {
-		return;
-	}
-
+const navSelect = (name, _) => {
 	if (name === 'logout') {
 		auth.logout();
 		router.push({ name: 'login' });
 	} else {
 		router.push({ name });
 	}
-}
+};
 </script>
 
 <style lang="scss">
@@ -85,6 +72,7 @@ function navSelect(name, _) {
 		display: flex;
 		flex-direction: column;
 		background-color: #036564;
+		user-select: none;
 
 		.primary-menu {
 			flex-grow: 1;

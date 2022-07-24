@@ -12,6 +12,9 @@ import SettingsView from '@/views/SettingsView.vue';
 import LoginView from '@/views/LoginView.vue';
 import JoinView from '@/views/JoinView.vue';
 import PostEditor from '@/components/PostEditor.vue';
+import AccountSettings from '@/components/AccountSettings.vue';
+import BillingSettings from '@/components/BillingSettings.vue';
+import DataExport from '@/components/DataExport.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,6 +69,23 @@ const router = createRouter({
 					path: 'settings',
 					name: 'settings',
 					component: SettingsView,
+					children: [
+						{
+							path: '',
+							name: 'account-settings',
+							component: AccountSettings,
+						},
+						{
+							path: 'billing',
+							name: 'billing-settings',
+							component: BillingSettings,
+						},
+						{
+							path: 'data-export',
+							name: 'data-export',
+							component: DataExport,
+						},
+					],
 				},
 			],
 		},

@@ -24,6 +24,7 @@
     "chart.js": "^3.8.0",
     "element-plus": "^2.2.5",
     "floating-vue": "^2.0.0-beta.17",
+    "jszip": "^3.10.0",
     "libsodium-wrappers": "^0.7.10",
     "lodash": "^4.17.21",
     "mapbox-gl": "^2.8.2",

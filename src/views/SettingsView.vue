@@ -2,73 +2,27 @@
 	<div class="settings">
 		<h1>Settings</h1>
 
-		<el-tabs class="settings-tabs" tab-position="top">
-			<el-tab-pane label="Account">
-				<el-form ref="form" :model="user" label-position="left" label-width="200px">
-					<el-form-item label="Email">
-						<el-input v-model="user.email" @keyup.enter="saveSettings" />
-					</el-form-item>
-					<el-form-item label="Password">
-						<n-link to="/change-password">
-							Change password
-						</n-link>
-					</el-form-item>
-
-					<el-form-item>
-						<el-button type="primary" @click="saveSettings">
-							Save changes
-						</el-button>
-					</el-form-item>
-				</el-form>
-			</el-tab-pane>
-
-			<el-tab-pane label="Billing">
-				<p v-if="auth.haveSubscription">
-					You are currently on the {{ auth.user.subscription.plan_name }} plan.
-				</p>
-				<p v-else>
-					You do not currently have an active plan.
-				</p>
-
-				<el-button v-if="auth.haveSubscription" type="primary" @click="handlePortal">
-					Manage your subscription
-				</el-button>
-
-				<el-button v-else type="primary" @click="handleSubscribe">
-					Choose a plan
-				</el-button>
-			</el-tab-pane>
-			<el-tab-pane label="Data export">
-				tbd
-			</el-tab-pane>
+		<el-tabs v-model="$route.name" class="settings-tabs" tab-position="top" @tab-click="changeTab">
+			<el-tab-pane v-for="tab in tabs" :key="tab.route" :name="tab.route" :label="tab.name" />
 		</el-tabs>
+
+		<RouterView />
 	</div>
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue';
-import { useAuth } from '@/stores/auth';
-import api from '@/api';
-import pick from 'lodash/pick';
+import { useRouter } from 'vue-router';
 
-const auth = useAuth();
-auth.loadUser();
-const user = reactive(pick(auth.user, ['email']));
+const tabs = [
+	{ name: 'Account', route: 'account-settings' },
+	{ name: 'Billing', route: 'billing-settings' },
+	{ name: 'Data export', route: 'data-export' },
+];
 
-function saveSettings() {
-	auth.updateUser(user);
-}
-
-const handleSubscribe = (async () => {
-	const res = await api.post('/billing/subscribe');
-	window.location.href = res.data.session_url;
-});
-
-const handlePortal = (async () => {
-	const res = await api.post('/billing/portal');
-	window.location.href = res.data.session_url;
-});
-
+const router = useRouter();
+const changeTab = async (obj, _ev) => {
+	router.push({ name: obj.paneName });
+};
 </script>
 
 <style lang="scss">
