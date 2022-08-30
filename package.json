@@ -52,6 +52,6 @@
     "eslint-plugin-vuejs-accessibility": "^1.1.0",
     "rollup-plugin-visualizer": "^5.6.0",
     "sass": "^1.52.3",
-    "vite": "^2.9.9"
+    "vite": "^2.9.13"
   }
 }
